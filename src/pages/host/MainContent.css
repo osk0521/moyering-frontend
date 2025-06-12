@@ -1,0 +1,90 @@
+.KHJ-main {
+  padding: 30px;
+  flex: 1;
+  animation: KHJ-main-fadeIn 0.4s ease-in-out;
+}
+
+@keyframes KHJ-main-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-main__dashboard {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.KHJ-main__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.KHJ-main__cell {
+  border: 1px solid #ffeccc;
+  border-width: 0 1px 1px 0;
+  padding: 30px 0;
+  text-align: center;
+  width: 25%;
+}
+
+.KHJ-main__cell:nth-child(4) {
+  border-right: 0;
+}
+
+.KHJ-main__table tr:last-child .KHJ-main__cell {
+  border-bottom: 0;
+}
+
+.KHJ-main__label {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.KHJ-main__value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+}
+
+.KHJ-main__notice-board {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.KHJ-main__notice {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.KHJ-main__badge {
+  background-color: #ffeccc;
+  color: #ff9900;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.KHJ-main__text {
+  flex: 1;
+  font-size: 14px;
+}
+
+.KHJ-main__date {
+  font-size: 12px;
+  color: #888;
+}

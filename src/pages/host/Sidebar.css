@@ -1,0 +1,87 @@
+.KHJ-sidebar {
+  width: 200px;
+  background-color: white;
+  padding: 20px;
+  height: 100vh;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+  position: relative;
+}
+
+.KHJ-sidebar__logo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.KHJ-sidebar__logo-img {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+
+.KHJ-sidebar__button-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.KHJ-sidebar__btn {
+  flex: 1;
+  padding: 8px 0;
+  background-color: white;
+  border: 2px solid #ffbf00;
+  color: #ffbf00;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.KHJ-sidebar__btn:hover {
+  background-color: #ffbf00;
+  color: white;
+}
+
+.KHJ-sidebar__menu {
+  list-style: none;
+  padding: 0;
+}
+
+.KHJ-sidebar__menu-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 25px 0;
+  cursor: pointer;
+}
+
+.KHJ-sidebar__arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.KHJ-sidebar__arrow-icon.open {
+  transform: rotate(90deg);
+}
+
+.KHJ-sidebar__submenu {
+  list-style: none;
+  padding-left: 15px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.KHJ-sidebar__submenu.open {
+  max-height: 500px;
+}
+
+.KHJ-sidebar__submenu li {
+  font-size: 13px;
+  margin: 10px 0;
+  cursor: pointer;
+  color: #444;
+}

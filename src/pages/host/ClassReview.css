@@ -1,0 +1,175 @@
+.KHJ-review-class-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  animation: KHJ-reviewFadeIn 0.4s ease-in-out;
+}
+
+@keyframes KHJ-reviewFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-review-class-search-area {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.KHJ-review-class-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.KHJ-review-class-form-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.KHJ-review-class-label {
+  font-weight: bold;
+  width: 60px;
+}
+
+.KHJ-review-class-form-row input[type="text"],
+.KHJ-review-class-form-row input[type="date"],
+.KHJ-review-class-form-row select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.KHJ-review-class-search-btn,
+.KHJ-review-class-reset-btn {
+  padding: 8px 16px;
+  border: none;
+  background-color: #ffa500;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.KHJ-review-class-date-separator {
+  margin: 0 5px;
+}
+
+.KHJ-review-class-result-area {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.KHJ-review-class-subtitle {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.KHJ-review-class-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.KHJ-review-class-table th {
+  background-color: #ffe08a;
+  padding: 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  border: 1px solid #ddd;
+}
+
+.KHJ-review-class-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.KHJ-review-class-summary {
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.KHJ-review-class-summary:hover {
+  background: #f9f9f9;
+}
+
+.KHJ-review-class-detail-cell {
+  background-color: #fff6da;
+  padding: 0;
+}
+
+.KHJ-review-class-detail {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s ease-in-out;
+}
+
+.KHJ-review-class-detail.open {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.KHJ-review-class-content {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.KHJ-review-class-content p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.KHJ-review-class-reply-btn {
+  background-color: #ffa500;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.KHJ-review-class-reply-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.KHJ-review-class-reply-form textarea {
+  width: 90%;
+  min-height: 80px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  resize: none;
+}
+
+.KHJ-review-class-reply-form button {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background-color: #218838;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

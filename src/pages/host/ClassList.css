@@ -1,0 +1,259 @@
+.KHJ-class-search-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: KHJ-fadeIn 0.4s ease-in-out;
+}
+
+.KHJ-class-result-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  animation: KHJ-fadeIn 0.4s ease-in-out;
+}
+
+@keyframes KHJ-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.KHJ-search-section,
+.KHJ-date-section,
+.KHJ-status-section {
+  margin-bottom: 20px;
+}
+
+.KHJ-search-section label,
+.KHJ-date-section label,
+.KHJ-status-section label {
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.KHJ-search-input-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.KHJ-search-input-container input {
+  width: 300px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.KHJ-search-filter {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 120px;
+}
+
+.KHJ-search-input-container button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #ffbf00;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.KHJ-search-input-container button:hover {
+  background-color: #e0a800;
+}
+
+.KHJ-date-section .KHJ-date-range {
+  display: flex;
+  gap: 10px;
+}
+
+.KHJ-date-range input[type="date"] {
+  flex: 1; /* 동일한 너비로 설정 */
+  min-width: 150px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.KHJ-date-section input[type="date"] {
+  padding: 8px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.KHJ-date-buttons button {
+  background-color: #ccc;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.KHJ-date-buttons button:hover {
+  background-color: #e0a800;
+}
+
+.KHJ-date-buttons .KHJ-active {
+  background-color: #ffbf00;
+  color: white;
+}
+
+.KHJ-checkbox-group {
+  display: flex;
+  gap: 20px;
+}
+
+.KHJ-checkbox-group label {
+  font-size: 0.9rem;
+}
+
+.KHJ-checkbox-group input[type="checkbox"] {
+  margin-right: 5px;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 16px;
+  height: 16px;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.KHJ-checkbox-group input[type="checkbox"]:checked {
+  background-color: #ffbf00;
+  border-color: #ffbf00;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.KHJ-checkbox-group input[type="checkbox"]:checked::before {
+  content: '✔';
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 3px;
+  font-size: 12px;
+}
+
+.KHJ-checkbox-group input[type="checkbox"]:hover {
+  border-color: #ffbf00;
+}
+
+.KHJ-result-section {
+  margin-top: 30px;
+}
+
+.KHJ-result-item {
+  display: flex;
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.KHJ-result-image img {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  margin-right: 16px;
+}
+
+.KHJ-result-info {
+  flex: 1;
+}
+
+.KHJ-result-info h5 {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.KHJ-result-actions {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  position: relative;
+  display: inline-block;
+}
+
+.KHJ-result-actions button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #ffbf00;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.KHJ-result-actions button:hover {
+  background-color: #e0a800;
+}
+
+.KHJ-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  z-index: 999;
+  width: 160px;
+}
+
+.KHJ-dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  border-width: 0 6px 10px 6px;
+  border-style: solid;
+  border-color: transparent transparent #ddd transparent;
+}
+
+.KHJ-dropdown-menu button {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.KHJ-dropdown-menu button:hover {
+  background-color: #f6f6f6;
+}

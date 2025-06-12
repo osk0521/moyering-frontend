@@ -1,0 +1,70 @@
+.KHJ-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #fff;
+}
+
+.KHJ-login-box {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.KHJ-login-logo {
+  width: 300px;
+  margin-bottom: 10px;
+}
+
+.KHJ-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.KHJ-login-form label {
+  text-align: left;
+  font-weight: bold;
+  margin-left: 4px;
+  font-size: 0.9rem;
+}
+
+.KHJ-login-form input {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.KHJ-login-btn {
+  background-color: #ffbf00;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.KHJ-kakao-btn {
+  margin-top: 15px;
+  background-color: #ffeb00;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #3b1e1e;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 360px;
+}
+
+.KHJ-kakao-icon {
+  width: 20px;
+  margin-right: 8px;
+}

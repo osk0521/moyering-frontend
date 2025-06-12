@@ -1,0 +1,158 @@
+.classInquiryLayout {
+  display: flex;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #f9f9f9;
+  border-right: 1px solid #eee;
+}
+
+.sidebarBox {
+  background: white;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  font-weight: 500;
+}
+
+.classInquiryPage {
+  flex: 1;
+  padding: 2rem 3rem;
+}
+
+.pageTitle {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.tabFilterRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.datepickerWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.datePickerInput {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.inquiryList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inquiryCard {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  transition: 0.2s;
+}
+
+.inquiryCard:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.inquiryHeader {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inquiryTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inquiryTitle {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.pending {
+  background-color: #ffe9e9;
+  color: #e44;
+}
+
+.done {
+  background-color: #e3f5e6;
+  color: #2e8b57;
+}
+
+.question {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.toggleIcon {
+  right: 1.2rem;
+  top: 1.2rem;
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.inquiryAnswer {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid #f58020;
+  background-color: #fdf6f1;
+  border-radius: 4px;
+  padding: 0.8rem 1rem;
+}
+
+.answerLabel {
+  font-weight: bold;
+  color: #f58020;
+  margin-bottom: 0.4rem;
+}
+.answerFilterWrap {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filterButton {
+  padding: 0.4rem 1rem;
+  background-color: #eee;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.filterButton:hover {
+  background-color: #ddd;
+}
+
+.active {
+  background-color: #f58020;
+  color: white;
+}
+

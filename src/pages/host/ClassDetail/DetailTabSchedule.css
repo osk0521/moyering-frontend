@@ -1,0 +1,122 @@
+.KHJ-schedule-tab-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-schedule-section {
+  margin-bottom: 30px;
+}
+
+.KHJ-schedule-section h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.KHJ-calendar-section h4 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.fc {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 10px;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #000;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.fc .fc-daygrid-day.fc-day-sun {
+  color: red;
+}
+
+.fc .fc-daygrid-day.fc-day-sat {
+  color: orange;
+}
+
+.KHJ-date-range {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.KHJ-date-range input[type="date"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.KHJ-dr-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.KHJ-dr-item-start,
+.KHJ-dr-item-end {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.KHJ-dr-labels .KHJ-dr-item {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.KHJ-dr-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.KHJ-dr-inputs input[type="date"] {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  outline: none;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.KHJ-dr-sep {
+  white-space: nowrap;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #666;
+}

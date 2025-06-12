@@ -1,0 +1,323 @@
+/* src/components/modals/ClassDetailModal.css */
+
+.modal-overlayHY {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 40px 20px;    
+}
+
+.modal-contentHY {
+  background: white;
+  border-radius: 12px;
+  /* max-width: 1400px; */
+  width: 100%;
+  max-height: 85vh;        
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+  margin: auto;           
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-headerHY {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-headerHY h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.modal-closeHY {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+.modal-closeHY:hover {
+  color: #ef4444;
+}
+
+.modal-bodyHY {
+  padding: 24px;
+}
+
+/* 클래스 정보 섹션 */
+.class-info-sectionHY {
+  margin-bottom: 32px;
+}
+
+.info-gridHY {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.info-itemHY {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-labelHY {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.info-valueHY {
+  font-size: 1rem;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.info-valueHY.price {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* 클래스 설명 섹션 */
+.class-description-sectionHY {
+  margin-bottom: 32px;
+}
+
+.class-description-sectionHY h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.description-contentHY {
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+}
+
+.description-contentHY p {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.description-contentHY p:last-child {
+  margin-bottom: 0;
+}
+
+/* 수강생 목록 섹션 */
+.student-list-sectionHY h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.student-table-containerHY {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.student-tableHY {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-tableHY th {
+  background-color: #f9fafb;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+}
+
+.student-tableHY td {
+  padding: 12px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  font-size: 0.875rem;
+}
+
+.student-tableHY tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.student-tableHY tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.no-dataHY {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  padding: 32px !important;
+}
+
+/* 상태 배지 */
+.status-badgeHY {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-pendingHY {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.status-recruitingHY {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.status-fullHY {
+  background-color: #fecaca;
+  color: #dc2626;
+}
+
+.status-completedHY {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.status-cancelledHY {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.status-rejectedHY {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* 모달 푸터 */
+.modal-footerHY {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.btn-secondaryHY {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-secondaryHY:hover {
+  background-color: #f3f4f6;
+}
+
+.btn-primaryHY {
+  padding: 8px 16px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-primaryHY:hover {
+  background-color: #2563eb;
+}
+
+.btn-dangerHY {
+  padding: 8px 16px;
+  border: none;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-dangerHY:hover {
+  background-color: #dc2626;
+}
+
+/* 클래스명 버튼 스타일 */
+.class-name-buttonHY {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: inherit;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s;
+}
+
+.class-name-buttonHY:hover {
+  color: #2563eb;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .modal-contentHY {
+    margin: 20px;
+    max-height: calc(100vh - 40px);
+  }
+  
+  .info-gridHY {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-footerHY {
+    flex-direction: column;
+  }
+  
+  .student-tableHY {
+    font-size: 0.75rem;
+  }
+  
+  .student-tableHY th,
+  .student-tableHY td {
+    padding: 8px;
+  }
+}

@@ -1,0 +1,166 @@
+.wrapper {
+  max-width: 1000px;
+  margin: 2rem auto;
+  font-family: 'Pretendard', sans-serif;
+  padding: 1rem;
+}
+
+.pageTitle {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 3fr 1.3fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.box {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.boxTitle {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.classInfoBox {
+  display: flex;
+  gap: 1rem;
+}
+
+.classImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+.classTitle {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.classPrice {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f58020;
+  margin-top: 0.5rem;
+}
+
+.agreeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.couponRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.couponRow select,
+.couponRow button {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.couponRow button {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.couponItem {
+  background-color: #f8f8f8;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.couponAppliedMsg {
+  background-color: #e6f8e7;
+  border-left: 4px solid #1abc9c;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #117a5d;
+  border-radius: 8px;
+}
+
+.rightColumn {
+  position: sticky;
+  top: 2rem;
+}
+
+.paymentSummary {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.paymentSummary h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.summaryRow,
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  font-size: 0.95rem;
+}
+
+.summaryTotal {
+  font-weight: bold;
+  border-top: 1px solid #eee;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  font-size: 1rem;
+}
+
+.payButton {
+  margin-top: 1.2rem;
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  background-color: #f58020;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.payButton:hover {
+  background-color: #e36d0f;
+}
+
+.notice {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.8rem;
+  text-align: center;
+}

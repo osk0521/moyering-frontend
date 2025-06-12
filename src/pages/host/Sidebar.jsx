@@ -22,7 +22,7 @@ export default function Sidebar() {
 
       <div className="KHJ-sidebar__button-row">
         <button className="KHJ-sidebar__btn" onClick={() => handleNavigation('/register')}>클래스등록</button>
-        <button className="KHJ-sidebar__btn" onClick={() => handleNavigation('/classList')}>클래스목록</button>
+        <button className="KHJ-sidebar__btn" onClick={() => handleNavigation('/HostclassList')}>클래스목록</button>
       </div>
 
       <nav>

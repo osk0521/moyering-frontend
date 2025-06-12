@@ -5,7 +5,7 @@ import { FaRegBell } from "react-icons/fa6";
 import { LuMessageCircleMore } from "react-icons/lu";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Header.css";
-import logoImage from '../../assets/a.png';
+import logoImage from '../../assets/react.svg';
 
 const Header = () => {
   return (

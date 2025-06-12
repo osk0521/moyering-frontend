@@ -4,7 +4,7 @@ import { BiChevronRight, BiChevronDown } from "react-icons/bi";
 import { Table } from "reactstrap";
 import './GatheringDetail.css';
 import "./GatheringDetailQna.css";
-import aImage from '../../assets/a.png';
+import aImage from '../../assets/react.svg';
 
 const handleJoinClick = () => {
   console.log("참가 신청하기 클릭");

@@ -1,0 +1,107 @@
+.mainPage {
+  padding: 2rem;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.bannerSection .bannerPlaceholder {
+  height: 300px;
+  background-color: #ccc;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.quickLinksSec {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quickLinks {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.quickBtn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.orange {
+  background-color: #FF7F50;
+}
+.yellow {
+  background-color: #FFD966;
+  color: #333;
+}
+.peach {
+  background-color: #FAD4C0;
+  color: #333;
+}
+.pink {
+  background-color: #FFA6C9;
+}
+
+.sectionBlock {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.sectionSub {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.cardList {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+
+.quickLinkBox {
+  flex: 1;
+  background-color: #fdf6ef;
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+.quickLinkBox:hover {
+  transform: translateY(-3px);
+}
+
+.quickLinkIcon {
+  font-size: 1.4rem;
+  color: #d72638;
+  margin-right: 10px;
+}
+
+.quickLinkTitle {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.quickLinkDesc {
+  font-size: 0.85rem;
+  color: #555;
+}

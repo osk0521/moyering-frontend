@@ -1,0 +1,87 @@
+.card {
+  width: 292px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 2px 2px 7px 2px rgb(0 0 0 / 8%);
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.cardImage {
+  position: relative;
+  height: 190px;
+  background-color: #ddd;
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.75rem;
+  color: white;
+  background-color: #FF5C5C;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+.likeIcon {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 0.3rem;
+  font-size: 1rem;
+  color: #d72638;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cardContent {
+  padding: 1rem;
+  padding-top: 0.5rem;
+}
+
+.cardTags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.yellow {
+  background-color: #FFF2CC;
+  color: #d49b00;
+}
+
+.blue {
+  background-color: #DFF5FF;
+  color: #359ecf;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.cardInfo {
+  font-size: 0.85rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}

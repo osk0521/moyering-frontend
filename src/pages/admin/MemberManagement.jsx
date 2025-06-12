@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Layout from '../common/Layout';
 import './MemberManagement.css';
 import MemberDetailModal from './MemberDetailModal'; // 회원 상세 모달 컴포넌트 
 

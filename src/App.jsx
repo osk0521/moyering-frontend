@@ -1,19 +1,22 @@
-import { useState } from 'react'
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+
 // 관리자 페이지
 import Login from './pages/admin/Login';
 import TwoFactorAuth from './pages/admin/TwoFactorAuth';
+import Dashboard from './pages/admin/Dashboard';
 import MemberManagement from './pages/admin/MemberManagement';
 import ClassManagement from './pages/admin/ClassManagement';
 import NoticeManagement from './pages/admin/NoticeManagement';
-import NoticeCreate from './pages/admin/NoticeCreate';
 import ReportManagement from './pages/admin/ReportManagement';
 import BannerManagement from './pages/admin/BannerManagement';
-import BannerCreateModal from './pages/admin/BannerCreateModal';
 import PaymentManagement from './pages/admin/PaymentManagement';
 import SettlementManagement from './pages/admin/SettlementManagement';
-import Dashboard from './pages/admin/Dashboard';
 import CategoryManagement from './pages/admin/CategoryManagement';
+import NoticeCreate from "./pages/admin/NoticeCreate";
+import BannerCreateModal from "./pages/admin/BannerCreateModal";
+
 
 import './App.css'
 
@@ -30,12 +33,13 @@ function App() {
       {/* 강사 /host/~~~~~ */}
       
       {/* 관리자 /admin/~~~~ */}
-                {/* 1차 로그인 화면  */}
-                <Route path="/admin" element={<Login />} />
+      <Routes>
+          {/* 1차 로그인 화면  */}
+          <Route path="/admin" element={<Login />} />
           <Route path="/admin/login" element={<Login />} />
 
           {/* 2차 로그인 화면 (인증번호 입력) */}
-          <Route path="/admin/auth/verify" element={<TwoFactorAuth />} />
+          <Route path="/verify" element={<TwoFactorAuth />} />
 
         {/* 대시보드 페이지 */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
@@ -67,10 +71,9 @@ function App() {
           {/* 정산관리 페이지  */}
         <Route path="/admin/settlement" element={<SettlementManagement />} />
 
-
           {/* 카테고리 관리 페이지  */}
         <Route path="/admin/category" element={<CategoryManagement />} />
-
+        </Routes>
     </Router>
   )
 }

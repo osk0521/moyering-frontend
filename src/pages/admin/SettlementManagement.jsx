@@ -1,7 +1,6 @@
-// src/components/pages/SettlementManagement.jsx
-import React, { useState } from 'react';
-import Layout from '../common/Layout';
 
+import React, { useState } from 'react';
+import Layout from "./Layout";
 import './SettlementManagement.css';
 
 const SettlementManagement = () => {

@@ -1,7 +1,5 @@
-
-// src/components/pages/NoticeCreate.jsx
 import React, { useState } from 'react';
-import Layout from '../common/Layout';
+import Layout from "./Layout";
 import './NoticeCreate.css';
 
 const NoticeCreate = () => {

@@ -1,5 +1,6 @@
 // src/components/modals/ClassDetailModal.jsx
 import React from 'react';
+import Layout from "./Layout";
 import './ClassDetailModal.css';
 
 const ClassDetailModal = ({ isOpen, onClose, classData }) => {

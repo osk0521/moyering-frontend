@@ -1,8 +1,5 @@
-// src/components/pages/ReportManagement.jsx
-
-
 import React, { useState } from 'react';
-import Layout from '../common/Layout';
+import Layout from "./Layout";
 import './ReportManagement.css';
 
 const ReportManagement = () => {

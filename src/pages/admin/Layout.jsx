@@ -1,8 +1,4 @@
-// src/components/common/Layout.jsx
-
-
 import React from 'react';
-import Layout from "./Layout";
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Layout.css';
 
@@ -62,7 +58,7 @@ const Layout = ({ children }) => {
         <header className="headerHY">
           <div className="header-leftHY">
             <div className="header-logoHY">
-              <img src="/moyering.png" alt="모여링 로고" className="header-logo-iconHY" />
+              <img src="/logo_managerHeader.png" alt="모여링 로고" className="header-logo-iconHY" />
             </div>
           </div>
           <div className="header-rightHY">

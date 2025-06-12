@@ -1,0 +1,181 @@
+.KHJ-class-info-box {
+  background: white;
+  padding: 16px 24px;
+  margin-bottom: 20px;
+  animation: KHJ-fadeIn 0.4s ease-in-out;
+  border-radius: 8px;
+}
+
+@keyframes KHJ-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-section-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.KHJ-form-section {
+  margin-bottom: 32px;
+}
+
+.KHJ-inline-form-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.KHJ-category-label {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 25px;
+}
+
+.KHJ-category-row {
+  display: flex;
+  gap: 24px;
+}
+
+.KHJ-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.KHJ-sub-label {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 220px;
+  background: white;
+}
+
+.KHJ-class-label {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.KHJ-class-input {
+  padding: 10px 12px;
+  width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.KHJ-label {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.KHJ-required-text {
+  margin-left: 100px;
+}
+
+.KHJ-required-text-dot {
+  color: red;
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+.KHJ-location-add-btn {
+  padding: 6px 12px;
+  border: 2px solid #ffbf00;
+  color: #ffbf00;
+  background: white;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.KHJ-location-add-btn:hover {
+  background-color: #ffbf00;
+  color: white;
+}
+
+.KHJ-location-wrapper {
+  margin-top: 16px;
+}
+
+.KHJ-location-box {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 600px;
+}
+
+.KHJ-location-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.KHJ-location-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.KHJ-location-label {
+  background: #f4f4f4;
+  font-weight: bold;
+  width: 100px;
+}
+
+.KHJ-location-remove-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  float: right;
+  margin-top: -20px;
+}
+
+.KHJ-location-relative {
+  position: relative;
+  display: inline-block;
+}
+
+.KHJ-postcode-popup {
+  position: absolute;
+  top: 0;
+  left: 110%;
+  z-index: 9999;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.KHJ-postcode-close-btn {
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: #ccc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.KHJ-postcode-close-btn:hover {
+  background: #999;
+  color: white;
+}

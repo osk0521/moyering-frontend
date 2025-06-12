@@ -1,0 +1,123 @@
+.KHJ-host-profile-container {
+  background: white;
+  padding: 24px;
+  padding-bottom: 120px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  animation: KHJ-hostFadeIn 0.4s ease-in-out;
+}
+
+@keyframes KHJ-hostFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-host-profile-title {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.KHJ-host-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.KHJ-host-profile-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.KHJ-host-image-upload {
+  align-items: flex-start;
+}
+
+.KHJ-host-profile-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 10px 0;
+}
+
+.KHJ-host-file-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.KHJ-host-profile-form input[type="text"],
+.KHJ-host-profile-form input[type="email"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+.KHJ-host-textarea-wrapper {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.KHJ-host-textarea-wrapper textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  height: 120px;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.KHJ-host-textarea-desc {
+  margin-top: -30px;
+  font-size: 0.85rem;
+  color: #666;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.KHJ-host-desc {
+  font-size: 0.85rem;
+  color: #666;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.KHJ-host-char-count {
+  font-size: 0.75rem;
+  color: #999;
+  text-align: right;
+  margin-top: -15px;
+}
+
+.KHJ-host-inline-input {
+  display: flex;
+  gap: 10px;
+}
+
+.KHJ-host-inline-input input {
+  flex: 1;
+}
+
+.KHJ-host-profile-form button {
+  padding: 10px 16px;
+  background-color: #ffbf00;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}

@@ -1,0 +1,46 @@
+.KHJ-class-calendar-wrapper {
+  width: 100%;
+  max-width: 900px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 20px auto;
+  animation: KHJ-calendarFadeIn 0.4s ease-in-out;
+}
+
+@keyframes KHJ-calendarFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-class-calendar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+/* FullCalendar 내부 스타일은 그대로 유지 */
+.fc {
+  width: 100%;
+  height: 100%;
+}
+
+.fc .fc-daygrid-event {
+  font-size: 0.85em;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #333;
+  font-weight: 500;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.2rem;
+}

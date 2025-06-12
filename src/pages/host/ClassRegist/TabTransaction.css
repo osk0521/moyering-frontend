@@ -1,0 +1,74 @@
+.KHJ-class-info-box {
+  background: white;
+  padding: 16px 24px;
+  margin-bottom: 20px;
+  animation: KHJ-fadeIn 0.4s ease-in-out;
+}
+
+@keyframes KHJ-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-section-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.KHJ-form-section {
+  margin-bottom: 32px;
+}
+
+.KHJ-warning-info-label,
+.KHJ-refund-policy-label {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.KHJ-required-text-dot {
+  color: red;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.KHJ-warning-info-textarea,
+.KHJ-refund-policy-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  resize: none;
+}
+
+.KHJ-warning-info-textarea {
+  height: 600px;
+  width: 800px;
+  margin-bottom: 20px;
+}
+
+.KHJ-refund-policy-textarea {
+  height: 600px;
+  width: 600px;
+  margin-bottom: 20px;
+}
+
+.KHJ-warning-info-textarea:focus,
+.KHJ-refund-policy-textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+.KHJ-warning {
+  color: red;
+  margin-top: -20px;
+}

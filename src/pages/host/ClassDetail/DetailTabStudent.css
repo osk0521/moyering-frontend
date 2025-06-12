@@ -1,0 +1,115 @@
+.KHJ-student-class-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  font-family: 'Pretendard', sans-serif;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-student-class-container h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.KHJ-student-card {
+  border: 1px solid #eee;
+  background-color: #fffbea;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.KHJ-student-basic {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background-color: #fff8cc;
+  padding: 14px 16px;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+}
+
+.KHJ-student-name.KHJ-clickable {
+  font-weight: bold;
+  color: #333;
+  text-decoration: underline;
+}
+
+.KHJ-class-section {
+  background: #fdfdfd;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+}
+
+.KHJ-class-title {
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.KHJ-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.KHJ-progress-bar-bg {
+  width: 100%;
+  height: 10px;
+  background-color: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.KHJ-progress-bar-fill {
+  height: 100%;
+  background-color: #337eff;
+  border-radius: 6px 0 0 6px;
+  transition: width 0.4s ease-in-out;
+}
+
+.KHJ-class-count {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.KHJ-today-status {
+  font-size: 0.9rem;
+  color: #28a745;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.KHJ-attendance-button-wrapper {
+  text-align: right;
+}
+
+.KHJ-attendance-button {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.KHJ-attendance-button:hover {
+  background-color: #218838;
+}

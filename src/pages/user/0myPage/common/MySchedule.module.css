@@ -1,0 +1,147 @@
+.page {
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.sidebarArea {
+  width: 240px;
+}
+
+.sidebar {
+  background: #fff4e6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.userImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.username {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 0.6rem;
+  background: #f58020;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout {
+  background: #e66262;
+}
+
+.calendarArea {
+  width: 72%;
+}
+
+.calendar {
+  width: 100%;
+  background: #fffaf4;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #f58020;
+}
+
+.calendarHeaderBtn {
+  background-color: #fff2e5;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #f58020;
+  transition: background-color 0.2s;
+}
+
+.calendarHeaderBtn:hover {
+  background-color: #ffe5cc;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendarDay {
+  text-align: center;
+  padding: 0.5rem 0;
+  background: #fff0db;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #c07015;
+  border-radius: 8px;
+}
+
+.calendarCell {
+  background: white;
+  min-height: 110px;
+  padding: 0.5rem 0.4rem;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color 0.2s;
+  border: 1px solid #f2e6dc;
+}
+
+.calendarCell:hover {
+  background-color: #fff7f0;
+}
+
+.todayCell {
+  border: 2px solid #f58020;
+  box-shadow: 0 0 0 3px #fff0e5 inset;
+  border-radius: 12px;
+}
+
+.dateNum {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+.scheduleBox {
+  padding: 0.35rem 0.5rem;
+  margin-top: 0.3rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: pre-line;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+}
+
+.classType {
+  background-color: #FFF1C6;
+  color: #5a3e1b;
+}
+
+.gatherType {
+  background-color: #D7F2FF;
+  color: #185b84;
+}

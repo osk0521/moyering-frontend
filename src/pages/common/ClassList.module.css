@@ -1,0 +1,136 @@
+.page {
+  padding: 2rem;
+  max-width: 1280px;
+}
+
+/* 공통 섹션 */
+.sectionBlock {
+  margin-top: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.sectionSub {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+/* 카드 리스트 */
+.cardList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 1.5rem;
+}
+
+/* 페이지네이션 */
+.pagination {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.pageBtn {
+  border: none;
+  padding: 0.5rem 0.9rem;
+  background-color: #eee;
+  border-radius: 80%;
+  cursor: pointer;
+}
+
+.pageBtnActive {
+  background-color: #f58020;
+  color: white;
+  font-weight: bold;
+  border-radius: 80%;
+}
+
+
+/* ClassSearchForm.module.css */
+.searchFormContainer {
+  background: #f5f6f8;
+  padding: 2rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+}
+
+.formTitle {
+  background: #f58020;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  width: fit-content;
+  margin-bottom: 1.5rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.formGroup label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+
+
+.day-buttons button {
+  margin-right: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.formActions {
+  grid-column: span 3;
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.resetBtn {
+  background: white;
+  border: 1px solid #f58020;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.submitBtn {
+  background: #f58020;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.datePickerInput {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.categoryGroup select {
+  width: 100%;
+}

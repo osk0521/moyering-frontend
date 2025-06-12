@@ -1,0 +1,219 @@
+/* ClassRingDetail.module.css */
+.detailWrapper {
+  display: flex;
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 20px;
+  gap: 24px;
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+}
+
+.mainContent {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.imageSection {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.mainImage {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.tabs {
+  display: flex;
+  margin: 16px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  background: white;
+  border: none;
+  transition: color 0.3s;
+}
+
+.active {
+  color: #ff6b6b;
+  font-weight: bold;
+  border-bottom: 2px solid #ff6b6b;
+}
+
+.section {
+  padding: 20px 0;
+}
+
+.moreBtn {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+}
+
+/* 문의(질문) 영역 */
+.questionsTable {
+  margin-top: 20px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  font-size: 14px;
+}
+
+.questionsHeader,
+.questionsGrid {
+  display: grid;
+  grid-template-columns: 100px 1fr 120px 120px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f4;
+  align-items: center;
+  color: #444;
+  font-weight: 600;
+}
+
+.questionsRow {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.alternate {
+  background-color: #fcfcfc;
+}
+
+.answerSection {
+  background: #f9f9f9;
+  padding: 16px;
+  border-left: 3px solid #28a745;
+  border-radius: 8px;
+  margin: 10px 0 20px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.answerHeader {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #333;
+}
+
+.answerBadge {
+  background: #28a745;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.answerContent {
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.sidebar {
+  width: 320px;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.cardBox {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.badgeCategory {
+  background: #fff3e0;
+  color: #f57c00;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badgeLocation {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #555;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.outlineBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  color: #666;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.applyBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f57c00;
+  color: white;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}

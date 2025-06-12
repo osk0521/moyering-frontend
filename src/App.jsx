@@ -1,23 +1,19 @@
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import UserLogin from './pages/common/UserLogin';
-import HostIntroPage from './pages/host/HostIntroPage';
-import DashboardLayout from './pages/host/DashboardLayout';
-import MainContent from './pages/host/MainContent';
-import HostProfile from './pages/host/HostProfile';
-import ClassRegisterPage from './pages/host/ClassRegist/ClassRegisterPage';
-import HostClassList from './pages/host/HostClassList';
-import StudentSearch from './pages/host/StudentSearch';
-import SettlementInfo from './pages/host/SettlementInfo';
-import Inquiry from './pages/host/Inquiry';
 import ClassCalendar from './pages/host/ClassCalendar';
 import ClassDetail from './pages/host/ClassDetail/ClassDetail';
+import ClassRegisterPage from './pages/host/ClassRegist/ClassRegisterPage';
 import ClassReview from './pages/host/ClassReview';
 import ClassSettlement from './pages/host/ClassSettlement';
-import React from 'react';
-
-
-
+import DashboardLayout from './pages/host/DashboardLayout';
+import HostClassList from './pages/host/HostClassList';
+import HostIntroPage from './pages/host/HostIntroPage';
+import HostProfile from './pages/host/HostProfile';
+import Inquiry from './pages/host/Inquiry';
+import MainContent from './pages/host/MainContent';
+import SettlementInfo from './pages/host/SettlementInfo';
+import StudentSearch from './pages/host/StudentSearch';
 import './App.css';
 import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
@@ -37,7 +33,6 @@ import PaymentManagement from './pages/admin/PaymentManagement';
 import ReportManagement from './pages/admin/ReportManagement';
 import SettlementManagement from './pages/admin/SettlementManagement';
 import TwoFactorAuth from './pages/admin/TwoFactorAuth';
-import Main from './pages/common/Main.jsx';
 import ClassList from './pages/common/ClassList.jsx';
 import ClassRingDetail from './pages/common/classRingDetail.jsx';
 import Main from './pages/common/Main.jsx';

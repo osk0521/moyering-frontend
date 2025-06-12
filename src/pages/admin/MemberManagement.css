@@ -1,0 +1,27 @@
+.managementHY {
+  padding: 50px;
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+  background-color: #fff;
+  max-width: 1200px;
+}
+
+/* 회원 구분 뱃지 스타일 */
+.member-typeHY {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.member-typeHY.general {
+  background-color: #e7f1ff;
+  color: #2d6dcc;
+}
+
+.member-typeHY.instructor {
+  background-color: #e8f8f0;
+  color: #2ac084;
+}

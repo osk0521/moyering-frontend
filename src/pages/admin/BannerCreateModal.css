@@ -1,0 +1,531 @@
+/* src/components/banner/BannerCreateModal.css */
+
+/* ===========================================
+   모달 오버레이 (배경)
+=========================================== */
+.modal-overlayHY {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===========================================
+   모달 컨테이너
+=========================================== */
+.banner-modal-containerHY {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.4s ease-out;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===========================================
+   모달 헤더
+=========================================== */
+.banner-modal-headerHY {
+  padding: 24px 32px;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.banner-modal-titleHY {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.banner-close-buttonHY {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  font-size: 18px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.banner-close-buttonHY:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* ===========================================
+   모달 바디
+=========================================== */
+.banner-modal-bodyHY {
+  padding: 32px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.banner-formHY {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===========================================
+   폼 그룹
+=========================================== */
+.form-groupHY {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-rowHY {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-labelHY {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-labelHY.required::after {
+  content: '*';
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.form-inputHY,
+.form-textareaHY {
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: #fafafa;
+  font-family: inherit;
+}
+
+.form-inputHY:focus,
+.form-textareaHY:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.form-inputHY.error,
+.form-textareaHY.error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.form-inputHY.error:focus,
+.form-textareaHY.error:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.form-inputHY::placeholder,
+.form-textareaHY::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.form-textareaHY {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ===========================================
+   이미지 업로드 영역
+=========================================== */
+.image-upload-areaHY {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  position: relative;
+  overflow: hidden;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-upload-areaHY:hover {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+}
+
+.image-upload-areaHY.drag-active {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  transform: scale(1.02);
+}
+
+.image-upload-areaHY.error {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+}
+
+.upload-placeholderHY {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-iconHY {
+  font-size: 48px;
+  opacity: 0.6;
+}
+
+.upload-textHY {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.upload-subtextHY {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ===========================================
+   이미지 미리보기
+=========================================== */
+.image-previewHY {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-previewHY img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.image-overlayHY {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-previewHY:hover .image-overlayHY {
+  opacity: 1;
+}
+
+.image-previewHY:hover img {
+  transform: scale(1.05);
+}
+
+.image-overlayHY span {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===========================================
+   라디오 그룹
+=========================================== */
+.radio-groupHY {
+  display: flex;
+  gap: 20px;
+}
+
+.radio-labelHY {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.radio-labelHY input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-textHY {
+  user-select: none;
+}
+
+/* ===========================================
+   에러 메시지
+=========================================== */
+.error-messageHY {
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.error-messageHY::before {
+  content: '⚠️';
+  font-size: 12px;
+}
+
+/* ===========================================
+   모달 푸터
+=========================================== */
+.banner-modal-footerHY {
+  padding: 24px 32px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.button-groupHY {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btnHY {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  min-width: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btnHY::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btnHY:hover::before {
+  left: 100%;
+}
+
+.btn-cancelHY {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-cancelHY:hover {
+  background: #e2e8f0;
+  color: #475569;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-saveHY {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-saveHY:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+/* ===========================================
+   반응형 디자인
+=========================================== */
+@media (max-width: 768px) {
+  .modal-overlayHY {
+    padding: 10px;
+  }
+  
+  .banner-modal-containerHY {
+    max-height: 95vh;
+    border-radius: 16px;
+  }
+  
+  .banner-modal-headerHY {
+    padding: 20px 24px;
+  }
+  
+  .banner-modal-titleHY {
+    font-size: 20px;
+  }
+  
+  .banner-modal-bodyHY {
+    padding: 24px 20px;
+  }
+  
+  .form-rowHY {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .banner-modal-footerHY {
+    padding: 20px 24px;
+  }
+  
+  .button-groupHY {
+    flex-direction: column-reverse;
+  }
+  
+  .btnHY {
+    width: 100%;
+  }
+  
+  .image-upload-areaHY {
+    padding: 24px;
+    min-height: 160px;
+  }
+  
+  .upload-iconHY {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlayHY {
+    padding: 5px;
+  }
+  
+  .banner-modal-containerHY {
+    border-radius: 12px;
+  }
+  
+  .banner-modal-headerHY {
+    padding: 16px 20px;
+  }
+  
+  .banner-modal-titleHY {
+    font-size: 18px;
+  }
+  
+  .banner-modal-bodyHY {
+    padding: 20px 16px;
+  }
+  
+  .banner-modal-footerHY {
+    padding: 16px 20px;
+  }
+  
+  .image-upload-areaHY {
+    padding: 20px;
+    min-height: 140px;
+  }
+  
+  .upload-textHY {
+    font-size: 14px;
+  }
+  
+  .upload-subtextHY {
+    font-size: 12px;
+  }
+}
+
+/* ===========================================
+   접근성 개선
+=========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlayHY,
+  .banner-modal-containerHY,
+  .image-upload-areaHY,
+  .btnHY {
+    animation: none;
+    transition: none;
+  }
+  
+  .btnHY::before {
+    display: none;
+  }
+}
+
+/* 포커스 스타일 */
+.banner-close-buttonHY:focus,
+.btnHY:focus,
+.form-inputHY:focus,
+.form-textareaHY:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.image-upload-areaHY:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

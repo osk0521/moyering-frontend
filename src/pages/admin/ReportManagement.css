@@ -1,0 +1,400 @@
+/* src/components/pages/ReportManagement.css */
+
+/* 1단계: 메인 컨테이너 스타일 */
+.report-managementHY {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* 2단계: 페이지 헤더 스타일 */
+.page-headerHY {
+  margin-bottom: 30px;
+}
+
+.page-headerHY h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+/* 3단계: 컨트롤 섹션 (검색 + 필터) */
+.controls-sectionHY {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* 4단계: 검색 섹션 스타일 */
+.search-sectionHY {
+  margin-bottom: 20px;
+}
+
+.search-boxHY {
+  position: relative;
+  max-width: 400px;
+}
+
+.search-iconHY {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #666;
+}
+
+.search-inputHY {
+  width: 100%;
+  height: 45px;
+  padding: 0 15px 0 40px;
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.search-inputHY:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* 5단계: 필터 버튼들 스타일 */
+.filter-sectionHY {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btnHY {
+  padding: 8px 16px;
+  border: 2px solid #e1e5e9;
+  background-color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btnHY:hover {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.filter-btnHY.active {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+/* 6단계: 결과 정보 스타일 */
+.result-infoHY {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.result-countHY {
+  font-size: 14px;
+  color: #666;
+}
+
+.result-countHY strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* 7단계: 테이블 컨테이너 */
+.table-containerHY {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* 8단계: 테이블 기본 스타일 */
+.report-tableHY {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.report-tableHY th,
+.report-tableHY td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+/* 9단계: 테이블 헤더 스타일 */
+.report-tableHY thead {
+  background-color: #f8f9fa;
+}
+
+.report-tableHY th {
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 정렬 가능한 헤더 */
+.sortableHY {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sortableHY:hover {
+  background-color: #e9ecef;
+}
+
+.sort-indicatorHY {
+  margin-left: 5px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* 10단계: 테이블 바디 스타일 */
+.report-tableHY tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.report-tableHY td {
+  color: #555;
+}
+
+/* 11단계: 카테고리 배지 스타일 */
+.category-badgeHY {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.category-게시글HY {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.category-댓글HY {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.category-사용자HY {
+  background-color: #e8f5e8;
+  color: #388e3c;
+}
+
+.category-기타HY {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+/* 12단계: 상태 배지 스타일 */
+.status-badgeHY {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status-receivedHY {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-processingHY {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-completedHY {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-rejectedHY {
+  background-color: #fdeaa7;
+  color: #8a6d3b;
+}
+
+/* 13단계: 내용 셀 스타일 */
+.content-cellHY {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-cellHY {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* 14단계: 액션 버튼들 스타일 */
+.action-buttonsHY {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-visibilityHY {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.btn-visibilityHY.visible {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-visibilityHY.visible:hover {
+  background-color: #c82333;
+}
+
+.btn-visibilityHY.hidden {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-visibilityHY.hidden:hover {
+  background-color: #218838;
+}
+
+/* 15단계: 페이지네이션 스타일 */
+.paginationHY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-btnHY {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.page-btnHY:hover {
+  background-color: #f8f9fa;
+  border-color: #007bff;
+}
+
+.page-btnHY.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.page-numbersHY {
+  display: flex;
+  gap: 5px;
+}
+
+/* 16단계: 반응형 디자인 */
+@media (max-width: 768px) {
+  .report-managementHY {
+    padding: 15px;
+  }
+  
+  .page-headerHY h1 {
+    font-size: 24px;
+  }
+  
+  .controls-sectionHY {
+    padding: 15px;
+  }
+  
+  .search-boxHY {
+    max-width: 100%;
+  }
+  
+  .filter-sectionHY {
+    justify-content: center;
+  }
+  
+  .table-containerHY {
+    overflow-x: auto;
+  }
+  
+  .report-tableHY {
+    min-width: 800px;
+  }
+  
+  .action-buttonsHY {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .paginationHY {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+}
+
+/* 17단계: 접근성 개선 */
+.search-inputHY:focus,
+.filter-btnHY:focus,
+.btn-visibilityHY:focus,
+.page-btnHY:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* 18단계: 애니메이션 효과 */
+.report-tableHY tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.filter-btnHY,
+.btn-visibilityHY,
+.page-btnHY {
+  transition: all 0.2s ease;
+}
+
+/* 19단계: 로딩 상태 (선택사항) */
+.loadingHY {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.loadingHY::after {
+  content: '로딩 중...';
+}

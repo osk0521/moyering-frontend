@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './ClassList.css';
+import './HostClassList.css';
 import { useNavigate } from 'react-router-dom';
 
 const ClassList = () => {

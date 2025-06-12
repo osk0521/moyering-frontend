@@ -1,12 +1,11 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css'
-import Login from './pages/common/Login';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import UserLogin from './pages/common/UserLogin';
 import HostIntroPage from './pages/host/HostIntroPage';
 import DashboardLayout from './pages/host/DashboardLayout';
 import MainContent from './pages/host/MainContent';
 import HostProfile from './pages/host/HostProfile';
 import ClassRegisterPage from './pages/host/ClassRegist/ClassRegisterPage';
-import ClassList from './pages/host/ClassList';
+import HostClassList from './pages/host/HostClassList';
 import StudentSearch from './pages/host/StudentSearch';
 import SettlementInfo from './pages/host/SettlementInfo';
 import Inquiry from './pages/host/Inquiry';
@@ -31,8 +30,6 @@ import CategoryManagement from './pages/admin/CategoryManagement';
 import NoticeCreate from "./pages/admin/NoticeCreate";
 import BannerCreateModal from "./pages/admin/BannerCreateModal";
 
-
-import './App.css'
 import Main from './pages/common/Main.jsx';
 import ClassList from './pages/common/ClassList.jsx';
 import Footer from './components/Footer.jsx';
@@ -44,21 +41,17 @@ import MyClassList from './pages/user/0myPage/classRing/MyClassList.jsx';
 import ClassPayment from './pages/user/classRing/ClassPayment.jsx';
 import ClassRingDetail from './pages/common/classRingDetail.jsx';
 import MyWishlist from './pages/user/0myPage/common/MyWishlist.jsx';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 function App() {
 
   return (
     <Router>
       <Routes>
-
       {/* 공통 /~~~으로 시작 */}
       <Route path="/" element={<Main />} />
       <Route path="/classList" element={<ClassList />} />
       <Route path="/classRingDetail" element={<ClassRingDetail />} />
-
       {/* 로그인한 유저 /user/~~~ */}
       <Route path="/user/ClassPayment" element={<ClassPayment />} />
-
       {/* 유저의 마이페이지 /user/mypage/~~~~ */}
       <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
       <Route path="/user/mypage/reviewList" element={<ReviewList />} />
@@ -66,17 +59,14 @@ function App() {
       <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
       <Route path="/user/mypage/myClassList" element={<MyClassList />} />
       <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
-
       {/* 강사 /host/~~~~~ */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/userlogin" element={<UserLogin />} />
           <Route path="/intro" element={<HostIntroPage />} />
           <Route element={<DashboardLayout />}>
             <Route path="/hostMyPage" element={<MainContent />} />
             <Route path="/profile" element={<HostProfile />} />
             <Route path="/register" element={<ClassRegisterPage />} />
-            <Route path="/classList" element={<ClassList />} />
+            <Route path="/HostclassList" element={<HostClassList />} />
             <Route path="/students" element={<StudentSearch />} />
             <Route path="/settlementInfo" element={<SettlementInfo />} />
             <Route path="/inquiry" element={<Inquiry />} />
@@ -85,8 +75,6 @@ function App() {
             <Route path="/classReview" element={<ClassReview />} />
             <Route path="/classSettlement" element={<ClassSettlement />} />
           </Route>
-        </Routes>
-      </BrowserRouter>
       {/* 관리자 /admin/~~~~ */}
           {/* 1차 로그인 화면  */}
           <Route path="/admin" element={<Login />} />

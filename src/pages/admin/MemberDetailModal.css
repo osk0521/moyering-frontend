@@ -1,0 +1,510 @@
+/* src/components/pages/MemberDetailModal.css */
+
+/* 모달 오버레이 */
+.modal-overlayHY {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.modal-contentHY {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* 모달 헤더 */
+.modal-headerHY {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #E0E0E0;
+  position: relative;
+}
+
+.modal-headerHY h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* 계정 비활성화 버튼 */
+.deactivate-btnHY {
+  background-color: #DC2626;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.deactivate-btnHY:hover {
+  background-color: #B91C1C;
+}
+
+/* 계정 활성화 버튼 */
+.activate-btnHY {
+  background-color: #16A34A;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.activate-btnHY:hover {
+  background-color: #15803D;
+}
+
+/* 닫기버튼  */
+.close-btnHY {
+  background-color: #d9dce4;
+  color: #374151; 
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.close-btnHY:hover {
+  background-color: #9CA3AF; 
+  color: #1F2937; 
+}
+
+/* 회원 기본 정보 */
+.member-basic-infoHY {
+  padding: 20px 24px;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.info-rowHY {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 16px;
+}
+
+.info-rowHY:last-child {
+  margin-bottom: 0;
+}
+
+.info-itemHY {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.info-itemHY label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  min-width: 80px;
+}
+
+.info-itemHY span {
+  font-size: 14px;
+  color: #333;
+}
+
+.member-badgeHY {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.member-badgeHY.general {
+  background-color: #E3F2FD;
+  color: #1976D2;
+}
+
+.member-badgeHY.instructor {
+  background-color: #E8F5E8;
+  color: #2E7D2E;
+}
+
+.status-badgeHY {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badgeHY.active {
+  background-color: #E8F5E8;
+  color: #2E7D2E;
+}
+
+.status-badgeHY.inactive {
+  background-color: #FFEBEE;
+  color: #D32F2F;
+}
+
+.status-badgeHY.complete {
+  background-color: #E8F5E8;
+  color: #2E7D2E;
+}
+
+.status-badgeHY.waiting {
+  background-color: #FFF3E0;
+  color: #F57C00;
+}
+
+/* 활동 내역 섹션 */
+.activity-sectionHY {
+  padding: 20px 24px;
+}
+
+.activity-sectionHY h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 20px 0;
+}
+
+/* 클래스 섹션 */
+.class-sectionHY {
+  margin-bottom: 32px;
+}
+
+.section-headerHY {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-headerHY h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.info-textHY {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 신고 섹션 */
+.report-sectionHY {
+  margin-top: 32px;
+}
+
+.report-sectionHY h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 16px 0;
+}
+
+/* 테이블 스타일 */
+.table-containerHY {
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.detail-tableHY {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.detail-tableHY th {
+  background-color: #F8F9FA;
+  color: #333;
+  font-weight: 600;
+  padding: 10px 8px;
+  text-align: center;
+  border-bottom: 1px solid #E0E0E0;
+  border-right: 1px solid #E0E0E0;
+  font-size: 11px;
+}
+
+.detail-tableHY th:last-child {
+  border-right: none;
+}
+
+.detail-tableHY td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #F0F0F0;
+  border-right: 1px solid #F0F0F0;
+  color: #666;
+  text-align: center;
+  font-size: 11px;
+}
+
+.detail-tableHY td:last-child {
+  border-right: none;
+}
+
+.detail-tableHY tbody tr:hover {
+  background-color: #F8F9FA;
+}
+
+/* 금액 색상 */
+.amount-redHY {
+  color: #E53E3E !important;
+  font-weight: 500;
+}
+
+.amount-blueHY {
+  color: #3182CE !important;
+  font-weight: 500;
+}
+
+/* 결제 상태 */
+.payment-statusHY {
+  color: #E53E3E !important;
+  font-weight: 500;
+  font-size: 11px;
+}
+
+/* username 링크 버튼 스타일 추가 */
+.username-linkHY {
+  background: none;
+  border: none;
+  color: #2C5282;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0;
+}
+
+/* 카테고리 섹션 */
+.category-sectionHY {
+  display: flex;
+  align-items: center;
+}
+
+.category-selectHY {
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-width: 140px;
+}
+
+.category-selectHY:focus {
+  border-color: #3B82F6;
+}
+
+/*  상태 필터 섹션 (체크박스) */
+.status-filter-sectionHY {
+  border-top: 1px solid #F3F4F6;
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-labelHY {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 600;
+  min-width: 40px;
+}
+
+.checkbox-groupHY {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.checkbox-labelHY {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.checkbox-labelHY:hover {
+  color: #1F2937;
+}
+
+.checkbox-inputHY {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #D1D5DB;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkbox-inputHY:checked {
+  background-color: #3B82F6;
+  border-color: #3B82F6;
+}
+
+.checkbox-inputHY:hover {
+  border-color: #9CA3AF;
+}
+
+.checkbox-textHY {
+  font-weight: 500;
+}
+
+.status-countHY {
+  font-size: 12px;
+  color: #9CA3AF;
+  font-weight: normal;
+  margin-left: 2px;
+}
+
+/* 결과 수 */
+.result-countHY {
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.result-countHY strong {
+  color: #1F2937;
+  font-weight: 600;
+}
+
+.filter-infoHY {
+  font-size: 12px;
+  color: #6B7280;
+  background-color: #F3F4F6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+/* 특별 스타일 셀 */
+.instructor-idHY {
+  color: #3B82F6;
+  font-weight: 500;
+}
+
+.class-nameHY {
+  color: #3B82F6;
+  font-weight: 500;
+  text-align: left !important;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.priceHY {
+  font-weight: 600;
+  color: #1F2937;
+}
+
+/* 진행률 셀 */
+.progress-cellHY {
+  text-align: center !important;
+}
+
+.progress-infoHY {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.progress-textHY {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.progress-percentageHY {
+  font-size: 11px;
+  color: #6B7280;
+}
+
+/* 상태 배지 */
+.status-pendingHY {
+  background-color: #FEF3C7;
+  color: #D97706;
+  border: 1px solid #FDE68A;
+}
+
+.status-recruitingHY {
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.status-fullHY {
+  background-color: #FEE2E2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+
+.status-completedHY {
+  background-color: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.status-cancelledHY {
+  background-color: #F3F4F6;
+  color: #6B7280;
+  border: 1px solid #D1D5DB;
+}
+
+.status-rejectedHY {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+/* 추가 스타일 */
+.status-activeHY {
+  background-color: #E8F5E8;
+  color: #2E7D2E;
+}
+
+.status-inactiveHY {
+  background-color: #FFEBEE;
+  color: #D32F2F;
+}
+
+.status-completeHY {
+  background-color: #E8F5E8;
+  color: #2E7D2E;
+}
+
+.status-waitingHY {
+  background-color: #FFF3E0;
+  color: #F57C00;
+}

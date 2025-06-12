@@ -1,0 +1,664 @@
+/* CategoryManagement.css - 드래그 앤 드롭 + 숨기기 기능 */
+.category-managementHY {
+  padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* 상단 섹션 */
+.top-sectionHY {
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.count-sectionHY {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.count-labelHY {
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.count-numberHY {
+  color: #2196F3;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.search-inputHY::placeholder {
+  color: #ccc;
+}
+
+.search-btnHY {
+  padding: 10px 15px;
+  border: none;
+  background: #f8f9fa;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  transition: background 0.2s;
+}
+
+.search-btnHY:hover {
+  background: #e9ecef;
+}
+
+/* 컨트롤 섹션 */
+.control-sectionHY {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-controlsHY,
+.right-controlsHY {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.control-btnHY {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  color: #333;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.control-btnHY:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.control-btnHY:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.control-btnHY.select-all {
+  border-color: #2196F3;
+  color: #2196F3;
+}
+
+.control-btnHY.hide-btn {
+  border-color: #FF9800;
+  color: #FF9800;
+}
+
+.control-btnHY.show-btn {
+  border-color: #4CAF50;
+  color: #4CAF50;
+}
+
+.control-btnHY.delete-btn {
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.control-btnHY.hide-btn:hover:not(:disabled) {
+  background: #FF9800;
+  color: white;
+}
+
+.control-btnHY.show-btn:hover:not(:disabled) {
+  background: #4CAF50;
+  color: white;
+}
+
+.control-btnHY.delete-btn:hover:not(:disabled) {
+  background: #f44336;
+  color: white;
+}
+
+.show-hidden-toggleHY {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+}
+
+.show-hidden-toggleHY input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #2196F3;
+}
+
+/* 드래그 안내 */
+.drag-infoHY {
+  background: #e3f2fd;
+  padding: 8px 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 4px solid #2196F3;
+}
+
+.drag-iconHY {
+  font-size: 16px;
+}
+
+.drag-textHY {
+  font-size: 13px;
+  color: #1565C0;
+  font-weight: 500;
+}
+
+/* 테이블 */
+.table-containerHY {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.category-tableHY {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.category-tableHY thead th {
+  background: #f8f9fa;
+  padding: 12px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 13px;
+}
+
+/* 컬럼 너비 */
+.drag-columnHY {
+  width: 80px;
+  text-align: center;
+}
+
+.checkbox-columnHY {
+  width: 50px;
+  text-align: center;
+}
+
+.id-columnHY {
+  width: 60px;
+}
+
+.type-columnHY {
+  width: 70px;
+}
+
+.category-columnHY {
+  width: 90px;
+}
+
+.field-columnHY {
+  width: 120px;
+}
+
+.visibility-columnHY {
+  width: 80px;
+  text-align: center;
+}
+
+.action-columnHY {
+  width: 80px;
+  text-align: center;
+}
+
+/* 테이블 바디 */
+.category-tableHY tbody td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f1f3f4;
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+/* 드래그 가능한 행 */
+.draggable-rowHY {
+  cursor: move;
+  transition: all 0.2s;
+}
+
+.draggable-rowHY:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-rowHY.selected {
+  background: #e3f2fd;
+}
+
+.draggable-rowHY.hidden-item {
+  opacity: 0.6;
+  background: #fafafa;
+}
+
+/* 드래그 셀 */
+.drag-cellHY {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.drag-handleHY {
+  font-size: 16px;
+  color: #999;
+  cursor: grab;
+  user-select: none;
+}
+
+.drag-handleHY:active {
+  cursor: grabbing;
+}
+
+.order-numberHY {
+  font-weight: 600;
+  color: #2196F3;
+  font-size: 12px;
+}
+
+/* 체크박스 셀 */
+.checkbox-cellHY {
+  text-align: center;
+}
+
+.checkbox-cellHY input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #2196F3;
+}
+
+/* ID 셀 */
+.id-cellHY {
+  font-weight: 600;
+  color: #333;
+}
+
+/* 유형 셀 */
+.type-cellHY {
+  text-align: center;
+}
+
+.type-badgeHY {
+  padding: 2px 8px;
+  border: 1px solid #4CAF50;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #4CAF50;
+  background: transparent;
+  font-weight: 500;
+}
+
+/* 카테고리 셀 */
+.category-cellHY {
+  color: #666;
+  font-size: 12px;
+}
+
+/* 영역명 셀 */
+.field-cellHY {
+  color: #333;
+  font-weight: 500;
+}
+
+/* 표시여부 셀 */
+.visibility-cellHY {
+  text-align: center;
+}
+
+.visibility-badgeHY {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.visibility-badgeHY.visible {
+  background: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.visibility-badgeHY.hidden {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+/* 액션 셀 */
+.action-cellHY {
+  text-align: center;
+}
+
+.toggle-btnHY {
+  padding: 4px 8px;
+  border: 1px solid;
+  border-radius: 4px;
+  background: white;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.toggle-btnHY.hide {
+  border-color: #FF9800;
+  color: #FF9800;
+}
+
+.toggle-btnHY.show {
+  border-color: #4CAF50;
+  color: #4CAF50;
+}
+
+.toggle-btnHY.hide:hover {
+  background: #FF9800;
+  color: white;
+}
+
+.toggle-btnHY.show:hover {
+  background: #4CAF50;
+  color: white;
+}
+
+/* 하단 안내 */
+.bottom-infoHY {
+  background: #fff3e0;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #FF9800;
+}
+
+.info-textHY {
+  margin: 0;
+  font-size: 13px;
+  color: #e65100;
+  line-height: 1.5;
+}
+
+/* 드래그 드롭 효과 */
+.draggable-rowHY[draggable="true"]:hover {
+  background: #e3f2fd !important;
+  border: 2px dashed #2196F3;
+}
+
+/* 카테고리 섹션 */
+.category-sectionHY {
+  display: flex;
+  align-items: center;
+}
+
+.category-selectHY {
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-width: 140px;
+}
+
+.category-selectHY:focus {
+  border-color: #3B82F6;
+}
+
+/* 상태 필터 섹션 (체크박스) */
+.status-filter-sectionHY {
+  border-top: 1px solid #F3F4F6;
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-labelHY {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 600;
+  min-width: 40px;
+}
+
+.checkbox-groupHY {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.checkbox-labelHY {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.checkbox-labelHY:hover {
+  color: #1F2937;
+}
+
+.checkbox-inputHY {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #D1D5DB;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkbox-inputHY:checked {
+  background-color: #3B82F6;
+  border-color: #3B82F6;
+}
+
+.checkbox-inputHY:hover {
+  border-color: #9CA3AF;
+}
+
+.checkbox-textHY {
+  font-weight: 500;
+}
+
+.status-countHY {
+  font-size: 12px;
+  color: #9CA3AF;
+  font-weight: normal;
+  margin-left: 2px;
+}
+
+/* 결과 수 */
+.result-countHY {
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.result-countHY strong {
+  color: #1F2937;
+  font-weight: 600;
+}
+
+.filter-infoHY {
+  font-size: 12px;
+  color: #6B7280;
+  background-color: #F3F4F6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+/* 특별 스타일 셀 */
+.instructor-idHY {
+  color: #3B82F6;
+  font-weight: 500;
+}
+
+.class-nameHY {
+  color: #3B82F6;
+  font-weight: 500;
+  text-align: left !important;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.priceHY {
+  font-weight: 600;
+  color: #1F2937;
+}
+
+/* 진행률 셀 */
+.progress-cellHY {
+  text-align: center !important;
+}
+
+.progress-infoHY {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.progress-textHY {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.progress-percentageHY {
+  font-size: 11px;
+  color: #6B7280;
+}
+
+/* 상태 배지 */
+.status-badgeHY {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 60px;
+}
+
+.status-pendingHY {
+  background-color: #FEF3C7;
+  color: #D97706;
+  border: 1px solid #FDE68A;
+}
+
+.status-recruitingHY {
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.status-fullHY {
+  background-color: #FEE2E2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+
+.status-completedHY {
+  background-color: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.status-cancelledHY {
+  background-color: #F3F4F6;
+  color: #6B7280;
+  border: 1px solid #D1D5DB;
+}
+
+.status-rejectedHY {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+  .top-sectionHY {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .control-sectionHY {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .left-controlsHY,
+  .right-controlsHY {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-managementHY {
+    padding: 15px;
+  }
+  
+  .table-containerHY {
+    overflow-x: auto;
+  }
+  
+  .category-tableHY {
+    min-width: 800px;
+  }
+  
+  .category-tableHY th,
+  .category-tableHY td {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+  
+  .drag-infoHY {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .bottom-infoHY {
+    padding: 12px;
+  }
+}
+
+/* 애니메이션 */
+@keyframes dragHighlight {
+  0% { background: #e3f2fd; }
+  50% { background: #bbdefb; }
+  100% { background: #e3f2fd; }
+}
+
+.draggable-rowHY:active {
+  animation: dragHighlight 0.3s ease;
+}

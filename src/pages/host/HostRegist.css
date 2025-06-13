@@ -1,0 +1,113 @@
+.host-regist-wrapper {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #fff;
+}
+
+.host-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-label {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.profile-image-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #d0eaf9;
+  background-image: url('/default-profile.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.img-upload-btn {
+  padding: 8px 14px;
+  border: none;
+  background-color: #ffbf00;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.form-input {
+  padding: 10px;
+  border: 1px solid #f5c66a;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  background-color: #fffaf0;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.verify-btn,
+.add-tag-btn {
+  background-color: #ffbf00;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.form-textarea {
+  padding: 10px;
+  border: 1px solid #f5c66a;
+  border-radius: 4px;
+  background-color: #fffaf0;
+  font-size: 0.95rem;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-subtext {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: -10px;
+}
+
+.error-msg {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: -6px;
+  margin-bottom: -6px;
+}
+
+.submit-btn {
+  margin-top: 24px;
+  padding: 12px;
+  background-color: #ffbf00;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+  background-color: #e0a800;
+}

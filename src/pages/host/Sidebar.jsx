@@ -16,13 +16,13 @@ export default function Sidebar() {
 
   return (
     <aside className="KHJ-sidebar">
-      <div className="KHJ-sidebar__logo" onClick={() => navigate('/hostMyPage')}>
+      <div className="KHJ-sidebar__logo" onClick={() => navigate('/host/hostMyPage')}>
         <img src="/hostlogo.png" alt="로고" className="KHJ-sidebar__logo-img" />
       </div>
 
       <div className="KHJ-sidebar__button-row">
-        <button className="KHJ-sidebar__btn" onClick={() => handleNavigation('/register')}>클래스등록</button>
-        <button className="KHJ-sidebar__btn" onClick={() => handleNavigation('/HostclassList')}>클래스목록</button>
+        <button className="KHJ-sidebar__btn" onClick={() => handleNavigation('/host/classRegist')}>클래스등록</button>
+        <button className="KHJ-sidebar__btn" onClick={() => handleNavigation('/host/HostclassList')}>클래스목록</button>
       </div>
 
       <nav>
@@ -34,8 +34,8 @@ export default function Sidebar() {
             </svg>
           </li>
           <ul className={`KHJ-sidebar__submenu ${openSection === 'info' ? 'open' : ''}`}>
-            <li onClick={() => handleNavigation('/profile')}>프로필 관리</li>
-            <li onClick={() => handleNavigation('/settlementInfo')}>정산정보관리</li>
+            <li onClick={() => handleNavigation('/host/profile')}>프로필 관리</li>
+            <li onClick={() => handleNavigation('/host/settlementInfo')}>정산정보관리</li>
           </ul>
 
           <li className="KHJ-sidebar__menu-title" onClick={() => toggleSection('class')}>
@@ -45,11 +45,11 @@ export default function Sidebar() {
             </svg>
           </li>
           <ul className={`KHJ-sidebar__submenu ${openSection === 'class' ? 'open' : ''}`}>
-            <li onClick={() => handleNavigation('/classList')}>클래스목록</li>
-            <li onClick={() => handleNavigation('/students')}>수강생관리</li>
-            <li onClick={() => handleNavigation('/inquiry')}>문의관리</li>
-            <li onClick={() => handleNavigation('/classReview')}>리뷰관리</li>
-            <li onClick={() => handleNavigation('/calendar')}>일정캘린더</li>
+            <li onClick={() => handleNavigation('/host/classList')}>클래스목록</li>
+            <li onClick={() => handleNavigation('/host/students')}>수강생관리</li>
+            <li onClick={() => handleNavigation('/host/inquiry')}>문의관리</li>
+            <li onClick={() => handleNavigation('/host/classReview')}>리뷰관리</li>
+            <li onClick={() => handleNavigation('/host/calendar')}>일정캘린더</li>
           </ul>
 
           <li className="KHJ-sidebar__menu-title" onClick={() => toggleSection('settlement')}>
@@ -59,7 +59,7 @@ export default function Sidebar() {
             </svg>
           </li>
           <ul className={`KHJ-sidebar__submenu ${openSection === 'settlement' ? 'open' : ''}`}>
-            <li onClick={() => handleNavigation('/classSettlement')}>정산계좌</li>
+            <li onClick={() => handleNavigation('/host/classSettlement')}>정산계좌</li>
           </ul>
         </ul>
       </nav>

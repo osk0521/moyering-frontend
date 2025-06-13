@@ -30,7 +30,6 @@ import MyClassList from './pages/user/0myPage/classRing/MyClassList.jsx';
 import ClassPayment from './pages/user/classRing/ClassPayment.jsx';
 import ClassRingDetail from './pages/common/classRingDetail.jsx';
 import MyWishlist from './pages/user/0myPage/common/MyWishlist.jsx';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 function App() {
 
   return (
@@ -55,46 +54,24 @@ function App() {
 
       {/* 강사 /host/~~~~~ */}
       
-      {/* 관리자 /admin/~~~~ */}
-          {/* 1차 로그인 화면  */}
-          <Route path="/admin" element={<Login />} />
-          <Route path="/admin/login" element={<Login />} />
 
-          {/* 2차 로그인 화면 (인증번호 입력) */}
-          <Route path="/verify" element={<TwoFactorAuth />} />
 
-        {/* 대시보드 페이지 */}
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          
-          {/* 회원 관리 페이지 */}
-          <Route path="/admin/member" element={<MemberManagement/>} />
 
-           {/* 클래스 관리 페이지 */}
-          <Route path="/admin/class" element={<ClassManagement />} />
-
-          {/* 공지사항 관리 페이지  */}
-        <Route path="/admin/notice" element={<NoticeManagement />} />
-
-          {/* 공지사항 생성 페이지  */}
-        <Route path="/admin/notice/create" element={<NoticeCreate />} />
-
-            {/* 신고관리 페이지  */}
-        <Route path="/admin/report" element={<ReportManagement />} />
-
-          {/* 배너관리 페이지  */}
-        <Route path="/admin/banner" element={<BannerManagement />} />
-
-          {/* 배너등록 페이지  */}
-        <Route path="/admin/banner/create" element={<BannerCreateModal />} />
-
-          {/* 결제관리 페이지  */}
-        <Route path="/admin/payment" element={<PaymentManagement />} />
-
-          {/* 정산관리 페이지  */}
-        <Route path="/admin/settlement" element={<SettlementManagement />} />
-
-          {/* 카테고리 관리 페이지  */}
-        <Route path="/admin/category" element={<CategoryManagement />} />
+      
+      {/* 관리자(/admin) */}
+        <Route path="/admin" element={<Login />} />                         {/* 1차 로그인 화면  */} 
+        <Route path="/admin/verify" element={<TwoFactorAuth />} />          {/* 2차 로그인 화면 (인증번호 입력) */}
+        <Route path="/admin/dashboard" element={<Dashboard />} />        {/* 대시보드 페이지 */}
+        <Route path="/admin/member" element={<MemberManagement/>} />   {/* 회원 관리 페이지 */}
+        <Route path="/admin/class" element={<ClassManagement />} />   {/* 클래스 관리 페이지 */}
+        <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
+        <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
+        <Route path="/admin/report" element={<ReportManagement />} />       {/* 신고관리 페이지  */}
+        <Route path="/admin/banner" element={<BannerManagement />} />    {/* 배너관리 페이지  */}
+        <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
+        <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
+        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산관리 페이지  */}      
+        <Route path="/admin/category" element={<CategoryManagement />} />    {/* 카테고리 관리 페이지  */}
         </Routes>
     </Router>
   )

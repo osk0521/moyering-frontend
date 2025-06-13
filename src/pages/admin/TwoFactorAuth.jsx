@@ -18,7 +18,7 @@ const TwoFactorAuth = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('2차 인증 시도:', authCode);
-    navigate('/member');
+    navigate('/admin/dashboard');
   };
 
   return (
@@ -49,7 +49,7 @@ const TwoFactorAuth = () => {
               value={authCode}
               onChange={handleInputChange}
               placeholder="6자리 숫자를 입력하세요"
-              className="input-field auth-code-inputHY"
+              className="input-fieldHY"
               maxLength={6}
               autoFocus
             />

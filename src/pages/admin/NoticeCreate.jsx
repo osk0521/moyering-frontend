@@ -65,16 +65,15 @@ const NoticeCreate = () => {
   // ===== 렌더링 =====
   return (
     <Layout>
-      <div className="notice-createHY">
+      {/* <div className="notice-createHY"> */}
         {/* 페이지 제목 */}
-        <div className="page-headerHY">
+        <div className="page-titleHY">
           <h1>공지사항 등록</h1>
         </div>
 
         {/* 등록 폼 */}
         <form className="notice-formHY" onSubmit={handleSubmit}>
           {/* 공개 여부 체크박스 */}
-          
           <div className="form-group checkbox-groupHY">
         <span className="checkbox-textHY">고정 :</span>
             <label className="checkbox-labelHY">
@@ -132,7 +131,7 @@ const NoticeCreate = () => {
             </button>
           </div>
         </form>
-      </div>
+      {/* </div> */}
     </Layout>
   );
 };

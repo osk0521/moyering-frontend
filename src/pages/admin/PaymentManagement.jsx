@@ -56,7 +56,7 @@ const PaymentManagement = () => {
       paymentMethod: '신용카드',
       status: '취소됨',
       paymentDate: '2023-05-12 16:45:12'
-    }
+    },
   ]);
 
   // 함수들 
@@ -118,47 +118,47 @@ const PaymentManagement = () => {
   // ===== 렌더링 =====
   return (
     <Layout>
-      <div className="managementHYHY">
         {/* 페이지 제목 */}
-        <div className="page-titleHYHY">
+        <div className="page-titleHY">
           <h1>결제 관리</h1>
         </div>
 
 
       {/* 검색 및 필터 영역 */}
-        <div className="controls-sectionHYHY">
-          <div className="search-sectionHYHY">
+          <div className="search-sectionHY">
             {/* 검색 박스 */}
-            <div className="search-boxHYHY">
-              <span className="search-iconHYHY">🔍</span>
+            <div className="search-boxHY">
+              <span className="search-iconHY">🔍</span>
               <input
                 type="text"
                 placeholder="주문번호, 주문명, 결제아이디 검색"
                 value={searchTerm}
                 onChange={handleSearch}
-                className="search-inputHYHY"
+                className="search-inputHY"
               />
             </div>
                  {/* 가입기간 필터 */}
-            <label className="date-labelHYHY">결제 기간</label>
+            <label className="date-labelHY">결제 기간</label>
             <input
               type="date"
-              className="date-inputHYHY"
+              className="date-inputHY"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-            <span className="date-separatorHYHY">~</span>
+            <span className="date-separatorHY">~</span>
             <input
               type="date"
-              className="date-inputHYHY"
+              className="date-inputHY"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
             />
           </div>
-     </div>
+
+          <br/>
+    
 
         {/* 상태 필터 섹션 (결제완료, 취소됨)) */}
-        <div className="filter-sectionHYHY">
+        <div className="filter-sectionHY">
           {['전체', '결제완료', '취소됨'].map(status => (
             <button
             key={status}
@@ -171,13 +171,18 @@ const PaymentManagement = () => {
         </div>
       
   
-
-          <button className="btn-excel-downloadHY" onClick={handleExcelDownload}>
-             엑셀다운로드
-          </button>
+        <div className="right-alignHY">
+  <button className="btn-excel-downloadHY" onClick={handleExcelDownload}>
+    엑셀 다운로드
+  </button>
+        </div>
+  <span className="result-countHY">
+          총 <strong>{filteredPayments.length}</strong>건
+        </span><br />
+          
         {/* 결제 테이블 */}
         <div className="table-wrapperHY">
-          <table className="tableHYHY">
+          <table className="tableHY">
             <thead>
               <tr>
                 <th>주문번호</th>
@@ -214,7 +219,7 @@ const PaymentManagement = () => {
             </tbody>
           </table>
         </div>
-      </div>
+ 
     </Layout>
   );
 };

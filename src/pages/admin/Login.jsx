@@ -23,7 +23,7 @@ const Login = () => {
     
     // 일단 간단하게 - 로그인 버튼 누르면 2차 인증으로 이동
     console.log('로그인 시도:', formData);
-    navigate('/auth/verify');
+    navigate('/admin/verify');
   };
 
   return (
@@ -32,7 +32,7 @@ const Login = () => {
         {/* 로고 부분 - 이미지만 사용 */}
         <div className="logo-sectionHY">
           <div className="logoHY">
-            <img src="/mng_moyering.png" alt="모여링 로고" className="logo-imageHY" />
+            <img src="/logo_managerLogin.png" alt="모여링 로고" className="logo-imageHY" />
           </div>
         </div>
 

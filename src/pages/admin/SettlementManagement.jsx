@@ -8,17 +8,17 @@ const SettlementManagement = () => {
   // 검색 상태
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 정산 데이터 - 피그마와 정확히 동일하게
+
   const [settlements, setSettlements] = useState([
     {
       id: 1,
       no: 1,
       settlementId: 'user',
       className: '베이킹 베이직기',
-      applicationDate: '2024-05-10',
-      settlementAmount: 1296000,
-      adjustmentDate: '2024-05-01',
-      adjustmentAmount: 120000,
+      settlementRequestDate: '2024-05-10',
+      settlementRequestAmount: 1296000,
+      classDate: '2024-05-01',
+      classAmount: 120000,
       participants: 12,
       status: '정산하기'
     },
@@ -27,10 +27,10 @@ const SettlementManagement = () => {
       no: 2,
       settlementId: 'user2',
       className: '그림을 배우기',
-      applicationDate: '2024-05-10',
-      settlementAmount: 2025000,
-      adjustmentDate: '2024-05-01',
-      adjustmentAmount: 150000,
+      settlementRequestDate: '2024-05-10',
+      settlementRequestAmount: 2025000,
+      classDate: '2024-05-01',
+      classAmount: 150000,
       participants: 15,
       status: '정산하기'
     },
@@ -39,10 +39,10 @@ const SettlementManagement = () => {
       no: 3,
       settlementId: 'user3',
       className: '제품 반영하기나과',
-      applicationDate: '2024-05-10',
-      settlementAmount: 3600000,
-      adjustmentDate: '2024-05-01',
-      adjustmentAmount: 200000,
+      settlementRequestDate: '2024-05-10',
+      settlementRequestAmount: 3600000,
+      classDate: '2024-05-01',
+      classAmount: 200000,
       participants: 20,
       status: '정산하기'
     },
@@ -51,10 +51,10 @@ const SettlementManagement = () => {
       no: 4,
       settlementId: 'user4',
       className: '피아노 베이직과',
-      applicationDate: '2024-05-10',
-      settlementAmount: 936000,
-      adjustmentDate: '2024-05-01',
-      adjustmentAmount: 80000,
+      settlementRequestDate: '2024-05-10',
+      settlementRequestAmount: 936000,
+      classDate: '2024-05-01',
+      classAmount: 80000,
       participants: 13,
       status: '정산하기'
     },
@@ -63,10 +63,10 @@ const SettlementManagement = () => {
       no: 5,
       settlementId: 'user5',
       className: '디자인을 베이직과!!',
-      applicationDate: '2024-05-10',
-      settlementAmount: 705600,
-      adjustmentDate: '2024-05-01',
-      adjustmentAmount: 98000,
+      settlementRequestDate: '2024-05-10',
+      settlementRequestAmount: 705600,
+      classDate: '2024-05-01',
+      classAmount: 98000,
       participants: 8,
       status: '정산하기'
     }
@@ -102,9 +102,8 @@ const SettlementManagement = () => {
   // ===== 렌더링 =====
   return (
     <Layout>
-      <div className="settlement-managementHY">
         {/* 페이지 헤더 */}
-        <div className="page-headerHY">
+        <div className="page-titleHY">
           <h1>오늘 정산할 내역</h1>
         </div>
 
@@ -122,25 +121,23 @@ const SettlementManagement = () => {
           </div>
         </div>
 
-        {/* 안내 문구 */}
-        <div className="info-messageHY">
-          출력값은 누적금, 금회차기 기준이며 출력값 상품현재지금 이용 수 수료 / 금회 무월 수 정산기간 누적금 집임
-        </div>
+          <br/>
 
         {/* 정산 테이블 */}
-        <div className="table-wrapperHY">
-          <table className="settlement-tableHY">
+   
+        <div className="table-containerHY">
+        <table className="tableHY">
             <thead>
               <tr>
                 <th>No</th>
                 <th>정산 ID</th>
-                <th>출력수급</th>
-                <th>정산 신청일</th>
-                <th>정산 금액일</th>
-                <th>출력수정일</th>
-                <th>출력수 금액</th>
-                <th>인원</th>
-                <th>정산하기</th>
+                <th>클래스명</th>
+                <th>정산 요청일</th>
+                <th>정산 요청금액</th>
+                <th>클래스 일자</th>
+                <th>클래스 금액</th>
+                <th>수강생 인원</th>
+                <th>액션</th>
               </tr>
             </thead>
             <tbody>
@@ -149,10 +146,10 @@ const SettlementManagement = () => {
                   <td className="no-columnHY">{settlement.no}</td>
                   <td className="settlement-idHY">{settlement.settlementId}</td>
                   <td className="class-nameHY">{settlement.className}</td>
-                  <td>{settlement.applicationDate}</td>
-                  <td className="amountHY">{formatAmount(settlement.settlementAmount)}</td>
-                  <td>{settlement.adjustmentDate}</td>
-                  <td className="amountHY">{formatAmount(settlement.adjustmentAmount)}</td>
+                  <td>{settlement.settlementRequestDate}</td>
+                  <td className="amountHY">{formatAmount(settlement.settlementRequestAmount)}</td>
+                  <td>{settlement.classDate}</td>
+                  <td className="amountHY">{formatAmount(settlement.classAmount)}</td>
                   <td className="participantsHY">{settlement.participants}</td>
                   <td>
                     <button 
@@ -167,7 +164,7 @@ const SettlementManagement = () => {
             </tbody>
           </table>
         </div>
-      </div>
+
     </Layout>
   );
 };

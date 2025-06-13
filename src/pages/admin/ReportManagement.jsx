@@ -3,8 +3,6 @@ import Layout from "./Layout";
 import './ReportManagement.css';
 
 const ReportManagement = () => {
-  // 2단계: 상태 관리 (State Management)
-  // React의 useState 훅을 사용해서 컴포넌트의 상태를 관리합니다
   
   // 검색어 상태 - 사용자가 입력한 검색어를 저장
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,9 +16,8 @@ const ReportManagement = () => {
     direction: 'desc' 
   });
 
-  // 3단계: 더미 데이터 생성
-  // 실제 개발에서는 API에서 데이터를 받아오지만, 
-  // 지금은 테스트용 더미 데이터를 만듭니다
+  // 더미 데이터 생성
+
   const [reports, setReports] = useState([
     {
       id: 1,
@@ -29,7 +26,7 @@ const ReportManagement = () => {
       title: '부적절한 글 게시',
       content: '게시글 내용에 욕설과 비방이 포함되어 있습니다',
       reporter: 'user2',
-      handler: 'user3',
+      handler: 'admin12',
       status: '대기중',
       reportDate: '2023-05-14 11:30:45',
       isVisible: true
@@ -41,7 +38,7 @@ const ReportManagement = () => {
       title: '욕설이 포함된 댓글',
       content: '댓글에 심한 욕설이 사용되었습니다',
       reporter: 'user2',
-      handler: 'user3',
+      handler: 'admin12',
       status: '대기중',
       reportDate: '2023-05-13 14:20:33',
       isVisible: true
@@ -53,7 +50,7 @@ const ReportManagement = () => {
       title: '불건전한 프로필 사진',
       content: '프로필 사진이 부적절합니다',
       reporter: 'user2',
-      handler: 'user3',
+      handler: 'admin12',
       status: '처리됨',
       reportDate: '2023-05-12 16:40:12',
       isVisible: false
@@ -77,7 +74,7 @@ const ReportManagement = () => {
       title: '욕설이 포함된 댓글',
       content: '댓글에 개인정보가 노출되었습니다',
       reporter: 'user2',
-      handler: 'user3',
+      handler: 'admin12',
       status: '처리됨',
       reportDate: '2023-05-13 14:20:33',
       isVisible: true
@@ -89,20 +86,138 @@ const ReportManagement = () => {
       title: '앱 버그 신고',
       content: '시스템 오류로 인한 문제입니다',
       reporter: 'user2',
-      handler: 'user3',
+      handler: 'admin12',
       status: '처리됨',
       reportDate: '2023-05-12 16:40:12',
       isVisible: false
-    }
+    },
+    {
+      id: 7,
+      number: 7,
+      category: '게시글',
+      title: '스팸성 홍보 게시글',
+      content: '상업적 목적의 광고성 게시글이 반복 게시되고 있습니다',
+      reporter: 'user5',
+      handler: 'admin12',
+      status: '처리됨',
+      reportDate: '2023-05-14 09:15:22',
+      isVisible: true
+     },
+     {
+      id: 8,
+      number: 8,
+      category: '댓글',
+      title: '허위정보 유포',
+      content: '잘못된 정보를 담은 댓글이 작성되었습니다',
+      reporter: 'user7',
+      handler: 'admin12',
+      status: '대기중',
+      reportDate: '2023-05-14 11:30:45',
+      isVisible: true
+     },
+     {
+      id: 9,
+      number: 9,
+      category: '사용자',
+      title: '부적절한 프로필 이미지',
+      content: '선정적인 프로필 사진을 사용하고 있습니다',
+      reporter: 'user3',
+      handler: 'admin2',
+      status: '처리됨',
+      reportDate: '2023-05-13 20:45:17',
+      isVisible: false
+     },
+     {
+      id: 10,
+      number: 10,
+      category: '게시글',
+      title: '저작권 침해 의심',
+      content: '타인의 저작물을 무단으로 사용한 게시글입니다',
+      reporter: 'user8',
+      handler: 'admin1',
+      status: '처리됨',
+      reportDate: '2023-05-14 13:22:08',
+      isVisible: true
+     },
+     {
+      id: 11,
+      number: 11,
+      category: '댓글',
+      title: '개인정보 노출',
+      content: '댓글에 전화번호와 주소가 공개되었습니다',
+      reporter: 'user1',
+      handler: 'admin3',
+      status: '처리됨',
+      reportDate: '2023-05-12 08:12:55',
+      isVisible: true
+     },
+     {
+      id: 12,
+      number: 12,
+      category: '기타',
+      title: '서비스 이용 방해',
+      content: '시스템을 악용하여 서비스 이용을 방해하고 있습니다',
+      reporter: 'user6',
+      handler: 'admin12',
+      status: '처리됨',
+      reportDate: '2023-05-14 15:10:33',
+      isVisible: true
+     },
+     {
+      id: 13,
+      number: 13,
+      category: '사용자',
+      title: '닉네임 부적절',
+      content: '혐오 표현이 포함된 닉네임을 사용하고 있습니다',
+      reporter: 'user4',
+      handler: 'admin2',
+      status: '처리됨',
+      reportDate: '2023-05-14 07:55:41',
+      isVisible: false
+     },
+     {
+      id: 14,
+      number: 14,
+      category: '게시글',
+      title: '사기 의심 게시글',
+      content: '허위 판매 게시글로 사용자들을 속이려 합니다',
+      reporter: 'user9',
+      handler: 'admin1',
+      status: '처리됨',
+      reportDate: '2023-05-13 12:35:19',
+      isVisible: true
+     },
+     {
+      id: 15,
+      number: 15,
+      category: '댓글',
+      title: '반복적인 도배',
+      content: '같은 내용의 댓글을 여러 게시글에 반복 작성',
+      reporter: 'user10',
+      handler: 'admin12',
+      status: '처리됨',
+      reportDate: '2023-05-14 16:20:07',
+      isVisible: true
+     },
+     {
+      id: 16,
+      number: 16,
+      category: '기타',
+      title: '해킹 시도',
+      content: '계정 해킹을 시도하는 의심스러운 활동 발견',
+      reporter: 'user2',
+      handler: 'admin3',
+      status: '처리됨',
+      reportDate: '2023-05-14 18:45:52',
+      isVisible: false
+     }
   ]);
 
-  // 4단계: 필터 옵션 정의
+  // 필터 옵션 정의
   // 필터 버튼에 표시될 카테고리들을 배열로 정의
   const filterOptions = ['전체', '게시글', '댓글', '사용자', '기타'];
 
-  // 5단계: 헬퍼 함수들 (Helper Functions)
-  // 재사용 가능한 작은 함수들을 만듭니다
-  
+  // 헬퍼 함수들 (Helper Functions)
   // 날짜 포맷팅 함수 - 날짜를 한국어 형식으로 변환
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -112,14 +227,13 @@ const ReportManagement = () => {
   // 상태에 따른 CSS 클래스 반환 함수
   const getStatusClass = (status) => {
     const statusMap = {
-      '대기중': 'status-received',
-      '처리됨': 'status-completed',
-      // '반려': 'status-rejected'
+      '대기중': 'status-receivedHY',
+      '처리됨': 'status-completedHY',
     };
     return statusMap[status] || '';
   };
 
-  // 6단계: 이벤트 핸들러 함수들
+  // 벤트 핸들러 함수들
   // 사용자의 액션(클릭, 입력 등)을 처리하는 함수들
   
   // 검색어 변경 처리
@@ -164,10 +278,9 @@ const ReportManagement = () => {
     );
   };
 
-  // 7단계: 데이터 필터링 및 정렬 로직
-  // useMemo를 사용해서 성능을 최적화합니다
+  // 데이터 필터링 및 정렬 로직
   const filteredAndSortedReports = React.useMemo(() => {
-    // 1) 먼저 필터링
+    // 필터링
     let filtered = reports.filter(report => {
       // 카테고리 필터 적용
       const matchesFilter = selectedFilter === '전체' || report.category === selectedFilter;
@@ -182,7 +295,7 @@ const ReportManagement = () => {
       return matchesFilter && matchesSearch;
     });
 
-    // 2) 정렬 적용
+    // 정렬 적용
     filtered.sort((a, b) => {
       let aValue = a[sortConfig.key];
       let bValue = b[sortConfig.key];
@@ -205,19 +318,15 @@ const ReportManagement = () => {
     return filtered;
   }, [reports, selectedFilter, searchTerm, sortConfig]);
 
-  // 8단계: JSX 렌더링
-  // 실제 화면에 보여질 HTML 구조를 반환합니다
+  // JSX 렌더링
   return (
     <Layout>
-    
-    <div className="report-managementHY">
       {/* 페이지 제목 */}
-      <div className="page-headerHY">
+      <div className="page-titleHY">
         <h1>신고 관리</h1>
       </div>
 
       {/* 검색 및 필터 영역 */}
-      <div className="controls-sectionHY">
         {/* 검색 박스 */}
         <div className="search-sectionHY">
           <div className="search-boxHY">
@@ -238,25 +347,23 @@ const ReportManagement = () => {
           {filterOptions.map(filter => (
             <button
               key={filter}
-              className={`filter-btn ${selectedFilter === filter ? 'active' : ''}`}
+              className={`filter-btnHY ${selectedFilter === filter ? 'active' : ''}`}
               onClick={() => handleFilterClick(filter)}
             >
               {filter}
             </button>
           ))}
         </div>
-      </div>
-
+  
       {/* 검색 결과 수 표시 */}
-      <div className="result-infoHY">
         <span className="result-countHY">
           총 <strong>{filteredAndSortedReports.length}</strong>건
         </span>
-      </div>
+   
 
       {/* 신고 테이블 */}
       <div className="table-containerHY">
-        <table className="report-tableHY">
+        <table className="tableHY">
           <thead>
             <tr>
               <th>번호</th>
@@ -296,7 +403,7 @@ const ReportManagement = () => {
                 <td>{report.reporter}</td>
                 <td>{report.handler}</td>
                 <td>
-                  <span className={`status-badge ${getStatusClass(report.status)}`}>
+                  <span className={`status-badgeHY ${getStatusClass(report.status)}`}>
                     {report.status}
                   </span>
                 </td>
@@ -304,7 +411,7 @@ const ReportManagement = () => {
                 <td>
                   <div className="action-buttonsHY">
                     <button 
-                      className={`btn-visibility ${report.isVisible ? 'visible' : 'hidden'}`}
+                      className={`btn-visibilityHY ${report.isVisible ? 'visible' : 'hidden'}`}
                       onClick={() => toggleVisibility(report.id)}
                     >
                       {report.isVisible ? '숨기기' : '보이기'}
@@ -317,17 +424,8 @@ const ReportManagement = () => {
         </table>
       </div>
 
-      {/* 페이지네이션 */}
-      <div className="paginationHY">
-        <button className="page-btn prevHY">이전</button>
-        <span className="page-numbersHY">
-          <button className="page-btn activeHY">1</button>
-          <button className="page-btnHY">2</button>
-          <button className="page-btnHY">3</button>
-        </span>
-        <button className="page-btn nextHY">다음</button>
-      </div>
-    </div>
+
+ 
     </Layout>
   );
 };

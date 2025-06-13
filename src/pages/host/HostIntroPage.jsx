@@ -1,7 +1,14 @@
 import React from 'react';
 import './HostIntroPage.css';
+import { useNavigate } from 'react-router';
 
 const HostIntroPage = () => {
+
+  const navigate = useNavigate();
+
+  const handleNavigation = (path)=>{
+    navigate(path)
+  }
   return (
     <div className="KHJ-host-intro-container">
       <section className="KHJ-intro-section">
@@ -38,40 +45,42 @@ const HostIntroPage = () => {
         <div className="KHJ-reason-grid">
           {reasons.map((item, idx) => (
             <div className="KHJ-reason-item" key={idx}>
-              <h3><span>{idx + 1}</span> {item.title}</h3>
+              <h3><span>{idx + 1}</span>{item.title}</h3>
               <p>{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
+
+      <button className="KHJ-start-btn" onClick={()=>handleNavigation('/host/regist')}>5분만에 호스트 시작하기 &gt;</button>
     </div>
   );
 };
 
 const reasons = [
   {
-    title: '1:1매칭호스트 관리',
-    desc: '1:1전담 호스트팀의 담당자가 배정되어 클래스 운영, 세금 신고 등 모든 활동을 체계적으로 돕습니다.'
+    title: '1:1 클래스 관리',
+    desc: '1:1 전담 호스트팀 담당자가 배정되어 클래스 운영, 세금 신고 등 모든 활동을 체계적으로 돕습니다.'
   },
   {
     title: '나만의 브랜드 구축',
-    desc: '모여링 플랫폼 또는 블로그 인기도 등을 통해 콘텐츠 브랜드로서 확장을 만들어갈 수 있습니다.'
+    desc: '모여링을 통해 나만의 브랜드를 알리고 인기 호스트로 성장할 수 있습니다.'
   },
   {
     title: '다양한 네트워크',
-    desc: '지속 가능한 활동을 위해 콘텐츠 경험자와 팬을 만들고, 호스트 네트워크에서 다양한 사례를 공유하고 협업도 나누며 함께 성장합니다.'
+    desc: '팬과 수강생, 다른 호스트들과 다양한 교류와 협업이 가능합니다.'
   },
   {
     title: '마케팅 활성화',
-    desc: '다양한 프로모션의 집합과 고객을 연결하는 검색, 추천광고가 다양한 활동을 효율적으로 돕습니다.'
+    desc: '검색 최적화와 추천 광고 등 다양한 방식으로 홍보를 지원합니다.'
   },
   {
-    title: '콘텐츠 등록',
-    desc: '모여링은 콘텐츠 전문가가 상시 등록을 도와드리며, 다양한 활동이 클래스 콘텐츠로 발전할 수 있도록 함께 고민합니다.'
+    title: '밀착 등록 지원',
+    desc: '콘텐츠 전문가가 상시 등록과 운영을 도와드리며 클래스 확장을 돕습니다.'
   },
   {
     title: '기업 단체 모여링 연결',
-    desc: '기업과 단체의 콘텐츠 연결도 지원하며, 다양한 수익의 확장이 가능합니다.'
+    desc: '기업 또는 단체와 연결하여 더 큰 수익 기회를 얻을 수 있습니다.'
   }
 ];
 

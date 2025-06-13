@@ -28,6 +28,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Login from "./pages/admin/Login";
 import MemberManagement from "./pages/admin/MemberManagement";
 import NoticeCreate from "./pages/admin/NoticeCreate";
+
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
@@ -85,20 +86,21 @@ function App() {
         <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
 
         {/* 강사 /host/~~~~~ */}
-        <Route path="/userlogin" element={<UserLogin />} />
-        <Route path="/intro" element={<HostIntroPage />} />
+        <Route path="/host/intro" element={<HostIntroPage />} />
+        <Route path="/host/regist" element={<HostRegist/>}/>
         <Route element={<DashboardLayout />}>
-        <Route path="/hostMyPage" element={<MainContent />} />
-        <Route path="/profile" element={<HostProfile />} />
-        <Route path="/register" element={<ClassRegisterPage />} />
-        <Route path="/HostclassList" element={<HostClassList />} />
-        <Route path="/students" element={<StudentSearch />} />
-        <Route path="/settlementInfo" element={<SettlementInfo />} />
-        <Route path="/inquiry" element={<Inquiry />} />
-        <Route path="/calendar" element={<ClassCalendar />} />
-        <Route path="/detail" element={<ClassDetail />} />
-        <Route path="/classReview" element={<ClassReview />} />
-        <Route path="/classSettlement" element={<ClassSettlement />} />
+          <Route path="/host/hostMyPage" element={<MainContent />} />
+          <Route path="/host/profile" element={<HostProfile />} />
+          <Route path="/host/classRegist" element={<ClassRegisterPage />} />
+          <Route path="/host/HostclassList" element={<HostClassList />} />
+          <Route path="/host/students" element={<StudentSearch />} />
+          <Route path="/host/settlementInfo" element={<SettlementInfo />} />
+          <Route path="/host/inquiry" element={<Inquiry />} />
+          <Route path="/host/calendar" element={<ClassCalendar />} />
+          <Route path="/host/detail" element={<ClassDetail />} />
+          <Route path="/host/classReview" element={<ClassReview />} />
+          <Route path="/host/classSettlement" element={<ClassSettlement />} />
+
         </Route>
         {/* 관리자 /admin/~~~~ */}
         {/* 1차 로그인 화면  */}

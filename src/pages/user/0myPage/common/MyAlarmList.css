@@ -1,0 +1,234 @@
+/* React DatePicker 커스터마이징 */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+}.MyAlarmList_date_range_container_osk {
+  position: relative;
+}
+
+.MyAlarmList_datepicker_osk {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+}/* MyAlarmList.css */
+
+.MyAlarmList_content_osk {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.MyAlarmList_page_title_osk {
+  margin: 0 0 30px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.MyAlarmList_filter_section_osk {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.MyAlarmList_filter_row_osk {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+  align-items: flex-end;
+}
+
+.MyAlarmList_filter_group_osk {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  align-items:flex-start;
+}
+
+.MyAlarmList_filter_label_osk {
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 5px;
+}
+
+.MyAlarmList_filter_select_osk {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: white;
+  color: #495057;
+  font-size: 14px;
+  min-width: 120px;
+  height: 38px;
+}
+
+.MyAlarmList_datepicker_input_osk {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: white;
+  color: #495057;
+  font-size: 14px;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.MyAlarmList_filter_actions_osk {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.MyAlarmList_search_action_button_osk {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #ff6b35;
+  color: white;
+  height: 38px;
+}
+
+.MyAlarmList_search_action_button_osk:hover {
+  background: #e55a2b;
+}
+
+.MyAlarmList_table_container_osk {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.MyAlarmList_table_osk {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 1px solid #dee2e6;
+}
+
+.MyAlarmList_table_head_osk {
+  background: #f8f9fa;
+}
+
+.MyAlarmList_table_header_osk {
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.MyAlarmList_table_row_osk {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.MyAlarmList_table_row_osk:hover {
+  background: #f8f9fa;
+}
+
+.MyAlarmList_table_cell_osk {
+  padding: 12px 8px;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #dee2e6;
+}
+
+.MyAlarmList_checkbox_osk {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  outline: none;
+}
+
+.MyAlarmList_checkbox_osk:checked {
+  background-color: #FEF3E2;
+  border-color: #ff6b35;
+}
+
+.MyAlarmList_checkbox_osk:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff6b35;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.MyAlarmList_status_badge_osk {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.MyAlarmList_status_badge_osk:hover {
+  opacity: 0.8;
+}
+
+.MyAlarmList_status_read_osk {
+  background: #d4edda;
+  color: #155724;
+}
+
+.MyAlarmList_status_unread_osk {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.MyAlarmList_pagination_osk {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.MyAlarmList_pagination_button_osk {
+  padding: 8px 12px;
+  border: 1px solid #dee2e6;
+  background: white;
+  color: #495057;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  min-width: 32px;
+}
+
+.MyAlarmList_pagination_button_osk:hover {
+  background: #e9ecef;
+}
+
+.MyAlarmList_pagination_active_osk {
+  background: #ff6b35;
+  color: white;
+  border-color: #ff6b35;
+}

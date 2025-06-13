@@ -1,37 +1,47 @@
 /* src/components/FeedDetail.css */
 
 .KYM-detail-container {
-    max-width: 960px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
+  
 }
 
 .KYM-detail-container .KYM-detail-main {
     display: flex;
+    width: 100%;
+    align-items: stretch;              /* 자식 높이 맞춤 */
     border: 1px solid #eee;
     border-radius: 8px;
     overflow: hidden;
-    gap: 20px;
 }
 
 /* 왼쪽 이미지 */
 .KYM-detail-container .KYM-detail-image {
     flex: 1;
+    background-color: #464545;            /* 바깥 배경을 검은색으로 */
+    display: flex;                     /* 이미지 중앙 정렬을 위해 flex */
+    align-items: center;               /* 세로 중앙 */
+    justify-content: center;           /* 가로 중앙 */
+    padding: 20px;                     /* 위아래 여백 (선택) */
 }
 
 .KYM-detail-container .KYM-detail-image img {
-    display: block;
-    width: 600px;
+    /* display: block; */
+    width: 100%;
     max-width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-height: 80vh;
+    height: auto;
+    object-fit: contain;
     border-radius: 8px;
 }
 
 /* 오른쪽 패널 */
 .KYM-detail-container .KYM-detail-side {
-    width: 360px;
+    width: 800px;
+    height: 600px;
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
@@ -54,6 +64,7 @@
 .KYM-detail-container .KYM-detail-name-line {
     display: flex;
     align-items: center;
+    width: 100%;
     gap: 6px;
 }
 
@@ -69,6 +80,17 @@
 
 .KYM-detail-container .KYM-detail-more {
     margin-left: auto;
+    cursor: pointer;
+}
+/* 팔로우 버튼 */
+.KYM-detail-container .KYM-follow-btn {
+    margin-left: 6px;
+    padding: 4px 8px;
+    background: #FFB22C;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 0.85rem;
     cursor: pointer;
 }
 
@@ -144,12 +166,50 @@
 .KYM-detail-container .KYM-toggle-replies {
     background: none;
     border: none;
-    color: #007bff;
+    color: #FFB22C;
     font-size: 0.85rem;
     cursor: pointer;
     padding: 0;
 }
+.KYM-detail-container .KYM-toggle-replies:hover {
+    text-decoration: underline;
+}
+/* 댓글 블록 안에서 답글을 작성하는 input */
+.KYM-detail-container .KYM-reply-input {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0 0 40px;   /* 들여쓰기: 댓글 본문과 맞추기 */
+}
 
+.KYM-detail-container .KYM-reply-input input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.KYM-detail-container .KYM-detail-userinfo {
+  flex: 1;            /* 요 부분 추가 */
+}
+.KYM-detail-container .KYM-reply-input .KYM-submit {
+    padding: 6px 12px;
+    background: #FFB22C;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+.KYM-detail-container .KYM-reply-add {
+  background: none;
+  border: none;
+  color: #FFB22C;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  margin: 4px 0 0;    /* 위쪽 여백만 살짝 줌 */
+}
+.KYM-detail-container .KYM-reply-add:hover {
+  text-decoration: underline;
+}
 /* 새 댓글 입력 */
 .KYM-detail-container .KYM-add-comment {
     display: flex;
@@ -205,4 +265,36 @@
     object-fit: cover;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.KYM-detail-container .KYM-more-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+}
+/* 2) 팝업 메뉴 */
+.KYM-detail-container .KYM-detail-menu {
+  position: absolute;
+  top: 100%;                     /* 버튼 바로 아래 */
+  right: 0;
+  margin-top: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  width: 140px;
+  z-index: 1000;
+  list-style: none;
+  padding: 4px 0;
+}
+
+.KYM-detail-container .KYM-detail-menu li {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.KYM-detail-container .KYM-detail-menu li:hover {
+  background: #f5f5f5;
 }

@@ -1,0 +1,158 @@
+/* src/components/FeedEdit.css */
+
+.KYM-FeedEdit-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 12px;
+}
+
+.KYM-FeedEdit-container
+  .KYM-FeedEdit-btn-cancel,
+.KYM-FeedEdit-container
+  .KYM-FeedEdit-btn-submit {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-btn-cancel {
+  background: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-btn-submit {
+  background: #FFB22C;
+  color: #fff;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-icon-plus {
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-main {
+  display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    min-height: 500px;
+    min-width: 1000px;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-image-box {
+  flex: 0 0 500px;
+  background: #797878;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-image-box img {
+  /* 1) 잘리지 않게, 비율 유지하며 컨테이너 안에 꽉 채우도록 */
+  object-fit: contain;
+
+  /* 2) 너비·높이를 고정 박스에 맞추지 말고, 최대한으로만 늘리기 */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+
+  /* 3) 박스 중앙에 위치시키기 */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-text {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+  font-size: 0.95rem;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-text-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-tags label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-tag-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-tag-item {
+  background: #fff7e6;
+  border: 1px solid #ffd47c;
+  border-radius: 16px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.KYM-FeedEdit-container .KYM-FeedEdit-tag-item button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #ff8c00;
+}

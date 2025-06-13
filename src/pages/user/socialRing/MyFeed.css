@@ -1,0 +1,145 @@
+/* src/components/MyFeed/MyFeed.css */
+
+/* ─── 최상위 부모 클래스 ─── */
+.myfeed-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 제목 */
+.myfeed-container .myfeed-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* 2열 그리드 */
+.myfeed-container .myfeed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* 카드 */
+.myfeed-container .myfeed-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 헤더 */
+.myfeed-container .myfeed-header {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.myfeed-container .myfeed-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.myfeed-container .myfeed-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.myfeed-container .myfeed-nickname {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.myfeed-container .myfeed-badge {
+  width: 20px;
+  height: 20px;
+}
+
+.myfeed-container .myfeed-date {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* 이미지 */
+.myfeed-container .myfeed-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* 본문 */
+.myfeed-container .myfeed-content {
+  padding: 12px;
+  flex: 1;
+}
+
+.myfeed-container .myfeed-content p {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.myfeed-container .myfeed-hashtags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.myfeed-container .myfeed-hashtag {
+  background: #fff7e6;
+  border: 1px solid #ffd47c;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* 푸터 */
+.myfeed-container .myfeed-footer {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid #eee;
+  gap: 16px;
+}
+
+/* 좋아요 버튼 */
+.myfeed-container .myfeed-like-btn {
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.myfeed-container .myfeed-like-btn.active .myfeed-icon {
+  /* 활성화 시 색상 변경? 필요시 추가 */
+}
+
+/* 아이콘 */
+.myfeed-container .myfeed-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* 댓글 수 */
+.myfeed-container .myfeed-comment-count {
+  font-size: 0.85rem;
+  color: #666;
+}
+/* MyFeed.css 에 추가 */
+.myfeed-container button:focus {
+  outline: none;
+}
+.myfeed-container button:focus-visible {
+  /* 탭키로 포커스될 때만 보이는 링 */
+  outline: 2px solid #FFB22C;
+  outline-offset: 2px;
+}

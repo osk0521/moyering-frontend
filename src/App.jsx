@@ -44,6 +44,11 @@ import MySchedule from './pages/user/0myPage/common/MySchedule.jsx';
 import MyWishlist from './pages/user/0myPage/common/MyWishlist.jsx';
 
 import ClassPayment from './pages/user/classRing/ClassPayment.jsx';
+import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
+import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
+import MyFeed from './pages/user/socialRing/MyFeed.jsx';
+import ScrapList from './pages/user/socialRing/ScrapList.jsx';
+import FollowList from './pages/user/socialRing/Followlist.jsx';
 
 function App() {
 
@@ -59,6 +64,11 @@ function App() {
         <Route path="/userFeed" element={<UserFeed />} />
         <Route path="/feedDetail" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
+        <Route path="/feedCreate" element={<FeedCreate/>}/>
+        <Route path="/feedEdit" element={<FeedEdit/>}/>
+        <Route path="/myFeed" element={<MyFeed/>}/>
+        <Route path="/scrapList" element={<ScrapList/>}/>
+        <Route path="/followList" element={<FollowList/>}/>
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}

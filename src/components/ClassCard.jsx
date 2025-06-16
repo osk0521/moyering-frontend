@@ -1,7 +1,10 @@
 import React from 'react';
 import styles from './ClassCard.module.css';
+import { MdCalendarMonth } from "react-icons/md";
 
 export default function ClassCard({ classInfo }) {
+    if (!classInfo) return null;
+  console.log(classInfo);
   return (
     <div className={styles.card}>
       <div
@@ -13,12 +16,13 @@ export default function ClassCard({ classInfo }) {
       </div>
       <div className={styles.cardContent}>
         <div className={styles.cardTags}>
-          <span className={`${styles.tag} ${styles.yellow}`}>카테고리</span>
-          <span className={`${styles.tag} ${styles.blue}`}>클래스 장소</span>
+          <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}</span>
+          <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
         </div>
-        <h3 className={styles.cardTitle}>클래스 이름</h3>
-        <p className={styles.cardInfo}>🗓 25.6.1(일) 오후 2:00</p>
+        <h3 className={styles.cardTitle}>{classInfo.name}</h3>
+        <p className={styles.cardInfo}><MdCalendarMonth/> {classInfo.startDate}</p>
       </div>
     </div>
   );
 }
+

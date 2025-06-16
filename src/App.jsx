@@ -101,6 +101,9 @@ function App() {
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
         <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
+        <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
+        <Route exact path="/user/mypage/myGatherInquiry" element={<MyGatherInquiry />}></Route>
+        <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />

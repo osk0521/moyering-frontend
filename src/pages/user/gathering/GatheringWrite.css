@@ -1,0 +1,421 @@
+.GatheringWrite_gathering-write-container_osk {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.GatheringWrite_content-wrapper_osk {
+  background-color: white;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.GatheringWrite_section_osk {
+  margin-bottom: 40px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 30px;
+}
+
+.GatheringWrite_section_osk:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.GatheringWrite_section-header_osk {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.GatheringWrite_section-icon_osk {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.GatheringWrite_section-title_osk {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.GatheringWrite_form-group_osk {
+  margin-bottom: 20px;
+}
+
+.GatheringWrite_field-label_osk {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.GatheringWrite_required_osk {
+  color: #ff6b35;
+}
+
+.GatheringWrite_custom-input_osk {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  background-color: white;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  color: #333;
+}
+
+.GatheringWrite_custom-input_osk:focus {
+  border-color: #FFB22C;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(255, 178, 44, 0.25);
+}
+
+.GatheringWrite_custom-textarea_osk {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 0 0 4px 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  background-color: white;
+  resize: vertical;
+  min-height: 150px;
+  box-sizing: border-box;
+}
+
+.GatheringWrite_custom-textarea_osk:focus {
+  border-color: #FFB22C;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(255, 178, 44, 0.25);
+}
+
+.GatheringWrite_custom-textarea-simple_osk {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  background-color: white;
+  color: #333;
+  resize: vertical;
+  min-height: 100px;
+  box-sizing: border-box;
+}
+
+.GatheringWrite_custom-textarea-simple_osk:focus {
+  border-color: #FFB22C;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(255, 178, 44, 0.25);
+}
+
+.GatheringWrite_row_osk {
+  display: flex;
+  margin: 0 -8px;
+}
+
+.GatheringWrite_col-md-6_osk {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 0 8px;
+}
+
+.GatheringWrite_time-input-group_osk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.GatheringWrite_time-input_osk {
+  flex: 1;
+}
+
+.GatheringWrite_time-separator_osk {
+  color: #666;
+  font-weight: 500;
+}
+
+/* 주소 검색 관련 스타일 */
+.GatheringWrite_address-search-group_osk {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.GatheringWrite_address-input_osk {
+  flex: 1;
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.GatheringWrite_address-search-btn_osk {
+  background-color: #FFB22C;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  transition: background-color 0.2s;
+}
+
+.GatheringWrite_address-search-btn_osk:hover {
+  background-color: #e6a028;
+}
+
+.toast-editor-container {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow-y: auto;
+}
+
+.toast-editor-container #toast-editor {
+  min-height: 300px;
+}
+
+/* TOAST UI Editor 컨테이너 스타일 */
+.toast-editor-container {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.toast-editor-container #toast-editor {
+  min-height: 300px;
+}
+
+/* TOAST UI Editor 기본 스타일 오버라이드 */
+.toast-editor-container .toastui-editor-defaultUI {
+  border: none;
+}
+
+.toast-editor-container .toastui-editor-toolbar {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 12px;
+}
+
+.toast-editor-container .toastui-editor-md-container {
+  background-color: white;
+}
+
+.toast-editor-container .toastui-editor-md-container .toastui-editor {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.toast-editor-container .toastui-editor-toolbar button {
+  border-radius: 3px;
+  margin: 0 2px;
+  transition: background-color 0.2s;
+}
+
+.toast-editor-container .toastui-editor-toolbar button:hover {
+  background-color: #e9ecef;
+}
+
+#toast-editor{
+  min-height: 400px;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-y: auto;
+}
+.ProseMirror .placeholder{
+  color: #999;
+  background-color : white !important;
+  font-size: 14px;;
+  font-style: italic;
+}
+
+
+/* 포커스 상태 */
+.toast-editor-container:focus-within {
+  border-color: #FFB22C;
+  box-shadow: 0 0 0 0.2rem rgba(255, 178, 44, 0.25);
+}
+
+.GatheringWrite_text-counter_osk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.GatheringWrite_tag-input-group_osk {
+  display: flex;
+  gap: 8px;
+}
+
+.GatheringWrite_tag-input_osk {
+  flex: 1;
+  color: #333;
+}
+
+.GatheringWrite_tag-add-btn_osk {
+  color: #FFB22C;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.GatheringWrite_tag-add-btn_osk:hover {
+  background-color: #e6a028;
+}
+/* TOAST UI Editor 다이얼로그 스타일 수정 */
+
+/* 이미지 업로드 다이얼로그 전체 스타일 */
+.toastui-editor-popup {
+  background-color: white !important;
+  color: #333 !important;
+}
+
+/* 다이얼로그 내부 input, textarea 스타일 수정 */
+.toastui-editor-popup input,
+.toastui-editor-popup textarea {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  padding: 8px 12px !important;
+}
+
+/* 특히 description 입력 필드 */
+.toastui-editor-popup .toastui-editor-popup-add-image .description {
+  background-color: white !important;
+  color: #333 !important;
+}
+
+/* 다이얼로그 버튼 스타일 */
+.toastui-editor-popup button {
+  background-color: #FFB22C !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+}
+
+.toastui-editor-popup button:hover {
+  background-color: #e6a028 !important;
+}
+
+/* Cancel 버튼 */
+.toastui-editor-popup .toastui-editor-popup-close-button,
+.toastui-editor-popup button[type="button"] {
+  background-color: #6c757d !important;
+}
+
+.toastui-editor-popup .toastui-editor-popup-close-button:hover,
+.toastui-editor-popup button[type="button"]:hover {
+  background-color: #5a6268 !important;
+}
+
+/* 탭 스타일 */
+.toastui-editor-popup .tab-item {
+  background-color: #f8f9fa !important;
+  color: #333 !important;
+  border-bottom: 2px solid transparent !important;
+}
+
+.toastui-editor-popup .tab-item.active {
+  background-color: white !important;
+  border-bottom-color: #FFB22C !important;
+}
+
+/* 파일 선택 버튼 */
+.toastui-editor-popup input[type="file"] {
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+}
+
+/* 다이얼로그 헤더 */
+.toastui-editor-popup .toastui-editor-popup-header {
+  background-color: #f8f9fa !important;
+  color: #333 !important;
+  border-bottom: 1px solid #ddd !important;
+}
+/* Select 스타일링 */
+select.GatheringWrite_custom-input_osk {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+  appearance: none;
+}
+
+/* 우편번호 검색 모달 스타일 */
+.postcode-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.postcode-modal-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 600px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.postcode-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+}
+
+.postcode-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.postcode-close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.postcode-close-btn:hover {
+  background-color: #e9ecef;
+  color: #333;
+}

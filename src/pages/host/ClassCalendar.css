@@ -44,3 +44,29 @@
 .fc .fc-toolbar-title {
   font-size: 1.2rem;
 }
+
+/* 일요일 - 빨간색 */
+.fc-day-sun a,
+.fc-day-sun {
+  color: red;
+}
+
+/* 토요일 - 파란색 */
+.fc-day-sat a,
+.fc-day-sat {
+  color: blue;
+}
+
+/* 평일 - 검정색 */
+.fc-day-mon a,
+.fc-day-tue a,
+.fc-day-wed a,
+.fc-day-thu a,
+.fc-day-fri a,
+.fc-day-mon,
+.fc-day-tue,
+.fc-day-wed,
+.fc-day-thu,
+.fc-day-fri {
+  color: black;
+}

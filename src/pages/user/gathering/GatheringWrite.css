@@ -14,12 +14,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.GatheringWrite_section_osk {
-  margin-bottom: 40px;
-  border-bottom: 1px solid #e9ecef;
-  padding-bottom: 30px;
-}
-
 .GatheringWrite_section_osk:last-child {
   border-bottom: none;
   padding-bottom: 0;
@@ -34,6 +28,11 @@
 .GatheringWrite_section-icon_osk {
   font-size: 18px;
   margin-right: 8px;
+}
+.GatheringWrite_section-icon_osk > svg {
+  width: 24px;
+  height: 24px;
+  color: #FFB22C;
 }
 
 .GatheringWrite_section-title_osk {
@@ -378,8 +377,6 @@ select.GatheringWrite_custom-input_osk {
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
-  max-height: 600px;
-  overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 

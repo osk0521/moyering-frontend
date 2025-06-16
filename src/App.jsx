@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Header from "./pages/common/Header.jsx";
 import UserLogin from "./pages/common/UserLogin";
 import ClassCalendar from "./pages/host/ClassCalendar";
 import ClassDetail from "./pages/host/ClassDetail/ClassDetail";
@@ -42,18 +43,15 @@ import ReviewList from "./pages/user/0myPage/classRing/ReviewList.jsx";
 import MyCouponList from "./pages/user/0myPage/common/MyCouponList.jsx";
 import MySchedule from "./pages/user/0myPage/common/MySchedule.jsx";
 import MyWishlist from "./pages/user/0myPage/common/MyWishlist.jsx";
-import Header from "./pages/common/Header.jsx";
 import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
 //게더링
-import GatheringDetail from "./pages/common/GatheringDetail.jsx";
-import GatheringWrite from "./pages/user/gathering/GatheringWrite.jsx";
-import Header from "./pages/common/Header";
 import GatheringDetail from "./pages/common/GatheringDetail";
+import GatheringWrite from "./pages/user/gathering/GatheringWrite";
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
-import GatheringWrite from "./pages/user/gathering/GatheringWrite";
 import GatheringChat from './pages/user/gathering/GatheringChat';
-
+import MyGatherInquiry from './pages/user/0myPage/gathering/MyGatherInquiry';
+import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList";
 function App() {
   return (
     <Router>
@@ -68,11 +66,7 @@ function App() {
         <Route path="/userFeed" element={<UserFeed />} />
         <Route path="/feedDetail" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
-        <Route path="/join" element={<UserJoin/>}/>
-        <Route path="/joinCategory" element={<UserJoinCategory/>}/>
-        <Route path="/joinSuccess" element={<UserJoinSuccess/>}/>
-        <Route path="/userlogin" element={<UserLogin />} />
-        <Route path="/gatheringDetail" element={<ClassPayment />} />
+        <Route path="/classPayment" element={<ClassPayment />} />
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
@@ -87,7 +81,10 @@ function App() {
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
         <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
-        
+        <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
+        <Route exact path="/user/mypage/myGatherInquiry" element={<MyGatherInquiry />}></Route>
+        <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
+
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />
         <Route path="/host/regist" element={<HostRegist/>}/>

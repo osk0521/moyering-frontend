@@ -87,7 +87,7 @@ function App() {
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />
-        <Route path="/host/regist" element={<HostRegist/>}/>
+        <Route path="/host/regist" element={<HostRegist/>}/> 
         <Route element={<DashboardLayout />}>
           <Route path="/host/hostMyPage" element={<MainContent />} />
           <Route path="/host/profile" element={<HostProfile />} />

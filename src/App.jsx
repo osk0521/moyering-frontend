@@ -36,6 +36,31 @@ import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import FollowList from './pages/user/socialRing/Followlist.jsx';
+import NoticeManagement from "./pages/admin/NoticeManagement";
+import PaymentManagement from "./pages/admin/PaymentManagement";
+import ReportManagement from "./pages/admin/ReportManagement";
+import SettlementManagement from "./pages/admin/SettlementManagement";
+import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
+import ClassList from "./pages/common/ClassList.jsx";
+import ClassRingDetail from "./pages/common/classRingDetail.jsx";
+import Main from "./pages/common/Main.jsx";
+import ClassInquiry from "./pages/user/0myPage/classRing/ClassInquiry.jsx";
+import MyClassList from "./pages/user/0myPage/classRing/MyClassList.jsx";
+import ReviewList from "./pages/user/0myPage/classRing/ReviewList.jsx";
+import MyCouponList from "./pages/user/0myPage/common/MyCouponList.jsx";
+import MySchedule from "./pages/user/0myPage/common/MySchedule.jsx";
+import MyWishlist from "./pages/user/0myPage/common/MyWishlist.jsx";
+import Header from "./pages/common/Header.jsx";
+import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
+//게더링
+import GatheringDetail from "./pages/common/GatheringDetail.jsx";
+import GatheringWrite from "./pages/user/gathering/GatheringWrite.jsx";
+import Header from "./pages/common/Header";
+import GatheringDetail from "./pages/common/GatheringDetail";
+import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
+import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
+import GatheringWrite from "./pages/user/gathering/GatheringWrite";
+import GatheringChat from './pages/user/gathering/GatheringChat';
 
 function App() {
   return (
@@ -57,6 +82,11 @@ function App() {
         <Route path="/scrapList" element={<ScrapList/>}/>
         <Route path="/followList" element={<FollowList/>}/>
         <Route path="/classPayment" element={<ClassPayment />} />
+        <Route path="/join" element={<UserJoin/>}/>
+        <Route path="/joinCategory" element={<UserJoinCategory/>}/>
+        <Route path="/joinSuccess" element={<UserJoinSuccess/>}/>
+        <Route path="/userlogin" element={<UserLogin />} />
+        <Route path="/gatheringDetail" element={<ClassPayment />} />
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />

@@ -2,6 +2,9 @@ import React from 'react';
 
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import UserLogin from './pages/common/UserLogin';
+import UserJoin from './pages/common/UserJoin';
+import UserJoinCategory from './pages/common/UserJoinCategory';
+import UserJoinSuccess from './pages/common/UserJoinSuccess';
 import ClassCalendar from './pages/host/ClassCalendar';
 import ClassDetail from './pages/host/ClassDetail/ClassDetail';
 import ClassRegisterPage from './pages/host/ClassRegist/ClassRegisterPage';
@@ -12,6 +15,7 @@ import HostClassList from './pages/host/HostClassList';
 import HostIntroPage from './pages/host/HostIntroPage';
 import HostProfile from './pages/host/HostProfile';
 import Inquiry from './pages/host/Inquiry';
+import HostRegist from './pages/host/HostRegist.jsx';
 import MainContent from './pages/host/MainContent';
 import SettlementInfo from './pages/host/SettlementInfo';
 import StudentSearch from './pages/host/StudentSearch';
@@ -30,7 +34,6 @@ import Login from "./pages/admin/Login";
 import MemberManagement from "./pages/admin/MemberManagement";
 import NoticeCreate from "./pages/admin/NoticeCreate";
 
-import ClassPayment from './pages/user/classRing/ClassPayment.jsx';
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
@@ -55,11 +58,10 @@ import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
 //게더링
 import GatheringDetail from "./pages/common/GatheringDetail.jsx";
 import GatheringWrite from "./pages/user/gathering/GatheringWrite.jsx";
-import Header from "./pages/common/Header";
-import GatheringDetail from "./pages/common/GatheringDetail";
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
-import GatheringWrite from "./pages/user/gathering/GatheringWrite";
+import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
+import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
 
 function App() {
@@ -81,12 +83,10 @@ function App() {
         <Route path="/myFeed" element={<MyFeed/>}/>
         <Route path="/scrapList" element={<ScrapList/>}/>
         <Route path="/followList" element={<FollowList/>}/>
-        <Route path="/classPayment" element={<ClassPayment />} />
         <Route path="/join" element={<UserJoin/>}/>
         <Route path="/joinCategory" element={<UserJoinCategory/>}/>
         <Route path="/joinSuccess" element={<UserJoinSuccess/>}/>
         <Route path="/userlogin" element={<UserLogin />} />
-        <Route path="/gatheringDetail" element={<ClassPayment />} />
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />

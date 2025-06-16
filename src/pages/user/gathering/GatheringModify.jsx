@@ -32,7 +32,6 @@ export default function GatheringWrite() {
     link: "",
     address: "",
     detailAddress: "",
-    meetingDate:"",
     minPeople: 2,
     maxPeople: "",
     deadline: "",
@@ -84,12 +83,12 @@ export default function GatheringWrite() {
   };
 
   // 날짜 변경 핸들러
-  // const handleDateChange = (date) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     date: date,
-  //   }));
-  // };
+  const handleDateChange = (date) => {
+    setFormData((prev) => ({
+      ...prev,
+      date: date,
+    }));
+  };
 
   // 캘린더 SVG 아이콘 컴포넌트
   const CalendarIcon = () => (
@@ -108,25 +107,25 @@ export default function GatheringWrite() {
     </svg>
   );
 
-  // // 커스텀 DatePicker 입력 컴포넌트
-  // const CustomDateInput = React.forwardRef(
-  //   ({ value, onClick, placeholder }, ref) => (
-  //     <div
-  //       className="GatheringWrite_date-input-container_osk"
-  //       onClick={onClick}
-  //       ref={ref}
-  //     >
-  //       <input
-  //         type="text"
-  //         value={value}
-  //         placeholder={placeholder}
-  //         className="GatheringWrite_custom-input_osk GatheringWrite_date-input_osk"
-  //         readOnly
-  //       />
-  //       <CalendarIcon />
-  //     </div>
-  //   )
-  // );
+  // 커스텀 DatePicker 입력 컴포넌트
+  const CustomDateInput = React.forwardRef(
+    ({ value, onClick, placeholder }, ref) => (
+      <div
+        className="GatheringWrite_date-input-container_osk"
+        onClick={onClick}
+        ref={ref}
+      >
+        <input
+          type="text"
+          value={value}
+          placeholder={placeholder}
+          className="GatheringWrite_custom-input_osk GatheringWrite_date-input_osk"
+          readOnly
+        />
+        <CalendarIcon />
+      </div>
+    )
+  );
 
   // 입력 완료 시점에 최솟값 검증을 위한 새로운 함수
   const handleNumberBlur = (e) => {
@@ -393,7 +392,7 @@ export default function GatheringWrite() {
                     모임 날짜{" "}
                     <span className="GatheringWrite_required_osk">*</span>
                   </label>
-                  {/* <DatePicker
+                  <DatePicker
                     selected={formData.date}
                     onChange={handleDateChange}
                     customInput={<CustomDateInput />}
@@ -404,8 +403,7 @@ export default function GatheringWrite() {
                     showMonthDropdown
                     dropdownMode="select"
                     yearDropdownItemNumber={10}
-                  /> */}
-                  <input type="date" onChange={handleInputChange} name="meetingDate"/>
+                  />
                 </div>
               </div>
               <div className="GatheringWrite_col-md-6_osk">

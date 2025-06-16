@@ -12,14 +12,16 @@
   font-size: 1.4rem;
   text-align: center;
   margin-bottom: 12px;
+  font-weight: bold;
 }
 
 .KHJ-intro-section p,
 .KHJ-reason-section p {
   font-size: 0.95rem;
   text-align: center;
-  color: #666;
+  color: #444;
   margin-bottom: 40px;
+  line-height: 1.6;
 }
 
 .KHJ-stats-box {
@@ -34,20 +36,22 @@
 }
 
 .KHJ-stats-box h3 {
-  font-size: 1.5rem;
-  margin-bottom: 4px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 6px;
 }
 
 .KHJ-stats-box p {
-  font-size: 0.85rem;
-  color: #777;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
 }
 
 .KHJ-stats-box a {
   color: #444;
   text-decoration: underline;
   font-weight: bold;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 .KHJ-divider {
@@ -63,31 +67,55 @@
 .KHJ-reason-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 30px;
+  gap: 32px;
+  margin-top: 40px;
 }
 
 .KHJ-reason-item {
   text-align: left;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  padding: 0 8px;
 }
 
 .KHJ-reason-item h3 {
   font-size: 1rem;
+  font-weight: bold;
   margin-bottom: 8px;
   color: #222;
+  display: flex;
+  align-items: center;
 }
 
 .KHJ-reason-item h3 span {
+  display: inline-block;
   color: #ffbf00;
+  font-size: 1.1rem;
   font-weight: bold;
-  margin-right: 4px;
+  margin-right: 6px;
 }
 
 .KHJ-reason-item p {
   color: #555;
   font-size: 0.85rem;
+}
+
+.KHJ-start-btn {
+  display: block;
+  margin: 60px auto 0;
+  padding: 14px 28px;
+  background-color: #ffbf00;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.KHJ-start-btn:hover {
+  background-color: #e6a900;
 }
 
 /* 모바일 대응 */
@@ -99,5 +127,10 @@
   .KHJ-stats-box {
     flex-direction: column;
     gap: 20px;
+  }
+
+  .KHJ-start-btn {
+    width: 100%;
+    font-size: 1rem;
   }
 }

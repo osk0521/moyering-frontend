@@ -1,0 +1,120 @@
+/* 질문 게시판 스타일 */
+.GatheringDetail_questions-board_osk  {
+  margin-top: 20px;
+}
+
+.GatheringDetail_questions-table_osk  {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.GatheringDetail_questions-header_osk  {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.GatheringDetail_questions-grid-header_osk ,
+.GatheringDetail_questions-grid_osk  {
+  display: grid;
+  grid-template-columns: 100px 1fr 120px 120px;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+.GatheringDetail_questions-grid-header_osk  {
+  font-weight: 500;
+  color: #666;
+}
+
+.GatheringDetail_questions-row_osk  {
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+}
+
+.GatheringDetail_questions-row_osk .GatheringDetail_alternate_osk  {
+  background-color: #fafafa;
+}
+
+.GatheringDetail_questions-grid_osk  .GatheringDetail_status_osk ,
+.GatheringDetail_questions-grid_osk  .GatheringDetail_author_osk ,
+.GatheringDetail_questions-grid_osk  .GatheringDetail_date_osk  {
+  color: #666;
+}
+
+.GatheringDetail_questions-grid .GatheringDetail_title_osk  {
+  color: #333;
+  font-weight: 400;
+}
+
+/* 답변 섹션 스타일 */
+.GatheringDetail_answer-section_osk  {
+  padding: 16px 60px 16px 40px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.GatheringDetail_answer-header_osk  {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.GatheringDetail_answer-badge_osk  {
+  display: inline-block;
+  background-color: #5cb85c;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.GatheringDetail_answer-author_osk  {
+  color: #666;
+  font-size: 13px;
+}
+
+.GatheringDetail_answer-date_osk  {
+  color: #999;
+  font-size: 13px;
+}
+
+.GatheringDetail_answer-content_osk  {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.GatheringDetail_6;
+  white-space: pre-line;
+}
+
+/* 페이지네이션 스타일 */
+.GatheringDetail_questions-pagination_osk  {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 8px;
+}
+
+.GatheringDetail_pagination-btn_osk  {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background-color: white;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.GatheringDetail_2s ease;
+}
+
+.GatheringDetail_pagination-btn_osk :hover {
+  background-color: #f5f5f5;
+}
+
+.GatheringDetail_pagination-btn_osk >.active {
+  background-color: #ffa500;
+  border-color: #ffa500;
+  color: white;
+}

@@ -300,7 +300,6 @@ const ClassManagement = () => {
               </select>
             </div>
           </div>
-          
           <br />
       
         {/* 상태 필터 */}

@@ -1,0 +1,448 @@
+/* src/components/FeedPage/FeedPage.css */
+
+/* ─── 전체 컨테이너 ─── */
+.KYM-feed-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    
+}
+
+/* ─── 제목 ─── */
+.KYM-feed-container .KYM-feed-title h2 {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* ─── 필터 버튼 ─── */
+.KYM-feed-container .KYM-feed-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.KYM-feed-container .KYM-filter-button {
+    background: #fff;
+    border: 1px solid #FFB22C;
+    color: #FFB22C;
+    border-radius: 20px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+
+.KYM-feed-container .KYM-filter-button:hover,
+.KYM-feed-container .KYM-filter-button.active {
+    background: #FFB22C;
+    color: #fff;
+}
+
+/* ─── 메인 레이아웃 ─── */
+.KYM-feed-container .KYM-feed-main {
+    display: flex;
+    gap: 20px;
+}
+
+/* ─── 게시물 그리드 ─── */
+.KYM-feed-container .KYM-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    flex: 1;
+}
+
+/* ─── 포스트 카드 ─── */
+.KYM-feed-container .KYM-post-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 포스트 헤더 */
+.KYM-feed-container .KYM-post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+}
+
+.KYM-feed-container .KYM-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.KYM-feed-container .KYM-avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ddd;
+}
+
+.KYM-feed-container .KYM-nickname {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.KYM-feed-container .KYM-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.KYM-feed-container .KYM-more-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* 포스트 이미지 */
+.KYM-feed-container .KYM-post-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* 포스트 내용 */
+.KYM-feed-container .KYM-post-content {
+    padding: 12px;
+    flex: 1;
+}
+
+.KYM-feed-container .KYM-post-content p {
+    margin: 0 0 10px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.KYM-feed-container .KYM-hashtags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.KYM-feed-container .KYM-hashtag {
+    background: #f0f0f0;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+/* 포스트 푸터 */
+.KYM-feed-container .KYM-post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+
+.KYM-feed-container .KYM-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.KYM-feed-container .KYM-comment-count {
+    font-size: 0.85rem;
+}
+
+/* ─── 버튼 공통 스타일 ─── */
+.KYM-feed-container button {
+    background: #fff;
+    border: 1px solid #FFB22C;
+    color: #FFB22C;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: background .2s, color .2s;
+}
+
+.KYM-feed-container button:not(.KYM-like-button):hover,
+.KYM-feed-container button:not(.KYM-like-button).active {
+    background: #FFB22C;
+    color: #fff;
+}
+
+/* ─── 좋아요 버튼만 별도 처리 ─── */
+.KYM-feed-container .KYM-like-button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0;
+}
+
+.KYM-feed-container .KYM-like-button:hover,
+.KYM-feed-container .KYM-like-button.active {
+    background: transparent !important;
+    border: none !important;
+    color: inherit !important;
+}
+
+.KYM-feed-container .KYM-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+/* ─── 사이드바 (스크롤 따라오는 sticky) ─── */
+.KYM-feed-container .KYM-feed-sidebar {
+    width: 210px;
+    margin-left: 20px;
+    position: sticky;
+    top: 100px;
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.KYM-feed-container .KYM-feed-sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+/* 리스트 스타일 제거 */
+.KYM-feed-container .KYM-popular-list {
+    list-style: none;
+    padding: 0;
+    flex: 1;
+    overflow: hidden;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.KYM-feed-container .KYM-popular-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.KYM-feed-container .KYM-popular-item:last-child {
+    border-bottom: none;
+}
+
+.KYM-feed-container .KYM-rank {
+    width: 24px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    margin-right: 8px;
+}
+
+.KYM-feed-container .KYM-pop-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.KYM-feed-container .KYM-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.KYM-feed-container .KYM-pop-nickname {
+    font-size: 1rem;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.KYM-feed-container .KYM-pop-count {
+    font-size: 0.9rem;
+    color: #777;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+/* ─── 인기 피드 페이징 ─── */
+.KYM-feed-container .KYM-pagination-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.KYM-feed-container .KYM-dot {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #FFB22C;
+    border-radius: 50%;
+    background: #fff;
+    padding: 0;
+    cursor: pointer;
+}
+
+.KYM-feed-container .KYM-dot.active {
+    background: #FFB22C;
+}
+
+/* ─── + 글쓰기 버튼 (화면 우측 하단 고정) ─── */
+.KYM-feed-container .KYM-create-post-button {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.KYM-feed-container .KYM-create-post-button img {
+    width: 28px;
+    height: 28px;
+}
+/* 닉네임 옆 배지 아이콘 */
+.KYM-feed-container .KYM-post-header .KYM-badge-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ... 더보기 메뉴 컨테이너를 relative로 */
+.KYM-feed-container .KYM-post-header {
+  position: relative;
+}
+
+/* 게시물 메뉴 (기본 hidden) */
+.KYM-feed-container .KYM-post-header .KYM-post-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 160px;
+  z-index: 10;
+  padding: 8px 0;
+  list-style: none;
+}
+
+/* 메뉴가 열릴 때 */
+.KYM-feed-container .KYM-post-header .KYM-post-menu.open {
+  display: block;
+}
+
+/* 메뉴 항목 */
+.KYM-feed-container .KYM-post-header .KYM-post-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.KYM-feed-container .KYM-post-header .KYM-post-menu li {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.KYM-feed-container .KYM-post-header .KYM-post-menu li:hover {
+  background: #f5f5f5;
+}
+
+/* 메뉴 구분선 */
+.KYM-feed-container .KYM-post-header .KYM-post-menu li + li {
+  border-top: 1px solid #eee;
+}
+
+/* FeedPage.css 맨 아래에 추가 */
+.KYM-feed-container .KYM-post-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 12px;
+  width: 160px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+/* FeedPage.css 맨 아래에 추가 */
+.KYM-feed-container .KYM-feed-main {
+  display: flex;          /* 기존 flex 유지 */
+  width: fit-content;     /* 콘텐츠(그리드+사이드바) 너비만큼만 */
+  margin: 0 auto;         /* 부모 안에서 블록 중앙 정렬 */
+  gap: 20px;              /* 기존 간격 유지 */
+}
+/* 기본 ul/KYM-popular-list 스타일 유지 */
+
+/* enter */
+.KYM-feed-container .slide-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.KYM-feed-container .slide-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 400ms ease-out;
+}
+
+/* exit */
+.KYM-feed-container .slide-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.KYM-feed-container .slide-exit-active {
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: all 300ms ease-in;
+}
+/* FeedPage.css 맨 아래에 추가 */
+.KYM-feed-container button {
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;  /* 모든 버튼의 기본 outline 제거 */
+}
+/* 1) Firefox 의 inner-border 제거 */
+.KYM-feed-container button::-moz-focus-inner {
+  border: 0;
+}
+.KYM-feed-container button:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+/* 4) 키보드로 포커스될 때만 custom ring */
+.KYM-feed-container button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 178, 44, 0.6) !important;
+}

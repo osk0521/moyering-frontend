@@ -1,0 +1,141 @@
+/* src/components/Sidebar.css -- 클래스명에 KYM- 접두어 추가 */
+
+.KYM-sidebar {
+    width: 240px;
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    font-family: Arial, sans-serif;
+}
+
+/* 섹션 헤더 */
+.KYM-sidebar h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+}
+
+/* 회원정보 박스 */
+.KYM-sidebar .KYM-member-info {
+    background: #fdf4e3;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.KYM-sidebar .KYM-member-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.KYM-sidebar .KYM-member-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.KYM-sidebar .KYM-member-text {
+    flex: 1;
+}
+
+.KYM-sidebar .KYM-member-name-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.KYM-sidebar .KYM-member-name {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.KYM-sidebar .KYM-member-badge {
+    width: 20px;
+    height: 20px;
+}
+
+.KYM-sidebar .KYM-member-stats {
+    font-size: 0.8rem;
+    color: #555;
+    display: flex;
+    gap: 8px;
+}
+
+/* 액션 버튼 */
+.KYM-sidebar .KYM-member-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.KYM-sidebar .KYM-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 6px 0;
+    font-size: 0.85rem;
+    border: 1px solid #FF8C00;
+    border-radius: 4px;
+    background: #fff;
+    color: #FF8C00;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.KYM-sidebar .KYM-btn.KYM-primary {
+    background: #FF8C00;
+    color: #fff;
+}
+
+.KYM-sidebar .KYM-btn:hover {
+    background: #FF8C00;
+    color: #fff;
+}
+
+/* 마이메뉴 리스트 */
+.KYM-sidebar .KYM-my-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.KYM-sidebar .KYM-my-menu > h3 {
+    font-size: 1.1rem;
+}
+
+.KYM-sidebar .KYM-my-menu li {
+    margin: 4px 0;
+    font-size: 0.85rem;
+}
+
+.KYM-sidebar .KYM-my-menu li strong {
+    display: block;
+    margin-top: 16px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.KYM-sidebar .KYM-my-menu li:first-child > strong {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.KYM-sidebar .KYM-my-menu li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding-left: 16px;
+}
+
+.KYM-sidebar .KYM-my-menu li a:hover {
+    text-decoration: underline;
+}

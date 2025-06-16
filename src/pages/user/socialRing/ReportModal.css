@@ -1,0 +1,87 @@
+.KYM-report-wrapper {
+  /* 필요한 경우 추가 스타일 */
+}
+
+.KYM-report-wrapper .KYM-report-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.KYM-report-wrapper .KYM-report-modal {
+  background: #fff;
+  border-radius: 8px;
+  width: 500px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.KYM-report-wrapper .KYM-report-title {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.KYM-report-wrapper .KYM-report-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.KYM-report-wrapper .KYM-report-select,
+.KYM-report-wrapper .KYM-report-textarea {
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.95rem;
+}
+
+.KYM-report-wrapper .KYM-report-select {
+  height: 36px;
+}
+
+.KYM-report-wrapper .KYM-report-textarea {
+  height: 200px;
+  resize: none;
+}
+
+.KYM-report-wrapper .KYM-report-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 4px;
+}
+
+.KYM-report-wrapper .KYM-report-footer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.KYM-report-wrapper .KYM-report-btn {
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+}
+
+.KYM-report-wrapper .KYM-report-submit {
+  background: #FFB22C;
+  color: #fff;
+}
+
+.KYM-report-wrapper .KYM-report-cancel {
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}

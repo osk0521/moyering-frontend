@@ -1,0 +1,199 @@
+/* src/components/UserFeed.css -- 부모 클래스 스코프 추가, KYM- 접두어 유지 */
+
+/* 전체 */
+.KYM-profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 0.85rem;
+}
+
+/* 헤더 */
+.KYM-profile-container .KYM-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.KYM-profile-container .KYM-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 50px;
+    width: 100px;
+    height: 100px;
+}
+
+/* 정보 전체 래퍼 */
+.KYM-profile-container .KYM-profile-info {
+    flex: 1;
+    margin-left: 30px;
+}
+
+/* 닉네임/배지/더보기 한 줄 */
+.KYM-profile-container .KYM-name-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.KYM-profile-container .KYM-nickname {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.KYM-profile-container .KYM-badge {
+    width: 24px;
+    height: 24px;
+}
+
+.KYM-profile-container .KYM-more-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+/* 자기소개 */
+.KYM-profile-container .KYM-intro {
+    margin: 8px 0 12px;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* 액션 버튼 */
+.KYM-profile-container .KYM-action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.KYM-profile-container .KYM-btn {
+    background: #fff;
+    border: 1px solid #FFB22C;
+    color: #FFB22C;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+.KYM-profile-container .KYM-btn:hover {
+    background: #FFB22C;
+    color: #fff;
+}
+
+/* 통계 */
+.KYM-profile-container .KYM-stat-list {
+    display: inline-flex;
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.KYM-profile-container .KYM-stat-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.KYM-profile-container .KYM-stat-list strong {
+    display: block;
+    font-size: 1rem;
+    color: #333;
+}
+
+.KYM-profile-container .KYM-stat-list span {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* 구분선 */
+.KYM-profile-container .KYM-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* 게시물 그리드 */
+.KYM-profile-container .KYM-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.KYM-profile-container .KYM-post-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.KYM-profile-container .KYM-post-img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    object-position: center;
+    background: #8a8a8a;
+}
+
+.KYM-profile-container .KYM-post-content {
+    padding: 8px;
+    flex: 1;
+    color: #333;
+}
+
+.KYM-profile-container .KYM-post-footer {
+    display: flex;
+    justify-content: flex-start;
+    padding: 6px 8px;
+    border-top: 1px solid #eee;
+}
+
+/* stats 컨테이너 */
+.KYM-profile-container .KYM-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 아이콘 */
+.KYM-profile-container .KYM-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+/* 좋아요 버튼 */
+.KYM-profile-container .KYM-like-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-right: 4px;
+}
+
+.KYM-profile-container .KYM-like-button:hover,
+.KYM-profile-container .KYM-like-button.KYM-active {
+    background: transparent !important;
+    border: none !important;
+    color: inherit !important;
+}
+
+.KYM-profile-container .KYM-like-button .KYM-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+/* 댓글 수 */
+.KYM-profile-container .KYM-comment-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}

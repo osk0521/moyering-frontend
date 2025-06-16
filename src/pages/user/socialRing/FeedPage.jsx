@@ -3,12 +3,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './FeedPage.css';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import plusIcon from './icons/plus.svg';
 import moreIcon from './icons/more.png';
 import badgeIcon from './icons/badge.jpg';
 import heartOutline from './icons/heart-outline.png';
 import heartFilled from './icons/heart-filled.png';
+import ReportModal from './ReportModal';
+import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group';
 
 const POSTS_PER_PAGE = 3;
 const dummyPosts = [
@@ -62,8 +64,10 @@ const FeedPage = () => {
   const [popularPage, setPopularPage] = useState(1);
   const [dragStartX, setDragStartX] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [reportTargetId, setReportTargetId] = useState(null);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
+  const slideRef = useRef(null);
 
   const totalPopularPages = Math.ceil(popularPosts.length / POSTS_PER_PAGE);
 
@@ -95,7 +99,7 @@ const FeedPage = () => {
         : { ...p, liked: !p.liked, likeCount: p.liked ? p.likeCount - 1 : p.likeCount + 1 }
     ));
   };
-  
+
 
   const onFilterClick = filter => setActiveFilter(filter);
   const onCreateClick = () => navigate('/feed/create');
@@ -166,11 +170,11 @@ const FeedPage = () => {
                   <span className="KYM-date">{post.date}</span>
                 </div>
                 <div className="KYM-more-container">
-                <img src={moreIcon} alt="더보기" className="KYM-more-icon" 
-                onClick={() => handleMenuToggle(post.id)}/>
-                {openMenuId === post.id && (
+                  <img src={moreIcon} alt="더보기" className="KYM-more-icon"
+                    onClick={() => handleMenuToggle(post.id)} />
+                  {openMenuId === post.id && (
                     <ul className="KYM-post-menu open">
-                      <li onClick={() => reportPost(post.id)}>신고하기</li>
+                      <li onClick={() => { setOpenMenuId(null); setReportTargetId(post.id); }}>신고하기</li>
                       <li onClick={() => viewPost(post.id)}>게시물로 이동</li>
                       <li onClick={() => scrapPost(post.id)}>스크랩하기</li>
                       <li onClick={() => sharePost(post.id)}>공유하기</li>
@@ -178,7 +182,7 @@ const FeedPage = () => {
                       <li onClick={() => openDM(post.authorName)}>DM</li>
                     </ul>
                   )}
-                  </div>
+                </div>
               </div>
 
               <img className="KYM-post-image" src={post.imageUrl} alt="게시물" />
@@ -221,11 +225,29 @@ const FeedPage = () => {
           onTouchEnd={e => handleDragEnd(e.changedTouches[0].clientX)}
         >
           <h3>인기 피드</h3>
-          <ul className="KYM-popular-list">
+          
+            {/* ① SwitchTransition + out-in 모드 */}
+      <SwitchTransition mode="out-in">
+        <CSSTransition
+          key={popularPage}         // 페이지가 바뀔 때마다 exit → enter
+          nodeRef={slideRef}        // findDOMNode 대체용 ref
+          timeout={{ exit: 300, enter: 300 }}
+          classNames="slide"
+          unmountOnExit              // exit 끝난 뒤에야 DOM 언마운트
+        >
+          {/* ② 매번 새로 렌더되는 컨테이너에 ref 달기 */}
+          <ul ref={slideRef} className="KYM-popular-list">
             {paginatedPopular.map((item, idx) => (
               <li key={item.id} className="KYM-popular-item">
-                <span className="KYM-rank">{(popularPage - 1) * POSTS_PER_PAGE + idx + 1}.</span>
-                <img src={item.image} alt="썸네일" className="KYM-pop-thumb" />
+                <span className="KYM-rank">
+                  {(popularPage - 1) * POSTS_PER_PAGE + idx + 1}.
+                </span>
+                <img
+                  src={item.image}
+                  alt="썸네일"
+                  className="KYM-pop-thumb"
+                  draggable="false"
+                />
                 <div className="KYM-info">
                   <span className="KYM-pop-nickname">{item.nickname}</span>
                   <span className="KYM-pop-count">{item.count}</span>
@@ -233,6 +255,8 @@ const FeedPage = () => {
               </li>
             ))}
           </ul>
+        </CSSTransition>
+      </SwitchTransition>
           <div className="KYM-pagination-dots">
             {Array.from({ length: totalPopularPages }).map((_, idx) => (
               <button
@@ -251,6 +275,16 @@ const FeedPage = () => {
           <img src={plusIcon} alt="새 글 추가" />
         </button>
       </div>
+      {/* 신고 모달 */}
+      <ReportModal
+        show={reportTargetId !== null}
+        onClose={() => setReportTargetId(null)}
+        onSubmit={({ reason, detail }) => {
+          // TODO: 여기에 실제 신고 API 호출
+          console.log('신고할 게시물 ID:', reportTargetId, '사유:', reason, '상세:', detail);
+          setReportTargetId(null);
+        }}
+      />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Layout from "./Layout";
-import './MemberManagement.css';
-import MemberDetailModal from './MemberDetailModal'; // 회원 상세 모달 컴포넌트 
+import './BannerManagement.css'; 
 
 const MemberManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -46,10 +45,9 @@ const MemberManagement = () => {
     <Layout>
       <div className="member-managementHY">
         <div className="page-titleHY">
-          <h1>회원 관리</h1>
+          <h1>배너 관리</h1>
         </div>
 
-        <div className="controls-sectionHY">
           <div className="search-sectionHY">
             <div className="search-boxHY">
               <span className="search-iconHY">🔍</span>
@@ -87,7 +85,7 @@ const MemberManagement = () => {
               {filteredMembers.map(member => (
                 <tr key={member.no}>
                   <td>{member.no}</td>
-                  <td><span className={`member-type ${member.type === '강사' ? 'instructor' : 'general'}`}>{member.type}</span></td>
+                  <td><span className={`member-typeHY ${member.type === '강사' ? 'instructor' : 'general'}`}>{member.type}</span></td>
                   <td><span className="username-linkHY" onClick={() => handleMemberClick(member)}>{member.username}</span></td>
                   <td>{member.name}</td>
                   <td>{member.email}</td>
@@ -107,7 +105,7 @@ const MemberManagement = () => {
             </div>
           </div>
         )}
-      </div>
+     
     </Layout>
   );
 };

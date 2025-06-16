@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Layout from "./Layout";
 import './MemberManagement.css';
 import MemberDetailModal from './MemberDetailModal'; // 회원 상세 모달 컴포넌트 
 
@@ -113,7 +114,157 @@ const MemberManagement = () => {
       phone: '010-0000-0123',
       joinDate: '2023-11-11',
       use_yn: 'Y',
-    }
+    },
+    {
+      no: 11,
+      type: '일반',
+      username: 'user6',
+      name: '회원6',
+      email: 'user6@example.com',
+      phone: '010-1111-2345',
+      joinDate: '2023-12-05',
+      use_yn: 'Y',
+     },
+     {
+      no: 12,
+      type: '강사',
+      username: 'teacher6',
+      name: '강사6',
+      email: 'teacher6@example.com',
+      phone: '010-2222-3456',
+      joinDate: '2023-12-20',
+      use_yn: 'Y',
+     },
+     {
+      no: 13,
+      type: '일반',
+      username: 'user7',
+      name: '회원7',
+      email: 'user7@example.com',
+      phone: '010-3333-4567',
+      joinDate: '2024-01-08',
+      use_yn: 'N',
+     },
+     {
+      no: 14,
+      type: '강사',
+      username: 'teacher7',
+      name: '강사7',
+      email: 'teacher7@example.com',
+      phone: '010-4444-5678',
+      joinDate: '2024-01-22',
+      use_yn: 'Y',
+     },
+     {
+      no: 15,
+      type: '일반',
+      username: 'user8',
+      name: '회원8',
+      email: 'user8@example.com',
+      phone: '010-5555-6789',
+      joinDate: '2024-02-14',
+      use_yn: 'Y',
+     },
+     {
+      no: 16,
+      type: '강사',
+      username: 'teacher8',
+      name: '강사8',
+      email: 'teacher8@example.com',
+      phone: '010-6666-7890',
+      joinDate: '2024-03-03',
+      use_yn: 'N',
+     },
+     {
+      no: 17,
+      type: '일반',
+      username: 'user9',
+      name: '회원9',
+      email: 'user9@example.com',
+      phone: '010-7777-8901',
+      joinDate: '2024-03-19',
+      use_yn: 'Y',
+     },
+     {
+      no: 18,
+      type: '강사',
+      username: 'teacher9',
+      name: '강사9',
+      email: 'teacher9@example.com',
+      phone: '010-8888-9012',
+      joinDate: '2024-04-07',
+      use_yn: 'Y',
+     },
+     {
+      no: 19,
+      type: '일반',
+      username: 'user10',
+      name: '회원10',
+      email: 'user10@example.com',
+      phone: '010-9999-0123',
+      joinDate: '2024-04-25',
+      use_yn: 'N',
+     },
+     {
+      no: 20,
+      type: '강사',
+      username: 'teacher10',
+      name: '강사10',
+      email: 'teacher10@example.com',
+      phone: '010-0000-1234',
+      joinDate: '2024-05-12',
+      use_yn: 'Y',
+     },
+     {
+      no: 21,
+      type: '일반',
+      username: 'user11',
+      name: '회원11',
+      email: 'user11@example.com',
+      phone: '010-1234-5678',
+      joinDate: '2024-05-28',
+      use_yn: 'Y',
+     },
+     {
+      no: 22,
+      type: '강사',
+      username: 'teacher11',
+      name: '강사11',
+      email: 'teacher11@example.com',
+      phone: '010-2345-6789',
+      joinDate: '2024-06-14',
+      use_yn: 'N',
+     },
+     {
+      no: 23,
+      type: '일반',
+      username: 'user12',
+      name: '회원12',
+      email: 'user12@example.com',
+      phone: '010-3456-7890',
+      joinDate: '2024-07-02',
+      use_yn: 'Y',
+     },
+     {
+      no: 24,
+      type: '강사',
+      username: 'teacher12',
+      name: '강사12',
+      email: 'teacher12@example.com',
+      phone: '010-4567-8901',
+      joinDate: '2024-07-18',
+      use_yn: 'Y',
+     },
+     {
+      no: 25,
+      type: '일반',
+      username: 'user13',
+      name: '회원13',
+      email: 'user13@example.com',
+      phone: '010-5678-9012',
+      joinDate: '2024-08-05',
+      use_yn: 'N',
+     }
   ];
 
   // 검색어 입력받아서 상태에 저장 
@@ -164,46 +315,47 @@ const MemberManagement = () => {
 
   return (
     <Layout>
-      <div className="managementHYHY">
+
         {/* 페이지 제목 */}
-        <div className="page-titleHYHY">
+        <div className="page-titleHY">
           <h1>회원 관리</h1>
         </div>
 
         {/* 검색 및 필터 영역 */}
-        <div className="controls-sectionHYHY">
-          <div className="search-sectionHYHY">
+
+          <div className="search-sectionHY">
             {/* 검색 박스 */}
-            <div className="search-boxHYHY">
-              <span className="search-iconHYHY">🔍</span>
+            <div className="search-boxHY">
+              <span className="search-iconHY">🔍</span>
               <input
                 type="text"
                 placeholder="회원 아이디, 이메일 검색"
                 value={searchTerm}
                 onChange={handleSearch}
-                className="search-inputHYHY"
+                className="search-inputHY"
               />
             </div>
             
             {/* 가입기간 필터 */}
-            <label className="date-labelHYHY">가입기간</label>
+            <label className="date-labelHY">가입기간</label>
             <input
               type="date"
-              className="date-inputHYHY"
+              className="date-inputHY"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-            <span className="date-separatorHYHY">~</span>
+            <span className="date-separatorHY">~</span>
             <input
               type="date"
-              className="date-inputHYHY"
+              className="date-inputHY"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
             />
           </div>
-
+            <br/>
           {/* 회원 유형 필터 */}
-          <div className="filter-sectionHYHY">
+          <div className="filter-sectionHY">
+            <div></div>
             {['전체', '일반', '강사'].map(type => (
               <button 
                 key={type}
@@ -214,16 +366,15 @@ const MemberManagement = () => {
               </button>
             ))}
           </div>
-        </div>
 
         {/* 필터된 결과 수 */}
-        <div className="result-countHYHY">
+        <div className="result-countHY">
           총 <strong>{filteredClasses.length}</strong>건
         </div>
 
         {/* 회원 테이블 */}
-        <div className="table-containerHYHY">
-          <table className="tableHYHY">
+        <div className="table-containerHY">
+          <table className="tableHY">
             <thead>
               <tr>
                 <th>No</th>
@@ -248,7 +399,7 @@ const MemberManagement = () => {
                   {/* 회원아이디 클릭하면 회원상세보기 모달창으로 이동 */}
                   <td>
                     <span 
-                      className="username-linkHYHY"
+                      className="username-linkHY"
                       onClick={() => handleMemberClick(member)}
                     >
                       {member.username}
@@ -267,8 +418,8 @@ const MemberManagement = () => {
 
         {/* 회원 상세 모달 */}
         {isModalOpen && selectedMember && (
-          <div className="modal-overlayHYHY">
-            <div className="modal-contentHYHY">
+          <div className="modal-overlayHY">
+            <div className="modal-contentHY">
               <MemberDetailModal 
                 member={selectedMember}
                 onClose={handleCloseModal}
@@ -276,7 +427,7 @@ const MemberManagement = () => {
             </div>
           </div>
         )}
-      </div>
+    
     </Layout>
   );
 };

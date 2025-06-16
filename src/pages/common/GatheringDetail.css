@@ -5,7 +5,8 @@
 }
 
 .GatheringDetail_gathering-detail_osk {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic",
+    sans-serif;
   background-color: #f8f9fa;
   color: #333;
   min-height: 100vh;
@@ -111,7 +112,7 @@
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .GatheringDetail_main-image_osk {
@@ -119,8 +120,8 @@
   height: 500px;
   object-fit: cover;
   display: block;
-  object-fit:cover;
-  object-position:center center;
+  object-fit: cover;
+  object-position: center center;
 }
 
 /* 탭 메뉴 */
@@ -132,7 +133,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   margin-bottom: 0;
   border: 1px solid #e9ecef;
 }
@@ -164,7 +165,7 @@
 }
 
 .GatheringDetail_tab_osk.GatheringDetail_active_osk::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -190,7 +191,7 @@ html {
   border-radius: 12px;
   padding: 24px;
   margin-top: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .GatheringDetail_detail-section_osk {
@@ -205,7 +206,7 @@ html {
 .GatheringDetail_detail-section_osk:last-child {
   margin-bottom: 0;
 }
-.GatheringDetail_detail-section_osk > img{
+.GatheringDetail_detail-section_osk > img {
   width: 688px;
 }
 .GatheringDetail_section-title_osk {
@@ -229,7 +230,7 @@ html {
   margin-bottom: 16px;
   font-size: 14px;
 }
-button.GatheringDetail_more_osk{
+button.GatheringDetail_more_osk {
   width: 100%;
   padding: 12px;
   background: white;
@@ -468,13 +469,25 @@ button.GatheringDetail_more_osk{
 .GatheringDetail_view-all-link_osk svg {
   font-size: 16px;
 }
-.GatheringDetail_members_osk {
-  display: inline-flex;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+/* 멤버 Carousel 컨테이너 */
+.GatheringDetail_members-carousel-container_osk {
   margin-bottom: 24px;
 }
 
+.GatheringDetail_members-carousel_osk {
+  position: relative;
+}
+
+/* 멤버 슬라이드 레이아웃 */
+.GatheringDetail_members-slide_osk {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 0;
+  flex-wrap: wrap;
+}
+
+/* 기존 멤버 카드 스타일 수정 */
 .GatheringDetail_member-card_osk {
   display: flex;
   width: 220px;
@@ -484,31 +497,10 @@ button.GatheringDetail_more_osk{
   border: 1px solid #e9ecef;
   border-radius: 12px;
   background: white;
+  flex-shrink: 0; /* 카드 크기 고정 */
 }
 
-.GatheringDetail_member-avatar_osk {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #f1f3f4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.GatheringDetail_member-profile-image_osk {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.GatheringDetail_member-info_osk {
-  flex: 1;
-}
-
+/* Text Ellipsis 적용 - 멤버 이름 */
 .GatheringDetail_member-name_osk {
   font-size: 14px;
   font-weight: 500;
@@ -517,18 +509,115 @@ button.GatheringDetail_more_osk{
   display: flex;
   align-items: center;
   gap: 4px;
+  
+  /* Text overflow ellipsis 속성 추가 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%; /* 부모 컨테이너에 맞춤 */
 }
 
-.GatheringDetail_verified_osk {
-  color: #28a745;
-  font-size: 12px;
-}
-
+/* Text Ellipsis 적용 - 멤버 소개 */
 .GatheringDetail_member-description_osk {
   font-size: 12px;
   color: #666;
   line-height: 1.3;
   margin: 0;
+  
+  /* Text overflow ellipsis 속성 추가 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%; /* 부모 컨테이너에 맞춤 */
+}
+
+/* Carousel 컨트롤 버튼 스타일 */
+.GatheringDetail_members-carousel_osk .carousel-control-prev,
+.GatheringDetail_members-carousel_osk .carousel-control-next {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #666;
+}
+
+.GatheringDetail_members-carousel_osk .carousel-control-prev {
+  left: -20px;
+}
+
+.GatheringDetail_members-carousel_osk .carousel-control-next {
+  right: -20px;
+}
+
+.GatheringDetail_members-carousel_osk .carousel-control-prev-icon,
+.GatheringDetail_members-carousel_osk .carousel-control-next-icon {
+  width: 20px;
+  height: 20px;
+  background-size: 100%, 100%;
+}
+
+/* Carousel 인디케이터 스타일 */
+.GatheringDetail_members-carousel_osk .carousel-indicators {
+  bottom: -30px;
+  margin-bottom: 0;
+}
+
+.GatheringDetail_members-carousel_osk .carousel-indicators li {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ddd;
+  border: none;
+  margin: 0 4px;
+}
+
+.GatheringDetail_members-carousel_osk .carousel-indicators .active {
+  background-color: #ff6b6b;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .GatheringDetail_members-slide_osk {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .GatheringDetail_member-card_osk {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .GatheringDetail_members-carousel_osk .carousel-control-prev,
+  .GatheringDetail_members-carousel_osk .carousel-control-next {
+    display: none; /* 모바일에서는 컨트롤 버튼 숨김 */
+  }
+}
+
+@media (max-width: 992px) {
+  .GatheringDetail_members-slide_osk {
+    gap: 12px;
+  }
+  
+  .GatheringDetail_member-card_osk {
+    width: 200px;
+  }
+}
+
+/* 카드 호버 효과 */
+.GatheringDetail_member-card_osk:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* 멤버 정보 영역 width 조정 */
+.GatheringDetail_member-info_osk {
+  flex: 1;
+  min-width: 0; /* flex item의 기본 min-width를 0으로 설정하여 텍스트 오버플로우가 정상 작동하도록 함 */
 }
 
 .GatheringDetail_more-text_osk {
@@ -590,7 +679,7 @@ button.GatheringDetail_more_osk{
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
 }
 
@@ -640,7 +729,7 @@ button.GatheringDetail_more_osk{
   background: white;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .GatheringDetail_status-badges_osk {
@@ -653,7 +742,7 @@ button.GatheringDetail_more_osk{
 .GatheringDetail_badge_osk {
   padding: 6px 12px;
   border-radius: 16px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
 }
 
@@ -661,7 +750,7 @@ button.GatheringDetail_more_osk{
   background: #fff3e0;
   color: #f57c00;
 }
-#GatheringDetail_apply_osk{
+#GatheringDetail_apply_osk {
   background: #f57c00;
   color: #fff3e0;
 }
@@ -682,7 +771,7 @@ button.GatheringDetail_more_osk{
   display: flex;
   align-items: center;
   margin-bottom: 12px;
-  font-size: 14px;
+  font-size: 16px;
   color: #555;
 }
 
@@ -780,7 +869,19 @@ button.GatheringDetail_more_osk{
 .GatheringDetail_page-btn_osk:hover {
   background: #f8f9fa;
 }
+/* 답변 내용은 여러 줄 표시 허용 */
+.GatheringDetail_answer-content_osk,
+.GatheringDetail_answer-content_osk * {
+  white-space: normal;
+  overflow: visible;
+}
 
+/* 질문이 없을 때 메시지도 정상 표시 */
+.GatheringDetail_no-questions_osk,
+.GatheringDetail_no-questions_osk * {
+  white-space: normal;
+  overflow: visible;
+}
 .GatheringDetail_page-btn_osk.GatheringDetail_active_osk {
   background: #ff6b6b;
   color: white;
@@ -848,6 +949,9 @@ button.GatheringDetail_more_osk{
 .GatheringDetail_author_osk {
   font-size: 14px;
   color: #666;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .GatheringDetail_date_osk {
@@ -894,7 +998,46 @@ button.GatheringDetail_more_osk{
   color: #555;
   line-height: 1.4;
 }
+/* 질문하기 버튼 스타일 수정 */
+.GatheringDetail_question-button_osk {
+  background-color: #28a745; /* 녹색 배경 */
+  color: white; /* 흰색 텍스트 */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px; /* 둥근 모서리 */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  margin-left: auto;
+  margin-right: 0;
+  float: right; /* 오른쪽 정렬 */
+}
 
+.GatheringDetail_question-button_osk:hover {
+  background-color: #218838; /* 호버 시 더 진한 녹색 */
+  transform: translateY(-1px); /* 살짝 위로 이동 효과 */
+}
+
+.GatheringDetail_question-button_osk:active {
+  background-color: #1e7e34; /* 클릭 시 더 진한 녹색 */
+  transform: translateY(0); /* 클릭 시 원래 위치 */
+}
+
+/* 질문 테이블 컨테이너 정렬을 위한 추가 스타일 */
+.GatheringDetail_questions-board_osk {
+  position: relative;
+}
+
+.GatheringDetail_questions-board_osk::after {
+  content: "";
+  display: table;
+  clear: both;
+}
 .GatheringDetail_questions-pagination_osk {
   display: flex;
   justify-content: center;
@@ -929,4 +1072,452 @@ button.GatheringDetail_more_osk{
 
 .GatheringDetail_top-icon_osk {
   font-size: 16px;
+}
+
+.GatheringDetail_info-row_osk > .GatheringDetail_info-icon_osk {
+  height: 30px;
+  display: inline-block;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.GatheringDetail_info-row_osk > .GatheringDetail_info-icon_osk > svg {
+  color: #ffa500;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+/* 질문하기 모달 스타일 */
+.GatheringDetail_question-modal_osk .modal-dialog {
+  max-width: 600px;
+}
+
+.GatheringDetail_question-modal_osk .modal-content {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: none;
+}
+
+/* 모달 헤더 */
+.GatheringDetail_modal-header_osk {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 20px 24px;
+  border-radius: 12px 12px 0 0;
+}
+
+.GatheringDetail_modal-title_osk {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.GatheringDetail_modal-close_osk {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.GatheringDetail_modal-close_osk:hover {
+  background-color: #e9ecef;
+}
+
+/* 모달 바디 */
+.GatheringDetail_modal-body_osk {
+  padding: 24px;
+}
+.GatheringDetail_modal-body_osk input,
+.GatheringDetail_modal-body_osk textarea {
+  color: #333;
+  background-color: #fff;
+}
+
+/* 모임 정보 섹션 */
+.GatheringDetail_gathering-info_osk {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.GatheringDetail_gathering-image_osk {
+  width: 80px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.GatheringDetail_gathering-details_osk {
+  flex: 1;
+}
+
+.GatheringDetail_gathering-info-item_osk {
+  font-size: 12px;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.GatheringDetail_gathering-info-item_osk:last-child {
+  margin-bottom: 0;
+}
+
+.GatheringDetail_gathering-info-icon_osk {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* 태그 섹션 */
+.GatheringDetail_modal-tags_osk {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.GatheringDetail_modal-tag_osk {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 입력 필드 섹션 */
+.GatheringDetail_input-section_osk {
+  margin-bottom: 20px;
+}
+
+.GatheringDetail_input-label_osk {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.GatheringDetail_input-field_osk {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.GatheringDetail_input-field_osk:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.GatheringDetail_input-field_osk::placeholder {
+  color: #999;
+}
+
+/* 텍스트 에리어 */
+.GatheringDetail_textarea-field_osk {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.GatheringDetail_textarea-field_osk:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.GatheringDetail_textarea-field_osk::placeholder {
+  color: #999;
+}
+
+/* 모달 푸터 */
+.GatheringDetail_modal-footer_osk {
+  border-top: 1px solid #e9ecef;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-radius: 0 0 12px 12px;
+}
+
+/* 버튼 스타일 */
+.GatheringDetail_modal-btn_osk {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
+
+.GatheringDetail_modal-btn-cancel_osk {
+  background-color: white;
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+.GatheringDetail_modal-btn-cancel_osk:hover {
+  background-color: #f8f9fa;
+  border-color: #5a6268;
+  color: #5a6268;
+}
+
+.GatheringDetail_modal-btn-submit_osk {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.GatheringDetail_modal-btn-submit_osk:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.GatheringDetail_modal-btn-submit_osk:active {
+  background-color: #bd2130;
+  border-color: #b21f2d;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .GatheringDetail_question-modal_osk .modal-dialog {
+    max-width: 90%;
+    margin: 20px auto;
+  }
+
+  .GatheringDetail_modal-header_osk,
+  .GatheringDetail_modal-body_osk,
+  .GatheringDetail_modal-footer_osk {
+    padding: 16px;
+  }
+
+  .GatheringDetail_gathering-info_osk {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .GatheringDetail_gathering-image_osk {
+    width: 100%;
+    height: 120px;
+  }
+
+  .GatheringDetail_modal-footer_osk {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .GatheringDetail_modal-btn_osk {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* 모달 오버레이 */
+.GatheringDetail_question-modal_osk .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 애니메이션 */
+.GatheringDetail_question-modal_osk .modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+  transform: translate(0, -50px);
+}
+
+.GatheringDetail_question-modal_osk .modal.show .modal-dialog {
+  transform: none;
+}
+
+/* 포커스 스타일 개선 */
+.GatheringDetail_modal-btn_osk:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.GatheringDetail_modal-close_osk:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* 로딩 상태 */
+.GatheringDetail_modal-btn-loading_osk {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.GatheringDetail_modal-btn-loading_osk::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 질문 게시판 스타일 */
+.GatheringDetail_questions-board_osk {
+  margin-top: 20px;
+}
+
+.GatheringDetail_questions-table_osk {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.GatheringDetail_questions-header_osk {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.GatheringDetail_questions-grid-header_osk,
+.GatheringDetail_questions-grid_osk {
+  display: grid;
+  grid-template-columns: 100px 1fr 120px 120px;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+.GatheringDetail_questions-grid-header_osk {
+  font-weight: 500;
+  color: #666;
+}
+
+.GatheringDetail_questions-row_osk {
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+}
+
+.GatheringDetail_questions-row_osk .GatheringDetail_alternate_osk {
+  background-color: #fafafa;
+}
+
+.GatheringDetail_questions-grid_osk .GatheringDetail_status_osk,
+.GatheringDetail_questions-grid_osk .GatheringDetail_author_osk,
+.GatheringDetail_questions-grid_osk .GatheringDetail_date_osk {
+  color: #666;
+}
+
+.GatheringDetail_questions-grid .GatheringDetail_title_osk {
+  color: #333;
+  font-weight: 400;
+}
+
+/* 답변 섹션 스타일 */
+.GatheringDetail_answer-section_osk {
+  padding: 16px 60px 16px 40px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.GatheringDetail_answer-header_osk {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.GatheringDetail_answer-badge_osk {
+  display: inline-block;
+  background-color: #5cb85c;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.GatheringDetail_answer-author_osk {
+  color: #666;
+  font-size: 13px;
+}
+
+.GatheringDetail_answer-date_osk {
+  color: #999;
+  font-size: 13px;
+}
+
+.GatheringDetail_answer-content_osk {
+  font-size: 14px;
+  color: #333;
+  line-height: 1GatheringDetail_6;
+  white-space: pre-line;
+}
+
+/* 페이지네이션 스타일 */
+.GatheringDetail_questions-pagination_osk {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 8px;
+}
+
+.GatheringDetail_pagination-btn_osk {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background-color: white;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0GatheringDetail_2s ease;
+}
+
+.GatheringDetail_pagination-btn_osk :hover {
+  background-color: #f5f5f5;
+}
+
+.GatheringDetail_pagination-btn_osk > .active {
+  background-color: #ffa500;
+  border-color: #ffa500;
+  color: white;
 }

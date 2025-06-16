@@ -12,7 +12,7 @@ const NoticeManagement = () => {
 
     // 버튼 클릭 시 실행 
       const handleNewNotice = () => {
-    navigate('/notice/create');
+    navigate('/admin/notice/create');
   }
 
   // ===== 상태 관리 =====
@@ -183,18 +183,19 @@ const NoticeManagement = () => {
   // ===== 렌더링 =====
   return (
     <Layout>
-      <div className="notice-managementHY">
         {/* 페이지 제목 */}
-        <div className="page-headerHY">
+        <div className="page-titleHY">
           <h1>공지사항 관리</h1>
+          </div>
+          
+          <div className="right-alignHY"/>
           <button className="btn-primary new-notice-btnHY" 
           onClick = {handleNewNotice}>
             + 새 공지사항
           </button>
-        </div>
+        
 
         {/* 검색 영역 */}
-        <div className="controls-sectionHY">
           <div className="search-sectionHY">
             <div className="search-boxHY">
               <span className="search-iconHY">🔍</span>
@@ -207,17 +208,15 @@ const NoticeManagement = () => {
               />
             </div>
           </div>
-        </div>
-
+    
         {/* 검색 결과 수 */}
-        <div className="result-infoHY">
           <span className="result-countHY">총 <strong>{filteredAndSortedNotices.length}</strong>건</span>
 
-        </div>
+  
 
         {/* 공지사항 테이블 */}
         <div className="table-containerHY">
-          <table className="notice-tableHY">
+          <table className="tableHY">
             <thead>
               <tr>
                 <th className="checkbox-colHY">
@@ -356,7 +355,7 @@ const NoticeManagement = () => {
             </div>
           </div>
         )}
-      </div>
+
     </Layout>
   );
 };

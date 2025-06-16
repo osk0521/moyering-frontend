@@ -99,9 +99,10 @@ const Dashboard = () => {
 
   return (
     <Layout>
-    <div className="dashboard-wrapperHY">
-      <h1 className="dashboard-titleHY">대시보드</h1>
-      
+      <div className="page-titleHY">
+        <h1>대시보드</h1>
+        </div>
+    
       {/* 상단 통계 카드들 */}
       <div className="stats-gridHY">
         <div className="stat-cardHY">
@@ -109,7 +110,7 @@ const Dashboard = () => {
           <div className="stat-contentHY">
             <div className="stat-labelHY">총 회원 수</div>
             <div className="stat-valueHY">12,345</div>
-            <div className="stat-change positiveHY">+500</div>
+            <div className="stat-changeHY positive">+500</div>
           </div>
         </div>
         
@@ -118,7 +119,7 @@ const Dashboard = () => {
           <div className="stat-contentHY">
             <div className="stat-labelHY">총 방문자 수</div>
             <div className="stat-valueHY">1,234,605</div>
-            <div className="stat-change positiveHY">+200</div>
+            <div className="stat-changeHY positive">+200</div>
           </div>
         </div>
         
@@ -127,7 +128,7 @@ const Dashboard = () => {
           <div className="stat-contentHY">
             <div className="stat-labelHY">총 매출</div>
             <div className="stat-valueHY">12,845,000</div>
-            <div className="stat-change positiveHY">+120,000</div>
+            <div className="stat-changeHY positive">+120,000</div>
           </div>
         </div>
         
@@ -143,7 +144,7 @@ const Dashboard = () => {
           <div className="stat-iconHY">👁️</div>
           <div className="stat-contentHY">
             <div className="stat-labelHY">강사 신청 건</div>
-            <div className="stat-value blueHY">10</div>
+            <div className="stat-valueHY blue">10</div>
           </div>
         </div>
         
@@ -151,7 +152,7 @@ const Dashboard = () => {
           <div className="stat-iconHY">👁️</div>
           <div className="stat-contentHY">
             <div className="stat-labelHY">클래스 신청 건</div>
-            <div className="stat-valueHY">5</div>
+            <div className="stat-valueHY blue">5</div>
           </div>
         </div>
         
@@ -159,7 +160,7 @@ const Dashboard = () => {
           <div className="stat-iconHY">📊</div>
           <div className="stat-contentHY">
             <div className="stat-labelHY">정산 요청 건</div>
-            <div className="stat-value blueHY">23</div>
+            <div className="stat-valueHY blue">23</div>
           </div>
         </div>
         
@@ -167,7 +168,7 @@ const Dashboard = () => {
           <div className="stat-iconHY">👥</div>
           <div className="stat-contentHY">
             <div className="stat-labelHY">신고 건</div>
-            <div className="stat-value blueHY">3</div>
+            <div className="stat-valueHY blue">3</div>
           </div>
         </div>
       </div>
@@ -179,19 +180,19 @@ const Dashboard = () => {
             <h2 className="chart-titleHY">클래스 개설 추이</h2>
             <div className="chart-controlsHY">
               <button 
-                className={`chart-btn ${mainChartPeriod === '월별' ? 'active' : ''}`}
+                className={`chart-btnHY ${mainChartPeriod === '월별' ? 'active' : ''}`}
                 onClick={() => setMainChartPeriod('월별')}
               >
                 월별
               </button>
               <button 
-                className={`chart-btn ${mainChartPeriod === '분기별' ? 'active' : ''}`}
+                className={`chart-btnHY ${mainChartPeriod === '분기별' ? 'active' : ''}`}
                 onClick={() => setMainChartPeriod('분기별')}
               >
                 분기별
               </button>
               <button 
-                className={`chart-btn ${mainChartPeriod === '년도별' ? 'active' : ''}`}
+                className={`chart-btnHY ${mainChartPeriod === '년도별' ? 'active' : ''}`}
                 onClick={() => setMainChartPeriod('년도별')}
               >
                 년도별
@@ -214,12 +215,12 @@ const Dashboard = () => {
                   <div key={index} className="month-groupHY">
                     <div className="barsHY">
                       <div 
-                        className="bar orangeHY" 
+                        className="barHY orange" 
                         style={{height: getBarHeight(data.class, maxClass)}}
                         title={`클래스: ${data.class.toLocaleString()}`}
                       ></div>
                       <div 
-                        className="bar yellowHY" 
+                        className="barHY yellow" 
                         style={{height: getBarHeight(data.student, maxClass)}}
                         title={`학생: ${data.student.toLocaleString()}`}
                       ></div>
@@ -230,12 +231,13 @@ const Dashboard = () => {
               </div>
               
               {/* 초록색 라인 차트 */}
-              <svg className="line-chart green-lineHY" viewBox="0 0 440 200">
+              <svg className="line-chartHY green-line" viewBox="0 0 440 200">
                 <polyline
                   points={generateLinePoints(currentMainData, maxStudent)}
                   fill="none"
                   stroke="#4CAF50"
-                  strokeWidth="3"
+                  strokeWidth="1"
+                  
                 />
                 {currentMainData.map((data, index) => {
                   const x = (index * 400 / (currentMainData.length - 1)) + 20;
@@ -254,13 +256,13 @@ const Dashboard = () => {
               </svg>
               
               {/* 빨간색 점선 차트 */}
-              <svg className="line-chart red-lineHY" viewBox="0 0 440 200">
+              <svg className="line-chartHY red-line" viewBox="0 0 440 200">
                 <polyline
                   points={generateLinePoints(currentMainData, 100, true)}
                   fill="none"
                   stroke="#FF5252"
-                  strokeWidth="2"
-                  strokeDasharray="5,5"
+                  strokeWidth="1"
+                  strokeDasharray="1,2"
                 />
                 {currentMainData.map((data, index) => {
                   const x = (index * 400 / (currentMainData.length - 1)) + 20;
@@ -326,19 +328,19 @@ const Dashboard = () => {
             <h3 className="trend-titleHY">방문자 수 </h3>
             <div className="trend-controlsHY">
               <button 
-                className={`trend-btn ${trendChartPeriod === '월별' ? 'active' : ''}`}
+                className={`trend-btnHY ${trendChartPeriod === '월별' ? 'active' : ''}`}
                 onClick={() => setTrendChartPeriod('월별')}
               >
                 월별
               </button>
               <button 
-                className={`trend-btn ${trendChartPeriod === '분기별' ? 'active' : ''}`}
+                className={`trend-btnHY ${trendChartPeriod === '분기별' ? 'active' : ''}`}
                 onClick={() => setTrendChartPeriod('분기별')}
               >
                 분기별
               </button>
               <button 
-                className={`trend-btn ${trendChartPeriod === '년도별' ? 'active' : ''}`}
+                className={`trend-btnHY ${trendChartPeriod === '년도별' ? 'active' : ''}`}
                 onClick={() => setTrendChartPeriod('년도별')}
               >
                 년도별
@@ -384,7 +386,7 @@ const Dashboard = () => {
                   strokeWidth="3"
                 />
                 
-                {/* 하이라이트 포인트 (마지막에서 3번째) */}
+                {/* 하이라이트 포인트  */}
                 {currentTrendData.length >= 3 && (
                   <>
                     <circle 
@@ -435,7 +437,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+
     </Layout>
   );
 };

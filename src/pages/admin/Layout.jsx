@@ -7,18 +7,18 @@ const Layout = ({ children }) => {
   const location = useLocation();
 
   const menuItems = [
-    { id: 'dashboard', label: '대시보드', icon: '📊', path: '/dashboard' },
-    { id: 'member', label: '회원관리', icon: '👥', path: '/member' },
-    { id: 'class', label: '클래스 관리', icon: '📚', path: '/class' },
-    { id: 'payment', label: '결제 관리', icon: '💳', path: '/payment' },
-    { id: 'settlement', label: '정산 관리', icon: '💳', path: '/settlement' },
-    { id: 'coupon', label: '쿠폰 관리', icon: '💳', path: '/coupon' },
-    { id: 'category', label: '카테고리 관리', icon: '💳', path: '/category' },
-    { id: 'badge', label: '배지 관리', icon: '🏅', path: '/badge' },
-    { id: 'banner', label: '배너 관리', icon: '🖼️', path: '/banner' },
-    { id: 'statistics', label: '통계 리포트', icon: '📈', path: '/statistics' },
-    { id: 'report', label: '신고 관리', icon: '🚨', path: '/report' },
-    { id: 'notice', label: '공지사항 관리', icon: '📢', path: '/notice' },
+    { id: 'dashboard', label: '대시보드', icon: '📊', path: '/admin/dashboard' },
+    { id: 'member', label: '회원관리', icon: '👥', path: '/admin/member' },
+    { id: 'class', label: '클래스 관리', icon: '📚', path: '/admin/class' },
+    { id: 'payment', label: '결제 관리', icon: '💳', path: '/admin/payment' },
+    { id: 'settlement', label: '정산 관리', icon: '💳', path: '/admin/settlement' },
+    { id: 'coupon', label: '쿠폰 관리', icon: '💳', path: '/admin/coupon' },
+    { id: 'category', label: '카테고리 관리', icon: '💳', path: '/admin/category' },
+    { id: 'badge', label: '배지 관리', icon: '🏅', path: '/admin/badge' },
+    { id: 'banner', label: '배너 관리', icon: '🖼️', path: '/admin/banner' },
+    { id: 'statistics', label: '통계 리포트', icon: '📈', path: '/admin/statistics' },
+    { id: 'report', label: '신고 관리', icon: '🚨', path: '/admin/report' },
+    { id: 'notice', label: '공지사항 관리', icon: '📢', path: '/admin/notice' },
   ];
 
   const handleMenuClick = (path) => {
@@ -34,14 +34,14 @@ const Layout = ({ children }) => {
       {/* 사이드바 */}
       <aside className="sidebarHY">
         <div className="sidebar-headerHY">
-  
+          {/* 로고나 제목 추가 가능 */}
         </div>
         <nav className="sidebar-navHY">
           <ul className="menu-listHY">
             {menuItems.map((item) => (
               <li key={item.id} className="menu-itemHY">
                 <button
-                  className={`menu-link ${location.pathname === item.path ? 'active' : ''}`}
+                  className={`menu-linkHY ${location.pathname === item.path ? 'active' : ''}`}
                   onClick={() => handleMenuClick(item.path)}
                 >
                   <span className="menu-iconHY">{item.icon}</span>
@@ -53,8 +53,9 @@ const Layout = ({ children }) => {
         </nav>
       </aside>
 
-      {/* 헤더 */}
-      <div className="main-areaHY">
+    
+      
+        {/* 헤더 */}
         <header className="headerHY">
           <div className="header-leftHY">
             <div className="header-logoHY">
@@ -71,10 +72,10 @@ const Layout = ({ children }) => {
 
         {/* 메인 컨텐츠 */}
         <div className="main-contentHY">
-          <main className="page-contentHYHY">{children}</main>
+          <main className="page-contentHY">{children}</main>
         </div>
       </div>
-    </div>
+  
   );
 };
 

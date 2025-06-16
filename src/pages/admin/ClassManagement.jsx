@@ -1,4 +1,3 @@
-// src/components/pages/ClassManagement.jsx
 import React, { useState } from 'react';
 import Layout from "./Layout";
 import './ClassManagement.css';
@@ -11,6 +10,7 @@ const ClassManagement = () => {
 
   // 카테고리 필터링
   const [categoryFilter, setCategoryFilter] = useState('전체 카테고리');
+  
   // 날짜 필터링 (클래스 개설일 범위)
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -222,12 +222,12 @@ const ClassManagement = () => {
   // 상태별 스타일 클래스
   const getStatusClass = (status) => {
     switch(status) {
-      case '등록 요청': return 'status-pending';
-      case '모집중': return 'status-recruiting';
-      case '모집마감': return 'status-full';
-      case '종료': return 'status-completed';
-      case '폐강': return 'status-cancelled';
-      case '거절됨': return 'status-rejected';
+      case '등록 요청': return 'status-pendingHY';
+      case '모집중': return 'status-recruitingHY';
+      case '모집마감': return 'status-fullHY';
+      case '종료': return 'status-completedHY';
+      case '폐강': return 'status-cancelledHY';
+      case '거절됨': return 'status-rejectedHY';
       default: return '';
     }
   };
@@ -248,47 +248,45 @@ const ClassManagement = () => {
 
   return (
     <Layout>
-      <div className="managementHYHY">
         {/* 페이지 제목 */}
-        <div className="page-titleHYHY">
+        <div className="page-titleHY">
           <h1>클래스 관리</h1>
         </div>
 
 
       {/* 검색 및 필터 영역 */}
-        <div className="controls-sectionHYHY">
-          <div className="search-sectionHYHY">
+          <div className="search-sectionHY">
             {/* 검색 박스 */}
-            <div className="search-boxHYHY">
-              <span className="search-iconHYHY">🔍</span>
+            <div className="search-boxHY">
+              <span className="search-iconHY">🔍</span>
               <input
                 type="text"
                 placeholder="클래스명, 강사명, 강사 ID 검색"
                 value={searchTerm}
                 onChange={handleSearch}
-                className="search-inputHYHY"
+                className="search-inputHY"
               />
             </div>
     
-              <label className="date-labelHYHY">클래스 개설일</label>
+              <label className="date-labelHY">클래스 개설일</label>
               <input
                 type="date"
-                className="date-inputHYHY"
+                className="date-inputHY"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
-              <span className="date-separatorHYHY">~</span>
+              <span className="date-separatorHY">~</span>
               <input
                 type="date"
-                className="date-inputHYHY"
+                className="date-inputHY"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
         
 
-            <div className="category-sectionHYHY">
+            <div className="category-sectionHY">
               <select 
-                className="category-selectHYHY"
+                className="category-selectHY"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
               >
@@ -302,9 +300,10 @@ const ClassManagement = () => {
               </select>
             </div>
           </div>
-        </div>
+          <br />
+      
         {/* 상태 필터 */}
-        <div className="filter-sectionHYHY">
+        <div className="filter-sectionHY">
           {statusOptions.map((status) => (
             <button 
               key={status}
@@ -318,13 +317,13 @@ const ClassManagement = () => {
         <br />
 
         {/* 검색 결과 수 */}
-        <div className="result-countHYHY">
+        <div className="result-countHY">
           총 <strong>{filteredClasses.length}</strong>건
         </div>
 
         {/* 클래스 테이블 */}
-        <div className="table-containerHYHY">
-          <table className="tableHYHY">
+        <div className="table-containerHY">
+          <table className="tableHY">
             <thead>
               <tr>
                 <th>NO</th>
@@ -370,7 +369,7 @@ const ClassManagement = () => {
                   </td>
                   <td>{classItem.classDate}</td>
                   <td>
-                    <span className={`status-badge ${getStatusClass(classItem.status)}`}>
+                    <span className={`status-badgeHY ${getStatusClass(classItem.status)}`}>
                       {classItem.status}
                     </span>
                   </td>
@@ -384,7 +383,7 @@ const ClassManagement = () => {
         onClose={closeModal}
         classData={selectedClass}
       />
-      </div>
+      
     </Layout>
   );
 };

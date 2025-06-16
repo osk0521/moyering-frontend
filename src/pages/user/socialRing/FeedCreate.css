@@ -1,0 +1,157 @@
+/* src/components/FeedCreate.css */
+
+.KYM-FeedCreate-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 12px;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-btn-cancel,
+.KYM-FeedCreate-container .KYM-FeedCreate-btn-submit {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-btn-cancel {
+    background: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-btn-submit {
+    background: #FFB22C;
+    color: #fff;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-icon-plus {
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-main {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    min-height: 500px;
+    min-width: 1000px;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-image-box {
+    flex: 0 0 500px;
+    background: #797878;
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-image-box img {
+    /* 1) 잘리지 않게, 비율 유지하며 컨테이너 안에 꽉 채우도록 */
+  object-fit: contain;
+
+  /* 2) 너비·높이를 고정 박스에 맞추지 말고, 최대한으로만 늘리기 */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+
+  /* 3) 박스 중앙에 위치시키기 */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-form {
+    flex: 1;
+    /* max-width: 400px; */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-text {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-size: 0.95rem;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-text-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-tags label {
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-tag-input-wrap input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-tag-list {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-tag-item {
+    background: #fff7e6;
+    border: 1px solid #ffd47c;
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.KYM-FeedCreate-container .KYM-FeedCreate-tag-item button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #ff8c00;
+}

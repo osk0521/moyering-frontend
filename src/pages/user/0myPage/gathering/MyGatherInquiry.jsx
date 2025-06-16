@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/GatherInquiry.css';
+import './MyGatherInquiry.css';
 
 export default function GatherInquiry() {
   const [activeTab, setActiveTab] = useState('participated');
@@ -34,16 +34,16 @@ export default function GatherInquiry() {
   };
 
   return (
-    <main className="GatherInquiry_gather-inquiry-page_osk">
-      <aside className="GatherInquiry_sidebar_osk">
-        <div className="GatherInquiry_sidebar-box_osk">회원정보</div>
-        <div className="GatherInquiry_sidebar-box_osk">마이메뉴</div>
+    <main className="MyGatherInquiryList_gather-inquiry-page_osk">
+      <aside className="MyGatherInquiryList_sidebar_osk">
+        <div className="MyGatherInquiryList_sidebar-box_osk">회원정보</div>
+        <div className="MyGatherInquiryList_sidebar-box_osk">마이메뉴</div>
       </aside>
 
-      <section className="GatherInquiry_inquiry-section_osk">
-        <h2 className="GatherInquiry_inquiry-title_osk">게더링 문의</h2>
+      <section className="MyGatherInquiryList_inquiry-section_osk">
+        <h2 className="MyGatherInquiryList_inquiry-title_osk">게더링 문의</h2>
 
-        <div className="GatherInquiry_inquiry-tabs_osk">
+        <div className="MyGatherInquiryList_inquiry-tabs_osk">
           <button
             className={activeTab === 'participated' ? 'GatherInquiry_active_osk' : ''}
             onClick={() => { setActiveTab('participated'); setSelectedStatus('전체'); }}
@@ -54,7 +54,7 @@ export default function GatherInquiry() {
           >내가 개최한 모임 문의</button>
         </div>
 
-        <div className="GatherInquiry_filter-row_osk">
+        <div className="MyGatherInquiryList_filter-row_osk">
           <label>답변 상태:</label>
           <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
             <option value="전체">전체</option>
@@ -63,33 +63,33 @@ export default function GatherInquiry() {
           </select>
         </div>
 
-        <div className="GatherInquiry_inquiry-list_osk">
+        <div className="MyGatherInquiryList_inquiry-list_osk">
           {filtered.map(item => (
-            <div key={item.id} className="GatherInquiry_inquiry-box_osk">
-              <div className="GatherInquiry_accordion-header_osk" onClick={() => toggleAccordion(item.id)}>
-                <p className="GatherInquiry_meta_osk">
+            <div key={item.id} className="MyGatherInquiryList_inquiry-box_osk">
+              <div className="MyGatherInquiryList_accordion-header_osk" onClick={() => toggleAccordion(item.id)}>
+                <p className="MyGatherInquiryList_meta_osk">
                   <strong>{item.title}</strong> | {item.date}
-                  <span className="GatherInquiry_inquirer-name_osk"> | 문의자: {item.user}</span>
+                  <span className="MyGatherInquiryList_inquirer-name_osk"> | 문의자: {item.user}</span>
                 </p>
                 <span className={`GatherInquiry_status_osk ${item.status === '답변완료' ? 'GatherInquiry_done_osk' : 'GatherInquiry_pending_osk'}`}>{item.status}</span>
               </div>
 
               {openId === item.id && (
-                <div className="GatherInquiry_accordion-body_osk">
-                  <p className="GatherInquiry_question_osk">Q. {item.question}</p>
+                <div className="MyGatherInquiryList_accordion-body_osk">
+                  <p className="MyGatherInquiryList_question_osk">Q. {item.question}</p>
                   {item.answer ? (
-                    <div className="GatherInquiry_answer_osk">
+                    <div className="MyGatherInquiryList_answer_osk">
                       <p><strong>A.</strong> {item.answer}</p>
                     </div>
                   ) : activeTab === 'hosted' ? (
                     <>
                       <textarea
-                        className="GatherInquiry_answer-textarea_osk"
+                        className="MyGatherInquiryList_answer-textarea_osk"
                         placeholder="답변을 입력해주세요"
                         value={replyText[item.id] || ''}
                         onChange={(e) => handleReplyChange(item.id, e.target.value)}
                       />
-                      <button className="GatherInquiry_submit-btn_osk" onClick={() => handleReplySubmit(item.id)}>
+                      <button className="MyGatherInquiryList_submit-btn_osk" onClick={() => handleReplySubmit(item.id)}>
                         답변 등록
                       </button>
                     </>

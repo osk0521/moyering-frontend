@@ -6,6 +6,7 @@
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
+    
 }
 
 /* ─── 제목 ─── */
@@ -219,6 +220,10 @@
     padding: 0;
     flex: 1;
     overflow: hidden;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .KYM-feed-container .KYM-popular-item {
@@ -226,6 +231,10 @@
     align-items: center;
     padding: 16px 0;
     border-bottom: 1px solid #eee;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .KYM-feed-container .KYM-popular-item:last-child {
@@ -255,11 +264,19 @@
 
 .KYM-feed-container .KYM-pop-nickname {
     font-size: 1rem;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .KYM-feed-container .KYM-pop-count {
     font-size: 0.9rem;
     color: #777;
+    /* 텍스트 드래그(선택) 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 /* ─── 인기 피드 페이징 ─── */
@@ -376,4 +393,56 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   padding: 8px 0;
   z-index: 1000;
+}
+
+/* FeedPage.css 맨 아래에 추가 */
+.KYM-feed-container .KYM-feed-main {
+  display: flex;          /* 기존 flex 유지 */
+  width: fit-content;     /* 콘텐츠(그리드+사이드바) 너비만큼만 */
+  margin: 0 auto;         /* 부모 안에서 블록 중앙 정렬 */
+  gap: 20px;              /* 기존 간격 유지 */
+}
+/* 기본 ul/KYM-popular-list 스타일 유지 */
+
+/* enter */
+.KYM-feed-container .slide-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.KYM-feed-container .slide-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 400ms ease-out;
+}
+
+/* exit */
+.KYM-feed-container .slide-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.KYM-feed-container .slide-exit-active {
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: all 300ms ease-in;
+}
+/* FeedPage.css 맨 아래에 추가 */
+.KYM-feed-container button {
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;  /* 모든 버튼의 기본 outline 제거 */
+}
+/* 1) Firefox 의 inner-border 제거 */
+.KYM-feed-container button::-moz-focus-inner {
+  border: 0;
+}
+.KYM-feed-container button:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+/* 4) 키보드로 포커스될 때만 custom ring */
+.KYM-feed-container button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 178, 44, 0.6) !important;
 }

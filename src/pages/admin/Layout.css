@@ -1,4 +1,9 @@
-/* src/components/common/Layout.css - 깔끔한 디자인 */
+.managementHY {
+  padding: 50px;
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+  background-color: #fff;
+}
 
 .admin-layoutHY {
   display: flex;
@@ -6,12 +11,10 @@
   width: 100vw;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-
 /* 헤더  */
-.header {
+.headerHY {
   background: 
 #FEF3E2;
   border-bottom: 1px solid 
@@ -22,34 +25,34 @@
   align-items: center;
   position: fixed;
   top: 0;
-  z-index: 150;
+  z-index: 1000;
   height: 60px;
   width: 100%;
 }
 
-.header-left .header-logo {
+.header-leftHY .header-logoHY {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.header-logo-icon {
+.header-logo-iconHY {
   width: 150px;   
   height: 60px;
 }
-.header-logo-text {
+.header-logo-textHY {
   font-size: 24px;
   font-weight: 700;
   color: #2D3748;
 }
 
-.header-right {
+.header-rightHY {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.admin-name {
+.admin-nameHY {
   font-size: 14px;
   color: #666666;
   font-weight: 500;
@@ -57,7 +60,7 @@
   border-radius: 4px;
 }
 
-.logout-btn {
+.logout-btnHY {
   background-color: #FF6B35;
   color: white;
   border: none;
@@ -69,13 +72,13 @@
   transition: background-color 0.2s ease;
 }
 
-.logout-btn:hover {
+.logout-btnHY:hover {
   background-color: #E85D2B;
 }
 
 
 /* 사이드바 */
-.sidebar {
+.sidebarHY {
   width: 180px;
   background-color: #2D3748;
   color: white;
@@ -89,19 +92,19 @@
 }
 
 /* 사이드바 헤더 개선 */
-.sidebar-header {
+.sidebar-headerHY {
   padding: 30px 16px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   background-color: #F8F9FA;
 }
 
-.sidebar .logo {
+.sidebarHY .logoHY {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.sidebar .logo-icon {
+.sidebarHY .logo-iconHY {
   font-size: 20px;
   width: 24px;
   height: 24px;
@@ -116,13 +119,13 @@
 
 
 /* 사이드바 네비게이션 */
-.sidebar-nav {
+.sidebar-navHY {
   flex: 1;
   padding: 16px 12px;
   background-color: white;
 }
 
-.menu-list {
+.menu-listHY {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -131,11 +134,11 @@
   gap: 4px;
 }
 
-.menu-item {
+.menu-itemHY {
   margin: 0;
 }
 
-.menu-link {
+.menu-linkHY {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -153,48 +156,46 @@
   margin-bottom: 2px;
 }
 
-.menu-link:hover {
+.menu-linkHY:hover {
   background-color: #F3F4F6;
   color: #374151;
   transform: translateX(2px);
 }
 
-.menu-link.active {
+.menu-linkHY.active {
   background-color: #FFB22C;
   color: white;
 
 }
 
-.menu-icon {
+.menu-iconHY {
   font-size: 20px;
   width: 25px;
   text-align: center;
 }
 
-.menu-label {
+.menu-labelHY {
   flex: 1;
 }
 
-/* 메인 컨텐츠 영역 */
-.main-content {
-  margin-left: 180px; /* 왼쪽 마진*/
-  margin-top: 60px;   /* 위 마진 */
 
-  flex: 1; /* 화면 나머지 영역 채우기 */
-  display: flex; 
+
+/* 메인 컨텐츠 영역 */
+.main-contentHY {
+  margin-top: 30px;
+  margin-left : 150px;
+  flex: 1;
+  display: flex;
   flex-direction: column;
   background-color: #FFFFFF;
-  position: relative;
-  z-index: 1;
-  overflow-x: auto; /* 테이블이 넘칠 경우 스크롤 */;
-
+  overflow-x: auto;
 }
 
 /* 페이지 컨텐츠 */
-.page-content {
+.page-contentHY {
   flex: 1;
   padding: 50px;
-    width: 90%;  
+    width: 100%;  
   overflow-y: auto;
   background-color: #FFFFFF;
 }
@@ -202,11 +203,11 @@
 
 /* 페이지 제목 */
 .page-titleHY {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .page-titleHY h1 {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #333;
   margin: 0 0 4px 0;
@@ -255,16 +256,12 @@
 
 .filter-sectionHY {
   display: flex;
-  gap: 10px;
+  gap: 5px;
 }
 
 .filter-btnHY {
-  padding: 8px 18px;
+  padding: 7px 17px;
   font-size: 14px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #333;
-  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -312,3 +309,39 @@
 .tableHY td {
   color: #333;
 }
+
+/* 오른쪽 정렬  */
+.right-alignHY {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 날짜 입력 */
+.date-inputHY {
+  appearance: none; /* 기본 스타일 제거 */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: #fff;
+  border: 1px solid #d1d5db; /* 회색 테두리 */
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #111827;
+  outline: none;
+  width: 160px;
+
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.date-inputHY:focus {
+  border-color: #3b82f6; /* 파란색 */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); /* 부드러운 외곽선 */
+  outline: none;
+}
+
+.date-inputHY::-webkit-calendar-picker-indicator {
+  filter: invert(40%);
+  cursor: pointer;
+}
+

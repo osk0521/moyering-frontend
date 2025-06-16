@@ -24,8 +24,6 @@ const CategoryManagement = () => {
     { id: '013', category: '음식 > 요리', isSave: false, isHidden: true, order: 13 },
     { id: '014', category: '스포츠 > 레저', isSave: true, isHidden: true, order: 14 },
     { id: '015', category: '음식 > 요리', isSave: false, isHidden: false, order: 15 },
-
-    
   ]);
 
   const filteredCategories = categories
@@ -117,32 +115,26 @@ const CategoryManagement = () => {
 
   return (
     <Layout>
-    <div className="category-managementHY">
-      <h1 className="page-titleHY">카테고리 관리</h1>
+      <div className="page-titleHY">카테고리 관리</div>
 
-      {/* 검색창  */}
- <div className="search-sectionHY">
-          <div className="search-boxHY">
-            <input
-              type="text"
-              placeholder="카테고리명 검색"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-inputHY"
-            />
-            <button className="search-btnHY">🔍</button>
-          </div>
+      <div className="search-sectionHY">
+        {/* 검색창  */}
+        <div className="search-boxHY">
+          <input
+            type="text"
+            placeholder="카테고리명 검색"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-inputHY"
+          />
+          <button className="search-btnHY">🔍</button>
+        </div>
 
-
-      <div className="top-sectionHY">
-        <div className="count-sectionHY">
-          <span className="count-labelHY">총 개수</span>
+        <div className="result-infoHY">
+          <span className="result-countHY">총 개수</span>
           <span className="count-numberHY">{filteredCategories.length}</span>
         </div>
-    
-        </div>
       </div>
-
 
       <div className="control-sectionHY">
         <div className="left-controlsHY">
@@ -184,12 +176,11 @@ const CategoryManagement = () => {
         </div>
       </div>
 
-
-      <div className="table-containerHYHY">
-        <table className="tableHYHY">
+      <div className="table-containerHY">
+        <table className="tableHY">
           <thead>
             <tr>
-            <th className="checkbox-columnHY"></th>      {/* 체크박스열  */}
+              <th className="checkbox-columnHY"></th>      {/* 체크박스열  */}
               <th className="drag-columnHY">배치 순서</th>
               <th className="id-columnHY">카테고리 ID</th>
               <th className="category-columnHY">카테고리명</th>
@@ -208,7 +199,7 @@ const CategoryManagement = () => {
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, category)}
               >
-                    <td className="checkbox-cellHY">
+                <td className="checkbox-cellHY">
                   <input
                     type="checkbox"
                     checked={selectedItems.includes(category.id)}
@@ -219,10 +210,8 @@ const CategoryManagement = () => {
                   <span className="drag-handleHY">⋮⋮</span>
                   <span className="order-numberHY">{category.order}</span>
                 </td>
-            
                 <td className="id-cellHY">{category.id}</td>
                 <td className="category-cellHY">{category.category}</td>
-               
                 <td className="action-cellHY">
                   <button
                     className={`toggle-btn ${category.isHidden ? 'show' : 'hide'}`}
@@ -236,9 +225,6 @@ const CategoryManagement = () => {
           </tbody>
         </table>
       </div>
-
-  
-    </div>
     </Layout>
   );
 };

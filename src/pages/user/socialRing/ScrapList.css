@@ -1,0 +1,130 @@
+/* 최상위 부모 셀렉터 */
+.KYM-scraplist-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* 헤더 */
+.KYM-scraplist-container .KYM-scraplist-header {
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* 그리드 */
+.KYM-scraplist-container .KYM-scraplist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* 카드 */
+.KYM-scraplist-container .KYM-scrap-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 카드 헤더 */
+.KYM-scraplist-container .KYM-scrap-header {
+    padding: 12px;
+}
+
+.KYM-scraplist-container .KYM-scrap-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.KYM-scraplist-container .KYM-scrap-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ddd;
+}
+
+.KYM-scraplist-container .KYM-scrap-nickname {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.KYM-scraplist-container .KYM-scrap-badge {
+    width: 20px;
+    height: 20px;
+}
+
+.KYM-scraplist-container .KYM-scrap-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* 이미지 */
+.KYM-scraplist-container .KYM-scrap-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+/* 내용 */
+.KYM-scraplist-container .KYM-scrap-content {
+    margin: 12px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.KYM-scraplist-container .KYM-scrap-hashtags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 12px 12px;
+}
+
+.KYM-scraplist-container .KYM-scrap-tag {
+    background: #f0f0f0;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+/* 푸터 */
+.KYM-scraplist-container .KYM-scrap-footer {
+    margin-top: auto;
+    padding: 12px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 16px;
+}
+
+/* 버튼 공통 */
+.KYM-scraplist-container button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.KYM-scraplist-container button:focus {
+    outline: 2px solid #FFB22C;
+    outline-offset: 2px;
+}
+
+/* 좋아요 버튼 */
+.KYM-scraplist-container .KYM-like-btn.active .KYM-icon {
+    filter: brightness(0) saturate(100%) invert(58%) sepia(97%) saturate(725%) hue-rotate(347deg) brightness(104%) contrast(105%);
+}
+
+/* 아이콘 사이즈 */
+.KYM-scraplist-container .KYM-icon {
+    width: 16px;
+    height: 16px;
+}

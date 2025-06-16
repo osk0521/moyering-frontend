@@ -1,27 +1,26 @@
 import React, { useState, useCallback } from "react";
 import { Button, Input, Form } from "reactstrap";
 import { CiHeart, CiSearch } from "react-icons/ci";
-import { FaRegBell } from "react-icons/fa6";
+import { FaRegBell, FaHeart } from "react-icons/fa6";
 import { LuMessageCircleMore } from "react-icons/lu";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Header.css";
-import logoImage from "../../../public/logo.png";
-
+import logoImage from '/logo.png';
 
 const Header = () => {
   return (
-    <div className="Header_Header-container_osk">
+    <div className="Header_header-container_osk">
       {/* 상단 작은 메뉴바 */}
       <div className="Header_top-menu-bar_osk">
         <div className="Header_top-menu-items_osk">
           <span className="Header_top-menu-link_osk">
-            <a href="">로그인</a>
+            <a href="/userlogin">로그인</a>
           </span>
           <span className="Header_top-menu-link_osk">
             <a href="">회원가입</a>
           </span>
-          <Button className="Header_icon-button_osk">
-            <CiHeart className="Header_top-icon_osk" />
+          <Button className="Header_icon-button_osk Header_heart-button_osk">
+            <FaHeart className="Header_top-icon_osk" />
           </Button>
           <Button className="Header_icon-button_osk">
             <FaRegBell className="Header_top-icon_osk" />
@@ -33,8 +32,8 @@ const Header = () => {
       </div>
 
       {/* 메인 헤더 */}
-      <div className="Header_main-Header_osk">
-        <div className="Header_Header-content_osk">
+      <div className="Header_main-header_osk">
+        <div className="Header_header-content_osk">
           {/* 로고 섹션 */}
           <div className="Header_logo-section_osk">
             <div className="Header_logo-container_osk">

@@ -1,5 +1,8 @@
+// GatheringChat.jsx
 import React, { useState } from 'react';
 import './GatheringChat.css';
+import { BsPaperclip, BsArrowUpCircleFill } from "react-icons/bs";
+import { HiOutlineMenu } from "react-icons/hi";
 
 export default function Chat() {
   const [activeTab, setActiveTab] = useState('개더링');
@@ -7,21 +10,20 @@ export default function Chat() {
 
   const chatRooms = [
     { id: 1, name: '테스트링입니다.', lastMessage: '🔔', time: '', unread: false },
-    { id: 2, name: '워너 힐맨글로소로 형사들이', lastMessage: '안', time: '', unread: true, count: 1 }
+    { id: 2, name: '워너 브로콜리로 함께가요✨', lastMessage: '111', time: '3분 전', unread: true, count: 1 }
   ];
 
   const messages = [
-    { id: 1, text: '2023년 5월 24일 오전', type: 'date' },
-    { id: 2, text: 'abc님이 들어왔습니다.', type: 'notification' },
-    { id: 3, text: '테스트를 남이 올렸습니다.', type: 'notification' },
+    { id: 1, text: '2023년 5월 24일 토요일', type: 'date' },
+    { id: 2, text: 'sko 님이 들어왔습니다.', type: 'notification' },
+    { id: 3, text: '테스트를 님이 들어왔습니다.', type: 'notification' },
     { id: 4, sender: '테스트를', text: 'abc', type: 'message', avatar: true },
     { id: 5, text: 'efg', type: 'my-message' },
-    { id: 6, text: '채팅창 리뉴얼로 채원님을 찾았습니다.', type: 'notification' }
+    { id: 6, text: '채팅방 관리자가 채팅방을 만들었습니다.', type: 'notification' }
   ];
 
   return (
     <div className="GatheringChat_chat-app_osk">
-      {/* Main Content */}
       <div className="GatheringChat_main-content_osk">
         {/* Sidebar */}
         <aside className="GatheringChat_sidebar_osk">
@@ -38,9 +40,7 @@ export default function Chat() {
             >
               DM
             </button>
-            <button className="GatheringChat_close-btn_osk">×</button>
           </div>
-          
           <div className="GatheringChat_chat-room-list_osk">
             {chatRooms.map(room => (
               <div key={room.id} className="GatheringChat_chat-room-item_osk">
@@ -61,12 +61,12 @@ export default function Chat() {
         <main className="GatheringChat_chat-area_osk">
           <div className="GatheringChat_chat-header_osk">
             <h2>테스트링입니다.</h2>
-            <button className="GatheringChat_menu-btn_osk">☰</button>
+            <button className="GatheringChat_menu-btn_osk"><HiOutlineMenu /></button>
           </div>
 
           <div className="GatheringChat_chat-messages_osk">
             {messages.map(msg => (
-              <div key={msg.id} className={`GatheringChat_message_osk ${msg.type}`}>
+              <div key={msg.id}>
                 {msg.type === 'date' && (
                   <div className="GatheringChat_date-divider_osk">{msg.text}</div>
                 )}
@@ -93,38 +93,19 @@ export default function Chat() {
 
           <div className="GatheringChat_chat-input-container_osk">
             <div className="GatheringChat_input-wrapper_osk">
-              <button className="GatheringChat_attach-btn_osk">📎</button>
+              {/* <button className="GatheringChat_attach-btn_osk"><BsPaperclip size={18} /></button> */}
               <input 
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder=""
+                placeholder="메시지를 입력하세요"
                 className="GatheringChat_message-input_osk"
               />
-              <button className="GatheringChat_send-btn_osk">⬆</button>
+              <BsArrowUpCircleFill size={22} />
             </div>
           </div>
         </main>
       </div>
-
-      {/* Footer */}
-      <footer className="GatheringChat_footer_osk">
-        <div className="GatheringChat_footer-content_osk">
-          <div className="GatheringChat_footer-logo_osk">
-            <span className="GatheringChat_logo-icon_osk">😊</span>
-            <span className="GatheringChat_logo-text_osk">모여링</span>
-          </div>
-          <div className="GatheringChat_footer-links_osk">
-            <a href="#">고객센터</a>
-            <a href="#">고객센터</a>
-            <a href="#">고객센터</a>
-          </div>
-          <div className="GatheringChat_footer-info_osk">
-            <p>주소 : 05609 서울특별시 송파구 양재대로 932 다저빌딩 지하 1층 명지 318 아뜨(주)</p>
-            <p>주소 : 05609 서울특별시 송파구 양재대로 932 다저빌딩 지하 1층 명지 318 아뜨(주)</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

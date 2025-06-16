@@ -6,6 +6,10 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+    /* max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-width: 1280px; */
 /* 상단 메뉴바 */
 .Header_top-menu-bar_osk {
   width: 100%;
@@ -27,7 +31,7 @@
   border: none;
   padding: 4px;
   font-size: 14px;
-  color: #6b7280;
+  border-color: #6b7280;
   cursor: pointer;
   transition: color 0.2s;
 }
@@ -130,7 +134,7 @@
 }
 
 .Header_search-input_osk:focus {
-  border-color: #3b82f6 !important;
+  border-color: #FFB22C !important;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
@@ -163,7 +167,15 @@
 .Header_search-button_osk:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
 }
-
+.Header_heart-button_osk{
+    color: #e61a1a;
+}
+.Header_heart-button_osk:hover{
+    color: #e61a1a!important;
+}
+.Header_heart-button_osk btn.active:hover{
+    color: #e61a1a;
+}
 /* 네비게이션 섹션 */
 .Header_nav-section_osk {
   display: flex;
@@ -182,5 +194,5 @@
 }
 
 .Header_nav-item_osk:hover {
-  color: #3b82f6;
+  color: #FFB22C;
 }

@@ -117,42 +117,90 @@ export default function GatheringWrite() {
   ));
 
   // 숫자 입력 핸들러 (2 이상의 숫자만 허용)
-  const handleNumberInput = (e) => {
-    const { name, value } = e.target;
+const handleNumberInput = (e) => {
+  const { name, value } = e.target;
+  
+  // 빈 문자열은 허용
+  if (value === "") {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    return;
+  }
+  
+  // 한글 체크 정규식
+  const koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+  
+  // 한글이 포함되어 있으면 차단
+  if (koreanRegex.test(value)) {
+    return;
+  }
+  
+  // 숫자만 허용하는 정규식
+  const numberRegex = /^\d+$/;
+  
+  if (numberRegex.test(value)) {
+    // 입력 중에는 모든 숫자 입력을 허용
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+};
+
+// 입력 완료 시점에 최솟값 검증을 위한 새로운 함수
+const handleNumberBlur = (e) => {
+  const { name, value } = e.target;
+  
+  if (value !== "" && parseInt(value, 10) < 2) {
+    // 경고 메시지 표시 또는 최솟값으로 자동 설정
+    setFormData((prev) => ({
+      ...prev,
+      [name]: "2", // 자동으로 최솟값으로 설정
+    }));
     
-    // 빈 문자열은 허용 (사용자가 입력 중일 수 있으므로)
-    if (value === "") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-      return;
+    // 또는 경고 메시지만 표시하고 값은 유지
+    // alert("최소 인원은 2명 이상이어야 합니다.");
+  }
+};
+
+// 방법 2: 실시간 검증하되 경고만 표시
+const handleNumberInputV2 = (e) => {
+  const { name, value } = e.target;
+  
+  // 빈 문자열은 허용
+  if (value === "") {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    return;
+  }
+  
+  // 한글 체크
+  const koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+  if (koreanRegex.test(value)) {
+    return;
+  }
+  
+  // 숫자만 허용
+  const numberRegex = /^\d+$/;
+  if (numberRegex.test(value)) {
+    // 모든 숫자 입력을 허용하되 상태에 저장
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    
+    // 2 미만일 때 경고 상태만 설정 (실제 입력은 막지 않음)
+    const numValue = parseInt(value, 10);
+    if (numValue < 2) {
+      // setErrorState 등으로 경고 상태 관리
+      console.warn(`${name}: 최소값은 2 이상이어야 합니다.`);
     }
-    
-    // 한글 체크 정규식
-    const koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    
-    // 한글이 포함되어 있으면 차단
-    if (koreanRegex.test(value)) {
-      return; // 이전 값 유지
-    }
-    
-    // 숫자만 허용하는 정규식
-    const numberRegex = /^\d+$/;
-    
-    if (numberRegex.test(value)) {
-      const numValue = parseInt(value, 10);
-      // 2 이상의 숫자만 허용
-      if (numValue >= 2) {
-        setFormData((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      }
-      // 2 미만이면 업데이트하지 않음 (이전 값 유지)
-    }
-    // 숫자가 아니면 업데이트하지 않음 (이전 값 유지)
-  };
+  }
+};
 
   // Daum 우편번호 검색 완료 시 호출되는 함수
   const handlePostcodeComplete = (data) => {
@@ -327,7 +375,7 @@ export default function GatheringWrite() {
                   </label>
                   <div className="GatheringWrite_time-input-group_osk">
                     <input
-                      type="text"
+                      type="time"
                       name="startTime"
                       value={formData.startTime}
                       onChange={handleInputChange}
@@ -337,7 +385,7 @@ export default function GatheringWrite() {
                     <CiClock1 />
                     <span className="GatheringWrite_time-separator_osk">~</span>
                     <input
-                      type="text"
+                      type="time"
                       name="endTime"
                       value={formData.endTime}
                       onChange={handleInputChange}
@@ -413,6 +461,7 @@ export default function GatheringWrite() {
                   onChange={handleInputChange}
                   placeholder="주소 찾기"
                   className="GatheringWrite_custom-input_osk GatheringWrite_address-input_osk"
+                  onClick={openPostcode}
                   readOnly
                 />
                 <button
@@ -609,7 +658,7 @@ export default function GatheringWrite() {
               onComplete={handlePostcodeComplete}
               autoClose={false}
               defaultQuery=""
-              style={{ width: "100%", height: "400px" }}
+              style={{ width: "100%" }}
             />
           </div>
         </div>

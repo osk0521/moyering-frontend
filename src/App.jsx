@@ -46,6 +46,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/classList" element={<ClassList />} />
         <Route path="/classRingDetail" element={<ClassRingDetail />} />
+        <Route path="/gatheringDetail" element={<GatheringDetail />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/userFeed" element={<UserFeed />} />
         <Route path="/feedDetail" element={<FeedDetail />} />
@@ -55,6 +56,7 @@ function App() {
         <Route path="/myFeed" element={<MyFeed/>}/>
         <Route path="/scrapList" element={<ScrapList/>}/>
         <Route path="/followList" element={<FollowList/>}/>
+        <Route path="/classPayment" element={<ClassPayment />} />
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
@@ -69,7 +71,7 @@ function App() {
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
         <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
-        
+
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />
         <Route path="/host/regist" element={<HostRegist/>}/>

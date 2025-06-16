@@ -25,8 +25,8 @@
 }
 
 .profile-image {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background-color: #d0eaf9;
   background-image: url('/default-profile.png');
@@ -69,6 +69,30 @@
   border-radius: 4px;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.tag-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tag-item {
+  background: #eee;
+  border-radius: 12px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.remove-tag-btn {
+  margin-left: 6px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #666;
+  cursor: pointer;
 }
 
 .form-textarea {

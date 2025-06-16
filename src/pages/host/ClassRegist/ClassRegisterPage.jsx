@@ -19,6 +19,7 @@ const tabs = [
 
 const ClassRegisterPage = () => {
   const [activeTab, setActiveTab] = useState(0);
+  // const [classData,setClassData] = useState({...});
   const validators = useRef([]);
 
   const registerValidator = (index, validateFn) => {
@@ -39,6 +40,16 @@ const ClassRegisterPage = () => {
     setActiveTab(nextTabIndex);
   };
 
+  const saveCurrentTab = async() => {
+    const validator = validators.current[activeTab];
+    if(validator){
+      const isValid = await validator();
+      if(!isValid)return false;
+    }
+
+    await axios.post(`/host/classRegist/${activeTab}`,classData);
+  }
+
   const renderTabContent = () => {
     const props = { registerValidator };
     switch (activeTab) {
@@ -51,6 +62,8 @@ const ClassRegisterPage = () => {
       default: return null;
     }
   };
+
+  
 
   return (
     <div className="KHJ-register-page">
@@ -77,7 +90,7 @@ const ClassRegisterPage = () => {
       </div>
 
       <div className="KHJ-tab-content">{renderTabContent()}</div>
-      <TabFooter activeTab={activeTab} />
+      <TabFooter activeTab={activeTab} onSave={saveCurrentTab}/>
     </div>
   );
 };

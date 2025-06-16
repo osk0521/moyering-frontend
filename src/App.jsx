@@ -60,15 +60,10 @@ import GatheringWrite from "./pages/user/gathering/GatheringWrite.jsx";
 import Header from "./pages/common/Header";
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
-import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
-import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
 import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
-import UserJoin from './pages/common/UserJoin';
-import UserJoinCategory from './pages/common/UserJoinCategory';
-import UserJoinSuccess from './pages/common/UserJoinSuccess';
-import HostRegist from "./pages/host/HostRegist.jsx";
+
 
 function App() {
   return (
@@ -115,7 +110,7 @@ function App() {
         <Route path="/host/intro" element={<HostIntroPage />} />
         <Route path="/host/regist" element={<HostRegist/>}/>
         <Route element={<DashboardLayout />}>
-          <Route path="/host/hostMyPage" element={<MainContent />} />
+          <Route path="/host/hostMyPage/:num" element={<MainContent />} />
           <Route path="/host/profile" element={<HostProfile />} />
           <Route path="/host/classRegist" element={<ClassRegisterPage />} />
           <Route path="/host/HostclassList" element={<HostClassList />} />

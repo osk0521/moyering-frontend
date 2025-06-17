@@ -72,7 +72,7 @@ function App() {
         {/* 공통 /~~~으로 시작 */}
         <Route path="/" element={<Main />} />
         <Route path="/classList" element={<ClassList />} />
-        <Route path="/classRingDetail" element={<ClassRingDetail />} />
+        <Route path="/classRingDetail/:id" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/userFeed" element={<UserFeed />} />

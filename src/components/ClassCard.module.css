@@ -6,6 +6,7 @@
   box-shadow: 2px 2px 7px 2px rgb(0 0 0 / 8%);
   transition: transform 0.2s ease;
   height: 331px;
+  cursor: pointer;
 }
 .card:hover {
   transform: translateY(-3px);

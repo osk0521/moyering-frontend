@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useSetAtom } from "jotai";
-import { recommendClassAtom } from "../../atom/classAtom";
+import { recommendClassAtom,hotClassAtom } from "../../atom/classAtom";
 import axios from "axios";
 import { url } from "../../config";
 
 export default function useRecommendClasses(userId) {
-  const setClasses = useSetAtom(recommendClassAtom);
+  const setRecommendClasses = useSetAtom(recommendClassAtom);
+  const setHotClasses = useSetAtom(hotClassAtom);
 
   useEffect(() => {
     axios
@@ -13,8 +14,9 @@ export default function useRecommendClasses(userId) {
         params: userId ? { userId } : {},
       })
       .then((res) => {
-        setClasses(res.data);
+        setRecommendClasses(res.data.classes);
+        setHotClasses(res.data.hotClasses);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("클래스 추천 데이터 로딩 실패", err));
   }, [userId]);
 }

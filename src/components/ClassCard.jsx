@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './ClassCard.module.css';
 import { MdCalendarMonth } from "react-icons/md";
 
-export default function ClassCard({ classInfo }) {
+export default function ClassCard({ classInfo, onClick  }) {
     if (!classInfo) return null;
   console.log(classInfo);
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={onClick}>
       <div
         className={styles.cardImage}
         style={{ backgroundImage: "url('/public/myclassList.png')" }}

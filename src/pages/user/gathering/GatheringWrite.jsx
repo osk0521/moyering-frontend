@@ -1,47 +1,200 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Button, Form, FormGroup, Label, Input, Row, Col } from "reactstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useState, useEffect, useRef } from "react";
+import { Button } from "reactstrap";
 import { CiSearch, CiLocationOn, CiHashtag } from "react-icons/ci";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { FiUpload } from "react-icons/fi";
 import { GoPeople } from "react-icons/go";
 import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
 import axios from "axios";
-import { url } from "../../../config";
+import { url, KAKAO_REST_API_KEY } from "../../../config";
 import DaumPostcode from "react-daum-postcode";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+// import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
 import "./GatheringWrite.css";
 
 export default function GatheringWrite() {
+  //지오코딩용
+  const [coordinates, setCoordinates] = useState({ x: "", y: "" });
+  const [geocodingError, setGeocodingError] = useState("");
+  const [geocodingLoading, setGeocodingLoading] = useState(false);
+
+  // 새로 추가된 이미지 업로드 관련 상태들
+  const [fileName, setFileName] = useState("");
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(""); // 새로 추가
+  const [errors, setErrors] = useState({});
   const editorRef = useRef(null);
   const [editor, setEditor] = useState(null);
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const [category1, setCategory1] = useState([]);
   const [category2, setCategory2] = useState([]);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("initial");
+
   const [formData, setFormData] = useState({
     title: "",
-    date: null, // Date 객체로 변경
     startTime: "",
     endTime: "",
     category1: "",
     category2: "",
-    link: "",
     address: "",
     detailAddress: "",
-    meetingDate:"",
-    minPeople: 2,
-    maxPeople: "",
+    meetingDate: "",
+    minAttendees: 2,
+    maxAttendees: "",
     deadline: "",
     content: "",
     preparation: "",
+    longitude: "", // 경도
+    latitude: "", // 위도
     tags: [], // 문자열 배열로 변경
-    introduction: "",
+    intrOnln: "", // 한 줄 소개
   });
   const [tagInput, setTagInput] = useState("");
+
+  const convertAddressToCoordinates = async (address) => {
+    if (!address || !address.trim()) {
+      setGeocodingError("주소가 입력되지 않았습니다.");
+      return null;
+    }
+
+    if (
+      !KAKAO_REST_API_KEY ||
+      KAKAO_REST_API_KEY === "YOUR_KAKAO_REST_API_KEY"
+    ) {
+      setGeocodingError("카카오 REST API 키를 설정해주세요.");
+      return null;
+    }
+
+    setGeocodingLoading(true);
+    setGeocodingError("");
+
+    try {
+      const response = await fetch(
+        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
+          address
+        )}`,
+        {
+          headers: {
+            Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.documents && data.documents.length > 0) {
+        const result = data.documents[0]; // 첫 번째 결과 사용
+        const coords = {
+          x: result.x, // 경도
+          y: result.y, // 위도
+        };
+        setCoordinates(coords);
+        setGeocodingError("");
+        // formData에 좌표 값 할당
+        if (formData) {
+          formData.latitude = result.y; // Y값(위도)을 latitude에 할당
+          formData.longitude = result.x; // X값(경도)을 longitude에 할당
+        }
+
+        console.log("지오코딩 성공:", {
+          address: result.address_name,
+          coordinates: coords,
+        });
+
+        return coords;
+      } else {
+        setGeocodingError("주소를 찾을 수 없습니다. 주소를 다시 확인해주세요.");
+        return null;
+      }
+    } catch (err) {
+      console.error("지오코딩 오류:", err);
+      if (err.message.includes("CORS")) {
+        setGeocodingError(
+          "CORS 오류가 발생했습니다. 프록시 서버를 통해 요청하거나 서버 사이드에서 API를 호출해주세요."
+        );
+      } else {
+        setGeocodingError(
+          "좌표 변환 중 오류가 발생했습니다. API 키를 확인하거나 네트워크 상태를 점검해주세요."
+        );
+      }
+      return null;
+    } finally {
+      setGeocodingLoading(false);
+    }
+  };
+
+  // 새로운 파일 업로드 처리 함수
+  const handleFileUpload = (file) => {
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert("파일 크기는 5MB를 초과할 수 없습니다.");
+      setUploadStatus("error");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 업로드 가능합니다.");
+      setUploadStatus("error");
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      const imageUrl = e.target.result;
+      // 새로운 미리보기 상태 설정
+      setPreviewUrl(imageUrl);
+      setFileName(file.name);
+      setUploadStatus("success");
+    };
+    reader.readAsDataURL(file);
+    setThumbnail(file);
+  };
+  const handleFileInputChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFileUpload(e.target.files[0]);
+    }
+  };
+
+  // 드래그 앤 드롭 핸들러 함수들
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFileUpload(files[0]);
+    }
+  };
+
+  // 업로드 존 클래스 결정 함수
+  const getUploadZoneClass = () => {
+    let baseClass = "GatheringWrite_upload-zone_osk";
+    if (isDragOver) baseClass += " GatheringWrite_upload-zone-dragover_osk";
+    if (uploadStatus === "success")
+      baseClass += " GatheringWrite_upload-zone-success_osk";
+    return baseClass;
+  };
 
   // 태그 입력 처리 (Enter 또는 쉼표로 태그 추가)
   const handleTagInput = (e) => {
@@ -68,85 +221,43 @@ export default function GatheringWrite() {
     }
   };
 
-  // 태그 삭제 처리
   const handleTagDelete = (tagToDelete) => {
     setFormData((prev) => ({
       ...prev,
       tags: prev.tags.filter((tag) => tag !== tagToDelete),
     }));
   };
+
+  // 폼 데이터 변경 시 콘솔에 출력
+  useEffect(() => {
+    console.group("📝 FormData 업데이트");
+    console.log("제목:", formData.title);
+    console.log("날짜:", formData.meetingDate);
+    console.log("시간:", `${formData.startTime} ~ ${formData.endTime}`);
+    console.log("카테고리:", `${formData.category2}`);
+    console.log("주소:", ` ${formData.address}, ${formData.detailAddress}`);
+    console.log("좌표:", `${formData.longitude}, ${formData.latitude}`);
+
+    console.log("인원:", `${formData.minAttendees} ~ ${formData.maxAttendees}명`);
+    console.log("태그:", formData.tags);
+    console.log("썸네일:", formData.thumbnail);
+    console.log("콘텐츠 길이:", formData.content);
+    console.groupEnd();
+  }, [formData]);
+
+  // 태그 삭제 처리
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
-  };
-
-  // 날짜 변경 핸들러
-  // const handleDateChange = (date) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     date: date,
-  //   }));
-  // };
-
-  // 캘린더 SVG 아이콘 컴포넌트
-  const CalendarIcon = () => (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ marginLeft: "8px", color: "#666" }}
-    >
-      <path
-        d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-
-  // // 커스텀 DatePicker 입력 컴포넌트
-  // const CustomDateInput = React.forwardRef(
-  //   ({ value, onClick, placeholder }, ref) => (
-  //     <div
-  //       className="GatheringWrite_date-input-container_osk"
-  //       onClick={onClick}
-  //       ref={ref}
-  //     >
-  //       <input
-  //         type="text"
-  //         value={value}
-  //         placeholder={placeholder}
-  //         className="GatheringWrite_custom-input_osk GatheringWrite_date-input_osk"
-  //         readOnly
-  //       />
-  //       <CalendarIcon />
-  //     </div>
-  //   )
-  // );
-
-  // 입력 완료 시점에 최솟값 검증을 위한 새로운 함수
-  const handleNumberBlur = (e) => {
-    const { name, value } = e.target;
-
-    if (value !== "" && parseInt(value, 10) < 2) {
-      // 경고 메시지 표시 또는 최솟값으로 자동 설정
-      setFormData((prev) => ({
-        ...prev,
-        [name]: "2", // 자동으로 최솟값으로 설정
-      }));
-
-      // 또는 경고 메시지만 표시하고 값은 유지
-      // alert("최소 인원은 2명 이상이어야 합니다.");
-    }
   };
 
   // 방법 실시간 검증하되 경고만 표시
   const handleNumberInput = (e) => {
     const { name, value } = e.target;
+    const numValue = parseInt(value);
 
     // 빈 문자열은 허용
     if (value === "") {
@@ -163,26 +274,50 @@ export default function GatheringWrite() {
       return;
     }
 
-    // 숫자만 허용
-    const numberRegex = /^\d+$/;
-    if (numberRegex.test(value)) {
-      // 모든 숫자 입력을 허용하되 상태에 저장
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-
-      // 2 미만일 때 경고 상태만 설정 (실제 입력은 막지 않음)
-      const numValue = parseInt(value, 10);
+    if (name === "minAttendees") {
       if (numValue < 2) {
-        // setErrorState 등으로 경고 상태 관리
-        console.warn(`${name}: 최소값은 2 이상이어야 합니다.`);
+        setErrors((prev) => ({
+          ...prev,
+          minAttendees: "최소 인원은 2명 이상이어야 합니다",
+        }));
+      } else if (
+        formData.maxAttendees &&
+        numValue > parseInt(formData.maxAttendees)
+      ) {
+        setErrors((prev) => ({
+          ...prev,
+          minAttendees: "최소 인원은 최대 인원보다 클 수 없습니다",
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          minAttendees: "",
+        }));
       }
     }
+
+    // 최대 인원 검증
+    if (name === "maxAttendees") {
+      if (formData.minAttendees && numValue < parseInt(formData.minAttendees)) {
+        setErrors((prev) => ({
+          ...prev,
+          maxAttendees: "최대 인원은 최소 인원보다 작을 수 없습니다",
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          maxAttendees: "",
+        }));
+      }
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // Daum 우편번호 검색 완료 시 호출되는 함수
-  const handlePostcodeComplete = (data) => {
+  const handlePostcodeComplete = async (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
 
@@ -197,10 +332,23 @@ export default function GatheringWrite() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
+    // 주소 상태 업데이트
     setFormData((prev) => ({
       ...prev,
       address: fullAddress,
     }));
+
+    // 주소를 좌표로 변환
+    const coords = await convertAddressToCoordinates(fullAddress);
+    if (coords) {
+      console.log("변환된 좌표:", coords);
+      // 좌표를 formData에 추가하거나 별도로 저장
+      setFormData((prev) => ({
+        ...prev,
+        latitude: coords.y, // 위도
+        longitude: coords.x, // 경도
+      }));
+    }
 
     setIsPostcodeOpen(false);
   };
@@ -210,8 +358,8 @@ export default function GatheringWrite() {
     setIsPostcodeOpen(true);
   };
 
+  // 1차 카테고리 데이터 가져오기
   useEffect(() => {
-    // 1차 카테고리 데이터 가져오기
     axios
       .get(`${url}/category1`)
       .then((res) => {
@@ -231,8 +379,9 @@ export default function GatheringWrite() {
         console.log("API 오류:", err);
       });
   }, []);
+
+  // 2차 카테고리 데이터 가져오기
   useEffect(() => {
-    // 2차 카테고리 데이터 가져오기
     if (formData.category1 && formData.category1 !== "") {
       axios
         .get(`${url}/category2/${formData.category1}`)
@@ -263,8 +412,8 @@ export default function GatheringWrite() {
     }
   }, [formData.category1]);
 
+  // DOM이 완전히 렌더링된 후 에디터 초기화
   useEffect(() => {
-    // DOM이 완전히 렌더링된 후 에디터 초기화
     const initEditor = () => {
       if (editorRef.current && !editor) {
         try {
@@ -332,20 +481,144 @@ export default function GatheringWrite() {
       }
     };
   }, []); // 빈 의존성 배열 유지
-
-  const handleSubmit = () => {
-    const submitData = {
-      ...formData,
-      content: editor ? editor.getMarkdown() : formData.content,
-    };
-    console.log("제출 데이터:", submitData);
-
-    // 이미지가 포함된 경우의 처리 예시
-    if (submitData.content.includes("![")) {
-      console.log("이미지가 포함된 콘텐츠입니다.");
-      // 서버 전송 시 Base64 이미지를 실제 이미지 URL로 변환하는 로직 필요
+const submit = (e) => {
+  e.preventDefault();
+  // 시간 순서 검증
+  if (formData.startTime >= formData.endTime) {
+    alert('종료 시간은 시작 시간보다 늦어야 합니다.');
+    return;
+  }
+  
+  // 신청 마감일 검증
+  if (formData.deadline && formData.meetingDate && formData.deadline > formData.meetingDate) {
+    alert('신청 마감일은 모임 날짜보다 이전이어야 합니다.');
+    return;
+  }
+  
+  const gatheringData = new FormData();
+  
+  // 파일 추가 (thumbnail)
+  if (thumbnail != null) {
+    gatheringData.append("thumbnail", thumbnail);
+  }
+  
+  // 기본 데이터 추가 (데이터 타입 주의)
+  gatheringData.append('userId', 10); // 숫자로 직접 전달
+  gatheringData.append("title", formData.title || '');
+  gatheringData.append("meetingDate", formData.meetingDate || '');
+  gatheringData.append("startTime", formData.startTime); 
+  gatheringData.append("endTime", formData.endTime);
+  
+  // 숫자 필드는 숫자로 변환
+  const subCategoryId = parseInt(formData.category2) || 0;
+  gatheringData.append("subCategoryId", subCategoryId);
+  
+  gatheringData.append("address", formData.address || '');
+  gatheringData.append("detailAddress", formData.detailAddress || '');
+  
+  // 좌표 데이터 추가 (BigDecimal 형식으로 정확히 전달)
+  if (coordinates.x && coordinates.y) {
+    // BigDecimal 정밀도에 맞게 소수점 7자리로 제한
+    const lat = parseFloat(coordinates.y).toFixed(7);
+    const lng = parseFloat(coordinates.x).toFixed(7);
+    gatheringData.append("latitude", lat); // 위도
+    gatheringData.append("longitude", lng); // 경도
+  }
+  
+  // 인원수는 반드시 숫자로 (필드명 수정: DTO와 일치)
+  const minPeople = parseInt(formData.minPeople) || 2; // 기본값 2 (엔티티 기본값과 일치)
+  
+  gatheringData.append("minAttendees", minPeople);  // DTO 필드명과 일치
+  
+  // maxAttendees는 null 허용이므로 빈 값일 때는 아예 전송하지 않음
+  if (formData.maxPeople && formData.maxPeople.trim() !== '') {
+    const maxPeople = parseInt(formData.maxPeople);
+    if (!isNaN(maxPeople) && maxPeople > 0) {
+      gatheringData.append("maxAttendees", maxPeople);
     }
-  };
+  }
+  // maxAttendees가 비어있으면 아예 FormData에 추가하지 않음 (null로 처리됨)
+  
+  gatheringData.append("applyDeadline", formData.deadline || '');
+  gatheringData.append("gatheringContent", formData.content || '');
+  gatheringData.append("preparationItems", formData.preparation || '');
+  gatheringData.append("intrOnln", formData.intrOnln || 'N');
+  gatheringData.append("status", "모집중");
+  
+  // tags 처리 - 배열이 비어있으면 빈 배열로
+  const tagsToSend = formData.tags && formData.tags.length > 0 ? formData.tags : [];
+  gatheringData.append("tags", JSON.stringify(tagsToSend));
+  
+  // FormData 내용 확인 (디버깅용)
+  console.log('=== FormData 내용 ===');
+  for (let [key, value] of gatheringData.entries()) {
+    console.log(`${key}:`, value);
+  }
+  // axios 요청
+  axios
+    .post(`${url}/user/writeGathering`, gatheringData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // FormData 사용시 필수
+      },
+      timeout: 10000, // 10초 타임아웃
+    })
+    .then((res) => {
+      console.log('성공:', res);
+      if (res.data && res.data.num) {
+        // navigate(`/gatheringDetail/${res.data.num}`);
+      } else {
+        console.log('응답 데이터:', res.data);
+      }
+    })
+    .catch((err) => {
+      console.error('요청 실패:', err);
+      
+      // 상세한 에러 정보 출력
+      if (err.response) {
+        console.error('응답 상태:', err.response.status);
+        console.error('응답 데이터:', err.response.data);
+        console.error('응답 헤더:', err.response.headers);
+        
+        // // 400 에러 상세 처리
+        // if (err.response.status === 400) {
+        //   console.error('=== Validation 에러 상세 ===');
+        //   console.error('전체 응답:', err.response.data);
+          
+        //   // Spring Boot validation 에러 메시지 추출
+        //   if (err.response.data.message && err.response.data.message.includes('Validation failed')) {
+        //     console.error('Validation 실패:', err.response.data.message);
+            
+        //     // trace에서 구체적인 필드 에러 정보 추출 시도
+        //     if (err.response.data.trace) {
+        //       console.error('=== 에러 trace 분석 ===');
+        //       const trace = err.response.data.trace;
+        //       console.error('Full trace:', trace);
+              
+        //       // BindException에서 필드별 에러 찾기
+        //       if (trace.includes('Field error')) {
+        //         console.error('⚠️  Field error 감지됨 - 위 trace에서 "Field error in object" 라인을 찾아보세요');
+        //       }
+              
+        //       // 특정 에러 패턴 찾기
+        //       if (trace.includes('Failed to convert')) {
+        //         console.error('⚠️  타입 변환 실패 감지됨 - 날짜/시간/숫자 형식을 확인하세요');
+        //       }
+        //     }
+            
+        //     alert(`데이터 검증 실패! (Error count: 2)\n\n문제가 될 수 있는 항목들:\n1. 날짜/시간 형식\n2. 빈 값 처리\n3. 데이터 타입 불일치\n\n개발자 도구 콘솔에서 상세 trace를 확인하세요.`);
+        //   } else {
+        //     alert(`입력 데이터에 문제가 있습니다: ${err.response.data.message || '알 수 없는 오류'}`);
+        //   }
+        // }
+      } else if (err.request) {
+        console.error('요청이 전송되었지만 응답이 없음:', err.request);
+        alert('서버에 연결할 수 없습니다. 네트워크를 확인해주세요.');
+      } else {
+        console.error('요청 설정 오류:', err.message);
+        alert('요청 처리 중 오류가 발생했습니다.');
+      }
+    });
+};
   return (
     <div className="GatheringWrite_gathering-write-container_osk">
       <div className="GatheringWrite_content-wrapper_osk">
@@ -360,16 +633,65 @@ export default function GatheringWrite() {
                 기본 정보
               </span>
             </div>
-
             <div className="GatheringWrite_form-group_osk">
               <label className="GatheringWrite_field-label_osk">
-                썸네일 <span className="GatheringWrite_required_osk">*</span>
+                <span className="GatheringWrite_section-icon_osk">
+                  <SlPicture />
+                </span>
+                대표 이미지{" "}
+                <span className="GatheringWrite_required_osk">*</span>
               </label>
+
+              {/* 업로드 존 - 이미지가 이 div 내부에 완전히 배치됩니다 */}
+              <div
+                className={getUploadZoneClass()}
+                onClick={() =>
+                  document
+                    .getElementById("GatheringWrite_thumbnail_osk")
+                    .click()
+                }
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                {uploadStatus === "success" ? (
+                  // 업로드 성공 시: 이미지가 업로드 존 전체를 채움
+                  <div className="GatheringWrite_preview-container_osk">
+                    <img
+                      src={previewUrl}
+                      alt="업로드된 이미지"
+                      className="GatheringWrite_preview-image_osk"
+                    />
+                    {/* 파일명 표시 */}
+                    <div className="GatheringWrite_file-name_osk">
+                      {fileName}
+                    </div>
+                  </div>
+                ) : (
+                  // 기본 상태: 업로드 대기 UI
+                  <>
+                    <div className="GatheringWrite_upload-icon_osk">
+                      <FiUpload />
+                    </div>
+                    <div className="GatheringWrite_upload-text_osk">
+                      이미지를 드래그하거나 클릭하여 업로드하세요
+                    </div>
+                    <div className="GatheringWrite_upload-info_osk">
+                      권장 크기: 1200 x 630px, 최대 5MB
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* 숨겨진 파일 입력 */}
               <input
                 type="file"
-                name="GatheringWrite_ifile_osk"
-                id="GatheringWrite_ifile_osk"
+                name="GatheringWrite_thumbnail_osk"
+                id="GatheringWrite_thumbnail_osk"
+                style={{ display: "none" }}
+                onChange={handleFileInputChange}
                 accept="image/*"
+                required
               />
             </div>
             <div className="GatheringWrite_form-group_osk">
@@ -378,11 +700,12 @@ export default function GatheringWrite() {
               </label>
               <input
                 type="text"
-                name="gatheringName"
-                value={formData.gatheringName}
+                name="title"
+                value={formData.title}
                 onChange={handleInputChange}
                 placeholder="모임 이름을 입력해주세요"
                 className="GatheringWrite_custom-input_osk"
+                required
               />
             </div>
 
@@ -393,19 +716,15 @@ export default function GatheringWrite() {
                     모임 날짜{" "}
                     <span className="GatheringWrite_required_osk">*</span>
                   </label>
-                  {/* <DatePicker
-                    selected={formData.date}
-                    onChange={handleDateChange}
-                    customInput={<CustomDateInput />}
-                    dateFormat="yyyy/MM/dd"
-                    placeholderText="yyyy/mm/dd"
-                    minDate={new Date()}
-                    showYearDropdown
-                    showMonthDropdown
-                    dropdownMode="select"
-                    yearDropdownItemNumber={10}
-                  /> */}
-                  <input type="date" onChange={handleInputChange} name="meetingDate"/>
+                  <input
+                    type="date"
+                    value={formData.meetingDate}
+                    onChange={handleInputChange}
+                    className="GatheringWrite_custom-input_osk GatheringWrite_date-input-container_osk"
+                    name="meetingDate"
+                    required
+                    placeholder="모임 날짜 입력"
+                  />
                 </div>
               </div>
               <div className="GatheringWrite_col-md-6_osk">
@@ -422,6 +741,7 @@ export default function GatheringWrite() {
                       onChange={handleInputChange}
                       placeholder="시작 시간 입력"
                       className="GatheringWrite_custom-input_osk GatheringWrite_time-input_osk"
+                      required
                     />
                     <span className="GatheringWrite_time-separator_osk">~</span>
                     <input
@@ -436,6 +756,7 @@ export default function GatheringWrite() {
                 </div>
               </div>
             </div>
+
             <div className="GatheringWrite_row_osk">
               {/* 1차 카테고리 */}
               <div className="GatheringWrite_col-md-6_osk">
@@ -469,16 +790,21 @@ export default function GatheringWrite() {
                     2차 카테고리{" "}
                     <span className="GatheringWrite_required_osk">*</span>
                   </label>
-                  <select 
+                  <select
                     name="category2"
-                    value={formData.category2} 
-                    onChange={handleInputChange} 
+                    value={formData.category2}
+                    onChange={handleInputChange}
                     className="GatheringWrite_custom-input_osk"
+                    disabled={!formData.category1} // 1차 카테고리가 선택되지 않으면 비활성화
+                    required
                   >
                     <option value="">2차 카테고리를 선택해주세요</option>
                     {Array.isArray(category2) &&
                       category2
-                        .filter(category => category.subCategoryId && category.subCategoryName) // 유효한 데이터만 필터링
+                        .filter(
+                          (category) =>
+                            category.subCategoryId && category.subCategoryName
+                        ) // 유효한 데이터만 필터링
                         .map((category) => (
                           <option
                             key={category.subCategoryId}
@@ -494,30 +820,29 @@ export default function GatheringWrite() {
           </div>
 
           {/* 모임 장소 */}
-          <div className="GatheringWrite_section_osk">
+          <div className="GatheringWrite_section_osk=">
             <div className="GatheringWrite_section-header_osk">
               <span className="GatheringWrite_section-icon_osk">
                 <CiLocationOn />
               </span>
               <span className="GatheringWrite_section-title_osk">
                 모임 장소
+                <span className="GatheringWrite_required_osk">*</span>
               </span>
             </div>
 
             <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">
-                링크 <span className="GatheringWrite_required_osk">*</span>
-              </label>
-              <div className="GatheringWrite_address-search-group_osk">
+              <div className="GatheringWrite_location-section_osk">
                 <input
                   type="text"
-                  name="link"
-                  value={formData.link}
+                  name="address"
+                  value={formData.address}
                   onChange={handleInputChange}
-                  placeholder="주소 찾기"
-                  className="GatheringWrite_custom-input_osk GatheringWrite_address-input_osk"
                   onClick={openPostcode}
+                  placeholder="주소를 입력해주세요"
+                  className="GatheringWrite_custom-input_osk"
                   readOnly
+                  required
                 />
                 <button
                   type="button"
@@ -532,23 +857,12 @@ export default function GatheringWrite() {
             <div className="GatheringWrite_form-group_osk">
               <input
                 type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="주소를 입력해주세요"
-                className="GatheringWrite_custom-input_osk"
-                readOnly
-              />
-            </div>
-
-            <div className="GatheringWrite_form-group_osk">
-              <input
-                type="text"
                 name="detailAddress"
                 value={formData.detailAddress}
                 onChange={handleInputChange}
                 placeholder="상세 주소를 입력해주세요"
                 className="GatheringWrite_custom-input_osk"
+                required
               />
             </div>
           </div>
@@ -565,31 +879,57 @@ export default function GatheringWrite() {
             </div>
 
             <div className="GatheringWrite_row_osk">
+              {/* 최소 인원 입력 부분 */}
               <div className="GatheringWrite_col-md-6_osk">
                 <div className="GatheringWrite_form-group_osk">
                   <label className="GatheringWrite_field-label_osk">
                     최소 인원{" "}
                     <span className="GatheringWrite_required_osk">*</span>
+                    {errors.minAttendees && (
+                      <span
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          marginLeft: "8px",
+                        }}
+                      >
+                        {errors.minAttendees}
+                      </span>
+                    )}
                   </label>
                   <input
                     type="text"
-                    name="minPeople"
-                    value={formData.minPeople}
+                    name="minAttendees"
+                    value={formData.minAttendees}
                     onChange={handleNumberInput}
                     placeholder="최소 인원 (2 이상)"
                     className="GatheringWrite_custom-input_osk"
+                    required
                   />
                 </div>
               </div>
+              {/* 최대 인원 입력 부분 */}
               <div className="GatheringWrite_col-md-6_osk">
                 <div className="GatheringWrite_form-group_osk">
                   <label className="GatheringWrite_field-label_osk">
-                    최대 인원
+                    최대 인원{" "}
+                    <span className="GatheringWrite_required_osk">*</span>
+                    {errors.maxAttendees && (
+                      <span
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          marginLeft: "8px",
+                        }}
+                      >
+                        {errors.maxAttendees}
+                      </span>
+                    )}
                   </label>
                   <input
                     type="text"
-                    name="maxPeople"
-                    value={formData.maxPeople}
+                    name="maxAttendees"
+                    value={formData.maxAttendees}
                     onChange={handleNumberInput}
                     placeholder="최대 인원 (2 이상)"
                     className="GatheringWrite_custom-input_osk"
@@ -601,14 +941,13 @@ export default function GatheringWrite() {
             <div className="GatheringWrite_form-group_osk">
               <label className="GatheringWrite_field-label_osk">
                 신청 마감일{" "}
-                <span className="GatheringWrite_required_osk">*</span>
+                {/* <span className="GatheringWrite_required_osk">*</span> */}
               </label>
               <input
-                type="text"
+                type="date"
                 name="deadline"
                 value={formData.deadline}
                 onChange={handleInputChange}
-                placeholder="mm/dd/yyyy"
                 className="GatheringWrite_custom-input_osk"
               />
             </div>
@@ -672,6 +1011,7 @@ export default function GatheringWrite() {
               </div>
             </div>
           </div>
+
           <div style={{ marginBottom: "20px" }}>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
               {formData.tags.map((tag, index) => (
@@ -699,13 +1039,19 @@ export default function GatheringWrite() {
               </label>
               <input
                 type="text"
-                name="condition"
-                value={formData.introduction}
+                name="intrOnln"
+                value={formData.intrOnln}
                 onChange={handleInputChange}
                 placeholder="모임에 관련한 한 줄 소개글을 입력해주세요"
                 className="GatheringWrite_custom-input_osk"
               />
             </div>
+          </div>
+
+          <div className="GatheringWrite_button-group_osk">
+            <Button onClick={submit} className="GatheringWrite_submit-btn_osk">
+              모임 등록
+            </Button>
           </div>
         </div>
       </div>

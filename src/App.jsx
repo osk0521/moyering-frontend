@@ -46,6 +46,7 @@ import SettlementManagement from "./pages/admin/SettlementManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/classRingDetail.jsx";
+import HostRegist from './pages/host/HostRegist.jsx';
 import Main from "./pages/common/Main.jsx";
 import ClassInquiry from "./pages/user/0myPage/classRing/ClassInquiry.jsx";
 import MyClassList from "./pages/user/0myPage/classRing/MyClassList.jsx";
@@ -56,6 +57,9 @@ import MyWishlist from "./pages/user/0myPage/common/MyWishlist.jsx";
 import Header from "./pages/common/Header.jsx";
 import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
 //게더링
+import GatheringDetail from "./pages/common/GatheringDetail";
+import GatheringWrite from "./pages/user/gathering/GatheringWrite";
+import GatheringModify from "./pages/user/gathering/GatheringModify";
 import GatheringDetail from "./pages/common/GatheringDetail.jsx";
 import GatheringWrite from "./pages/user/gathering/GatheringWrite.jsx";
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
@@ -73,7 +77,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/classList" element={<ClassList />} />
         <Route path="/classRingDetail" element={<ClassRingDetail />} />
-        <Route path="/gatheringDetail" element={<GatheringDetail />} />
+        <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/userFeed" element={<UserFeed />} />
         <Route path="/feedDetail" element={<FeedDetail />} />
@@ -90,6 +94,7 @@ function App() {
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
+        <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
@@ -107,7 +112,7 @@ function App() {
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />
-        <Route path="/host/regist" element={<HostRegist/>}/>
+        <Route path="/host/regist" element={<HostRegist/>}/> 
         <Route element={<DashboardLayout />}>
           <Route path="/host/hostMyPage" element={<MainContent />} />
           <Route path="/host/profile" element={<HostProfile />} />

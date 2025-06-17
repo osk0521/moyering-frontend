@@ -13,6 +13,13 @@
   padding: 40px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+.GatheringWrite_location-section_osk {
+  display: flex;
+  gap: 17px;
+  justify-content:center;
+  flex-wrap: nowrap;
+
+}
 
 .GatheringWrite_section_osk:last-child {
   border-bottom: none;
@@ -68,7 +75,6 @@
   box-sizing: border-box;
   color: #333;
 }
-
 .GatheringWrite_custom-input_osk:focus {
   border-color: #FFB22C;
   outline: none;
@@ -165,7 +171,25 @@
   height: 48px;
   transition: background-color 0.2s;
 }
-
+.GatheringWrite_button-group_osk{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.GatheringWrite_submit-btn_osk{
+  background-color: #FFB22C;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  transition: background-color 0.2s;
+}
 .GatheringWrite_address-search-btn_osk:hover {
   background-color: #e6a028;
 }
@@ -415,4 +439,183 @@ select.GatheringWrite_custom-input_osk {
 .postcode-close-btn:hover {
   background-color: #e9ecef;
   color: #333;
+}
+/* 업로드 존 기본 스타일 수정 */
+.GatheringWrite_upload-zone_osk {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.GatheringWrite_upload-zone_osk:hover {
+  border-color: #FFB22C;
+  background-color: #fff9f0;
+}
+
+.GatheringWrite_upload-zone-dragover_osk {
+  border-color: #FFB22C !important;
+  background-color: #fff9f0 !important;
+  transform: scale(1.02);
+}
+
+/* 미리보기 컨테이너 - 업로드 존 전체를 채우도록 */
+.GatheringWrite_preview-container_osk {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  border-radius: 6px; /* 업로드 존보다 약간 작은 border-radius */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 미리보기 이미지 - 컨테이너를 완전히 채우도록 */
+.GatheringWrite_preview-image_osk {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+}
+
+/* 미리보기 오버레이 */
+.GatheringWrite_preview-overlay_osk {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(16, 185, 129, 0.9);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.GatheringWrite_preview-overlay_osk svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 파일명 표시 */
+.GatheringWrite_file-name_osk {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 호버 효과 */
+.GatheringWrite_upload-zone-success_osk:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+}
+
+.GatheringWrite_upload-zone-success_osk:hover .GatheringWrite_preview-overlay_osk {
+  background-color: rgba(16, 185, 129, 1);
+}
+
+/* 기본 상태 (업로드 전) 아이콘과 텍스트 스타일 */
+.GatheringWrite_upload-icon_osk {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.GatheringWrite_upload-icon_osk svg {
+  color: #9ca3af;
+  width: 48px;
+  height: 48px;
+}
+
+.GatheringWrite_upload-zone_osk:hover .GatheringWrite_upload-icon_osk svg {
+  color: #FFB22C;
+}
+
+.GatheringWrite_upload-text_osk {
+  font-size: 16px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.GatheringWrite_upload-info_osk {
+  font-size: 14px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .GatheringWrite_upload-zone_osk {
+    min-height: 180px;
+    padding: 15px;
+  }
+  
+  .GatheringWrite_upload-zone-success_osk {
+    min-height: 200px;
+  }
+  
+  .GatheringWrite_preview-container_osk {
+    min-height: 200px;
+  }
+  
+  .GatheringWrite_preview-image_osk {
+    min-height: 200px;
+  }
+  
+  .GatheringWrite_upload-icon_osk svg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .GatheringWrite_upload-text_osk {
+    font-size: 15px;
+  }
+  
+  .GatheringWrite_upload-info_osk {
+    font-size: 13px;
+  }
+  
+  .GatheringWrite_preview-overlay_osk {
+    top: 8px;
+    right: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .GatheringWrite_file-name_osk {
+    font-size: 12px;
+    padding: 12px;
+  }
 }

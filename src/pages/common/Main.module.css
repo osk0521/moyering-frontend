@@ -1,6 +1,8 @@
 .mainPage {
   padding: 2rem;
-  font-family: 'Pretendard', sans-serif;
+  min-width: 1280px;
+  max-width: 1600px;
+  margin: auto;
 }
 
 .bannerSection .bannerPlaceholder {
@@ -36,18 +38,18 @@
 }
 
 .orange {
-  background-color: #FF7F50;
+  background-color: #ff7f50;
 }
 .yellow {
-  background-color: #FFD966;
+  background-color: #ffd966;
   color: #333;
 }
 .peach {
-  background-color: #FAD4C0;
+  background-color: #fad4c0;
   color: #333;
 }
 .pink {
-  background-color: #FFA6C9;
+  background-color: #ffa6c9;
 }
 
 .sectionBlock {
@@ -69,9 +71,8 @@
 .cardList {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
-
 
 .quickLinkBox {
   flex: 1;

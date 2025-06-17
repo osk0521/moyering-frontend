@@ -1,6 +1,9 @@
 import React from 'react';
 import styles from './Main.module.css';
 import ClassCard from '../../components/ClassCard';
+import { recommendClassAtom } from '../../atom/classAtom';
+import useRecommendClasses from '../../hooks/common/useRecommendClasses';
+import { useAtomValue } from 'jotai';
 
 export default function Main() {
   const items = [
@@ -9,6 +12,8 @@ export default function Main() {
     { title: '카테고리', desc: '카테고리별 다양한 클래스', icon: '🗂️' },
     { title: '소셜링', desc: '사람들은 어떤 이야기를 나눌까?', icon: '💬' },
   ];
+  const classes = useAtomValue(recommendClassAtom);
+  useRecommendClasses(1); // userId 없으면 null 넘기기
 
   return (
     <main className={styles.mainPage}>
@@ -37,9 +42,9 @@ export default function Main() {
         <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
         <p className={styles.sectionSub}>모여링이 추천해주는 맞춤 클래스</p>
         <div className={styles.cardList}>
-          {[...Array(4)].map((_, idx) => (
-            <ClassCard key={idx} />
-          ))}
+        {classes.map((classInfo, idx) => (
+                  <ClassCard key={idx} classInfo={classInfo} />
+        ))}
         </div>
       </section>
 

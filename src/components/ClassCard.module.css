@@ -1,10 +1,11 @@
 .card {
-  width: 292px;
-  border-radius: 12px;
+  width: 350px;
+  border-radius: 20px;
   overflow: hidden;
   background: white;
   box-shadow: 2px 2px 7px 2px rgb(0 0 0 / 8%);
   transition: transform 0.2s ease;
+  height: 331px;
 }
 .card:hover {
   transform: translateY(-3px);
@@ -12,7 +13,7 @@
 
 .cardImage {
   position: relative;
-  height: 190px;
+  height: 210px;
   background-color: #ddd;
   background-size: cover;
   background-position: center;
@@ -26,7 +27,7 @@
   left: 10px;
   font-size: 0.75rem;
   color: white;
-  background-color: #FF5C5C;
+  background-color: #ff5c5c;
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   font-weight: bold;
@@ -52,23 +53,23 @@
 .cardTags {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin: 0.6rem 0 0.5rem 0;
 }
 
 .tag {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   padding: 0.3rem 0.6rem;
   border-radius: 8px;
   font-weight: 600;
 }
 
 .yellow {
-  background-color: #FFF2CC;
+  background-color: #fff2cc;
   color: #d49b00;
 }
 
 .blue {
-  background-color: #DFF5FF;
+  background-color: #dff5ff;
   color: #359ecf;
 }
 
@@ -79,7 +80,7 @@
 }
 
 .cardInfo {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #666;
   display: flex;
   align-items: center;

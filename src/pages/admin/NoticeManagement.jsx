@@ -10,7 +10,7 @@ const NoticeManagement = () => {
 // + 새 공지사항 버튼 클릭 시 이동할 navigate 함수
     const navigate = useNavigate();
 
-    // 버튼 클릭 시 실행 
+    // 공지사항 등록 클릭 시 모달 창 띄우기 
       const handleNewNotice = () => {
     navigate('/admin/notice/create');
   }
@@ -80,7 +80,6 @@ const NoticeManagement = () => {
   ]);
 
   // ===== 헬퍼 함수들 =====
-  
   // 내용 100자 제한 함수
   const truncateContent = (content, maxLength = 100) => {
     if (content.length <= maxLength) return content;
@@ -94,7 +93,6 @@ const NoticeManagement = () => {
   };
 
   // ===== 이벤트 핸들러들 =====
-
   // 정렬 함수
   const handleSort = (key) => {
     let direction = 'asc';
@@ -150,7 +148,7 @@ const NoticeManagement = () => {
       return matchesSearch;
     });
 
-    // 📌 핀 고정된 항목들을 먼저 분리
+    // 핀 고정된 항목들을 먼저 분리
     const pinnedItems = filtered.filter(notice => notice.isPinned);
     const unpinnedItems = filtered.filter(notice => !notice.isPinned);
 
@@ -188,12 +186,7 @@ const NoticeManagement = () => {
           <h1>공지사항 관리</h1>
           </div>
           
-          <div className="right-alignHY"/>
-          <button className="btn-primary new-notice-btnHY" 
-          onClick = {handleNewNotice}>
-            + 새 공지사항
-          </button>
-        
+
 
         {/* 검색 영역 */}
           <div className="search-sectionHY">
@@ -208,7 +201,16 @@ const NoticeManagement = () => {
               />
             </div>
           </div>
+              <div className="right-alignHY">
+          <button className="btn-primary new-notice-btnHY" 
+          onClick = {handleNewNotice}>
+            + 새 공지사항
+          </button>
+          </div>
+        
+        
     
+    <br />
         {/* 검색 결과 수 */}
           <span className="result-countHY">총 <strong>{filteredAndSortedNotices.length}</strong>건</span>
 
@@ -265,7 +267,7 @@ const NoticeManagement = () => {
                   </td>
                   <td>
                     <button 
-                      className={`publish-btn ${notice.isPublished ? 'published' : 'unpublished'}`}
+                      className={`publish-btnHY ${notice.isPublished ? 'published' : 'unpublished'}`}
                       onClick={() => togglePublishStatus(notice.id)}
                     >
                       {notice.isPublished ? '게시중' : '비게시'}
@@ -273,7 +275,7 @@ const NoticeManagement = () => {
                   </td>
                   <td>
                     <button 
-                      className={`pin-btn ${notice.isPinned ? 'pinned' : 'unpinned'}`}
+                      className={`pin-btnHY ${notice.isPinned ? 'pinned' : 'unpinned'}`}
                       onClick={() => togglePinStatus(notice.id)}
                       title={notice.isPinned ? '핀 해제' : '상단 고정'}
                     >
@@ -326,7 +328,7 @@ const NoticeManagement = () => {
                   
                   <div className="detail-itemHY">
                     <label>게시 상태:</label>
-                    <span className={`status-badge ${selectedNotice.isPublished ? 'status-published' : 'status-unpublished'}`}>
+                    <span className={`status-badgeHY ${selectedNotice.isPublished ? 'status-published' : 'status-unpublished'}`}>
                       {selectedNotice.isPublished ? '게시중' : '비게시'}
                     </span>
                   </div>

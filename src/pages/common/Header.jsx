@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input, Form } from "reactstrap";
 import { CiHeart, CiSearch } from "react-icons/ci";
 import { FaRegBell, FaHeart } from "react-icons/fa6";
@@ -8,11 +9,14 @@ import "./Header.css";
 import logoImage from '/logo.png';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <div className="Header_header-container_osk">
       {/* 상단 작은 메뉴바 */}
       <div className="Header_top-menu-bar_osk">
         <div className="Header_top-menu-items_osk">
+          
           <span className="Header_top-menu-link_osk">
             <a href="/userlogin">로그인</a>
           </span>

@@ -15,7 +15,6 @@ import HostClassList from './pages/host/HostClassList';
 import HostIntroPage from './pages/host/HostIntroPage';
 import HostProfile from './pages/host/HostProfile';
 import Inquiry from './pages/host/Inquiry';
-import HostRegist from './pages/host/HostRegist.jsx';
 import MainContent from './pages/host/MainContent';
 import SettlementInfo from './pages/host/SettlementInfo';
 import StudentSearch from './pages/host/StudentSearch';
@@ -59,9 +58,6 @@ import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
 import GatheringDetail from "./pages/common/GatheringDetail";
 import GatheringWrite from "./pages/user/gathering/GatheringWrite";
 import GatheringModify from "./pages/user/gathering/GatheringModify";
-import GatheringDetail from "./pages/common/GatheringDetail.jsx";
-import GatheringWrite from "./pages/user/gathering/GatheringWrite.jsx";
-import Header from "./pages/common/Header";
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
@@ -72,7 +68,6 @@ import GatheringChat from './pages/user/gathering/GatheringChat';
 function App() {
   return (
     <Router>
-      <Header />
       <Routes>
         {/* 공통 /~~~으로 시작 */}
         <Route path="/" element={<Main />} />

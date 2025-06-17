@@ -12,7 +12,7 @@ import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 // import "react-datepicker/dist/react-datepicker.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./GatheringWrite.css";
 
 export default function GatheringWrite() {
@@ -20,6 +20,7 @@ export default function GatheringWrite() {
   const [coordinates, setCoordinates] = useState({ x: "", y: "" });
   const [geocodingError, setGeocodingError] = useState("");
   const [geocodingLoading, setGeocodingLoading] = useState(false);
+  const{gatheringId} = useParams();
 
   // 새로 추가된 이미지 업로드 관련 상태들
   const [fileName, setFileName] = useState("");
@@ -52,6 +53,28 @@ export default function GatheringWrite() {
     latitude: "", // 위도
     tags: [], // 문자열 배열로 변경
     intrOnln: "", // 한 줄 소개
+    //----
+    "gatheringId": 1,
+    "title": "책과 함께하는 저녁",
+    "userId": 1,
+    "gatheringContent": "함께 독서하며 생각을 나누는 소규모 모임입니다.",
+    "thumbnailFileName": "thumb1.jpg",
+    "meetingDate": "2025-06-30",
+    "startTime": "16:00",
+    "endTime": "18:00",
+    "address": "서울시 강남구",
+    "detailAddress": "역삼동 123-45",
+    "minAttendees": 2,
+    "maxAttendees": 10,
+    "applyDeadline": "2025-06-25",
+    "preparationItems": "좋아하는 책 한 권",
+    "tags": "독서,소모임",
+    "createDate": "2025-06-15",
+    "subCategoryId": 1,
+    "latitude": 37.4979000,
+    "longitude": 127.0276000,
+    "intrOnln": "오프라인",
+    "status": "모집중"
   });
   const [tagInput, setTagInput] = useState("");
 
@@ -363,7 +386,7 @@ export default function GatheringWrite() {
     axios
       .get(`${url}/category1`)
       .then((res) => {
-        console.log("API 응답:", res);
+        console.log("1차 카테고리:", res);
 
         // res.data.category1 배열을 category1 상태에 저장
         const categoryArray = res.data.category1;
@@ -379,38 +402,6 @@ export default function GatheringWrite() {
         console.log("API 오류:", err);
       });
   }, []);
-
-  // 2차 카테고리 데이터 가져오기
-  useEffect(() => {
-    if (formData.category1 && formData.category1 !== "") {
-      axios
-        .get(`${url}/category2/${formData.category1}`)
-        .then((res) => {
-          console.log("2차 카테고리 API 응답:", res);
-          const categoryArray = res.data.category2.map((item) => ({
-            subCategoryId: item.subCategoryId,
-            subCategoryName: item.subCategoryName,
-          }));
-          setCategory2(categoryArray);
-          if (categoryArray.length > 0) {
-            setFormData((prev) => ({
-              ...prev,
-              category2: categoryArray[0].subCategoryId.toString(),
-            }));
-          }
-        })
-        .catch((err) => {
-          console.log("2차 카테고리 API 오류:", err);
-        });
-    } else {
-      // 1차 카테고리가 선택되지 않으면 2차 카테고리 초기화
-      setCategory2([]);
-      setFormData((prev) => ({
-        ...prev,
-        category2: "",
-      }));
-    }
-  }, [formData.category1]);
 
   // DOM이 완전히 렌더링된 후 에디터 초기화
   useEffect(() => {
@@ -481,6 +472,49 @@ export default function GatheringWrite() {
       }
     };
   }, []); // 빈 의존성 배열 유지
+   useEffect(()=> {
+        axios.get(`${url}/detailGathering/?gatheringId=${gatheringId}`)
+            .then(res=> {
+              console.log('gathering :', res.data.gathering); 
+              setFormData(res.data.gathering);
+            })
+            .catch(err=> {
+                console.log(err)
+            })
+    },[]);
+    
+
+  // 2차 카테고리 데이터 가져오기
+  useEffect(() => {
+    if (formData.category1 && formData.category1 !== "") {
+      axios
+        .get(`${url}/category2/${formData.category1}`)
+        .then((res) => {
+          console.log("2차 카테고리 :", res);
+          const categoryArray = res.data.category2.map((item) => ({
+            subCategoryId: item.subCategoryId,
+            subCategoryName: item.subCategoryName,
+          }));
+          setCategory2(categoryArray);
+          if (categoryArray.length > 0) {
+            setFormData((prev) => ({
+              ...prev,
+              category2: categoryArray[0].subCategoryId.toString(),
+            }));
+          }
+        })
+        .catch((err) => {
+          console.log("2차 카테고리 API 오류:", err);
+        });
+    } else {
+      // 1차 카테고리가 선택되지 않으면 2차 카테고리 초기화
+      setCategory2([]);
+      setFormData((prev) => ({
+        ...prev,
+        category2: "",
+      }));
+    }
+  }, [formData.category1]);
 const submit = (e) => {
   e.preventDefault();
   // 시간 순서 검증
@@ -556,7 +590,7 @@ const submit = (e) => {
   }
   // axios 요청
   axios
-    .post(`${url}/user/writeGathering`, gatheringData, {
+    .post(`${url}/user/modifyGathering`, gatheringData, {
       headers: {
         'Content-Type': 'multipart/form-data', // FormData 사용시 필수
       },
@@ -578,38 +612,6 @@ const submit = (e) => {
         console.error('응답 상태:', err.response.status);
         console.error('응답 데이터:', err.response.data);
         console.error('응답 헤더:', err.response.headers);
-        
-        // // 400 에러 상세 처리
-        // if (err.response.status === 400) {
-        //   console.error('=== Validation 에러 상세 ===');
-        //   console.error('전체 응답:', err.response.data);
-          
-        //   // Spring Boot validation 에러 메시지 추출
-        //   if (err.response.data.message && err.response.data.message.includes('Validation failed')) {
-        //     console.error('Validation 실패:', err.response.data.message);
-            
-        //     // trace에서 구체적인 필드 에러 정보 추출 시도
-        //     if (err.response.data.trace) {
-        //       console.error('=== 에러 trace 분석 ===');
-        //       const trace = err.response.data.trace;
-        //       console.error('Full trace:', trace);
-              
-        //       // BindException에서 필드별 에러 찾기
-        //       if (trace.includes('Field error')) {
-        //         console.error('⚠️  Field error 감지됨 - 위 trace에서 "Field error in object" 라인을 찾아보세요');
-        //       }
-              
-        //       // 특정 에러 패턴 찾기
-        //       if (trace.includes('Failed to convert')) {
-        //         console.error('⚠️  타입 변환 실패 감지됨 - 날짜/시간/숫자 형식을 확인하세요');
-        //       }
-        //     }
-            
-        //     alert(`데이터 검증 실패! (Error count: 2)\n\n문제가 될 수 있는 항목들:\n1. 날짜/시간 형식\n2. 빈 값 처리\n3. 데이터 타입 불일치\n\n개발자 도구 콘솔에서 상세 trace를 확인하세요.`);
-        //   } else {
-        //     alert(`입력 데이터에 문제가 있습니다: ${err.response.data.message || '알 수 없는 오류'}`);
-        //   }
-        // }
       } else if (err.request) {
         console.error('요청이 전송되었지만 응답이 없음:', err.request);
         alert('서버에 연결할 수 없습니다. 네트워크를 확인해주세요.');
@@ -654,20 +656,19 @@ const submit = (e) => {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
               >
-                {uploadStatus === "success" ? (
-                  // 업로드 성공 시: 이미지가 업로드 존 전체를 채움
-                  <div className="GatheringWrite_preview-container_osk">
-                    <img
-                      src={previewUrl}
-                      alt="업로드된 이미지"
-                      className="GatheringWrite_preview-image_osk"
-                    />
-                    {/* 파일명 표시 */}
-                    <div className="GatheringWrite_file-name_osk">
-                      {fileName}
+                {uploadStatus === "success" || formData.thumbnailFileName ? (
+                    // 업로드 성공 또는 기존 썸네일 파일이 있을 경우
+                    <div className="GatheringWrite_preview-container_osk">
+                      <img
+                        src={uploadStatus === "success" ? previewUrl : `${url}/image?filename=${formData.thumbnailFileName}`}
+                        alt="업로드된 이미지"
+                        className="GatheringWrite_preview-image_osk"
+                      />
+                      <div className="GatheringWrite_file-name_osk">
+                        {formData.fileName || formData.thumbnailFileName}
+                      </div>
                     </div>
-                  </div>
-                ) : (
+                  ) : (
                   // 기본 상태: 업로드 대기 UI
                   <>
                     <div className="GatheringWrite_upload-icon_osk">

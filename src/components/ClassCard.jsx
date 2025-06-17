@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './ClassCard.module.css';
 import { MdCalendarMonth } from "react-icons/md";
+import { url } from '../config';
 
 export default function ClassCard({ classInfo, onClick  }) {
     if (!classInfo) return null;
@@ -9,8 +10,12 @@ export default function ClassCard({ classInfo, onClick  }) {
     <div className={styles.card} onClick={onClick}>
       <div
         className={styles.cardImage}
-        style={{ backgroundImage: "url('/public/myclassList.png')" }}
-      >
+        style={{
+              backgroundImage: `url(${url}/image?filename=${classInfo.img1})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+      >        
         <span className={styles.badge}>추천</span>
         <span className={styles.likeIcon}>🤍</span>
       </div>

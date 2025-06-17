@@ -1,14 +1,31 @@
 import React from "react";
 import styles from "./Main.module.css";
 import ClassCard from "../../components/ClassCard";
-import { recommendClassAtom,hotClassAtom  } from "../../atom/classAtom";
+import { recommendClassAtom,hotClassAtom ,recommendGatheringAtom,mainBannerList } from "../../atom/classAtom";
 import useRecommendClasses from "../../hooks/common/useRecommendClasses";
 import { useAtomValue } from "jotai";
 import Header from "./Header";
+import Footer from "./Footer";
 import { useNavigate } from 'react-router-dom';
+import GatheringCard from "../../components/GatheringCard";
+import { url } from "../../config";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 export default function Main() {
-const navigate = useNavigate();
+//슬라이더 
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 3000,
+};
+
+  const navigate = useNavigate();
 
 const items = [
   { title: "내 주변 클래스링", desc: "주변에 있는 클래스 찾기", icon: "❤️", link: "/classList" },
@@ -17,18 +34,31 @@ const items = [
   { title: "소셜링", desc: "사람들은 어떤 이야기를 나눌까?", icon: "💬", link: "/feed" },
 ];
   useRecommendClasses(1); // userId 없으면 null 넘기기
-
   const classes = useAtomValue(recommendClassAtom);
   const hotClasses = useAtomValue(hotClassAtom);
+  const gathers = useAtomValue(recommendGatheringAtom);
+  const mainBanners = useAtomValue(mainBannerList);
 
+  console.log(mainBanners);
   return (
     <>
       <Header />
-      <main className={styles.mainPage}>
-        {/* 배너 */}
+              {/* 배너 */}
         <section className={styles.bannerSection}>
-          <div className={styles.bannerPlaceholder}>배너 이미지</div>
+          <Slider {...settings}>
+            {mainBanners.map((banner) => (
+              <div key={banner.bannerId}>
+                <img
+                  src={`${url}/image?filename=${banner.bannerImg}`}
+                  alt={banner.title}
+                  className={styles.bannerImage}
+                />
+              </div>
+            ))}
+          </Slider>
         </section>
+      <main className={styles.mainPage}>
+
 
         {/* 바로가기 버튼 */}
         <section className={styles.quickLinksSec}>
@@ -56,7 +86,7 @@ const items = [
           <div className={styles.cardList}>
             {classes.map((classInfo, idx) => (
               <ClassCard key={idx} classInfo={classInfo} 
-              onClick={() => navigate(`/classRingDetail/${classInfo.id}`)}
+              onClick={() => navigate(`/classRingDetail/${classInfo.classIdd}`)}
               />
             ))}
           </div>
@@ -67,8 +97,10 @@ const items = [
           <h2 className={styles.sectionTitle}>추천 모임 👍</h2>
           <p className={styles.sectionSub}>모여링이 대표하는 알짜 모임들</p>
           <div className={styles.cardList}>
-            {[...Array(4)].map((_, idx) => (
-              <ClassCard key={idx} />
+            {gathers.map((gatherInfo, idx) => (
+              <GatheringCard key={idx} gatherInfo={gatherInfo} 
+              onClick={() => navigate(`/gatheringDetail/${gatherInfo.id}`)}
+              />
             ))}
           </div>
         </section>
@@ -82,12 +114,13 @@ const items = [
           <div className={styles.cardList}>
             {hotClasses.map((classInfo, idx) => (
               <ClassCard key={idx} classInfo={classInfo} 
-              onClick={() => navigate(`/classRingDetail/${classInfo.id}`)}
+              onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
               />
             ))}
           </div>
         </section>
       </main>
+      <Footer/>
     </>
   );
 }

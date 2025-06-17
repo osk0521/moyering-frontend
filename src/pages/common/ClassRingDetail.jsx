@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { CiHeart } from "react-icons/ci";
 import { BiChevronRight, BiChevronDown } from "react-icons/bi";
 import styles from "./ClassRingDetail.module.css";
+import Header from "./Header";
 
 export default function ClassRingDetail() {
   const [activeTab, setActiveTab] = useState("details");
@@ -61,6 +62,8 @@ export default function ClassRingDetail() {
   }, []);
 
   return (
+    <>
+    <Header/>
     <div className={styles.detailWrapper}>
       <main className={styles.mainContent}>
         <section className={styles.imageSection}>
@@ -141,5 +144,6 @@ export default function ClassRingDetail() {
         </div>
       </aside>
     </div>
+    </>
   );
 }

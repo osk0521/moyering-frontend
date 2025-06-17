@@ -39,7 +39,7 @@ const Header = () => {
       <div className="Header_main-header_osk">
         <div className="Header_header-content_osk">
           {/* 로고 섹션 */}
-          <div className="Header_logo-section_osk">
+          <div className="Header_logo-section_osk" onClick={()=> navigate(`/`)} style={{ cursor: 'pointer' }}>
             <div className="Header_logo-container_osk">
               <img src={logoImage} alt="모여링 로고" className="Header_logo-image_osk" />
             </div>

@@ -1,6 +1,6 @@
 .mainPage {
-padding: 0px 2rem 2rem 2rem;  min-width: 1280px;
-  max-width: 1600px;
+  padding: 0px 2rem 2rem 2rem;  
+  width: 1280px;
   margin: auto;
 }
 .bannerSection {
@@ -85,9 +85,9 @@ padding: 0px 2rem 2rem 2rem;  min-width: 1280px;
 
 .quickLinkBox {
   flex: 1;
-  background-color: #fdf6ef;
+  background-color: #f9f3ea;
   border-radius: 12px;
-  padding: 1.2rem 1.5rem;
+  padding: 1.2rem 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;

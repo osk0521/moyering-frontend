@@ -1,6 +1,7 @@
 .page {
   padding: 2rem;
-  max-width: 1280px;
+  width: 1280px;
+  margin: auto;
 }
 
 /* 공통 섹션 */

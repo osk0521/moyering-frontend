@@ -551,7 +551,8 @@ export default function GatheringDetail() {
   }, []);
 
   return (
-    <div className="GatheringDetail_gathering-detail_osk">
+    <div><Header />
+  <div className="GatheringDetail_gathering-detail_osk">
       {/* 메인 컨테이너 */}
       <div className="GatheringDetail_main-container_osk">
         {/* 왼쪽 메인 컨텐츠 */}
@@ -1129,6 +1130,6 @@ export default function GatheringDetail() {
           </button>
         </ModalFooter>
       </Modal>
-    </div>
+    </div></div>
   );
 }

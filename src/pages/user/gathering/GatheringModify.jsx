@@ -12,6 +12,7 @@ import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 // import "react-datepicker/dist/react-datepicker.css";
+import Header from '../../common/Header';
 import { useNavigate, useParams } from "react-router-dom";
 import "./GatheringWrite.css";
 
@@ -622,7 +623,9 @@ const submit = (e) => {
     });
 };
   return (
-    <div className="GatheringWrite_gathering-write-container_osk">
+    <div>
+      <Header/>
+      <div className="GatheringWrite_gathering-write-container_osk">
       <div className="GatheringWrite_content-wrapper_osk">
         <div>
           {/* 기본 정보 */}
@@ -1079,6 +1082,7 @@ const submit = (e) => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 }

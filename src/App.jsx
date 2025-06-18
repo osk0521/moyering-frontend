@@ -46,7 +46,7 @@ import SettlementManagement from "./pages/admin/SettlementManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/classRingDetail.jsx";
-import HostRegist from './pages/host/HostRegist.jsx';
+
 import Main from "./pages/common/Main.jsx";
 import ClassInquiry from "./pages/user/0myPage/classRing/ClassInquiry.jsx";
 import MyClassList from "./pages/user/0myPage/classRing/MyClassList.jsx";
@@ -55,12 +55,11 @@ import MyCouponList from "./pages/user/0myPage/common/MyCouponList.jsx";
 import MySchedule from "./pages/user/0myPage/common/MySchedule.jsx";
 import MyWishlist from "./pages/user/0myPage/common/MyWishlist.jsx";
 import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
+
 //게더링
 import GatheringDetail from "./pages/common/GatheringDetail";
 import GatheringWrite from "./pages/user/gathering/GatheringWrite";
 import GatheringModify from "./pages/user/gathering/GatheringModify";
-import GatheringDetail from "./pages/common/GatheringDetail.jsx";
-import GatheringWrite from "./pages/user/gathering/GatheringWrite.jsx";
 import Header from "./pages/common/Header";
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";

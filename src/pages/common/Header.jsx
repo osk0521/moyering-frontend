@@ -1,21 +1,21 @@
-import React, { useState, useCallback } from "react";
-import { Button, Input, Form } from "reactstrap";
-import { CiHeart, CiSearch } from "react-icons/ci";
-import { FaRegBell, FaHeart } from "react-icons/fa6";
-import { LuMessageCircleMore } from "react-icons/lu";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { CiSearch } from "react-icons/ci";
+import { FaHeart, FaRegBell } from "react-icons/fa6";
+import { LuMessageCircleMore } from "react-icons/lu";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button, Form, Input } from "reactstrap";
 import "./Header.css";
 import logoImage from '/logo.png';
-import { Navigate, useNavigate } from "react-router";
 
 const Header = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
   return (
     <div className="Header_header-container_osk">
       {/* 상단 작은 메뉴바 */}
       <div className="Header_top-menu-bar_osk">
         <div className="Header_top-menu-items_osk">
+          
           <span className="Header_top-menu-link_osk">
             <a href="/userlogin">로그인</a>
           </span>
@@ -38,7 +38,7 @@ const Header = () => {
       <div className="Header_main-header_osk">
         <div className="Header_header-content_osk">
           {/* 로고 섹션 */}
-          <div className="Header_logo-section_osk">
+          <div className="Header_logo-section_osk" onClick={()=> navigate(`/`)} style={{ cursor: 'pointer' }}>
             <div className="Header_logo-container_osk">
               <img src={logoImage} alt="모여링 로고" className="Header_logo-image_osk" />
             </div>

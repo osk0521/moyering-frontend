@@ -145,11 +145,18 @@
 .KYM-feed-container .KYM-stats {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: flex-start;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  gap: 16px;
 }
 
 .KYM-feed-container .KYM-comment-count {
     font-size: 0.85rem;
+    display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
 }
 
 /* ─── 버튼 공통 스타일 ─── */
@@ -179,6 +186,11 @@
     border: none;
     color: inherit;
     padding: 0;
+    cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 4px;
 }
 
 .KYM-feed-container .KYM-like-button:hover,
@@ -445,4 +457,63 @@
 .KYM-feed-container button:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 178, 44, 0.6) !important;
+}
+
+/* 이미지 슬라이더 전체 영역 */
+.KYM-feed-container .KYM-image-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* 피드 이미지 */
+.KYM-feed-container .KYM-post-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* 슬라이드 좌우 네비게이션 버튼 */
+.KYM-feed-container .KYM-image-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 2;
+  padding: 5px 10px;
+}
+
+.KYM-feed-container .KYM-image-nav.left {
+  left: 10px;
+}
+.KYM-feed-container .KYM-image-nav.right {
+  right: 10px;
+}
+
+/* 이미지 하단 점(dot) 표시 */
+.KYM-feed-container .KYM-image-dots {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.KYM-feed-container .dot {
+  color: lightgray;
+  font-size: 10px;
+}
+.KYM-feed-container .dot.active {
+  color: black;
+}
+.KYM-feed-container .KYM-like-button img {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  object-fit: contain;
 }

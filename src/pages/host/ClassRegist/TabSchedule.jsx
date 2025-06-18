@@ -3,11 +3,8 @@ import './TabSchedule.css';
 import 'react-multi-date-picker/styles/colors/teal.css';
 import { Calendar } from 'react-multi-date-picker';
 
-const TabSchedule = () => {
-    const [dates, setDates] = useState([]);
-    const [minPeople, setMinPeople] = useState('');
-    const [maxPeople, setMaxPeople] = useState('');
-
+const TabSchedule = ({classData,setClassData}) => {
+    const {schedule} = classData;
     const korean = {
         name: "gregorian_ko",
         months: [
@@ -17,12 +14,46 @@ const TabSchedule = () => {
         weekDays: [
             ["일"], ["월"], ["화"], ["수"], ["목"], ["금"], ["토"]
         ],
-        digits: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        digits: ["0", "1" , "2", "3", "4", "5", "6", "7", "8", "9"],
         meridiems: [
             ["AM", "오전"],
             ["PM", "오후"]
         ]
     };
+
+    const handleCruitMinChange = (e) => {
+      const value = e.target.value.replace(/[^0-9]/g,'');
+      setClassData((prev)=>({
+        ...prev,
+        schedule:{
+          ...prev.schedule,
+          recruitMin:value,
+        }
+      }));
+    }
+
+    const handleCruitMaxChange = (e) => {
+      const value = e.target.value.replace(/[^0-9]/g,'');
+      setClassData((prev)=>({
+        ...prev,
+        schedule:{
+          ...prev.schedule,
+          recruitMax:value,
+        }
+      }));
+    }
+
+    const handleDatesChange = (dates) => {
+      const formmattedDates = dates.map((d)=>d.format("YYYY-MM-DD"));
+      setClassData((prev)=>({
+        ...prev,
+        schedule:{
+          ...prev.schedule,
+          dates:formmattedDates,
+        }
+      }))
+    }
+
 
    return (
     <div className="KHJ-class-info-box">
@@ -34,8 +65,8 @@ const TabSchedule = () => {
             최소 인원수:&nbsp;
             <input
               type="text"
-              value={minPeople}
-              onChange={e => setMinPeople(e.target.value.replace(/[^0-9]/g, ''))}
+              value={schedule.recruitMin || ''}
+              onChange={handleCruitMinChange}
               placeholder="숫자만 입력"
               className="KHJ-people-input"
             />
@@ -44,8 +75,8 @@ const TabSchedule = () => {
             최대 인원수:&nbsp;
             <input
               type="text"
-              value={maxPeople}
-              onChange={e => setMaxPeople(e.target.value.replace(/[^0-9]/g, ''))}
+              value={schedule.recruitMax || ''}
+              onChange={handleCruitMaxChange}
               placeholder="숫자만 입력"
               className="KHJ-people-input"
             />
@@ -57,8 +88,8 @@ const TabSchedule = () => {
           <div className="KHJ-date-picker-container">
             <Calendar
               multiple
-              value={dates}
-              onChange={setDates}
+              value={schedule.dates}
+              onChange={handleDatesChange}
               format="YYYY-MM-DD"
               locale={korean}
               className="teal"
@@ -81,12 +112,12 @@ const TabSchedule = () => {
             />
           </div>
         </div>
-        {dates.length > 0 && (
+        {schedule.dates.length > 0 && (
           <div className="KHJ-selected-dates">
             <strong>선택한 날짜:</strong>
             <ul>
-              {dates.map((date, i) => (
-                <li key={i}>{date.format("YYYY년 MM월 DD일")}</li>
+              {schedule.dates.map((date, i) => (
+                <li key={i}>{date}</li>
               ))}
             </ul>
           </div>

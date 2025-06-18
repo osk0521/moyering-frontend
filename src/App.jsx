@@ -61,6 +61,7 @@ import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
 import GatheringDetail from "./pages/common/GatheringDetail";
 import GatheringWrite from "./pages/user/gathering/GatheringWrite";
 import GatheringModify from "./pages/user/gathering/GatheringModify";
+
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";

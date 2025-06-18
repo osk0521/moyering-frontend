@@ -1,13 +1,38 @@
 import React, { useState } from 'react';
 import './UserLogin.css';
+import { useSetAtom } from 'jotai';
+import { useNavigate } from 'react-router';
+import { tokenAtom, userAtom } from '../../atoms';
+import axios from 'axios';
+import { url } from './../../config';
 
 const Login = () => {
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+  const [login, setLogin] = useState({ username: '', password: '' })
+  const setUser = useSetAtom(userAtom);
+  const setToken = useSetAtom(tokenAtom)
+  const navigate = useNavigate();
 
+  const edit = (e) => {
+    setLogin({ ...login, [e.target.name]: e.target.value });
+  }
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log('로그인 요청:', { userId, password });
+    let formData = new FormData();
+    formData.append("username", login.username);
+    formData.append("password", login.password);
+    axios.post(`${url}/login`, formData)
+      .then(res => {
+        console.log(res);
+        setToken(res.headers.authorization);
+        console.log(setToken)
+        console.log("받은 토큰:"+res.headers.authorization);
+        const user = res.data;
+        setUser({ ...user });
+        navigate("/")
+      })
+      .catch(err => {
+        console.log(err);
+      })
     // 실제 로그인 처리 로직은 여기에 추가
   };
 
@@ -25,15 +50,17 @@ const Login = () => {
           <input
             type="text"
             placeholder="아이디"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
+            name="username"
+            value={login.username}
+            onChange={edit}
           />
           <label>비밀번호</label>
           <input
             type="password"
             placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={login.password}
+            onChange={edit}
           />
           <button type="submit" className="KHJ-login-btn">로그인</button>
         </form>

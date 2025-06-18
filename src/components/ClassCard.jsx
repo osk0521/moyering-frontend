@@ -25,7 +25,10 @@ export default function ClassCard({ classInfo, onClick  }) {
           <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
         </div>
         <h3 className={styles.cardTitle}>{classInfo.name}</h3>
-        <p className={styles.cardInfo}><MdCalendarMonth/> {classInfo.startDate}</p>
+        <div className={styles.cardEtc}>
+          <p className={styles.cardInfo}><MdCalendarMonth/> {classInfo.startDate}</p>
+          <p className={styles.cardPrice}>{classInfo.price}원</p>
+        </div>
       </div>
     </div>
   );

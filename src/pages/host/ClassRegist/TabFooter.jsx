@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './TabFooter.css';
 
-const TabFooter = ({ activeTab }) => {
+const TabFooter = ({ activeTab,onSave,onSubmit }) => {
   const [isPreview, setIsPreview] = useState(false);
 
   // 각 탭에 따라 다른 버튼 표시
@@ -23,8 +23,8 @@ const TabFooter = ({ activeTab }) => {
           <button className="KHJ-footer-btn KHJ-preview-btn" onClick={() => setIsPreview(!isPreview)}>
             미리보기
           </button>
-          <button className="KHJ-footer-btn KHJ-save-btn">저장</button>
-          <button className="KHJ-footer-btn KHJ-delete-btn">삭제</button>
+          <button className="KHJ-footer-btn KHJ-save-btn" onClick={onSave}>저장</button>
+          <button className="KHJ-footer-btn KHJ-delete-btn" onClick={onSubmit}>삭제</button>
         </div>
       );
     }

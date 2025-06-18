@@ -1,24 +1,29 @@
 import { useEffect, useState } from 'react';
 import './TabPortfolio.css';
 
-const TabPortfolio = ({ registerValidator }) => {
-  const [file, setFile] = useState(null);
+const TabPortfolio = ({ registerValidator,classData,setClassData }) => {
+  const {classPortfolio} = classData;
 
   const handleFileChange = (e) => {
-    const uploadedFile = e.target.files[0];
-    setFile(uploadedFile);
+    setClassData(prev=>({
+      ...prev,
+      classPortfolio:{
+        ...prev.classPortfolio,
+        portfolio:e.target.value
+      }
+    }))
   };
 
   // 유효성 검사 함수 (필수 항목: 파일)
   const validate = () => {
-    if (!file) return false;
+    if (classPortfolio.portfolio) return false;
     return true;
   };
 
   // 부모 컴포넌트에 유효성 검사 함수 등록
   useEffect(() => {
     registerValidator(5, validate);
-  }, [file]);
+  }, [classData.classPortfolio]);
 
   return (
     <div className="KHJ-class-info-box">
@@ -29,8 +34,8 @@ const TabPortfolio = ({ registerValidator }) => {
           <span className="KHJ-required-text-dot">*</span>포트폴리오 업로드
         </label>
         <div className="KHJ-file-upload-container">
-          {file ? (
-            <span>{file.name}</span>
+          {classPortfolio.portfolio ? (
+            <span>{classPortfolio.portfolio}</span>
           ) : (
             <span className="KHJ-file-placeholder">포트폴리오 파일을 클릭하여 업로드하세요</span>
           )}

@@ -1,10 +1,9 @@
-import React, { useState, useCallback } from "react";
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Input, Form } from "reactstrap";
-import { CiHeart, CiSearch } from "react-icons/ci";
-import { FaRegBell, FaHeart } from "react-icons/fa6";
-import { LuMessageCircleMore } from "react-icons/lu";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { CiSearch } from "react-icons/ci";
+import { FaHeart, FaRegBell } from "react-icons/fa6";
+import { LuMessageCircleMore } from "react-icons/lu";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button, Form, Input } from "reactstrap";
 import "./Header.css";
 import logoImage from '/logo.png';
 
@@ -39,7 +38,7 @@ const Header = () => {
       <div className="Header_main-header_osk">
         <div className="Header_header-content_osk">
           {/* 로고 섹션 */}
-          <div className="Header_logo-section_osk">
+          <div className="Header_logo-section_osk" onClick={()=> navigate(`/`)} style={{ cursor: 'pointer' }}>
             <div className="Header_logo-container_osk">
               <img src={logoImage} alt="모여링 로고" className="Header_logo-image_osk" />
             </div>
@@ -63,7 +62,7 @@ const Header = () => {
 
           {/* 네비게이션 메뉴 */}
           <div className="Header_nav-section_osk">
-            <span className="Header_nav-item_osk">클래스잉</span>
+            <span className="Header_nav-item_osk" onClick={()=>navigate('/host/intro')}>클래스잉</span>
             <span className="Header_nav-item_osk">게더링</span>
             <span className="Header_nav-item_osk">소셜링</span>
             <span className="Header_nav-item_osk">공지사항</span>

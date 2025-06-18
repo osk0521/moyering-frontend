@@ -14,6 +14,8 @@ import DashboardLayout from './pages/host/DashboardLayout';
 import HostClassList from './pages/host/HostClassList';
 import HostIntroPage from './pages/host/HostIntroPage';
 import HostProfile from './pages/host/HostProfile';
+import HostRegist from "./pages/host/HostRegist.jsx"
+
 import Inquiry from './pages/host/Inquiry';
 import MainContent from './pages/host/MainContent';
 import SettlementInfo from './pages/host/SettlementInfo';
@@ -59,6 +61,7 @@ import ClassPayment from "./pages/user/classRing/ClassPayment.jsx";
 import GatheringDetail from "./pages/common/GatheringDetail";
 import GatheringWrite from "./pages/user/gathering/GatheringWrite";
 import GatheringModify from "./pages/user/gathering/GatheringModify";
+
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
@@ -73,7 +76,7 @@ function App() {
         {/* 공통 /~~~으로 시작 */}
         <Route path="/" element={<Main />} />
         <Route path="/classList" element={<ClassList />} />
-        <Route path="/classRingDetail" element={<ClassRingDetail />} />
+        <Route path="/classRingDetail/:id" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/userFeed" element={<UserFeed />} />

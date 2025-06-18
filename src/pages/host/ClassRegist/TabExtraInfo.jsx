@@ -1,79 +1,109 @@
 import { useEffect, useState } from 'react';
 import './TabExtraInfo.css';
 
-const TabExtraInfo = ({ registerValidator }) => {
-  const [file, setFile] = useState(null);
-  const [tags, setTags] = useState([]);
-  const [keywords, setKeywords] = useState('');
-  const [coupon, setCoupon] = useState('');
-  const [selectedCouponInfo, setSelectedCouponInfo] = useState([]);
-  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
-  const [selectedCoupons, setSelectedCoupons] = useState([]);
+const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
+  const { extraInfo } = classData;
 
+  // 파일 변경
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];
-    setFile(uploadedFile);
+    if (uploadedFile) {
+      setClassData(prev => ({
+        ...prev,
+        extraInfo: {
+          ...prev.extraInfo,
+          material: uploadedFile.name,
+        }
+      }));
+    }
   };
 
-  const handleTagsChange = (e) => {
-    const value = e.target.value;
-    setTags(value.split(','));
+  // 태그 추가/제거 (콤마로 관리)
+  const addTag = (key, input) => {
+    const tags = (extraInfo[key] || '').split(',').filter(Boolean);
+    if (input && !tags.includes(input) && tags.length < 20) {
+      const updated = [...tags, input].join(',');
+      setClassData(prev => ({
+        ...prev,
+        extraInfo: {
+          ...prev.extraInfo,
+          [key]: updated,
+        }
+      }));
+    }
   };
 
-  const handleKeywordsChange = (e) => {
-    setKeywords(e.target.value);
+  const removeTag = (key, tagToRemove) => {
+    const tags = (extraInfo[key] || '').split(',').filter(Boolean);
+    const updated = tags.filter(tag => tag !== tagToRemove).join(',');
+    setClassData(prev => ({
+      ...prev,
+      extraInfo: {
+        ...prev.extraInfo,
+        [key]: updated,
+      }
+    }));
   };
 
+  // 검증 함수
   const validate = () => {
-    if (!file) return false;
-    if (tags.length === 0) return false;
-    if (!keywords.trim()) return false;
-    if (!coupon.trim()) return false;
-    return true;
+    const hasMaterial = extraInfo.material && extraInfo.material.trim();
+    const hasIncluision = extraInfo.incluision?.split(',').filter(Boolean).length > 0;
+    const hasPreparation = extraInfo.preparation?.split(',').filter(Boolean).length > 0;
+    const hasKeywords = extraInfo.keywords?.split(',').filter(Boolean).length > 0;
+    return hasMaterial && hasIncluision && hasPreparation && hasKeywords;
   };
 
   useEffect(() => {
     registerValidator(3, validate);
-  }, [file, tags, keywords, coupon]);
+  }, [extraInfo]);
 
-  const dummyCoupons = [
-    { code: 'FIRST100', name: '첫 수업 할인', discount: '10%', valid: '2025.6.1 ~ 2025.6.3' },
-    { code: 'RETURN15', name: '재등록 할인', discount: '₩15,000', valid: '상시' },
-  ];
+  // 태그 입력용 컴포넌트
+  const TagInput = ({ label, keyName, placeholder }) => {
+    const [input, setInput] = useState('');
+    const tags = (extraInfo[keyName] || '').split(',').filter(Boolean);
 
-  const toggleCouponSelection = (code) => {
-    const existing = selectedCoupons.find(c => c.code === code);
-    if (existing) {
-      setSelectedCoupons(selectedCoupons.filter(c => c.code !== code));
-    } else {
-      const found = dummyCoupons.find(c => c.code === code);
-      setSelectedCoupons([...selectedCoupons, { ...found, customName: '', count: 1 }]);
-    }
-  };
-
-  const updateCouponField = (code, field, value) => {
-    setSelectedCoupons(prev =>
-      prev.map(c => c.code === code ? { ...c, [field]: value } : c)
+  return (
+      <div className="KHJ-form-section">
+        <label className="KHJ-tags-label">{label}</label>
+        <div className="KHJ-tags-input-container">
+          <input
+            type="text"
+            className="KHJ-tags-input"
+            value={input}
+            placeholder={placeholder}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (addTag(keyName, input), setInput(''))}
+          />
+          <button type="button" className="KHJ-add-tag-btn" onClick={() => { addTag(keyName, input); setInput(''); }}>등록</button>
+        </div>
+        <div className="KHJ-tag-list">
+          {tags.map((tag, index) => (
+            <span key={index} className="KHJ-tag">
+              {tag}
+              <button
+                type="button"
+                className="KHJ-tag-remove"
+                onClick={() => removeTag(keyName, tag)}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      </div>
     );
   };
 
-  const handleCouponApply = () => {
-    const validCoupons = selectedCoupons.filter(c => c.customName.trim() && c.count > 0);
-    if (validCoupons.length > 0) {
-      setCoupon(validCoupons.map(c => c.code).join(','));
-      setSelectedCouponInfo(validCoupons);
-      setIsCouponModalOpen(false);
-    }
-  };
-return (
+  return (
     <div className="KHJ-class-info-box">
       <h3 className="KHJ-section-title">클래스 부가정보</h3>
 
       <div className="KHJ-form-section">
         <label className="KHJ-file-label"><span className="KHJ-required-text-dot">*</span>클래스 강의자료</label>
         <div className="KHJ-file-upload-container">
-          {file ? (
-            <span>{file.name}</span>
+          {extraInfo.material ? (
+            <span>{extraInfo.material}</span>
           ) : (
             <span className="KHJ-file-placeholder">강의 자료를 클릭하여 업로드하세요</span>
           )}
@@ -82,28 +112,25 @@ return (
         </div>
       </div>
 
-      <div className="KHJ-form-section">
-        <label className="KHJ-tags-label"><span className="KHJ-required-text-dot">*</span>포함 사항(선택)</label>
-        <div className="KHJ-tags-input-container">
-          <input type="text" className="KHJ-tags-input" placeholder="태그를 입력해주세요. (쉼표로 구분)" value={tags.join(',')} onChange={handleTagsChange} />
-        </div>
-      </div>
+      <TagInput
+        label="포함 사항"
+        keyName="incluision"
+        placeholder="예: 재료비 포함, 음료 제공"
+      />
 
-      <div className="KHJ-form-section">
-        <label className="KHJ-tags-label"><span className="KHJ-required-text-dot">*</span>클래스 준비물(선택)</label>
-        <div className="KHJ-tags-input-container">
-          <input type="text" className="KHJ-tags-input" placeholder="태그를 입력해주세요. (쉼표로 구분)" value={tags.join(',')} onChange={handleTagsChange} />
-        </div>
-      </div>
+      <TagInput
+        label="클래스 준비물"
+        keyName="preparation"
+        placeholder="예: 필기도구, 앞치마"
+      />
 
-      <div className="KHJ-form-section">
-        <label className="KHJ-keywords-label"><span className="KHJ-required-text-dot">*</span>검색 키워드(선택)</label>
-        <div className="KHJ-keywords-input-container">
-          <input type="text" className="KHJ-keywords-input" placeholder="검색 키워드를 입력해주세요." value={keywords} onChange={handleKeywordsChange} />
-        </div>
-      </div>
+      <TagInput
+        label="검색 키워드"
+        keyName="keywords"
+        placeholder="예: 베이킹, 원데이클래스"
+      />
 
-      <div className="KHJ-form-section">
+      {/* <div className="KHJ-form-section">
         <label className="KHJ-coupon-label"><span className="KHJ-required-text-dot">*</span>쿠폰 등록(선택)</label>
         <div className="KHJ-coupon-input-container">
           <button className="KHJ-coupon-input-btn" onClick={() => setIsCouponModalOpen(true)}>쿠폰 선택</button>
@@ -166,7 +193,7 @@ return (
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

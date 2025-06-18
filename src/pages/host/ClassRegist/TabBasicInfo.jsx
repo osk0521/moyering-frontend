@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import './TabBasicInfo.css';
 
-const TabBasicInfo = ({ registerValidator }) => {
+const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
   const categoryMap = {
     '스포츠': ['실내 & 수상 스포츠', '실외 스포츠', '기타'],
     '음식': ['베이킹', '음료', '요리', '기타'],
@@ -13,39 +13,53 @@ const TabBasicInfo = ({ registerValidator }) => {
     '자유모임': ['여행', '게임', '파티', '기타']
   };
 
-  const [hostClass, setHostClass] = useState({
-    category1: '',
-    category2: '',
-    name: '',
-    locName: '',
-    addr: '',
-    longitude: '',
-    latitude: ''
-  });
-
+  const {basicInfo} = classData;
   const [tempLocName, setTempLocName] = useState('');
   const [showLocation, setShowLocation] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState('');
 
-  const handlePrimaryChange = (e) => {
-    setHostClass((prev) => ({
+  const handleChange = (e) => {
+    const {name,value} = e.target;
+    setClassData(prev=>({
       ...prev,
-      category1: e.target.value,
-      category2: ''
+      basicInfo : {
+        ...prev.basicInfo,
+        basicInfo : {
+          ...prev.basicInfo,
+          [name]:value,
+        },
+      }
+    }));
+  }
+
+  const handlePrimaryChange = (e) => {
+    setClassData((prev) => ({
+      ...prev,
+      basicInfo:{
+        ...prev.basicInfo,
+        category1 : e.target.value,
+        category2:'', //1차 바뀌면 2차 초기화
+      }
     }));
   };
 
   const handleSecondaryChange = (e) => {
-    setHostClass((prev) => ({
+    setClassData((prev) => ({
       ...prev,
-      category2: e.target.value
+      basicInfo:{
+        ...prev.basicInfo,
+        category2:e.target.value,
+      }
     }));
   };
 
   const handleClassNameChange = (e) => {
-    setHostClass((prev) => ({
+    setClassData((prev) => ({
       ...prev,
-      name: e.target.value
+      basicInfo:{
+        ...prev.basicInfo,
+        name:e.target.value,
+      }
     }));
   };
 
@@ -63,14 +77,16 @@ const TabBasicInfo = ({ registerValidator }) => {
       return;
     }
 
-    setHostClass((prev) => ({
+    setClassData((prev) => ({
       ...prev,
-      locName: tempLocName,
-      addr: selectedAddress,
-      longitude: '12.3456',
-      latitude: '12.3456'
+      basicInfo:{
+        ...prev.basicInfo,
+        locName: tempLocName,
+        addr: selectedAddress,
+        longitude: '12.3456',
+        latitude: '12.3456'
+      }
     }));
-
     // 초기화
     setTempLocName('');
     setSelectedAddress('');
@@ -78,36 +94,41 @@ const TabBasicInfo = ({ registerValidator }) => {
   };
 
   const handleAddressClear = () => {
-    setHostClass((prev) => ({
+    setClassData((prev) => ({
       ...prev,
-      locName: '',
-      addr: '',
-      longitude: '',
-      latitude: ''
+      basicInfo:{
+        ...prev.basicInfo,
+        locName: '',
+        addr: '',
+        longitude: '',
+        latitude: ''
+      }
     }));
   };
 
   const validate = () => {
-    const { category1, category2, name, addr } = hostClass;
+    const { category1, category2, name, addr } = classData.basicInfo;
     return category1 && category2 && name.trim() && addr;
   };
 
   useEffect(() => {
-    registerValidator(0, validate);
-  }, [hostClass]);
+    const {category1,category2,name,addr} = classData.basicInfo;
+    const isValid = category1 && category2 && name.trim() && addr;
+    registerValidator(0, ()=> isValid);
+  }, [classData.basicInfo,registerValidator]);
 
-  const secondaryOptions = categoryMap[hostClass.category1] || [];
+  const secondaryOptions = categoryMap[basicInfo.category1] || [];
 
   const submit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("category1",hostClass.category1);
-    formData.append("category2",hostClass.category2);
-    formData.append("name",hostClass.name);
-    formData.append("locName",hostClass.locName);
-    formData.append("addr",hostClass.addr);
-    formData.append("longitude",hostClass);
-    formData.append("latitude",hostClass.latitude);
+    formData.append("category1",basicInfo.category1);
+    formData.append("category2",basicInfo.category2);
+    formData.append("name",basicInfo.name);
+    formData.append("locName",basicInfo.locName);
+    formData.append("addr",basicInfo.addr);
+    formData.append("longitude",basicInfo.longitude);
+    formData.append("latitude",basicInfo.latitude);
 
     axios.post(`${url}/host/classRegist`,formData)
     .then(res=>{
@@ -129,7 +150,7 @@ const TabBasicInfo = ({ registerValidator }) => {
           <div className="KHJ-category-row">
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">1차카테고리</label>
-              <select value={hostClass.category1} onChange={handlePrimaryChange}>
+              <select value={basicInfo.category1} onChange={handlePrimaryChange}>
                 <option value="" disabled hidden>1차 카테고리 선택</option>
                 {Object.keys(categoryMap).map((key) => (
                   <option key={key} value={key}>{key}</option>
@@ -139,9 +160,9 @@ const TabBasicInfo = ({ registerValidator }) => {
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">2차카테고리</label>
               <select
-                value={hostClass.category2}
+                value={basicInfo.category2}
                 onChange={handleSecondaryChange}
-                disabled={!hostClass.category1}
+                disabled={!basicInfo.category1}
               >
                 <option value="" disabled hidden>2차카테고리 선택</option>
                 {secondaryOptions.map((sub) => (
@@ -161,7 +182,7 @@ const TabBasicInfo = ({ registerValidator }) => {
           type="text"
           placeholder="클래스명을 입력해주세요."
           className="KHJ-class-input"
-          value={hostClass.name}
+          value={basicInfo.name}
           onChange={handleClassNameChange}
         />
       </div>
@@ -173,7 +194,7 @@ const TabBasicInfo = ({ registerValidator }) => {
           장소 <span className="KHJ-required-text"><span className="KHJ-required-text-dot">*</span> 진행장소</span>
         </label>
 
-        {!hostClass.addr ? (
+        {!basicInfo.addr ? (
           <div className="KHJ-location-add-wrapper">
             <div className="KHJ-location-relative">
               <button className="KHJ-location-add-btn" onClick={() => setShowLocation(true)}>
@@ -219,15 +240,15 @@ const TabBasicInfo = ({ registerValidator }) => {
                 <tbody>
                   <tr>
                     <td className="KHJ-location-label">장소명</td>
-                    <td>{hostClass.locName}</td>
+                    <td>{basicInfo.locName}</td>
                   </tr>
                   <tr>
                     <td className="KHJ-location-label">주소</td>
-                    <td>{hostClass.addr}</td>
+                    <td>{basicInfo.addr}</td>
                   </tr>
                   <tr>
                     <td className="KHJ-location-label">좌표</td>
-                    <td>위도 : {hostClass.latitude} &nbsp;&nbsp;&nbsp; 경도 : {hostClass.longitude}</td>
+                    <td>위도 : {basicInfo.latitude} &nbsp;&nbsp;&nbsp; 경도 : {basicInfo.longitude}</td>
                   </tr>
                 </tbody>
               </table>

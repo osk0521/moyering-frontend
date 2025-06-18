@@ -10,6 +10,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -179,7 +180,67 @@
   cursor: pointer;
 }
 
-.KHJ-selected-coupon-info > div {
+.KHJ-selected-coupon-info>div {
   font-size: 14px;
   margin-top: 8px;
+}
+
+.KHJ-tags-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.KHJ-tag {
+   display: inline-flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin: 5px 5px 0 0;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.KHJ-tag-remove {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: #00796b;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.KHJ-add-tag-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.KHJ-add-tag-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.KHJ-add-tag-btn {
+  padding: 8px 12px;
+  background-color: #ffbf00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.KHJ-add-tag-btn:hover {
+  background-color: #e69a00;
 }

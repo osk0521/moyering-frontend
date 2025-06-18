@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './UserJoinCategory.css';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { url } from '../../config';
+import axios from 'axios';
 
 const categories = [
   '실내 & 수상 스포츠', '실외 스포츠', '베이킹', '음료', '요리', '가죽공예',
@@ -11,8 +13,22 @@ const categories = [
 
 const UserJoinCategory = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [intro, setIntro] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const nUser = location.state;
+  const [user, setUser] = useState({
+    ...nUser,
+    category1: selectedCategories[0] || '',
+    category2: selectedCategories[1] || '',
+    category3: selectedCategories[2] || '',
+    category4: selectedCategories[3] || '',
+    category5: selectedCategories[4] || '',
+
+  })
+
+  const edit = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value })
+  }
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -25,6 +41,44 @@ const UserJoinCategory = () => {
       setSelectedCategories([...selectedCategories, category]);
     }
   };
+
+  const formData = new FormData();
+
+  // user 객체에 있는 값들을 하나씩 넣기
+  formData.append('username', user.username);
+  formData.append('password', user.password);
+  formData.append('name', user.name);
+  formData.append('nickName', user.nickName);
+  formData.append('tel', user.tel);
+  formData.append('email', user.email);
+  formData.append('birthday', user.birthday);
+  formData.append('addr', user.addr);
+  formData.append('detailAddr', user.detailAddr);
+  formData.append('intro', user.intro);
+  formData.append('userType', user.userType)
+
+  // category1 ~ category5 도 포함
+  formData.append('category1', user.category1);
+  formData.append('category2', user.category2);
+  formData.append('category3', user.category3);
+  formData.append('category4', user.category4);
+  formData.append('category5', user.category5);
+
+  // 프로필 이미지가 있다면
+  // formData.append('profileImage', imageFile);
+
+  const submit = (e) => {
+    e.preventDefault();
+    axios.post(`${url}/join`, formData)
+      .then(res => {
+        console.log(res)
+          navigate("/joinSuccess")
+      })
+      .catch(err => {
+        alert("회원가입 실패")
+        console.log(err);
+      })
+  }
 
   return (
     <div className="category-wrapper">
@@ -50,14 +104,15 @@ const UserJoinCategory = () => {
           placeholder="자신을 간단히 소개해주세요."
           rows="3"
           maxLength={500}
-          value={intro}
-          onChange={(e) => setIntro(e.target.value)}
+          name='intro'
+          value={user.intro}
+          onChange={edit}
         />
-        <div className="intro-count">{intro.length}/500</div>
+        <div className="intro-count">{(user.intro ?? '').length}/500</div>
         <p className="intro-desc">한줄 소개는 게더링 참여시 모임장에게 보여집니다.</p>
       </div>
 
-      <button className="submit-btn" onClick={()=>handleNavigation('/joinSuccess')}>회원가입</button>
+      <button className="submit-btn" onClick={submit}>회원가입</button>
     </div>
   );
 };

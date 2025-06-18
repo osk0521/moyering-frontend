@@ -87,11 +87,3 @@
   align-items: center;
   gap: 0.3rem;
 }
-
-.cardEtd {
-  display: flex;
-  justify-content: space-between;
-}
-.cardPrice {
-  font-weight: 700;
-}

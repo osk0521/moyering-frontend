@@ -1,10 +1,15 @@
 .mainPage {
-  padding: 2rem;
-  min-width: 1280px;
-  max-width: 1600px;
+  padding: 0px 2rem 2rem 2rem;  
+  width: 1280px;
   margin: auto;
 }
-
+.bannerSection {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  min-width: 1280px;
+}
 .bannerSection .bannerPlaceholder {
   height: 300px;
   background-color: #ccc;
@@ -15,7 +20,11 @@
   justify-content: center;
   font-size: 2rem;
 }
-
+.bannerImage {
+  width: 100%;
+  height: 300px; 
+  object-fit: cover;
+}
 .quickLinksSec {
   display: flex;
   flex-direction: column;
@@ -25,7 +34,7 @@
 .quickLinks {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2.5rem;
+  margin: 2.5rem;
 }
 
 .quickBtn {
@@ -76,9 +85,9 @@
 
 .quickLinkBox {
   flex: 1;
-  background-color: #fdf6ef;
+  background-color: #f9f3ea;
   border-radius: 12px;
-  padding: 1.2rem 1.5rem;
+  padding: 1.2rem 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;

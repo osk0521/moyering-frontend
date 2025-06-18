@@ -30,8 +30,8 @@ export default function GatheringWrite() {
   const editorRef = useRef(null);
   const [editor, setEditor] = useState(null);
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
-  const [category1, setCategory1] = useState([]);
-  const [category2, setCategory2] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [subCategory, setSubCategory] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("initial");
   
@@ -40,8 +40,8 @@ export default function GatheringWrite() {
     title: "",
     startTime: "",
     endTime: "",
-    category1: "",
-    category2: "",
+    category: "",
+    subCategory: "",
     address: "",
     detailAddress: "",
     meetingDate: "",
@@ -341,18 +341,15 @@ export default function GatheringWrite() {
 
   // 1차 카테고리 데이터 가져오기
   useEffect(() => {
-    axios
-      .get(`${url}/category1`)
+    axios.get(`${url}/category`)
       .then((res) => {
         console.log("1차 카테고리 API 응답:", res);
-
-        // res.data.category1 배열을 category1 상태에 저장
-        const categoryArray = res.data.category1;
-        setCategory1(categoryArray);
+        const categoryArray = res.data.category;
+        setCategory(categoryArray);
         if (categoryArray.length > 0) {
           setFormData((prev) => ({
             ...prev,
-            category1: categoryArray[0].categoryId.toString(),
+            category: categoryArray[0].categoryId.toString(),
           }));
         }
       })
@@ -363,20 +360,20 @@ export default function GatheringWrite() {
 
   // 2차 카테고리 데이터 가져오기
   useEffect(() => {
-    if (formData.category1 && formData.category1 !== "") {
+    if (formData.category && formData.category !== "") {
       axios
-        .get(`${url}/category2/${formData.category1}`)
+        .get(`${url}/subCategory/${formData.category}`)
         .then((res) => {
           console.log("2차 카테고리 API 응답:", res);
-          const categoryArray = res.data.category2.map((item) => ({
+          const categoryArray = res.data.subCategory.map((item) => ({
             subCategoryId: item.subCategoryId,
             subCategoryName: item.subCategoryName,
           }));
-          setCategory2(categoryArray);
+          setSubCategory(categoryArray);
           if (categoryArray.length > 0) {
             setFormData((prev) => ({
               ...prev,
-              category2: categoryArray[0].subCategoryId.toString(),
+              subCategory: categoryArray[0].subCategoryId.toString(),
             }));
           }
         })
@@ -385,13 +382,13 @@ export default function GatheringWrite() {
         });
     } else {
       // 1차 카테고리가 선택되지 않으면 2차 카테고리 초기화
-      setCategory2([]);
+      setSubCategory([]);
       setFormData((prev) => ({
         ...prev,
-        category2: "",
+        subCategory: "",
       }));
     }
-  }, [formData.category1]);
+  }, [formData.category]);
 
   // DOM이 완전히 렌더링된 후 에디터 초기화
   useEffect(() => {
@@ -401,9 +398,11 @@ export default function GatheringWrite() {
           const editorInstance = new Editor({
             el: editorRef.current,
             height: "400px",
-            initialEditType: "markdown",
+            initialEditType: "wysiwyg",
             placeholder: "모임에 대한 상세한 설명을 작성해주세요",
             hideModeSwitch: true,
+            previewStyle: 'vertical',
+            initialValue: '', // 초기값 비우기
             // 툴바 설정
             toolbarItems: [
               ["heading", "bold", "italic", "strike"],
@@ -481,7 +480,7 @@ export default function GatheringWrite() {
   // 지오코딩 실행 (주소를 좌표로 변환)
   console.log("지오코딩 시작...");
   const coords = await convertAddressToCoordinates(formData.address);
-  
+  console.log("지오코딩 완료..."+coords);
   if (!coords) {
     alert('주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.');
     return;
@@ -492,8 +491,8 @@ export default function GatheringWrite() {
     ...formData,
     latitude: parseFloat(coords.y), // 위도
     longitude: parseFloat(coords.x), // 경도
-    categoryId: parseInt(formData.category1) || 0,
-    subCategoryId: parseInt(formData.category2) || 0,
+    categoryId: parseInt(formData.category) || 0,
+    subCategoryId: parseInt(formData.subCategory) || 0,
     userId: 10,
     status: "모집중"
   };
@@ -739,13 +738,13 @@ export default function GatheringWrite() {
                   </label>
                   <select
                     name="category1"
-                    value={formData.category1}
+                    value={formData.category}
                     onChange={handleInputChange}
                     className="GatheringWrite_custom-input_osk"
                   >
                     <option value="">1차 카테고리를 선택해주세요</option>
-                    {Array.isArray(category1) &&
-                      category1.map((category) => (
+                    {Array.isArray(category) &&
+                      category.map((category) => (
                         <option
                           key={category.categoryId}
                           value={category.categoryId.toString()}
@@ -767,12 +766,12 @@ export default function GatheringWrite() {
                     value={formData.category2}
                     onChange={handleInputChange}
                     className="GatheringWrite_custom-input_osk"
-                    disabled={!formData.category1} // 1차 카테고리가 선택되지 않으면 비활성화
+                    disabled={!formData.category} // 1차 카테고리가 선택되지 않으면 비활성화
                     required
                   >
                     <option value="">2차 카테고리를 선택해주세요</option>
-                    {Array.isArray(category2) &&
-                      category2
+                    {Array.isArray(subCategory) &&
+                      category
                         .filter(
                           (category) =>
                             category.subCategoryId && category.subCategoryName

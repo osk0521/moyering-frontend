@@ -6,8 +6,11 @@ import { LuMessageCircleMore } from "react-icons/lu";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Header.css";
 import logoImage from '/logo.png';
+import { Navigate, useNavigate } from "react-router";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="Header_header-container_osk">
       {/* 상단 작은 메뉴바 */}
@@ -59,7 +62,7 @@ const Header = () => {
 
           {/* 네비게이션 메뉴 */}
           <div className="Header_nav-section_osk">
-            <span className="Header_nav-item_osk">클래스잉</span>
+            <span className="Header_nav-item_osk" onClick={()=>navigate('/host/intro')}>클래스잉</span>
             <span className="Header_nav-item_osk">게더링</span>
             <span className="Header_nav-item_osk">소셜링</span>
             <span className="Header_nav-item_osk">공지사항</span>

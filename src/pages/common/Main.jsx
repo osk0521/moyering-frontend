@@ -4,6 +4,7 @@ import ClassCard from '../../components/ClassCard';
 import { recommendClassAtom } from '../../atom/classAtom';
 import useRecommendClasses from '../../hooks/common/useRecommendClasses';
 import { useAtomValue } from 'jotai';
+import { userAtom } from '../../atoms';
 
 export default function Main() {
   const items = [
@@ -12,8 +13,9 @@ export default function Main() {
     { title: '카테고리', desc: '카테고리별 다양한 클래스', icon: '🗂️' },
     { title: '소셜링', desc: '사람들은 어떤 이야기를 나눌까?', icon: '💬' },
   ];
+  const user = useAtomValue(userAtom);
   const classes = useAtomValue(recommendClassAtom);
-  useRecommendClasses(1); // userId 없으면 null 넘기기
+  useRecommendClasses(user.username); // userId 없으면 null 넘기기
 
   return (
     <main className={styles.mainPage}>

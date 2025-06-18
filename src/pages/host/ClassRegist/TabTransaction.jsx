@@ -1,45 +1,30 @@
 import { useState, useEffect } from 'react';
 import './TabTransaction.css';
 
-const TabTransaction = ({ registerValidator }) => {
-    const [transactionInfo, setTransactionInfo] = useState('');
-    const [tags, setTags] = useState([]);
-    const [file, setFile] = useState(null);
-    const [warningInfo, setWarningInfo] = useState('');
+const TabTransaction = ({ registerValidator,classData,setClassData }) => {
+    const {transaction} = classData;
 
-    const handleTransactionInfoChange = (e) => {
-        setTransactionInfo(e.target.value);
+    const handleCautionChange = (e) => {
+        setClassData((prev) => ({
+          ...prev,
+          transaction:{
+            ...prev.transaction,
+            caution:e.target.value
+          }
+        }))
     };
 
-    const handleRefundPolicyChange = (e) => {
-        setRefundPolicy(e.target.value);
-    };
-
-    const handleWarningInfoChange = (e) => {
-        setWarningInfo(e.target.value);
-    };
-
-    const handleTagsChange = (e) => {
-        const value = e.target.value;
-        setTags(value.split(','));
-    };
-
-    const handleFileChange = (e) => {
-        const uploadedFile = e.target.files[0];
-        setFile(uploadedFile);
-    };
 
     // 유효성 검사 함수 (필수 항목: 거래 정보, 환불 규정, 파일)
     const validate = () => {
-        if (!transactionInfo.trim()) return false;
-        if (!file) return false;
+        if (!transaction.caution.trim()) return false;
         return true;
     };
 
     // 부모 컴포넌트에 유효성 검사 함수 등록
     useEffect(() => {
         registerValidator(4, validate);
-    }, [transactionInfo, file]);
+    }, [transaction.caution]);
 
   return (
     <div className="KHJ-class-info-box">
@@ -51,8 +36,8 @@ const TabTransaction = ({ registerValidator }) => {
         </label>
         <textarea
           className="KHJ-warning-info-textarea"
-          value={warningInfo}
-          onChange={handleWarningInfoChange}
+          value={transaction.caution || ''}
+          onChange={handleCautionChange}
           placeholder="신청 시 유의사항을 입력해주세요."
         />
         <div className="KHJ-warning">
@@ -66,7 +51,6 @@ const TabTransaction = ({ registerValidator }) => {
         </label>
         <textarea
           className="KHJ-refund-policy-textarea"
-          onChange={handleRefundPolicyChange}
           placeholder="1. 결제 후 1시간 이내에는 무료 취소가 가능합니다. 
 (단, 신청마감 이후 취소 시, 프립 진행 당일 결제 후 취소 시 취소 및 환불 불가) 
 2. 결제 후 1시간이 초과한 경우, 아래의 환불규정에 따라 취소수수료가 부과됩니다. 

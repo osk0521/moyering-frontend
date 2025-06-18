@@ -34,7 +34,8 @@ export default function GatheringWrite() {
   const [category2, setCategory2] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("initial");
-
+  
+  // 입력용 formData 상태 (사용자 입력을 받는 용도)
   const [formData, setFormData] = useState({
     title: "",
     startTime: "",
@@ -49,11 +50,11 @@ export default function GatheringWrite() {
     deadline: "",
     content: "",
     preparation: "",
-    longitude: "", // 경도
-    latitude: "", // 위도
+    locName:"",
     tags: [], // 문자열 배열로 변경
     intrOnln: "", // 한 줄 소개
   });
+  
   const [tagInput, setTagInput] = useState("");
 
   const convertAddressToCoordinates = async (address) => {
@@ -64,7 +65,7 @@ export default function GatheringWrite() {
 
     if (
       !KAKAO_REST_API_KEY ||
-      KAKAO_REST_API_KEY === "YOUR_KAKAO_REST_API_KEY"
+      KAKAO_REST_API_KEY === `${KAKAO_REST_API_KEY}`
     ) {
       setGeocodingError("카카오 REST API 키를 설정해주세요.");
       return null;
@@ -99,11 +100,6 @@ export default function GatheringWrite() {
         };
         setCoordinates(coords);
         setGeocodingError("");
-        // formData에 좌표 값 할당
-        if (formData) {
-          formData.latitude = result.y; // Y값(위도)을 latitude에 할당
-          formData.longitude = result.x; // X값(경도)을 longitude에 할당
-        }
 
         console.log("지오코딩 성공:", {
           address: result.address_name,
@@ -132,11 +128,11 @@ export default function GatheringWrite() {
     }
   };
 
-  // 새로운 파일 업로드 처리 함수
+  // 새로운 파일 업로드 처리 함수 (100MB 제한으로 변경)
   const handleFileUpload = (file) => {
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 100 * 1024 * 1024; // 100MB로 변경
     if (file.size > maxSize) {
-      alert("파일 크기는 5MB를 초과할 수 없습니다.");
+      alert("파일 크기는 100MB를 초과할 수 없습니다.");
       setUploadStatus("error");
       return;
     }
@@ -158,6 +154,7 @@ export default function GatheringWrite() {
     reader.readAsDataURL(file);
     setThumbnail(file);
   };
+  
   const handleFileInputChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       handleFileUpload(e.target.files[0]);
@@ -228,24 +225,6 @@ export default function GatheringWrite() {
       tags: prev.tags.filter((tag) => tag !== tagToDelete),
     }));
   };
-
-  // 폼 데이터 변경 시 콘솔에 출력
-  useEffect(() => {
-    console.group("📝 FormData 업데이트");
-    console.log("제목:", formData.title);
-    console.log("날짜:", formData.meetingDate);
-    console.log("시간:", `${formData.startTime} ~ ${formData.endTime}`);
-    console.log("카테고리:", `${formData.category2}`);
-    console.log("주소:", ` ${formData.address}, ${formData.detailAddress}`);
-    console.log("좌표:", `${formData.longitude}, ${formData.latitude}`);
-
-    console.log("인원:", `${formData.minAttendees} ~ ${formData.maxAttendees}명`);
-    console.log("태그:", formData.tags);
-    console.log("썸네일:", formData.thumbnail);
-    console.log("콘텐츠 길이:", formData.content);
-    console.groupEnd();
-  }, [formData]);
-
   // 태그 삭제 처리
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -318,7 +297,7 @@ export default function GatheringWrite() {
     }));
   };
 
-  const handlePostcodeComplete = async (data) => {
+  const handlePostcodeComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
 
@@ -333,23 +312,24 @@ export default function GatheringWrite() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    // 주소 상태 업데이트
+    // locName 추출: 주소에서 시/도 + 구/군/시 부분만 추출
+    const addressParts = data.address.split(' ');
+    let locName = "";
+    
+    if (addressParts.length >= 2) {
+      // 첫 번째와 두 번째 요소를 조합 (예: "서울 강남구")
+      locName = `${addressParts[0]} ${addressParts[1]}`;
+    } else if (addressParts.length === 1) {
+      // 주소가 한 단어만 있는 경우
+      locName = addressParts[0];
+    }
+
+    // 주소 상태 업데이트 
     setFormData((prev) => ({
       ...prev,
       address: fullAddress,
+      locName: locName, // locName 필드 추가
     }));
-
-    // 주소를 좌표로 변환
-    const coords = await convertAddressToCoordinates(fullAddress);
-    if (coords) {
-      console.log("변환된 좌표:", coords);
-      // 좌표를 formData에 추가하거나 별도로 저장
-      setFormData((prev) => ({
-        ...prev,
-        latitude: coords.y, // 위도
-        longitude: coords.x, // 경도
-      }));
-    }
 
     setIsPostcodeOpen(false);
   };
@@ -364,7 +344,7 @@ export default function GatheringWrite() {
     axios
       .get(`${url}/category1`)
       .then((res) => {
-        console.log("API 응답:", res);
+        console.log("1차 카테고리 API 응답:", res);
 
         // res.data.category1 배열을 category1 상태에 저장
         const categoryArray = res.data.category1;
@@ -482,8 +462,10 @@ export default function GatheringWrite() {
       }
     };
   }, []); // 빈 의존성 배열 유지
-const submit = (e) => {
+
+  const submit = async (e) => {
   e.preventDefault();
+  
   // 시간 순서 검증
   if (formData.startTime >= formData.endTime) {
     alert('종료 시간은 시작 시간보다 늦어야 합니다.');
@@ -495,131 +477,118 @@ const submit = (e) => {
     alert('신청 마감일은 모임 날짜보다 이전이어야 합니다.');
     return;
   }
+
+  // 지오코딩 실행 (주소를 좌표로 변환)
+  console.log("지오코딩 시작...");
+  const coords = await convertAddressToCoordinates(formData.address);
   
-  const gatheringData = new FormData();
+  if (!coords) {
+    alert('주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.');
+    return;
+  }
+
+  // formData를 최종 데이터로 변환 (좌표 추가)
+  const finalGatheringData = {
+    ...formData,
+    latitude: parseFloat(coords.y), // 위도
+    longitude: parseFloat(coords.x), // 경도
+    categoryId: parseInt(formData.category1) || 0,
+    subCategoryId: parseInt(formData.category2) || 0,
+    userId: 10,
+    status: "모집중"
+  };
+  console.log("최종 데이터:", finalGatheringData);
+
+  // FormData 객체 생성 (변수명 변경으로 충돌 방지)
+  const formDataToSend = new FormData();
   
   // 파일 추가 (thumbnail)
   if (thumbnail != null) {
-    gatheringData.append("thumbnail", thumbnail);
+    formDataToSend.append("thumbnail", thumbnail);
   }
   
-  // 기본 데이터 추가 (데이터 타입 주의)
-  gatheringData.append('userId', 10); // 숫자로 직접 전달
-  gatheringData.append("title", formData.title || '');
-  gatheringData.append("meetingDate", formData.meetingDate || '');
-  gatheringData.append("startTime", formData.startTime); 
-  gatheringData.append("endTime", formData.endTime);
+  // 기본 데이터 추가
+  formDataToSend.append('userId', 1);
+  formDataToSend.append("title", finalGatheringData.title || '');
+  formDataToSend.append("meetingDate", finalGatheringData.meetingDate || '');
+  formDataToSend.append("startTime", finalGatheringData.startTime); 
+  formDataToSend.append("endTime", finalGatheringData.endTime);
   
-  // 숫자 필드는 숫자로 변환
-  const subCategoryId = parseInt(formData.category2) || 0;
-  gatheringData.append("subCategoryId", subCategoryId);
+  // 숫자 필드
+  formDataToSend.append("categoryId", finalGatheringData.categoryId);
+  formDataToSend.append("subCategoryId", finalGatheringData.subCategoryId);
   
-  gatheringData.append("address", formData.address || '');
-  gatheringData.append("detailAddress", formData.detailAddress || '');
+  formDataToSend.append("address", finalGatheringData.address || '');
+  formDataToSend.append("detailAddress", finalGatheringData.detailAddress || '');
+  formDataToSend.append("locName", finalGatheringData.locName || '');
   
-  // 좌표 데이터 추가 (BigDecimal 형식으로 정확히 전달)
-  if (coordinates.x && coordinates.y) {
-    // BigDecimal 정밀도에 맞게 소수점 7자리로 제한
-    const lat = parseFloat(coordinates.y).toFixed(7);
-    const lng = parseFloat(coordinates.x).toFixed(7);
-    gatheringData.append("latitude", lat); // 위도
-    gatheringData.append("longitude", lng); // 경도
+  // 좌표 데이터 추가
+  if (coords.x && coords.y) {
+    const lat = parseFloat(coords.y).toFixed(7);
+    const lng = parseFloat(coords.x).toFixed(7);
+    formDataToSend.append("latitude", lat);
+    formDataToSend.append("longitude", lng);
   }
   
-  // 인원수는 반드시 숫자로 (필드명 수정: DTO와 일치)
-  const minPeople = parseInt(formData.minPeople) || 2; // 기본값 2 (엔티티 기본값과 일치)
+  // 인원수
+  const minPeople = parseInt(finalGatheringData.minAttendees) || 2;
+  formDataToSend.append("minAttendees", minPeople);
   
-  gatheringData.append("minAttendees", minPeople);  // DTO 필드명과 일치
-  
-  // maxAttendees는 null 허용이므로 빈 값일 때는 아예 전송하지 않음
-  if (formData.maxPeople && formData.maxPeople.trim() !== '') {
-    const maxPeople = parseInt(formData.maxPeople);
+  // maxAttendees 처리
+  if (finalGatheringData.maxAttendees && finalGatheringData.maxAttendees.toString().trim() !== '') {
+    const maxPeople = parseInt(finalGatheringData.maxAttendees);
     if (!isNaN(maxPeople) && maxPeople > 0) {
-      gatheringData.append("maxAttendees", maxPeople);
+      formDataToSend.append("maxAttendees", maxPeople);
     }
   }
-  // maxAttendees가 비어있으면 아예 FormData에 추가하지 않음 (null로 처리됨)
   
-  gatheringData.append("applyDeadline", formData.deadline || '');
-  gatheringData.append("gatheringContent", formData.content || '');
-  gatheringData.append("preparationItems", formData.preparation || '');
-  gatheringData.append("intrOnln", formData.intrOnln || 'N');
-  gatheringData.append("status", "모집중");
+  formDataToSend.append("applyDeadline", finalGatheringData.deadline || '');
+  formDataToSend.append("gatheringContent", finalGatheringData.content || '');
+  formDataToSend.append("preparationItems", finalGatheringData.preparation || '');
+  formDataToSend.append("intrOnln", finalGatheringData.intrOnln || 'N');
+  formDataToSend.append("status", "모집중");
   
-  // tags 처리 - 배열이 비어있으면 빈 배열로
-  const tagsToSend = formData.tags && formData.tags.length > 0 ? formData.tags : [];
-  gatheringData.append("tags", JSON.stringify(tagsToSend));
+  // tags 처리
+  const tagsToSend = finalGatheringData.tags && finalGatheringData.tags.length > 0 ? finalGatheringData.tags : [];
+  formDataToSend.append("tags", JSON.stringify(tagsToSend));
   
   // FormData 내용 확인 (디버깅용)
   console.log('=== FormData 내용 ===');
-  for (let [key, value] of gatheringData.entries()) {
+  for (let [key, value] of formDataToSend.entries()) {
     console.log(`${key}:`, value);
   }
+  
   // axios 요청
-  axios
-    .post(`${url}/user/writeGathering`, gatheringData, {
+  try {
+    const response = await axios.post(`${url}/user/writeGathering`, formDataToSend, {
       headers: {
-        'Content-Type': 'multipart/form-data', // FormData 사용시 필수
+        'Content-Type': 'multipart/form-data',
       },
-      timeout: 10000, // 10초 타임아웃
-    })
-    .then((res) => {
-      console.log('성공:', res);
-      if (res.data && res.data.num) {
-        // navigate(`/gatheringDetail/${res.data.num}`);
-      } else {
-        console.log('응답 데이터:', res.data);
-      }
-    })
-    .catch((err) => {
-      console.error('요청 실패:', err);
-      
-      // 상세한 에러 정보 출력
-      if (err.response) {
-        console.error('응답 상태:', err.response.status);
-        console.error('응답 데이터:', err.response.data);
-        console.error('응답 헤더:', err.response.headers);
-        
-        // // 400 에러 상세 처리
-        // if (err.response.status === 400) {
-        //   console.error('=== Validation 에러 상세 ===');
-        //   console.error('전체 응답:', err.response.data);
-          
-        //   // Spring Boot validation 에러 메시지 추출
-        //   if (err.response.data.message && err.response.data.message.includes('Validation failed')) {
-        //     console.error('Validation 실패:', err.response.data.message);
-            
-        //     // trace에서 구체적인 필드 에러 정보 추출 시도
-        //     if (err.response.data.trace) {
-        //       console.error('=== 에러 trace 분석 ===');
-        //       const trace = err.response.data.trace;
-        //       console.error('Full trace:', trace);
-              
-        //       // BindException에서 필드별 에러 찾기
-        //       if (trace.includes('Field error')) {
-        //         console.error('⚠️  Field error 감지됨 - 위 trace에서 "Field error in object" 라인을 찾아보세요');
-        //       }
-              
-        //       // 특정 에러 패턴 찾기
-        //       if (trace.includes('Failed to convert')) {
-        //         console.error('⚠️  타입 변환 실패 감지됨 - 날짜/시간/숫자 형식을 확인하세요');
-        //       }
-        //     }
-            
-        //     alert(`데이터 검증 실패! (Error count: 2)\n\n문제가 될 수 있는 항목들:\n1. 날짜/시간 형식\n2. 빈 값 처리\n3. 데이터 타입 불일치\n\n개발자 도구 콘솔에서 상세 trace를 확인하세요.`);
-        //   } else {
-        //     alert(`입력 데이터에 문제가 있습니다: ${err.response.data.message || '알 수 없는 오류'}`);
-        //   }
-        // }
-      } else if (err.request) {
-        console.error('요청이 전송되었지만 응답이 없음:', err.request);
-        alert('서버에 연결할 수 없습니다. 네트워크를 확인해주세요.');
-      } else {
-        console.error('요청 설정 오류:', err.message);
-        alert('요청 처리 중 오류가 발생했습니다.');
-      }
+      timeout: 10000,
     });
+    
+    console.log('성공:', response);
+    if (response.data && response.data.num) {
+      // navigate(`/gatheringDetail/${response.data.num}`);
+    } else {
+      console.log('응답 데이터:', response.data);
+    }
+  } catch (err) {
+    console.error('요청 실패:', err);
+    
+    if (err.response) {
+      console.error('응답 상태:', err.response.status);
+      console.error('응답 데이터:', err.response.data);
+    } else if (err.request) {
+      console.error('요청이 전송되었지만 응답이 없음:', err.request);
+      alert('서버에 연결할 수 없습니다. 네트워크를 확인해주세요.');
+    } else {
+      console.error('요청 설정 오류:', err.message);
+      alert('요청 처리 중 오류가 발생했습니다.');
+    }
+  }
 };
+  
   return (
    <div>
     <Header/>
@@ -680,7 +649,7 @@ const submit = (e) => {
                       이미지를 드래그하거나 클릭하여 업로드하세요
                     </div>
                     <div className="GatheringWrite_upload-info_osk">
-                      권장 크기: 1200 x 630px, 최대 5MB
+                      권장 크기: 1200 x 630px, 최대 100MB
                     </div>
                   </>
                 )}
@@ -916,7 +885,6 @@ const submit = (e) => {
                 <div className="GatheringWrite_form-group_osk">
                   <label className="GatheringWrite_field-label_osk">
                     최대 인원{" "}
-                    <span className="GatheringWrite_required_osk">*</span>
                     {errors.maxAttendees && (
                       <span
                         style={{
@@ -1010,7 +978,7 @@ const submit = (e) => {
                   placeholder="태그를 입력하고 Enter 또는 쉼표 사용하여 등록하세요"
                   className="GatheringWrite_custom-input_osk GatheringWrite_tag-input_osk"
                 />
-                <CiHashtag className="GatheringWrite_tag-add-btn_osk" />
+                {/* <CiHashtag className="GatheringWrite_tag-add-btn_osk" /> */}
               </div>
             </div>
           </div>

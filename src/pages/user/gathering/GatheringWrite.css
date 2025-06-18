@@ -110,6 +110,7 @@
   resize: vertical;
   min-height: 100px;
   box-sizing: border-box;
+  resize: none;
 }
 
 .GatheringWrite_custom-textarea-simple_osk:focus {

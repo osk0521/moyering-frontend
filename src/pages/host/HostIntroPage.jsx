@@ -1,10 +1,14 @@
-import React from 'react';
+import { useAtomValue } from 'jotai';
+import { Navigate, useNavigate } from 'react-router';
+import { userAtom } from '../../atoms';
 import './HostIntroPage.css';
-import { useNavigate } from 'react-router';
 
 const HostIntroPage = () => {
-
+  const user = useAtomValue(userAtom);
   const navigate = useNavigate();
+  if(!user || user.userType !== 'ROLE_HT'){
+      return <Navigate to="/userLogin"/>
+  }
 
   const handleNavigation = (path)=>{
     navigate(path)

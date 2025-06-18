@@ -1,20 +1,49 @@
 import { useState } from 'react';
 import './TabDescription.css';
 
-const TabDescription = () => {
-    const [description, setDescription] = useState('');
-    const [images, setImages] = useState([null, null, null, null, null]);
+const TabDescription = ({ classData, setClassData }) => {
+    const { description } = classData;
+    const [images, setImages] = useState([
+        description.img1 ? URL.createObjectURL(description.img1) : null,
+        description.img2 ? URL.createObjectURL(description.img2) : null,
+        description.img3 ? URL.createObjectURL(description.img3) : null,
+        description.img4 ? URL.createObjectURL(description.img4) : null,
+        description.img5 ? URL.createObjectURL(description.img5) : null,
+    ]);
 
     const handleImageChange = (e, index) => {
         const file = e.target.files[0];
-        if (file) {
-            const updatedImages = [...images];
-            updatedImages[index] = URL.createObjectURL(file);
-            setImages(updatedImages);
-        }
+        if (!file) return;
+
+        // 1. 미리보기 이미지 URL 저장
+        const previewUrl = URL.createObjectURL(file);
+        const updatedImages = [...images];
+        updatedImages[index] = previewUrl;
+        setImages(updatedImages);
+
+        // 2. classData.description에 실제 파일 저장
+        const imageKey = `img${index + 1}`;
+        setClassData((prev) => ({
+            ...prev,
+            description: {
+                ...prev.description,
+                [imageKey]: file,
+            },
+        }));
     };
 
-   return (
+
+    const handledetailDescriptionChange = (e) => {
+        setClassData(prev => ({
+            ...prev,
+            description: {
+                ...prev.description,
+                detailDescription: e.target.value
+            }
+        }))
+    }
+
+    return (
         <div className="KHJ-class-info-box">
             <h3 className="KHJ-section-title">클래스 설명</h3>
 
@@ -55,14 +84,14 @@ const TabDescription = () => {
                     <span className="KHJ-required-text-dot">*</span>클래스 상세설명
                 </label>
                 <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    value={description.detailDescription || ''}
+                    onChange={handledetailDescriptionChange}
                     placeholder="클래스에 대한 설명을 작성해주세요."
                     className="KHJ-description-textarea"
                     maxLength="2000"
                 />
                 <div className="KHJ-footer">
-                    <span>{description.length} / 2000</span>
+                    <span>{(description.detailDescription || '').length} / 2000</span>
                 </div>
             </div>
         </div>

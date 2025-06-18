@@ -14,6 +14,8 @@ import DashboardLayout from './pages/host/DashboardLayout';
 import HostClassList from './pages/host/HostClassList';
 import HostIntroPage from './pages/host/HostIntroPage';
 import HostProfile from './pages/host/HostProfile';
+import HostRegist from "./pages/host/HostRegist.jsx"
+
 import Inquiry from './pages/host/Inquiry';
 import MainContent from './pages/host/MainContent';
 import SettlementInfo from './pages/host/SettlementInfo';

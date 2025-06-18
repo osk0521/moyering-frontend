@@ -1,105 +1,191 @@
-// src/components/pages/NoticeManagement.jsx
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {url} from "/src/config";
+import axios from "axios"; 
 import Layout from "./Layout";
 import { useNavigate } from 'react-router-dom';
 import './NoticeManagement.css';
 
+// 공지사항 관리
+export default function NoticeList() {
+  const navigate = useNavigate();
+  const [noticeList, setNoticeList] = useState([]); // 공지사항 목록 
+  const [pageInfo, setPageInfo] = useState({
+    number: 0,
+    totalPages: 1,
+    totalElements: 0,
+    size: 10,
+    first: true,
+    last: true
+  }); // Spring Boot Pageable 형식
+  const [search, setSearch] = useState({ // 검색 정보 
+    page: 0, // Spring은 0부터 시작 
+    keyword: ''
+  });
+  const [loading, setLoading] = useState(false); // 로딩 상태
 
-const NoticeManagement = () => {
-// + 새 공지사항 버튼 클릭 시 이동할 navigate 함수
-    const navigate = useNavigate();
+  // UI 상태 관리
+  const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' }); // 작성일 기준 내림차순 
+  const [isModalOpen, setIsModalOpen] = useState(false); // + 새 공지사항 모달 창 열기 
+  const [selectedNotice, setSelectedNotice] = useState(null); // 선택한 공지사항 (수정/삭제)
 
-    // 공지사항 등록 클릭 시 모달 창 띄우기 
-      const handleNewNotice = () => {
-    navigate('/admin/notice/create');
+  // 컴포넌트 마운트시 게시글 목록 로드
+  // search.page : 페이지 이동할 때 새 데이터 로드, search.keyword : 검색어 변경할 때 새 데이터 로드 
+  useEffect(() => { // 렌더링 될 때마다 실행 
+    loadNoticeList();
+  }, [search.page, search.keyword]);
+
+  // 게시글 목록 API 호출
+  const loadNoticeList = async () => {
+    setLoading(true);
+    try { 
+      const params = {
+        page: search.page,
+        size: 10,
+        sort: 'createdAt,desc'
+      };
+      
+      // 검색어가 있을 때만 keyword 파라미터 추가
+      if (search.keyword && search.keyword.trim()) {
+        params.keyword = search.keyword.trim();
+      }
+
+      const response = await axios.get(`${url}/api/notice`, { params }); 
+      
+      setNoticeList(response.data.content || []);
+      setPageInfo({
+        number: response.data.number || 0,
+        totalPages: response.data.totalPages || 1,
+        totalElements: response.data.totalElements || 0,
+        size: response.data.size || 10,
+        first: response.data.first || true,
+        last: response.data.last || true
+      });
+    } catch (error) {
+      console.error('공지사항 목록 로드 실패:', error);
+      alert('공지사항 목록을 불러오는데 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 검색어 변경 (디바운스 적용을 위해 useEffect 사용)
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearch({...search, keyword: value, page: 0}); // 검색어 변경시 첫 페이지로
+  };
+
+  // 페이지 변경 (새로운 페이지 클릭하면 페이지 변경)
+  const changePage = (newPage) => {
+    if (newPage >= 0 && newPage < pageInfo.totalPages) {
+      setSearch({...search, page: newPage});
+    }
+  };
+
+  // 공지사항 등록 API
+  const createNotice = async (noticeData) => {
+    try {
+      const response = await axios.post(`${url}/api/notice`, {
+        title: noticeData.title,
+        content: noticeData.content,
+        pinYn: noticeData.pinYn || false,
+        isHidden: false
+      });
+      
+      if (response.status === 201) {
+        alert('공지사항이 등록되었습니다.');
+        loadNoticeList(); // 목록 새로고침
+        return response.data;
+      }
+    } catch (error) {
+      console.error('공지사항 등록 실패:', error);
+      alert('공지사항 등록에 실패했습니다.');
+      throw error;
+    }
+  };
+
+  // 공지사항 수정 API
+  const updateNotice = async (noticeId, noticeData) => {
+    try {
+      const response = await axios.put(`${url}/api/notice/${noticeId}`, {
+        title: noticeData.title,
+        content: noticeData.content,
+        pinYn: noticeData.pinYn
+      });
+      
+      if (response.status === 200) {
+        alert('공지사항이 수정되었습니다.');
+        loadNoticeList(); // 목록 새로고침
+        return response.data;
+      }
+    } catch (error) {
+      console.error('공지사항 수정 실패:', error);
+      alert('공지사항 수정에 실패했습니다.');
+      throw error;
+    }
+  };
+
+  // 공지사항 삭제 API
+  const deleteNotice = async (noticeId) => {
+    if (!window.confirm('정말로 삭제하시겠습니까?')) return;
+    
+    try {
+      const response = await axios.delete(`${url}/api/notice/${noticeId}`);
+      
+      if (response.status === 204 || response.status === 200) {
+        alert('공지사항이 삭제되었습니다.');
+        loadNoticeList(); // 목록 새로고침
+      }
+    } catch (error) {
+      console.error('공지사항 삭제 실패:', error);
+      alert('공지사항 삭제에 실패했습니다.');
+    }
+  };
+
+  // 보이기/ 숨기기 
+const toggleNoticeVisibility = async (noticeId, currentHiddenStatus) => {
+  try {
+    const newHiddenStatus = !currentHiddenStatus;
+    
+    // API 호출 - 현재 상태의 반대로 변경
+    const endpoint = newHiddenStatus ? 'hide' : 'show';
+    const response = await axios.patch(`${url}/api/notice/${noticeId}/${endpoint}`);
+    
+    if (response.status === 200) {
+      alert(`공지사항이 ${newHiddenStatus ? '숨기기' : '보이기'} 처리되었습니다.`);
+      loadNoticeList(); 
+    }
+  } catch (error) {
+    console.error('공지사항 표시 상태 변경 실패:', error);
+    alert('공지사항 표시 상태 변경에 실패했습니다.');
   }
+};
 
-  // ===== 상태 관리 =====
-  // 검색 상태. (초기값은 빈 문자열)
-  const [searchTerm, setSearchTerm] = useState('');
-
-  // 정렬 상태 (공지사항 올린 작성일 기준 내림차순)
-  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
-
-  // 모달관리 상태
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // 선택된 공지사항 상태
-  const [selectedNotice, setSelectedNotice] = useState(null);
-
-
-
-  // ===== 공지사항 더미 데이터 =====
-  const [notices, setNotices] = useState([
-    {
-      id: 1,
-      number: 1,
-      date: '2024-03-30', // 작성일 
-      title: '새로운 클래스 등록 안내', // 제목 
-      content: '새로운 클래스 등록 시스템이 업데이트되었습니다. 이제 더욱 간편하게 클래스를 등록하실 수 있으며, 실시간으로 수강생 현황을 확인하실 수 있습니다. 자세한 내용은 사용 가이드를 참고해 주세요.', // 내용 
-      isPublished: true, // 게시 여부
-      isPinned: true // 상단 고정 여부 
-    },
-    {
-      id: 2,
-      number: 2,
-      date: '2024-03-29',
-      title: '시스템 정기 점검 안내',
-      content: '서비스 품질 향상을 위한 정기 점검이 예정되어 있습니다. 점검 시간: 2024년 4월 1일 오전 2시 ~ 6시 (4시간). 점검 중에는 서비스 이용이 제한될 수 있으니 양해 부탁드립니다.',
-      isPublished: true,
-      isPinned: false
-    },
-    {
-      id: 3,
-      number: 3,
-      date: '2024-03-28',
-      title: '새로운 기능 업데이트',
-      content: '사용자 편의성 증대를 위한 새로운 기능들이 추가되었습니다. 실시간 채팅, 화면 공유, 출석 체크 자동화 등의 기능을 새롭게 사용하실 수 있습니다.',
-      isPublished: true,
-      isPinned: true
-    },
-    {
-      id: 4,
-      number: 4,
-      date: '2024-03-27',
-      title: '수강료 정산 시스템 개선',
-      content: '강사님들의 편의를 위해 수강료 정산 시스템이 개선되었습니다. 이제 실시간으로 수강료 현황을 확인하실 수 있으며, 정산 주기도 단축되었습니다.',
-      isPublished: false,
-      isPinned: false
-    },
-    {
-      id: 5,
-      number: 5,
-      date: '2024-03-26',
-      title: '모바일 앱 출시 예정',
-      content: '곧 모바일 애플리케이션이 출시될 예정입니다. iOS 및 Android 지원 예정이며, 웹과 동일한 기능을 모바일에서도 편리하게 이용하실 수 있습니다.',
-      isPublished: true,
-      isPinned: false
+  // 핀 상태 변경 API (메인화면 고정/해제)
+  const togglePinStatus = async (noticeId, currentPinYn) => {
+    try {
+      const newPinYn = !currentPinYn;
+      const response = await axios.patch(
+        `${url}/api/notice/${noticeId}/pin?pinYn=${newPinYn}`
+      );
+      
+      if (response.status === 200) {
+        alert(`공지사항이 ${newPinYn ? '상단 고정' : '고정 해제'}되었습니다.`);
+        loadNoticeList(); // 목록 새로고침
+      }
+    } catch (error) {
+      console.error('핀 상태 변경 실패:', error);
+      alert('핀 상태 변경에 실패했습니다.');
     }
-  ]);
-
-  // ===== 헬퍼 함수들 =====
-  // 내용 100자 제한 함수
-  const truncateContent = (content, maxLength = 100) => {
-    if (content.length <= maxLength) return content;
-    return content.substring(0, maxLength) + '...';
   };
 
-  // 날짜 포맷팅
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR');
+  // 새 공지사항 등록 페이지로 이동
+  const handleNewNotice = () => {
+    navigate('/admin/notice/create');
   };
 
-  // ===== 이벤트 핸들러들 =====
-  // 정렬 함수
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
+  // 공지사항 수정 페이지로 이동
+  const handleEditNotice = (noticeId) => {
+    navigate(`/admin/notice/edit/${noticeId}`);
   };
 
   // 공지사항 상세 모달 열기
@@ -114,146 +200,185 @@ const NoticeManagement = () => {
     setSelectedNotice(null);
   };
 
-  // 게시 상태 토글
-  const togglePublishStatus = (id) => {
-    setNotices(prevNotices =>
-      prevNotices.map(notice =>
-        notice.id === id
-          ? { ...notice, isPublished: !notice.isPublished }
-          : notice
-      )
-    );
+  // 내용 100자 제한 함수
+  const truncateContent = (content, maxLength = 100) => {
+    if (!content) return '';
+    if (content.length <= maxLength) return content;
+    return content.substring(0, maxLength) + '...';
   };
 
-  // 핀 상태 토글
-  const togglePinStatus = (id) => {
-    setNotices(prevNotices =>
-      prevNotices.map(notice =>
-        notice.id === id
-          ? { ...notice, isPinned: !notice.isPinned }
-          : notice
-      )
-    );
+  // 날짜 포맷팅
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR');
   };
 
-  // ===== 필터링 및 정렬 로직 =====
-  
-  const filteredAndSortedNotices = React.useMemo(() => {
-    let filtered = notices.filter(notice => {
-      // 검색어 필터링 (제목, 내용)
-      const matchesSearch = 
-        notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        notice.content.toLowerCase().includes(searchTerm.toLowerCase());
+  // 정렬 함수 (클라이언트 사이드 정렬)
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
-      return matchesSearch;
+  // 정렬된 공지사항 목록
+  const sortedNoticeList = React.useMemo(() => {
+    const sorted = [...noticeList].sort((a, b) => {
+      let aValue = a[sortConfig.key];
+      let bValue = b[sortConfig.key];
+
+      // 날짜의 경우 Date 객체로 변환
+      if (sortConfig.key === 'createdAt') {
+        aValue = new Date(aValue);
+        bValue = new Date(bValue);
+      }
+
+      if (aValue < bValue) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
     });
 
-    // 핀 고정된 항목들을 먼저 분리
-    const pinnedItems = filtered.filter(notice => notice.isPinned);
-    const unpinnedItems = filtered.filter(notice => !notice.isPinned);
+    // 핀 고정된 항목을 맨 위로
+    const pinnedItems = sorted.filter(notice => notice.pinYn === true);
+    const unpinnedItems = sorted.filter(notice => notice.pinYn !== true);
+    
+    return [...pinnedItems, ...unpinnedItems];
+  }, [noticeList, sortConfig]);
 
-    // 각각 정렬 적용
-    const sortItems = (items) => {
-      return items.sort((a, b) => {
-        let aValue = a[sortConfig.key];
-        let bValue = b[sortConfig.key];
+  // 숨기기
+  const hideNotice = async(noticeId) => {
+    try {
+      const response = await axios.patch(`${url}/api/notice/${noticeId}/hide`);
+      if (response.status === 200){
+        alert("공지사항이 숨겨졌습니다.")
+        loadNoticeList();
+      }
+    } catch(error){
+      console.error("숨기기 실패", error);
+      alert("숨기기에 실패했습니다.")
+    }
+  }
 
-        // 날짜의 경우 Date 객체로 변환
-        if (sortConfig.key === 'date') {
-          aValue = new Date(aValue);
-          bValue = new Date(bValue);
-        }
+  // 보이기
+const showNotice = async (noticeId) => {
+  try {
+    const response = await axios.patch(`${url}/api/notice/${noticeId}/show`);
+    if (response.status === 200) {
+      alert("공지사항이 게시되었습니다.");
+      loadNoticeList();
+    }
+  } catch (error) {
+    console.error("보이기 실패:", error);
+    alert("보이기에 실패했습니다.");
+  }
+};
 
-        if (aValue < bValue) {
-          return sortConfig.direction === 'asc' ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return sortConfig.direction === 'asc' ? 1 : -1;
-        }
-        return 0;
-      });
-    };
+  // 페이지 번호 배열 생성 (최대 5개 페이지 번호 표시)
+  const getPageNumbers = () => {
+    const currentPage = pageInfo.number;
+    const totalPages = pageInfo.totalPages;
+    const maxVisible = 5;
+    
+    let start = Math.max(0, currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages - 1, start + maxVisible - 1);
+    
+    // 끝에서부터 계산해서 start 조정
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(0, end - maxVisible + 1);
+    }
+    
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
-    // 핀 고정 
-    return [...sortItems(pinnedItems), ...sortItems(unpinnedItems)];
-  }, [notices, searchTerm, sortConfig])
-
-  // ===== 렌더링 =====
   return (
     <Layout>
-        {/* 페이지 제목 */}
-        <div className="page-titleHY">
-          <h1>공지사항 관리</h1>
-          </div>
-          
+      {/* 페이지 제목 */}
+      <div className="page-titleHY">
+        <h1>공지사항 관리</h1>
+      </div>
 
+      {/* 검색 영역 */}
+      <div className="search-sectionHY">
+        <div className="search-boxHY">
+          <span className="search-iconHY">🔍</span>
+          <input
+            type="text"
+            placeholder="제목, 내용으로 검색"
+            value={search.keyword}
+            onChange={handleSearchChange}
+            className="search-inputHY"
+          />
+        </div>
+      </div>
+      
+      <div className="right-alignHY">
+        <button className="btn-primary new-notice-btnHY" onClick={handleNewNotice}>
+          + 새 공지사항
+        </button>
+      </div>
 
-        {/* 검색 영역 */}
-          <div className="search-sectionHY">
-            <div className="search-boxHY">
-              <span className="search-iconHY">🔍</span>
-              <input
-                type="text"
-                placeholder="제목, 내용으로 검색"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-inputHY"
-              />
-            </div>
-          </div>
-              <div className="right-alignHY">
-          <button className="btn-primary new-notice-btnHY" 
-          onClick = {handleNewNotice}>
-            + 새 공지사항
-          </button>
-          </div>
-        
-        
-    
-    <br />
-        {/* 검색 결과 수 */}
-          <span className="result-countHY">총 <strong>{filteredAndSortedNotices.length}</strong>건</span>
+      <br />
 
-  
+      {/* 검색 결과 수 */}
+      <span className="result-countHY">
+        총 <strong>{pageInfo.totalElements}</strong>건
+      </span>
 
-        {/* 공지사항 테이블 */}
-        <div className="table-containerHY">
-          <table className="tableHY">
-            <thead>
+      {/* 공지사항 테이블 */}
+      <div className="table-containerHY">
+        <table className="tableHY">
+          <thead>
+            <tr>
+              <th className="checkbox-colHY">
+                <input type="checkbox" />
+              </th>
+              <th>번호</th>
+              <th 
+                className="sortableHY"
+                onClick={() => handleSort('createdAt')}
+              >
+                작성일
+                {sortConfig.key === 'createdAt' && (
+                  <span className="sort-indicatorHY">
+                    {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                  </span>
+                )}
+              </th>
+              <th>제목</th>
+              <th>내용</th>
+              <th>게시</th>
+              <th>고정</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedNoticeList.length === 0 ? (
               <tr>
-                <th className="checkbox-colHY">
-                  <input type="checkbox" />
-                </th>
-                <th>번호</th>
-                <th 
-                  className="sortableHY"
-                  onClick={() => handleSort('date')}
-                >
-                  작성일
-                  {sortConfig.key === 'date' && (
-                    <span className="sort-indicatorHY">
-                      {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </th>
-                <th>제목</th>
-                <th>내용</th>
-                <th>게시</th>
-                <th>고정</th>
-                <th>관리</th>
+                <td colSpan="8" className="no-data-messageHY">
+                  {loading ? '로딩 중...' : '등록된 공지사항이 없습니다.'}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredAndSortedNotices.map(notice => (
-                <tr key={notice.id} className={notice.isPinned ? 'pinned-row' : ''}>
+            ) : (
+              sortedNoticeList.map((notice, index) => (
+                <tr key={notice.noticeId} className={notice.pinYn ? 'pinned-row' : ''}>
                   <td>
                     <input type="checkbox" />
                   </td>
                   <td>
-                    {notice.isPinned && <span className="pin-iconHY">📌</span>}
-                    {notice.number}
+                    {notice.pinYn && <span className="pin-iconHY">📌</span>}
+                    {pageInfo.totalElements - (pageInfo.number * pageInfo.size) - index}
                   </td>
-                  <td>{formatDate(notice.date)}</td>
+                  <td>{formatDate(notice.createdAt)}</td>
                   <td className="title-cellHY">
                     <button 
                       className="title-linkHY"
@@ -266,100 +391,139 @@ const NoticeManagement = () => {
                     {truncateContent(notice.content)}
                   </td>
                   <td>
-                    <button 
-                      className={`publish-btnHY ${notice.isPublished ? 'published' : 'unpublished'}`}
-                      onClick={() => togglePublishStatus(notice.id)}
-                    >
-                      {notice.isPublished ? '게시중' : '비게시'}
-                    </button>
+                  <button
+                    className={`publish-btnHY ${!notice.isHidden ? 'published' : 'unpublished'}`}
+                    onClick={() => toggleNoticeVisibility(notice.noticeId, notice.isHidden)}
+                  >
+                    {!notice.isHidden ? '숨기기' : '보이기'}
+                  </button>
                   </td>
                   <td>
                     <button 
-                      className={`pin-btnHY ${notice.isPinned ? 'pinned' : 'unpinned'}`}
-                      onClick={() => togglePinStatus(notice.id)}
-                      title={notice.isPinned ? '핀 해제' : '상단 고정'}
+                      className={`pin-btnHY ${notice.pinYn ? 'pinned' : 'unpinned'}`}
+                      onClick={() => togglePinStatus(notice.noticeId, notice.pinYn)}
+                      title={notice.pinYn ? '핀 해제' : '상단 고정'}
                     >
                       📌
                     </button>
                   </td>
                   <td>
                     <div className="action-buttonsHY">
-                      <button className="btn-editHY">수정</button>
-                      <button className="btn-deleteHY">삭제</button>
+                      <button 
+                        className="btn-editHY"
+                        onClick={() => handleEditNotice(notice.noticeId)}
+                      >
+                        수정
+                      </button>
+                      <button 
+                        className="btn-deleteHY"
+                        onClick={() => deleteNotice(notice.noticeId)}
+                      >
+                        삭제
+                      </button>
                     </div>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
-        {/* 페이지네이션 */}
-        <div className="paginationHY">
-          <button className="page-btn prevHY">이전</button>
-          <span className="page-numbersHY">
-            <button className="page-btn activeHY">1</button>
-            <button className="page-btnHY">2</button>
-            <button className="page-btnHY">3</button>
-          </span>
-          <button className="page-btn nextHY">다음</button>
-        </div>
+      {/* 페이지네이션 */}
+      <div className="paginationHY">
+        <button 
+          className="page-btn prevHY"
+          onClick={() => changePage(pageInfo.number - 1)}
+          disabled={pageInfo.first}
+        >
+          이전
+        </button>
+        <span className="page-numbersHY">
+          {getPageNumbers().map(num => (
+            <button 
+              key={num}
+              className={`page-btnHY ${num === pageInfo.number ? 'activeHY' : ''}`}
+              onClick={() => changePage(num)}
+            >
+              {num + 1}
+            </button>
+          ))}
+        </span>
+        <button 
+          className="page-btn nextHY"
+          onClick={() => changePage(pageInfo.number + 1)}
+          disabled={pageInfo.last}
+        >
+          다음
+        </button>
+      </div>
 
-        {/* 공지사항 상세 모달 */}
-        {isModalOpen && selectedNotice && (
-          <div className="modal-overlayHY" onClick={closeModal}>
-            <div className="modal-contentHY" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-headerHY">
-                <h2>공지사항 상세</h2>
-                <button className="modal-closeHY" onClick={closeModal}>×</button>
-              </div>
-              
-              <div className="modal-bodyHY">
-                <div className="notice-detailHY">
-                  <div className="detail-itemHY">
-                    <label>제목:</label>
-                    <span>{selectedNotice.title}</span>
-                  </div>
-                  
-                  <div className="detail-itemHY">
-                    <label>작성일:</label>
-                    <span>{formatDate(selectedNotice.date)}</span>
-                  </div>
-                  
-                  <div className="detail-itemHY">
-                    <label>게시 상태:</label>
-                    <span className={`status-badgeHY ${selectedNotice.isPublished ? 'status-published' : 'status-unpublished'}`}>
-                      {selectedNotice.isPublished ? '게시중' : '비게시'}
-                    </span>
-                  </div>
-                  
-                  <div className="detail-itemHY">
-                    <label>상단 고정:</label>
-                    <span className={`status-badge ${selectedNotice.isPinned ? 'status-pinned' : 'status-unpinned'}`}>
-                      {selectedNotice.isPinned ? '고정됨' : '일반'}
-                    </span>
-                  </div>
-                  
-                  <div className="detail-item full-widthHY">
-                    <label>내용:</label>
-                    <div className="content-displayHY">
-                      {selectedNotice.content}
-                    </div>
+      {/* 공지사항 상세 모달 */}
+      {isModalOpen && selectedNotice && (
+        <div className="modal-overlayHY" onClick={closeModal}>
+          <div className="modal-contentHY" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-headerHY">
+              <h2>공지사항 상세</h2>
+              <button className="modal-closeHY" onClick={closeModal}>×</button>
+            </div>
+            
+            <div className="modal-bodyHY">
+              <div className="notice-detailHY">
+                <div className="detail-itemHY">
+                  <label>제목:</label>
+                  <span>{selectedNotice.title}</span>
+                </div>
+                
+                <div className="detail-itemHY">
+                  <label>작성일:</label>
+                  <span>{formatDate(selectedNotice.createdAt)}</span>
+                </div>
+                
+                <div className="detail-itemHY">
+                  <label>게시 상태:</label>
+                  <span className={`status-badgeHY ${!selectedNotice.isHidden ? 'status-published' : 'status-unpublished'}`}>
+                    {!selectedNotice.isHidden ? '게시중' : '비게시'}
+                  </span>
+                </div>
+                
+                <div className="detail-itemHY">
+                  <label>상단 고정:</label>
+                  <span className={`status-badge ${selectedNotice.pinYn ? 'status-pinned' : 'status-unpinned'}`}>
+                    {selectedNotice.pinYn ? '고정됨' : '일반'}
+                  </span>
+                </div>
+                
+                <div className="detail-item full-widthHY">
+                  <label>내용:</label>
+                  <div className="content-displayHY">
+                    {selectedNotice.content}
                   </div>
                 </div>
               </div>
-              
-              <div className="modal-footerHY">
-                <button className="btn-secondaryHY" onClick={closeModal}>닫기</button>
-                <button className="btn-primaryHY">수정</button>
-                <button className="btn-dangerHY">삭제</button>
-              </div>
+            </div>
+            
+            <div className="modal-footerHY">
+              <button className="btn-secondaryHY" onClick={closeModal}>닫기</button>
+              <button 
+                className="btn-primaryHY"
+                onClick={() => handleEditNotice(selectedNotice.noticeId)}
+              >
+                수정
+              </button>
+              <button 
+                className="btn-dangerHY"
+                onClick={() => {
+                  closeModal();
+                  deleteNotice(selectedNotice.noticeId);
+                }}
+              >
+                삭제
+              </button>
             </div>
           </div>
-        )}
-
+        </div>
+      )}
     </Layout>
   );
 };
-
-export default NoticeManagement;

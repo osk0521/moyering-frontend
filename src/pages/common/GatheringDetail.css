@@ -498,6 +498,12 @@ button.GatheringDetail_more_osk {
   border-radius: 12px;
   background: white;
   flex-shrink: 0; /* 카드 크기 고정 */
+  flex-wrap:wrap;
+}
+.GatheringDetail_member-profile-image_osk {
+  background-position: center;
+  object-fit: contain;
+  background-size: contain;
 }
 
 /* Text Ellipsis 적용 - 멤버 이름 */
@@ -530,90 +536,29 @@ button.GatheringDetail_more_osk {
   text-overflow: ellipsis;
   max-width: 100%; /* 부모 컨테이너에 맞춤 */
 }
-
-/* Carousel 컨트롤 버튼 스타일 */
-.GatheringDetail_members-carousel_osk .carousel-control-prev,
-.GatheringDetail_members-carousel_osk .carousel-control-next {
-  width: 40px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.9);
+/* 멤버 아바타 컨테이너 - 고정 크기 설정 */
+.GatheringDetail_member-avatar_osk {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 1px solid #e9ecef;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  color: #666;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: #f8f9fa;
+  border: 2px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.GatheringDetail_members-carousel_osk .carousel-control-prev {
-  left: -20px;
-}
-
-.GatheringDetail_members-carousel_osk .carousel-control-next {
-  right: -20px;
-}
-
-.GatheringDetail_members-carousel_osk .carousel-control-prev-icon,
-.GatheringDetail_members-carousel_osk .carousel-control-next-icon {
-  width: 20px;
-  height: 20px;
-  background-size: 100%, 100%;
-}
-
-/* Carousel 인디케이터 스타일 */
-.GatheringDetail_members-carousel_osk .carousel-indicators {
-  bottom: -30px;
-  margin-bottom: 0;
-}
-
-.GatheringDetail_members-carousel_osk .carousel-indicators li {
-  width: 8px;
-  height: 8px;
+/* 멤버 프로필 이미지 - 비율 유지하면서 컨테이너에 맞춤 */
+.GatheringDetail_member-profile-image_osk {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 비율 유지하면서 컨테이너를 완전히 채움 */
+  object-position: center; /* 이미지 중앙 부분을 표시 */
   border-radius: 50%;
-  background-color: #ddd;
-  border: none;
-  margin: 0 4px;
+  transition: transform 0.2s ease;
 }
-
-.GatheringDetail_members-carousel_osk .carousel-indicators .active {
-  background-color: #ff6b6b;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .GatheringDetail_members-slide_osk {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .GatheringDetail_member-card_osk {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .GatheringDetail_members-carousel_osk .carousel-control-prev,
-  .GatheringDetail_members-carousel_osk .carousel-control-next {
-    display: none; /* 모바일에서는 컨트롤 버튼 숨김 */
-  }
-}
-
-@media (max-width: 992px) {
-  .GatheringDetail_members-slide_osk {
-    gap: 12px;
-  }
-  
-  .GatheringDetail_member-card_osk {
-    width: 200px;
-  }
-}
-
-/* 카드 호버 효과 */
-.GatheringDetail_member-card_osk:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
 /* 멤버 정보 영역 width 조정 */
 .GatheringDetail_member-info_osk {
   flex: 1;
@@ -628,6 +573,71 @@ button.GatheringDetail_more_osk {
 
 .GatheringDetail_view-more-btn_osk:hover {
   color: #333;
+}
+/* 화살표 공통 스타일 */
+.GatheringDetail_custom-slick-prev_osk,
+.GatheringDetail_custom-slick-next_osk {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  z-index: 2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* 이전 화살표 위치 */
+.GatheringDetail_custom-slick-prev_osk {
+  left: -20px;
+}
+
+/* 다음 화살표 위치 */
+.GatheringDetail_custom-slick-next_osk {
+  right: -20px;
+}
+
+/* 화살표 아이콘 스타일 - 중앙 정렬 개선 */
+.GatheringDetail_arrow-icon_osk {
+  color: black;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+/* react-icons SVG 요소 직접 타겟팅 */
+.GatheringDetail_arrow-icon_osk svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+
+/* 비활성화 상태 */
+.GatheringDetail_custom-slick-prev_osk.slick-disabled,
+.GatheringDetail_custom-slick-next_osk.slick-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 비활성화 상태 */
+.GatheringDetail_custom-slick-prev_osk.slick-disabled,
+.GatheringDetail_custom-slick-next_osk.slick-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* 질문 테이블 */

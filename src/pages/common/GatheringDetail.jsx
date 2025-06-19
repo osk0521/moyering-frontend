@@ -131,7 +131,7 @@ export default function GatheringDetail() {
             setMembers(member.map(m => ({
                 id: m.gatheringApplyId,
                 name: m.name,
-                profileImage: m.profile ? `${url}/uploads/${m.profile}` : null,
+                profileImage: m.profile ? `${url}/image/${m.profile}` : null,
                 introduction: m.intro,
                 applyDate: m.applyDate,
                 aspiration: m.aspiration,

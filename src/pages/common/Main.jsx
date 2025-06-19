@@ -36,8 +36,8 @@ const items = [
   useRecommendClasses(); // userId 없으면 null 넘기기
   const classes = useAtomValue(recommendClassAtom);
   const hotClasses = useAtomValue(hotClassAtom);
-  //const gathers = useAtomValue(recommendGatheringAtom);
-  const gathers = [];
+  const gathers = useAtomValue(recommendGatheringAtom);
+  //const gathers = [];
   const mainBanners = useAtomValue(mainBannerList);
 
   console.log(mainBanners);
@@ -117,7 +117,7 @@ const items = [
               gathers.map((gatherInfo, idx) => (
               <GatheringCard
                 key={idx}
-                classInfo={gatherInfo}
+                gatherInfo={gatherInfo}
                 onClick={() => navigate(`/gatheringDetail/${gatherInfo.gatheringId}`)}
               />
             )))}

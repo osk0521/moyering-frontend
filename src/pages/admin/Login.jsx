@@ -1,6 +1,7 @@
 // src/components/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Login.css';
 import axios from 'axios';
 import { myAxios, url } from '../../config';
@@ -35,16 +36,19 @@ const Login = () => {
       })
     // 일단 간단하게 - 로그인 버튼 누르면 2차 인증으로 이동
   };
+ 
+ 
 
-  return (
-    <div className="login-containerHY">
-      <div className="login-boxHY">
-        {/* 로고 부분 - 이미지만 사용 */}
-        <div className="logo-sectionHY">
-          <div className="logoHY">
-            <img src="/logo_managerLogin.png" alt="모여링 로고" className="logo-imageHY" />
-          </div>
-        </div>
+ 
+
+ return (
+   <div className="login-containerHY">
+     <div className="login-boxHY">
+       <div className="logo-sectionHY">
+         <div className="logoHY">
+           <img src="/logo_managerLogin.png" alt="모여링 로고" className="logo-imageHY" />
+         </div>
+       </div>
 
         {/* 로그인 폼 */}
         <form onSubmit={handleSubmit} className="login-formHY">
@@ -73,15 +77,20 @@ const Login = () => {
               className="input-fieldHY"
             />
           </div>
+       {/* 로그인 폼 */}
+       
 
-          {/* 로그인 버튼 - 피그마 주황색 버튼과 동일 */}
-          <button type="submit" className="login-buttonHY">
-            로그인
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+         <button 
+           type="submit" 
+           className="login-buttonHY"
+           disabled={loading}
+         >
+           {loading ? '로그인 중...' : '로그인'}
+         </button>
+       </form>
+     </div>
+   </div>
+ );
 };
 
 export default Login;

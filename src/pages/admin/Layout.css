@@ -25,7 +25,7 @@
   align-items: center;
   position: fixed;
   top: 0;
-  z-index: 1000;
+  z-index: 500;
   height: 60px;
   width: 100%;
 }
@@ -88,7 +88,7 @@
   height: 100vh;
   left: 0;
   top: 0;
-  z-index: 100;
+  z-index: 400;
 }
 
 /* 사이드바 헤더 개선 */
@@ -204,6 +204,8 @@
 /* 페이지 제목 */
 .page-titleHY {
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .page-titleHY h1 {
@@ -345,3 +347,22 @@
   cursor: pointer;
 }
 
+/* 모달이 열렸을 때 Layout 요소들 비활성화 */
+body.modal-open .headerHY {
+  z-index: 1;
+}
+
+/* 이 부분이 누락되어 있어요! */
+body.modal-open .sidebarHY {
+  z-index: 1;
+}
+
+/* 모달 관련 스타일 추가 */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* 모달이 열렸을 때 사이드바도 뒤로 보내기 */
+body.modal-open .sidebarHY {
+  z-index: 1 !important;
+}

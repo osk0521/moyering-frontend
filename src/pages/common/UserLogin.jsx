@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router';
 import { tokenAtom, userAtom } from '../../atoms';
 import axios from 'axios';
-import { url } from './../../config';
+import { myAxios } from './../../config';
 
 const Login = () => {
   const [login, setLogin] = useState({ username: '', password: '' })
@@ -20,12 +20,10 @@ const Login = () => {
     let formData = new FormData();
     formData.append("username", login.username);
     formData.append("password", login.password);
-    axios.post(`${url}/login`, formData)
+    myAxios().post("login", formData)
       .then(res => {
         console.log(res);
         setToken(res.headers.authorization);
-        console.log(setToken)
-        console.log("받은 토큰:"+res.headers.authorization);
         const user = res.data;
         setUser({ ...user });
         navigate("/")

@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import React from 'react'; // 이 한 줄만 추가!
 import './DashboardLayout.css'; // KHJ 스타일 적용됨
 import Sidebar from './Sidebar';
 import Header from './Headers';

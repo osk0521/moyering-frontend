@@ -1,5 +1,6 @@
 // MainContent.jsx
 import './MainContent.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 export default function MainContent() {
   const stats = [

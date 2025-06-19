@@ -1,113 +1,414 @@
-import React, { useState } from 'react';
-import Layout from "./Layout";
-import './BannerManagement.css'; 
+import React, { useState, useEffect } from 'react';
+import { url } from "/src/config";
+import axios from "axios";
+import Layout from './Layout';
+import { useNavigate } from 'react-router-dom';
+import './BannerManagement.css';
 
-const MemberManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [memberType, setMemberType] = useState('전체');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const memberData = [
-    { no: 1, type: '일반', username: 'example1', name: '회원1', email: 'example.com', phone: '010-1111-1234', joinDate: '2023-02-10', use_yn: 'Y' },
-    { no: 2, type: '강사', username: 'teacher1', name: '강사1', email: 'teacher1@example.com', phone: '010-2222-2345', joinDate: '2023-03-15', use_yn: 'Y' },
-    { no: 3, type: '일반', username: 'user2', name: '회원2', email: 'user2@example.com', phone: '010-3333-3456', joinDate: '2023-04-20', use_yn: 'N' },
-    { no: 4, type: '강사', username: 'teacher2', name: '강사2', email: 'teacher2@example.com', phone: '010-4444-4567', joinDate: '2023-05-05', use_yn: 'Y' },
-    { no: 5, type: '일반', username: 'user3', name: '회원3', email: 'user3@example.com', phone: '010-5555-5678', joinDate: '2023-06-10', use_yn: 'Y' },
-    { no: 6, type: '강사', username: 'teacher3', name: '강사3', email: 'teacher3@example.com', phone: '010-6666-6789', joinDate: '2023-07-01', use_yn: 'N' },
-    { no: 7, type: '일반', username: 'user4', name: '회원4', email: 'user4@example.com', phone: '010-7777-7890', joinDate: '2023-08-18', use_yn: 'Y' },
-    { no: 8, type: '강사', username: 'teacher4', name: '강사4', email: 'teacher4@example.com', phone: '010-8888-8901', joinDate: '2023-09-25', use_yn: 'Y' },
-    { no: 9, type: '일반', username: 'user5', name: '회원5', email: 'user5@example.com', phone: '010-9999-9012', joinDate: '2023-10-30', use_yn: 'N' },
-    { no: 10, type: '강사', username: 'teacher5', name: '강사5', email: 'teacher5@example.com', phone: '010-0000-0123', joinDate: '2023-11-11', use_yn: 'Y' }
-  ];
-
-  const handleSearch = (e) => setSearchTerm(e.target.value);
-  const handleMemberTypeChange = (type) => setMemberType(type);
-  const handleMemberClick = (member) => { setSelectedMember(member); setIsModalOpen(true); };
-  const handleCloseModal = () => { setIsModalOpen(false); setSelectedMember(null); };
-
-  const filteredMembers = memberData.filter((member) => {
-    const matchesSearch = member.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          member.phone.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = memberType === '전체' || member.type === memberType;
-    const join = new Date(member.joinDate);
-    const start = startDate ? new Date(startDate) : null;
-    const end = endDate ? new Date(endDate) : null;
-    const matchesDate = (!start || join >= start) && (!end || join <= end);
-    return matchesSearch && matchesType && matchesDate;
+const BannerManagement = () => {
+  const navigate = useNavigate();
+  const [bannerList, setBannerList] = useState([]); // 배너 목록
+  const [pageInfo, setPageInfo] = useState({
+    number: 0,
+    totalPages: 1,
+    totalElements: 0,
+    size: 10,
+    first: true,
+    last: true
+  }); // Spring Boot Pageable 형식
+  const [search, setSearch] = useState({
+    page: 0,
+    keyword: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [selectedBanners, setSelectedBanners] = useState([]); // 체크박스 선택된 배너들
+
+  // 컴포넌트 마운트시 배너 목록 로드
+  useEffect(() => {
+    loadBannerList();
+  }, [search.page, search.keyword]);
+
+  // 배너 목록 API 호출
+  const loadBannerList = async () => {
+    setLoading(true);
+    try {
+      const params = {
+        page: search.page,
+        size: 10,
+        sort: 'createdAt,desc'
+      };
+      
+      // 검색어가 있을 때만 keyword 파라미터 추가
+      if (search.keyword && search.keyword.trim()) {
+        params.keyword = search.keyword.trim();
+      }
+
+      const response = await axios.get(`${url}/api/banner`, { params });
+      
+      setBannerList(response.data.content || []);
+      setPageInfo({
+        number: response.data.number || 0,
+        totalPages: response.data.totalPages || 1,
+        totalElements: response.data.totalElements || 0,
+        size: response.data.size || 10,
+        first: response.data.first || true,
+        last: response.data.last || true
+      });
+    } catch (error) {
+      console.error('배너 목록 로드 실패:', error);
+      // API가 없을 때 더미 데이터 사용
+      setBannerList([
+        {
+          bannerId: 1,
+          bannerCode: 'BN1',
+          imageUrl: 'banner1.jpg',
+          title: '신규 요리 클래스 오픈',
+          isHidden: false,
+          registerId: 'admin1',
+          createdAt: '2024-02-15T10:00:00'
+        },
+        {
+          bannerId: 2,
+          bannerCode: 'PU2',
+          imageUrl: 'popup2.jpg',
+          title: '겨울 특별 할인 이벤트',
+          isHidden: true,
+          registerId: 'admin1',
+          createdAt: '2024-02-15T11:00:00'
+        },
+        {
+          bannerId: 3,
+          bannerCode: 'BN3',
+          imageUrl: 'banner3.jpg',
+          title: '도예 클래스 인기 급상승',
+          isHidden: false,
+          registerId: 'admin1',
+          createdAt: '2024-02-15T12:00:00'
+        },
+        {
+          bannerId: 4,
+          bannerCode: 'BN4',
+          imageUrl: 'banner4.jpg',
+          title: '봄맞이 새학기 특별 이벤트',
+          isHidden: false,
+          registerId: 'admin2',
+          createdAt: '2024-02-28T09:00:00'
+        },
+        {
+          bannerId: 5,
+          bannerCode: 'PU5',
+          imageUrl: 'popup5.jpg',
+          title: '모바일 앱 출시 기념 이벤트',
+          isHidden: true,
+          registerId: 'admin1',
+          createdAt: '2024-02-19T14:00:00'
+        }
+      ]);
+      setPageInfo({
+        number: 0,
+        totalPages: 1,
+        totalElements: 5,
+        size: 10,
+        first: true,
+        last: true
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 검색어 변경
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearch({...search, keyword: value, page: 0});
+  };
+
+  // 페이지 변경
+  const changePage = (newPage) => {
+    if (newPage >= 0 && newPage < pageInfo.totalPages) {
+      setSearch({...search, page: newPage});
+    }
+  };
+
+  // 배너 등록 페이지로 이동
+  const handleRegister = () => {
+    navigate('/admin/banner/create');
+  };
+
+  // 배너 수정
+  const handleEdit = (bannerId) => {
+    navigate(`/admin/banner/edit/${bannerId}`);
+  };
+
+  // 배너 삭제
+  const handleDelete = async (bannerId) => {
+    if (!window.confirm('정말로 삭제하시겠습니까?')) return;
+    
+    try {
+      const response = await axios.delete(`${url}/api/banner/${bannerId}`);
+      
+      if (response.status === 204 || response.status === 200) {
+        alert('배너가 삭제되었습니다.');
+        loadBannerList();
+      }
+    } catch (error) {
+      console.error('배너 삭제 실패:', error);
+      alert('배너 삭제에 실패했습니다.');
+    }
+  };
+
+  // 배너 숨기기
+  const hideBanner = async (bannerId) => {
+    try {
+      const response = await axios.patch(`${url}/api/banner/${bannerId}/hide`);
+      
+      if (response.status === 200) {
+        alert("배너가 숨겨졌습니다.");
+        
+        if (response.data) {
+          setBannerList(prevList => 
+            prevList.map(banner => 
+              banner.bannerId === bannerId ? response.data : banner
+            )
+          );
+        } else {
+          loadBannerList();
+        }
+      }
+    } catch (error) {
+      console.error("배너 숨기기 실패:", error);
+      alert("배너 숨기기에 실패했습니다.");
+    }
+  };
+
+  // 배너 보이기
+  const showBanner = async (bannerId) => {
+    try {
+      const response = await axios.patch(`${url}/api/banner/${bannerId}/show`);
+      
+      if (response.status === 200) {
+        alert("배너가 게시되었습니다.");
+        
+        if (response.data) {
+          setBannerList(prevList => 
+            prevList.map(banner => 
+              banner.bannerId === bannerId ? response.data : banner
+            )
+          );
+        } else {
+          loadBannerList();
+        }
+      }
+    } catch (error) {
+      console.error("배너 보이기 실패:", error);
+      alert("배너 보이기에 실패했습니다.");
+    }
+  };
+
+  // 전체 선택/해제
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      setSelectedBanners(bannerList.map(banner => banner.bannerId));
+    } else {
+      setSelectedBanners([]);
+    }
+  };
+
+  // 개별 체크박스 선택
+  const handleSelectBanner = (bannerId, checked) => {
+    if (checked) {
+      setSelectedBanners([...selectedBanners, bannerId]);
+    } else {
+      setSelectedBanners(selectedBanners.filter(id => id !== bannerId));
+    }
+  };
+
+  // 날짜 포맷팅
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR');
+  };
+
+  // 필터링된 데이터
+  const filteredData = bannerList.filter(banner => {
+    if (!search.keyword) return true;
+    const keyword = search.keyword.toLowerCase();
+    return banner.title.toLowerCase().includes(keyword) ||
+           banner.bannerCode.toLowerCase().includes(keyword);
+  });
+
+  // 페이지 번호 배열 생성
+  const getPageNumbers = () => {
+    const currentPage = pageInfo.number;
+    const totalPages = pageInfo.totalPages;
+    const maxVisible = 5;
+    
+    let start = Math.max(0, currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages - 1, start + maxVisible - 1);
+    
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(0, end - maxVisible + 1);
+    }
+    
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
   return (
     <Layout>
-      <div className="member-managementHY">
-        <div className="page-titleHY">
-          <h1>배너 관리</h1>
+      <div className="page-titleHY">
+        <h1>배너 관리</h1>
+      </div>
+
+      {/* 검색 영역 */}
+      <div className="search-sectionHY">
+        <div className="search-boxHY">
+          <span className="search-iconHY">🔍</span>
+          <input
+            type="text"
+            placeholder="배너/팝업 제목, 등록 ID 검색"
+            value={search.keyword}
+            onChange={handleSearchChange}
+            className="search-inputHY"
+          />
         </div>
-
-          <div className="search-sectionHY">
-            <div className="search-boxHY">
-              <span className="search-iconHY">🔍</span>
-              <input type="text" placeholder="       회원 아이디, 이메일 검색" value={searchTerm} onChange={handleSearch} className="search-inputHY" />
-            </div>
-            <label className="date-labelHY">가입기간</label>
-            <input type="date" className="date-inputHY" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-            <span className="date-separatorHY">~</span>
-            <input type="date" className="date-inputHY" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-          </div>
-          <div className="filter-sectionHY">
-            {['전체', '일반', '강사'].map(type => (
-              <button key={type} className={`filter-btn ${memberType === type ? 'active' : ''}`} onClick={() => handleMemberTypeChange(type)}>{type}</button>
-            ))}
-          </div>
+        <div className="right-alignHY">
+          <button className="btn-primary register-btnHY" onClick={handleRegister}>
+            + 등록
+          </button>
         </div>
+      </div>
 
-        <div className="result-countHY">총 <strong>{filteredMembers.length}</strong>건</div>
+      <br />
 
-        <div className="table-containerHY">
-          <table className="member-tableHY">
-            <thead>
+      {/* 검색 결과 수 */}
+      <span className="result-countHY">
+        총 <strong>{pageInfo.totalElements}</strong>건
+      </span>
+
+      {/* 배너 테이블 */}
+      <div className="table-containerHY">
+        <table className="tableHY banner-table">
+          <thead>
+            <tr>
+              <th className="checkbox-colHY">
+                <input 
+                  type="checkbox" 
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  checked={selectedBanners.length === bannerList.length && bannerList.length > 0}
+                />
+              </th>
+              <th>ID</th>
+              <th>배너 이미지</th>
+              <th>제목</th>
+              <th>상태</th>
+              <th>등록 ID</th>
+              <th>등록일자</th>
+              <th>액션</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.length === 0 ? (
               <tr>
-                <th>No</th>
-                <th>회원 구분</th>
-                <th>아이디</th>
-                <th>회원명</th>
-                <th>이메일</th>
-                <th>연락처</th>
-                <th>가입일</th>
-                <th>사용여부</th>
+                <td colSpan="8" className="no-data">
+                  {loading ? '로딩 중...' : '등록된 배너가 없습니다.'}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredMembers.map(member => (
-                <tr key={member.no}>
-                  <td>{member.no}</td>
-                  <td><span className={`member-typeHY ${member.type === '강사' ? 'instructor' : 'general'}`}>{member.type}</span></td>
-                  <td><span className="username-linkHY" onClick={() => handleMemberClick(member)}>{member.username}</span></td>
-                  <td>{member.name}</td>
-                  <td>{member.email}</td>
-                  <td>{member.phone}</td>
-                  <td>{member.joinDate}</td>
-                  <td>{member.use_yn}</td>
+            ) : (
+              filteredData.map((banner) => (
+                <tr key={banner.bannerId}>
+                  <td>
+                    <input 
+                      type="checkbox" 
+                      checked={selectedBanners.includes(banner.bannerId)}
+                      onChange={(e) => handleSelectBanner(banner.bannerId, e.target.checked)}
+                    />
+                  </td>
+                  <td className="banner-id">{banner.bannerCode}</td>
+                  <td className="banner-image">
+                    <div className="image-placeholder">
+                      <span>이미지</span>
+                    </div>
+                  </td>
+                  <td className="banner-title">{banner.title}</td>
+                  <td>
+                    {banner.isHidden ? (
+                      <button 
+                        className="status-toggle status-hidden"
+                        onClick={() => showBanner(banner.bannerId)}
+                      >
+                        숨기기
+                      </button>
+                    ) : (
+                      <button 
+                        className="status-toggle status-visible"
+                        onClick={() => hideBanner(banner.bannerId)}
+                      >
+                        보이기
+                      </button>
+                    )}
+                  </td>
+                  <td>{banner.registerId}</td>
+                  <td>{formatDate(banner.createdAt)}</td>
+                  <td>
+                    <div className="action-buttons">
+                      <button 
+                        className="btn-edit"
+                        onClick={() => handleEdit(banner.bannerId)}
+                      >
+                        수정
+                      </button>
+                      <button 
+                        className="btn-delete"
+                        onClick={() => handleDelete(banner.bannerId)}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
-        {isModalOpen && selectedMember && (
-          <div className="modal-overlayHY">
-            <div className="modal-contentHY">
-              <MemberDetailModal member={selectedMember} onClose={handleCloseModal} />
-            </div>
-          </div>
-        )}
-     
+      {/* 페이지네이션 */}
+      {pageInfo.totalPages > 1 && (
+        <div className="paginationHY">
+          <button 
+            className="page-btnHY prev"
+            onClick={() => changePage(pageInfo.number - 1)}
+            disabled={pageInfo.first}
+          >
+            이전
+          </button>
+          <span className="page-numbersHY">
+            {getPageNumbers().map(num => (
+              <button 
+                key={num}
+                className={`page-btnHY ${num === pageInfo.number ? 'activeHY' : ''}`}
+                onClick={() => changePage(num)}
+              >
+                {num + 1}
+              </button>
+            ))}
+          </span>
+          <button 
+            className="page-btnHY next"
+            onClick={() => changePage(pageInfo.number + 1)}
+            disabled={pageInfo.last}
+          >
+            다음
+          </button>
+        </div>
+      )}
     </Layout>
   );
 };
 
-export default MemberManagement;
+export default BannerManagement;

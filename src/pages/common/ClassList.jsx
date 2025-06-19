@@ -36,12 +36,15 @@ export default function ClassList() {
   const categoryList = useAtomValue(categoryListAtom);
   const fetchCategories = useSetAtom(fetchCategoryListAtom);
 
+  //처음에 클래스 끌고오기
+  const filters = useAtomValue(classFilterAtom);
   console.log(categoryList);
   
   // useEffect로 최초 1회 호출
   useEffect(() => {
     fetchCategories();
-  }, []);
+    fetchClassList();
+  }, [currentPage, filters]);
 
   const firstCategoryList = Array.from(
     new Map(categoryList.map(item => [item.categoryId, item.categoryName])).entries()
@@ -115,8 +118,8 @@ const handleReset = () => {
                 <label>지역</label>
                 <select className={styles.datePickerInput} value={selectedSido} onChange={handleSidoChange}>
                   <option value="">전체</option>
-                  <option value="서울특별시">서울특별시</option>
-                  <option value="부산광역시">부산광역시</option>
+                  <option value="서울">서울</option>
+                  <option value="부산">부산</option>
                   <option value="대구광역시">대구광역시</option>
                   <option value="인천광역시">인천광역시</option>
                   <option value="광주광역시">광주광역시</option>

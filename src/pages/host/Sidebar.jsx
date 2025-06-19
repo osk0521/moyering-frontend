@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 export default function Sidebar() {
   const [openSection, setOpenSection] = useState(null);

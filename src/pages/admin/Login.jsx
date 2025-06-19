@@ -1,9 +1,7 @@
 // src/components/Login.jsx
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './Login.css';
-import axios from 'axios';
 import { myAxios, url } from '../../config';
 import { useSetAtom } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
@@ -37,10 +35,6 @@ const Login = () => {
     // 일단 간단하게 - 로그인 버튼 누르면 2차 인증으로 이동
   };
  
- 
-
- 
-
  return (
    <div className="login-containerHY">
      <div className="login-boxHY">

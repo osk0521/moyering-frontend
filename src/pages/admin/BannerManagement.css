@@ -1,195 +1,161 @@
-
-/* 액션 영역 (등록 버튼) */
-.action-sectionHY {
-  display: flex;
-  align-items: center;
+/* 배너 관리 페이지 전체 스타일 */
+.banner-management {
+  padding: 24px;
+  font-family: 'Pretendard', sans-serif;
 }
 
-.create-btnHY {
-  padding: 14px 24px;
-  background: linear-gradient(135deg, #10b981, #059669);
+/* 체크박스 컬럼 */
+.checkbox-colHY {
+  width: 50px;
+  text-align: center;
+}
+
+/* 검색 영역 커스터마이징 */
+.search-sectionHY {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* 등록 버튼 */
+.register-btnHY {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
   border: none;
-  border-radius: 12px;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
 }
 
-.create-btnHY::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+.register-btnHY:hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
 }
 
-.create-btnHY:hover::before {
-  left: 100%;
+/* 검색 결과 수 */
+.result-countHY {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 16px;
+  display: block;
 }
 
-.create-btnHY:hover {
-  background: linear-gradient(135deg, #059669, #047857);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-}
-
-/* ===========================================
-   테이블 카드
-=========================================== */
-.table-cardHY {
+/* 배너 테이블 커스터마이징 */
+.banner-table {
   background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f1f3f4;
-  animation: fadeInUp 0.6s ease-out 0.2s;
-  animation-fill-mode: both;
-}
-
-
-
-/* 배너 ID 링크 */
-.banner-id-linkHY {
-  color: #3b82f6;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  padding: 6px 12px;
   border-radius: 8px;
-  transition: all 0.2s ease;
-  display: inline-block;
-  position: relative;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.banner-id-linkHY::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg, 
-    transparent, 
-    rgba(59, 130, 246, 0.15), 
-    transparent
-  );
-  transition: left 0.6s ease;
-}
-
-.banner-id-linkHY:hover::before {
-  left: 100%;
-}
-
-.banner-id-linkHY:hover {
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  color: #1d4ed8;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-}
-
-/* 제목 셀 */
-.title-cellHY {
-  text-align: left !important;
-  max-width: 200px;
+.banner-table th {
+  background-color: #f8fafc;
+  color: #374151;
   font-weight: 600;
-  color: #1e293b;
-  word-break: keep-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 16px 12px;
+  text-align: center;
+  border-bottom: 2px solid #e5e7eb;
 }
 
-/* 내용 셀 */
-.content-cellHY {
+.banner-table td {
+  padding: 14px 12px;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+/* 배너 ID 스타일 */
+.banner-id {
+  font-weight: 600;
+  color: #3b82f6;
+  font-family: 'Courier New', monospace;
+}
+
+/* 배너 제목 스타일 */
+.banner-title {
   text-align: left !important;
   max-width: 250px;
-  color: #64748b;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 13px;
+  font-weight: 500;
+  color: #1f2937;
 }
 
-/* 상태 뱃지 */
-.status-badgeHY {
-  display: inline-flex;
+/* 배너 이미지 플레이스홀더 */
+.banner-image {
+  padding: 8px !important;
+}
+
+.image-placeholder {
+  width: 60px;
+  height: 40px;
+  background-color: #f3f4f6;
+  border: 2px dashed #d1d5db;
+  border-radius: 6px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 12px;
-  border-radius: 16px;
+  margin: 0 auto;
+}
+
+.image-placeholder span {
   font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  color: #6b7280;
+  font-weight: 500;
 }
 
-.status-badgeHY::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
+/* 상태 토글 버튼 (숨기기/보이기) */
+.status-toggle {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  min-width: 70px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.status-badgeHY:hover::before {
-  left: 100%;
-}
-
-.status-badgeHY.active {
-  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+.status-visible {
+  background-color: #dcfce7;
   color: #166534;
-  border: 1px solid rgba(22, 101, 52, 0.2);
-  box-shadow: 0 2px 4px rgba(22, 101, 52, 0.1);
+  border: 1px solid #bbf7d0;
 }
 
-.status-badgeHY.active:hover {
-  background: linear-gradient(135deg, #bbf7d0, #86efac);
+.status-visible:hover {
+  background-color: #bbf7d0;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(22, 101, 52, 0.2);
 }
 
-.status-badgeHY.inactive {
-  background: linear-gradient(135deg, #fee2e2, #fecaca);
-  color: #dc2626;
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.1);
+.status-hidden {
+  background-color: #fecaca;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
 }
 
-.status-badgeHY.inactive:hover {
-  background: linear-gradient(135deg, #fecaca, #fca5a5);
+.status-hidden:hover {
+  background-color: #fca5a5;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
 }
 
-/* ===========================================
-   액션 버튼들
-=========================================== */
-.action-buttonsHY {
+/* 액션 버튼 */
+.action-buttons {
   display: flex;
   gap: 8px;
   justify-content: center;
+  align-items: center;
 }
 
-.edit-btnHY,
-.delete-btnHY {
-  padding: 6px 12px;
+.btn-edit {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
   border: none;
+  padding: 8px 16px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
@@ -198,167 +164,190 @@
   min-width: 50px;
 }
 
-.edit-btnHY {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-}
-
-.edit-btnHY:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+.btn-edit:hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
 }
 
-.delete-btnHY {
+.btn-delete {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 50px;
 }
 
-.delete-btnHY:hover {
+.btn-delete:hover {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
-/* ===========================================
-   애니메이션
-=========================================== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* 데이터 없음 메시지 */
+.no-data {
+  text-align: center !important;
+  color: #6b7280;
+  font-style: italic;
+  padding: 40px 20px !important;
+  background-color: #f9fafb;
 }
 
-/* ===========================================
-   반응형 디자인
-=========================================== */
-@media (max-width: 1200px) {
-  .banner-managementHY {
-    padding: 20px;
-  }
-  
-  .page-titleHY {
-    font-size: 28px;
-  }
-  
-  .page-descriptionHY {
-    font-size: 15px;
-  }
-  
-  .search-inputHY {
-    width: 280px;
+/* 테이블 행 호버 효과 */
+.banner-table tbody tr:hover {
+  background-color: #f8fafc;
+  transition: background-color 0.2s ease;
+}
+
+/* 페이지네이션 스타일 */
+.paginationHY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.page-btnHY {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.page-btnHY:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.page-btnHY:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-btnHY.activeHY {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.page-numbersHY {
+  display: flex;
+  gap: 4px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .search-sectionHY {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 }
 
 @media (max-width: 768px) {
-  .banner-managementHY {
-    padding: 16px;
-  }
-  
-  .controls-cardHY {
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-  }
-  
-  .controls-sectionHY {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-  }
-  
-  .search-sectionHY {
-    justify-content: center;
-  }
-  
-  .search-inputHY {
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .action-sectionHY {
-    width: 100%;
-  }
-  
-  .create-btnHY {
-    width: 100%;
-  }
-  
-  .banner-tableHY {
-    min-width: 800px;
-  }
-  
-  .banner-tableHY th,
-  .banner-tableHY td {
-    padding: 14px 12px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 480px) {
-  .banner-managementHY {
-    padding: 12px;
-  }
-  
-  .controls-cardHY {
-    padding: 16px;
-  }
-  
-  .banner-tableHY {
-    min-width: 700px;
-  }
-  
-  .banner-tableHY th,
-  .banner-tableHY td {
-    padding: 12px 8px;
+  .banner-table {
     font-size: 12px;
   }
   
-  .action-buttonsHY {
+  .banner-table th,
+  .banner-table td {
+    padding: 10px 8px;
+  }
+  
+  .banner-title {
+    max-width: 150px;
+  }
+  
+  .action-buttons {
     flex-direction: column;
     gap: 4px;
   }
   
-  .edit-btnHY,
-  .delete-btnHY {
-    width: 100%;
-    min-width: auto;
+  .btn-edit,
+  .btn-delete {
+    padding: 6px 12px;
+    font-size: 11px;
+    min-width: 40px;
   }
+}s ease;
 }
 
-/* ===========================================
-   접근성 개선
-=========================================== */
-@media (prefers-reduced-motion: reduce) {
-  .banner-managementHY > *,
-  .banner-id-linkHY,
-  .status-badgeHY,
-  .create-btnHY,
-  .edit-btnHY,
-  .delete-btnHY {
-    animation: none;
-    transition: none;
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .search-sectionHY {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
   
-  .banner-id-linkHY::before,
-  .status-badgeHY::before,
-  .create-btnHY::before {
-    display: none;
+  .banner-search {
+    width: 100% !important;
+  }
+  
+  .date-groupHY {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .date-separatorHY {
+    align-self: center;
+    margin-bottom: 0;
   }
 }
 
-/* 포커스 스타일 */
-.banner-id-linkHY:focus,
-.create-btnHY:focus,
-.edit-btnHY:focus,
-.delete-btnHY:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+@media (max-width: 768px) {
+  .banner-table {
+    font-size: 12px;
+  }
+  
+  .banner-table th,
+  .banner-table td {
+    padding: 10px 8px;
+  }
+  
+  .banner-title {
+    max-width: 150px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .btn-edit,
+  .btn-delete {
+    padding: 6px 12px;
+    font-size: 11px;
+    min-width: 40px;
+  }
+}
+
+/* 스크롤바 스타일링 */
+.table-containerHY::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-containerHY::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.table-containerHY::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.table-containerHY::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

@@ -53,12 +53,15 @@ export default function GatheringWrite() {
     preparationItems: "",
     tags: [],
     createDate: "",
-    categoryId: null,
-    subCategoryId: null,
+    category1: "",
+    category2: "",
+    category: "",
+    subCategory: "",
     latitude: 0,
     longitude: 0,
     intrOnln: "",
     status: "",
+    locName: "",
   });
   const [tagInput, setTagInput] = useState("");
 
@@ -468,39 +471,58 @@ export default function GatheringWrite() {
       }
     };
   }, []); // 빈 의존성 배열 유지
-  useEffect(() => {
-    axios
-      .get(`${url}/detailGathering/?gatheringId=${gatheringId}`)
-      .then((res) => {
-        console.log("gathering :", res.data.gathering);
-
-        // 받은 데이터를 복사하여 가공
-        const gatheringInfo = { ...res.data.gathering };
-
-        // tags 필드를 문자열에서 배열로 변환
-        if (gatheringInfo.tags && typeof gatheringInfo.tags === "string") {
-          try {
-            // 문자열 "['독서', '소모임', '홍대']"를 배열로 변환
-            // 작은따옴표를 큰따옴표로 변경하여 JSON.parse 가능하게 만듦
-            const validJsonString = gatheringInfo.tags.replace(/'/g, '"');
-            gatheringInfo.tags = JSON.parse(validJsonString);
-          } catch (error) {
-            console.error("Tags 파싱 오류:", error);
-            // 파싱 실패시 빈 배열로 설정
-            gatheringInfo.tags = [];
-          }
-        } else if (!gatheringInfo.tags) {
-          // tags가 없으면 빈 배열로 초기화
-          gatheringInfo.tags = [];
-        }
-
-        console.log("변환된 tags:", gatheringInfo.tags); // 디버깅용
-        setGatheringData(gatheringInfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  useEffect(()=> {
+    axios.get(`${url}/detailGathering/?gatheringId=${gatheringId}`)
+        .then(res=> {
+            console.log('API Response:', res.data); 
+            
+            // gathering 데이터 설정
+            const gathering = res.data.gathering;
+            
+            // tags 필드를 문자열에서 배열로 변환
+            let parsedTags = [];
+            if (gathering.tags && typeof gathering.tags === 'string') {
+                try {
+                    // 문자열 "['독서', '소모임', '홍대']"를 배열로 변환
+                    const validJsonString = gathering.tags.replace(/'/g, '"');
+                    parsedTags = JSON.parse(validJsonString);
+                } catch (error) {
+                    console.error('Tags 파싱 오류:', error);
+                    parsedTags = [];
+                }
+            }
+            
+            setGatheringData({
+                gatheringId: gathering.gatheringId,
+                title: gathering.title,
+                userId: gathering.userId,
+                gatheringContent: gathering.gatheringContent,
+                thumbnailFileName: gathering.thumbnailFileName,
+                meetingDate: gathering.meetingDate,
+                startTime: gathering.startTime,
+                endTime: gathering.endTime,
+                address: gathering.address,
+                detailAddress: gathering.detailAddress,
+                minAttendees: gathering.minAttendees,
+                maxAttendees: gathering.maxAttendees,
+                applyDeadline: gathering.applyDeadline,
+                preparationItems: gathering.preparationItems,
+                tags: parsedTags,
+                createDate: gathering.createDate,
+                category: gathering.categoryName,
+                subCategory: gathering.subCategoryName,
+                latitude: gathering.latitude,
+                longitude: gathering.longitude,
+                intrOnln: gathering.intrOnln,
+                status: gathering.status,
+                locName: gathering.locName,
+            });
+            console.log('변환된 tags:', parsedTags);
+        })
+        .catch(err=> {
+            console.log(err)
+        })
+  }, [gatheringId]);
 
   // 2차 카테고리 데이터 가져오기
   useEffect(() => {

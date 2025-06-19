@@ -6,6 +6,7 @@ export const initUser = {
     name:'',
     nickName:'',
     userType:'',
+    profile:'',
 }
 
 export const userAtom = atomWithStorage("user",initUser,createJSONStorage(()=>sessionStorage));

@@ -119,25 +119,25 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
 
   const secondaryOptions = categoryMap[basicInfo.category1] || [];
 
-  const submit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("category1",basicInfo.category1);
-    formData.append("category2",basicInfo.category2);
-    formData.append("name",basicInfo.name);
-    formData.append("locName",basicInfo.locName);
-    formData.append("addr",basicInfo.addr);
-    formData.append("longitude",basicInfo.longitude);
-    formData.append("latitude",basicInfo.latitude);
+  // const submit = (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("category1",basicInfo.category1);
+  //   formData.append("category2",basicInfo.category2);
+  //   formData.append("name",basicInfo.name);
+  //   formData.append("locName",basicInfo.locName);
+  //   formData.append("addr",basicInfo.addr);
+  //   formData.append("longitude",basicInfo.longitude);
+  //   formData.append("latitude",basicInfo.latitude);
 
-    axios.post(`${url}/host/classRegist`,formData)
-    .then(res=>{
-      console.log(res);
-    })
-    .catch(err=>{
-      console.log(err);
-    })
-  }
+  //   axios.post(`${url}/host/classRegist`,formData)
+  //   .then(res=>{
+  //     console.log(res);
+  //   })
+  //   .catch(err=>{
+  //     console.log(err);
+  //   })
+  // }
 
 
   return (

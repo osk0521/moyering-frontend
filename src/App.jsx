@@ -89,14 +89,14 @@ function App() {
         <Route path="/userFeed" element={<UserFeed />} />
         <Route path="/feedDetail" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
-        <Route path="/feedCreate" element={<FeedCreate/>}/>
-        <Route path="/feedEdit" element={<FeedEdit/>}/>
-        <Route path="/myFeed" element={<MyFeed/>}/>
-        <Route path="/scrapList" element={<ScrapList/>}/>
-        <Route path="/followList" element={<FollowList/>}/>
-        <Route path="/join" element={<UserJoin/>}/>
-        <Route path="/joinCategory" element={<UserJoinCategory/>}/>
-        <Route path="/joinSuccess" element={<UserJoinSuccess/>}/>
+        <Route path="/feedCreate" element={<FeedCreate />} />
+        <Route path="/feedEdit" element={<FeedEdit />} />
+        <Route path="/myFeed" element={<MyFeed />} />
+        <Route path="/scrapList" element={<ScrapList />} />
+        <Route path="/followList" element={<FollowList />} />
+        <Route path="/join" element={<UserJoin />} />
+        <Route path="/joinCategory" element={<UserJoinCategory />} />
+        <Route path="/joinSuccess" element={<UserJoinSuccess />} />
         <Route path="/userlogin" element={<UserLogin />} />
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
@@ -119,6 +119,7 @@ function App() {
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />
+        <Route path="/host/regist" element={<HostRegist />} />
         {/* <Route path="/host/regist" element={<HostRegist/>}/>  */}
         <Route element={<DashboardLayout />}>
           <Route path="/host/hostMyPage/:num" element={<MainContent />} />
@@ -129,42 +130,40 @@ function App() {
           <Route path="/host/settlementInfo" element={<SettlementInfo />} />
           <Route path="/host/inquiry" element={<Inquiry />} />
           <Route path="/host/calendar" element={<ClassCalendar />} />
-          <Route path="/host/detail" element={<ClassDetail />} />
+          <Route path="/host/detail/:classId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
 
         </Route>
-        {/* 관리자 /admin/~~~~ */}
+        
         {/* 1차 로그인 화면  */}
-        <Route path="/admin/login" element={<Login />} />
+        {/* 공통 /~~~으로 시작 */}
+        <Route path="/" element={<Main />} />
+        <Route path="/classList" element={<ClassList />} />
+        <Route path="/classRingDetail" element={<ClassRingDetail />} />
 
-      {/* 공통 /~~~으로 시작 */}
-      <Route path="/" element={<Main />} />
-      <Route path="/classList" element={<ClassList />} />
-      <Route path="/classRingDetail" element={<ClassRingDetail />} />
+        {/* 로그인한 유저 /user/~~~ */}
+        <Route path="/user/ClassPayment" element={<ClassPayment />} />
 
-      {/* 로그인한 유저 /user/~~~ */}
-      <Route path="/user/ClassPayment" element={<ClassPayment />} />
+        {/* 유저의 마이페이지 /user/mypage/~~~~ */}
+        <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
+        <Route path="/user/mypage/reviewList" element={<ReviewList />} />
+        <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
+        <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
+        <Route path="/user/mypage/myClassList" element={<MyClassList />} />
+        <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
 
-      {/* 유저의 마이페이지 /user/mypage/~~~~ */}
-      <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
-      <Route path="/user/mypage/reviewList" element={<ReviewList />} />
-      <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
-      <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
-      <Route path="/user/mypage/myClassList" element={<MyClassList />} />
-      <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
-
-      {/* 강사 /host/~~~~~ */}
-      
+        {/* 강사 /host/~~~~~ */}
 
 
 
-      
-      {/* 관리자(/admin) */}
-        <Route path="/admin" element={<Login />} />                         {/* 1차 로그인 화면  */} 
+
+
+        {/* 관리자(/admin) */}
+        <Route path="/admin" element={<Login />} />                         {/* 1차 로그인 화면  */}
         <Route path="/admin/verify" element={<TwoFactorAuth />} />          {/* 2차 로그인 화면 (인증번호 입력) */}
         <Route path="/admin/dashboard" element={<Dashboard />} />        {/* 대시보드 페이지 */}
-        <Route path="/admin/member" element={<MemberManagement/>} />   {/* 회원 관리 페이지 */}
+        <Route path="/admin/member" element={<MemberManagement />} />   {/* 회원 관리 페이지 */}
         <Route path="/admin/class" element={<ClassManagement />} />   {/* 클래스 관리 페이지 */}
         <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}

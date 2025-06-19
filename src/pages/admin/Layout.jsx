@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
     { id: 'payment', label: '결제 관리', icon: '💳', path: '/admin/payment' },
     { id: 'settlement', label: '정산 관리', icon: '💳', path: '/admin/settlement' },
     { id: 'coupon', label: '쿠폰 관리', icon: '💳', path: '/admin/coupon' },
-    { id: 'category', label: '카테고리 관리', icon: '💳', path: '/admin/category' },
+    // { id: 'category', label: '카테고리 관리', icon: '💳', path: '/admin/category' },
     { id: 'badge', label: '배지 관리', icon: '🏅', path: '/admin/badge' },
     { id: 'banner', label: '배너 관리', icon: '🖼️', path: '/admin/banner' },
     { id: 'statistics', label: '통계 리포트', icon: '📈', path: '/admin/statistics' },

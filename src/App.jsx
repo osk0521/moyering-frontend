@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import UserLogin from './pages/common/UserLogin';
-import UserJoin from './pages/common/UserJoin';
+import UserJoin from './pages/common/UserJoin'; 
 import UserJoinCategory from './pages/common/UserJoinCategory';
 import UserJoinSuccess from './pages/common/UserJoinSuccess';
 import ClassCalendar from './pages/host/ClassCalendar';
@@ -25,16 +24,22 @@ import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
 import Sidebar from './pages/user/socialRing/Sidebar';
 import UserFeed from './pages/user/socialRing/UserFeed';
+
 // 관리자 페이지
 import BannerCreateModal from "./pages/admin/BannerCreateModal";
 import BannerManagement from "./pages/admin/BannerManagement";
-import CategoryManagement from "./pages/admin/CategoryManagement";
+// import CategoryManagement from "./pages/admin/CategoryManagement";
 import ClassManagement from "./pages/admin/ClassManagement";
 import Dashboard from "./pages/admin/Dashboard";
 import Login from "./pages/admin/Login";
 import MemberManagement from "./pages/admin/MemberManagement";
 import NoticeCreate from "./pages/admin/NoticeCreate";
 import NoticeEdit from "./pages/admin/NoticeEdit"
+import CouponManagement from './pages/admin/CouponManagement.jsx';
+
+
+
+
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
@@ -67,6 +72,7 @@ import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringAppl
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
 import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
+
 
 
 function App() {
@@ -162,12 +168,13 @@ function App() {
         <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
         <Route path="/admin/notice/edit/:noticeId" element={<NoticeEdit />} />     {/* 공지사항 수정 페이지  */}
+        <Route path="/admin/coupon" element={<CouponManagement />} />     {/* 쿠폰 관리 페이지  */}
         <Route path="/admin/report" element={<ReportManagement />} />       {/* 신고관리 페이지  */}
         <Route path="/admin/banner" element={<BannerManagement />} />    {/* 배너관리 페이지  */}
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
         <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산관리 페이지  */}      
-        <Route path="/admin/category" element={<CategoryManagement />} />    {/* 카테고리 관리 페이지  */}
+        {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
         </Routes>
     </Router>
   );

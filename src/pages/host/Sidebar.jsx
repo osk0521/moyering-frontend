@@ -45,7 +45,7 @@ export default function Sidebar() {
             </svg>
           </li>
           <ul className={`KHJ-sidebar__submenu ${openSection === 'class' ? 'open' : ''}`}>
-            <li onClick={() => handleNavigation('/host/classList')}>클래스목록</li>
+            <li onClick={() => handleNavigation('/host/HostclassList')}>클래스목록</li>
             <li onClick={() => handleNavigation('/host/students')}>수강생관리</li>
             <li onClick={() => handleNavigation('/host/inquiry')}>문의관리</li>
             <li onClick={() => handleNavigation('/host/classReview')}>리뷰관리</li>

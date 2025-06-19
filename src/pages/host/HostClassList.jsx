@@ -209,9 +209,9 @@ const ClassList = () => {
                 <button onClick={() => toggleDropdown(index)}>더 보기</button>
                 {dropdownIndex === index && (
                   <div className="KHJ-dropdown-menu">
-                    <button onClick={() => handleNavigate('/inquiry')}>문의 관리</button>
-                    <button onClick={() => handleNavigate('/classReview')}>리뷰 관리</button>
-                    <button onClick={() => handleNavigate('/detail')}>상품 상세</button>
+                    <button onClick={() => handleNavigate('/host/inquiry')}>문의 관리</button>
+                    <button onClick={() => handleNavigate('/host/classReview')}>리뷰 관리</button>
+                    <button onClick={() => handleNavigate('/host/detail')}>상품 상세</button>
                   </div>
                 )}
               </div>

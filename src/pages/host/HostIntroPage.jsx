@@ -4,7 +4,7 @@ import { userAtom } from '../../atoms';
 import './HostIntroPage.css';
 
 const HostIntroPage = () => {
-  // const user = useAtomValue(userAtom);
+  const user = useAtomValue(userAtom);
   const navigate = useNavigate();
   // if(!user || user.userType !== 'ROLE_HT'){
   //     return <Navigate to="/userLogin"/>
@@ -12,6 +12,14 @@ const HostIntroPage = () => {
 
   const handleNavigation = (path)=>{
     navigate(path)
+  }
+
+  const validUser = () => {
+    if(user!=null){
+      handleNavigation('/host/hostMyPage/')
+    }else{
+      handleNavigation('/host/regist')
+    }
   }
   return (
     <div className="KHJ-host-intro-container">
@@ -56,7 +64,7 @@ const HostIntroPage = () => {
         </div>
       </section>
 
-      <button className="KHJ-start-btn" onClick={()=>handleNavigation('/host/regist')}>5분만에 호스트 시작하기 &gt;</button>
+      <button className="KHJ-start-btn" onClick={validUser}>5분만에 호스트 시작하기 &gt;</button>
     </div>
   );
 };

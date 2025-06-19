@@ -2,28 +2,38 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import axios from 'axios';
+import { myAxios, url } from '../../config';
+import { useSetAtom } from 'jotai';
+import { tokenAtom, userAtom } from '../../atoms';
 
 const Login = () => {
+  const [login,setLogin] = useState({username:'',password:''})
+  const setUser = useSetAtom(userAtom);
+  const setToken = useSetAtom(tokenAtom);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
+  const edit = (e) => {
+    setLogin({...login,[e.target.name]:e.target.value});
+  }
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    let formData = new FormData();
+    formData.append("username",login.username);
+    formData.append("password",login.password);
+    myAxios().post("login", formData)
+      .then(res => {
+        console.log(res);
+        setToken(res.headers.authorization);
+        const user = res.data;
+        setUser({...user});
+        navigate("/admin/dashboard");
+      })
+      .catch(err=>{
+        console.log(err);
+      })
     // 일단 간단하게 - 로그인 버튼 누르면 2차 인증으로 이동
-    console.log('로그인 시도:', formData);
-    navigate('/admin/verify');
   };
 
   return (
@@ -44,8 +54,8 @@ const Login = () => {
               type="text"
               id="username"
               name="username"
-              value={formData.username}
-              onChange={handleInputChange}
+              value={login.username}
+              onChange={edit}
               placeholder="관리자 아이디"
               className="input-fieldHY"
             />
@@ -57,8 +67,8 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
-              value={formData.password}
-              onChange={handleInputChange}
+              value={login.password}
+              onChange={edit}
               placeholder="비밀번호"
               className="input-fieldHY"
             />

@@ -129,7 +129,7 @@ function App() {
         </Route>
         {/* 관리자 /admin/~~~~ */}
         {/* 1차 로그인 화면  */}
-        <Route path="/admin" element={<Login />} />
+        <Route path="/admin/login" element={<Login />} />
 
       {/* 공통 /~~~으로 시작 */}
       <Route path="/" element={<Main />} />

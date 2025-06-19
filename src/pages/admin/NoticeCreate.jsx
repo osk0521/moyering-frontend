@@ -123,13 +123,6 @@ const NoticeCreate = () => {
             />
           </div>
 
-          {/* <div className="right-alignHY">
-        <button className="btn-primary new-notice-btnHY" onClick={handleNewNotice}>
-          + 새 공지사항
-        </button>
-      </div>
- */}
-
 
           {/* 버튼 영역 */}
           <div className="right-alignHY">

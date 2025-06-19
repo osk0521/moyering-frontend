@@ -11,6 +11,7 @@ import axios from 'axios';
 import { myAxios } from '../../../config';
 import { tokenAtom,userAtom } from '../../../atoms';
 import { useAtomValue } from 'jotai';
+import React from 'react'; // 이 한 줄만 추가!
 
 const tabs = [
   '기본정보',

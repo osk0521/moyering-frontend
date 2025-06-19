@@ -122,7 +122,7 @@ function App() {
         <Route path="/host/regist" element={<HostRegist />} />
         {/* <Route path="/host/regist" element={<HostRegist/>}/>  */}
         <Route element={<DashboardLayout />}>
-          <Route path="/host/hostMyPage/:num" element={<MainContent />} />
+          <Route path="/host/hostMyPage/" element={<MainContent />} />
           <Route path="/host/profile" element={<HostProfile />} />
           <Route path="/host/classRegist" element={<ClassRegisterPage />} />
           <Route path="/host/HostclassList" element={<HostClassList />} />

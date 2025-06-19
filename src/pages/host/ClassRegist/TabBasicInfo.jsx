@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import './TabBasicInfo.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
   const categoryMap = {

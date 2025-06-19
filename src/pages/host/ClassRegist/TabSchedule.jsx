@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './TabSchedule.css';
 import 'react-multi-date-picker/styles/colors/teal.css';
 import { Calendar } from 'react-multi-date-picker';
+import React from 'react'; // 이 한 줄만 추가!
 
 const TabSchedule = ({classData,setClassData}) => {
     const {schedule} = classData;

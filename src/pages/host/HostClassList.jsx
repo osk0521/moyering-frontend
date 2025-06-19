@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './HostClassList.css';
 import { useNavigate } from 'react-router-dom';
+import React from 'react'; // 이 한 줄만 추가!
 
 const ClassList = () => {
   const [searchQuery, setSearchQuery] = useState('');

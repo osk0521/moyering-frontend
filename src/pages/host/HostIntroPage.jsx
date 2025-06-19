@@ -4,11 +4,11 @@ import { userAtom } from '../../atoms';
 import './HostIntroPage.css';
 
 const HostIntroPage = () => {
-  const user = useAtomValue(userAtom);
+  // const user = useAtomValue(userAtom);
   const navigate = useNavigate();
-  if(!user || user.userType !== 'ROLE_HT'){
-      return <Navigate to="/userLogin"/>
-  }
+  // if(!user || user.userType !== 'ROLE_HT'){
+  //     return <Navigate to="/userLogin"/>
+  // }
 
   const handleNavigation = (path)=>{
     navigate(path)

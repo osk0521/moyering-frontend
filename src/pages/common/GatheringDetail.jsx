@@ -12,6 +12,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Header from "./Header";
 import {Table, Modal, ModalHeader,  ModalBody, ModalFooter, Button,} from "reactstrap";
 import "./GatheringDetail.css";
+import GatheringDetailInquiry from "./GatheringDetailInquiry";
 // import { FaRegCalendar } from "react-icons/fa";
 import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
 import { GoPeople } from "react-icons/go";

@@ -7,7 +7,7 @@ import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
 import axios from "axios";
-import { url, KAKAO_REST_API_KEY } from "../../../config";
+import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY } from "../../../config";
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -466,10 +466,10 @@ export default function GatheringWrite() {
   e.preventDefault();
   
   // 시간 순서 검증
-  if (formData.startTime >= formData.endTime) {
-    alert('종료 시간은 시작 시간보다 늦어야 합니다.');
-    return;
-  }
+  // if (formData.startTime >= formData.endTime) {
+  //   alert('종료 시간은 시작 시간보다 늦어야 합니다.');
+  //   return;
+  // }
   
   // 신청 마감일 검증
   if (formData.deadline && formData.meetingDate && formData.deadline > formData.meetingDate) {
@@ -481,19 +481,19 @@ export default function GatheringWrite() {
   console.log("지오코딩 시작...");
   const coords = await convertAddressToCoordinates(formData.address);
   console.log("지오코딩 완료..."+coords);
-  if (!coords) {
-    alert('주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.');
-    return;
-  }
+  // if (!coords) {
+  //   alert('주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.');
+  //   return;
+  // }
 
   // formData를 최종 데이터로 변환 (좌표 추가)
   const finalGatheringData = {
     ...formData,
-    latitude: parseFloat(coords.y), // 위도
-    longitude: parseFloat(coords.x), // 경도
+  //   latitude: parseFloat(coords.y), // 위도
+  //   longitude: parseFloat(coords.x), // 경도
     categoryId: parseInt(formData.category) || 0,
     subCategoryId: parseInt(formData.subCategory) || 0,
-    userId: 10,
+  //   userId: 10,
     status: "모집중"
   };
   console.log("최종 데이터:", finalGatheringData);
@@ -525,6 +525,7 @@ export default function GatheringWrite() {
   if (coords.x && coords.y) {
     const lat = parseFloat(coords.y).toFixed(7);
     const lng = parseFloat(coords.x).toFixed(7);
+    console.log(lat, lng);
     formDataToSend.append("latitude", lat);
     formDataToSend.append("longitude", lng);
   }
@@ -762,29 +763,28 @@ export default function GatheringWrite() {
                     <span className="GatheringWrite_required_osk">*</span>
                   </label>
                   <select
-                    name="category2"
-                    value={formData.category2}
-                    onChange={handleInputChange}
-                    className="GatheringWrite_custom-input_osk"
-                    disabled={!formData.category} // 1차 카테고리가 선택되지 않으면 비활성화
-                    required
-                  >
-                    <option value="">2차 카테고리를 선택해주세요</option>
-                    {Array.isArray(subCategory) &&
-                      category
-                        .filter(
-                          (category) =>
-                            category.subCategoryId && category.subCategoryName
-                        ) // 유효한 데이터만 필터링
-                        .map((category) => (
-                          <option
-                            key={category.subCategoryId}
-                            value={category.subCategoryId.toString()}
-                          >
-                            {category.subCategoryName}
-                          </option>
-                        ))}
-                  </select>
+                      name="subCategory"
+                      value={formData.subCategory}
+                      onChange={handleInputChange}
+                      className="GatheringWrite_custom-input_osk"
+                      disabled={!formData.category} // 1차 카테고리가 선택되지 않으면 비활성화
+                      required
+                    >
+                      <option value="">2차 카테고리를 선택해주세요</option>
+                      {Array.isArray(subCategory) &&
+                        subCategory // category가 아닌 subCategory 사용
+                          .filter(
+                            (item) => item.subCategoryId && item.subCategoryName
+                          ) // 유효한 데이터만 필터링
+                          .map((item) => (
+                            <option
+                              key={item.subCategoryId}
+                              value={item.subCategoryId.toString()}
+                            >
+                              {item.subCategoryName}
+                            </option>
+                          ))}
+                    </select>
                 </div>
               </div>
             </div>

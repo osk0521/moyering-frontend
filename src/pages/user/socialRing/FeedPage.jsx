@@ -9,6 +9,7 @@ import heartOutline from './icons/heart-outline.png';
 import heartFilled from './icons/heart-filled.png';
 import ReportModal from './ReportModal';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import Header from '../../common/Header';
 
 const POSTS_PER_PAGE = 3;
 
@@ -90,6 +91,8 @@ export default function FeedPage() {
   );
 
   return (
+    <>
+    <Header/>
     <div className="KYM-feed-container">
       <div className="KYM-feed-title">
         <h2>커뮤니티 피드</h2>
@@ -150,6 +153,7 @@ export default function FeedPage() {
                   <p>{feed.content}</p>
                   <div className="KYM-hashtags">
                     {getFeedTags(feed).map((tag, i) => (
+                      
                       <span key={i} className="KYM-hashtag">#{tag}</span>
                     ))}
                   </div>
@@ -217,5 +221,6 @@ export default function FeedPage() {
         }}
       />
     </div>
+    </>
   );
 }

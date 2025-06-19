@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 export default function Sidebar() {
   const [openSection, setOpenSection] = useState(null);
@@ -45,7 +46,7 @@ export default function Sidebar() {
             </svg>
           </li>
           <ul className={`KHJ-sidebar__submenu ${openSection === 'class' ? 'open' : ''}`}>
-            <li onClick={() => handleNavigation('/host/classList')}>클래스목록</li>
+            <li onClick={() => handleNavigation('/host/HostclassList')}>클래스목록</li>
             <li onClick={() => handleNavigation('/host/students')}>수강생관리</li>
             <li onClick={() => handleNavigation('/host/inquiry')}>문의관리</li>
             <li onClick={() => handleNavigation('/host/classReview')}>리뷰관리</li>

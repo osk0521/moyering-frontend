@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Layout from "./Layout";
+import CouponCreateModal from './CouponCreateModal';
 import './CategoryManagement.css';
+
 
 const CategoryManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');

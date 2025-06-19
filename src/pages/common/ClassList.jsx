@@ -36,12 +36,15 @@ export default function ClassList() {
   const categoryList = useAtomValue(categoryListAtom);
   const fetchCategories = useSetAtom(fetchCategoryListAtom);
 
+  //처음에 클래스 끌고오기
+  const filters = useAtomValue(classFilterAtom);
   console.log(categoryList);
   
   // useEffect로 최초 1회 호출
   useEffect(() => {
     fetchCategories();
-  }, []);
+    fetchClassList();
+  }, [currentPage, filters]);
 
   const firstCategoryList = Array.from(
     new Map(categoryList.map(item => [item.categoryId, item.categoryName])).entries()
@@ -115,8 +118,8 @@ const handleReset = () => {
                 <label>지역</label>
                 <select className={styles.datePickerInput} value={selectedSido} onChange={handleSidoChange}>
                   <option value="">전체</option>
-                  <option value="서울특별시">서울특별시</option>
-                  <option value="부산광역시">부산광역시</option>
+                  <option value="서울">서울</option>
+                  <option value="부산">부산</option>
                   <option value="대구광역시">대구광역시</option>
                   <option value="인천광역시">인천광역시</option>
                   <option value="광주광역시">광주광역시</option>
@@ -215,7 +218,7 @@ const handleReset = () => {
 
       <section className={styles.sectionBlock}>
         <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
-        <p className={styles.sectionSub}>모여링이 추천해주는 맞춤 클래스</p>
+        <p className={styles.sectionSub}>모여링의 모든 원데이 클래스를 모아 모아~</p>
         <div className={styles.cardList}>
           {classList.length === 0 ? (
             <p>조건에 맞는 클래스가 없습니다.</p>
@@ -231,7 +234,7 @@ const handleReset = () => {
       </section>
 
       <div className={styles.pagination}>
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>〈</button>
+        <button className={styles.pageBtn} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>〈</button>
         {[...Array(totalPages)].map((_, i) => (
           <button
             key={i}
@@ -241,7 +244,7 @@ const handleReset = () => {
             {i + 1}
           </button>
         ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>〉</button>
+        <button className={styles.pageBtn}  onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>〉</button>
       </div>
     </main>
     </>

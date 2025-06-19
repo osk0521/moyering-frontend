@@ -1,10 +1,12 @@
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
 export const initUser = {
+    id:'',
     username:'',
     name:'',
     nickName:'',
     userType:'',
+    hostId:'',
 }
 
 export const userAtom = atomWithStorage("user",initUser,createJSONStorage(()=>sessionStorage));

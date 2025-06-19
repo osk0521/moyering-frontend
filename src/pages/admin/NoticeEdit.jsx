@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from "./Layout";
 import {url} from "/src/config";
-import './NoticeCreate.css';
+import './NoticeCreate.css'; // 공통으로 사용 
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 
 
 const NoticeCreate = () => {
   // ===== 상태 관리 =====
+  const {noticeId} = useParams() ; // noticeId 작성된 공지사항 정보 불러오기 
   const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     title: '',
@@ -16,7 +17,26 @@ const NoticeCreate = () => {
     pinYn : false
   });
 
-  // ===== 이벤트 핸들러들 =====
+
+  // 공지사항 상세 조회
+  useEffect(() => {
+    const fetchNotice = async () => {
+      try {
+        const res = await axios.get(`${url}/api/notice/${noticeId}`);
+        setFormData({ // ← 이게 맞음!
+          title: res.data.title,
+          content: res.data.content,
+          pinYn: res.data.pinYn
+        });
+      } catch (err) {
+        console.error('공지사항 조회 실패 :', err);
+        alert('공지사항을 불러오는 데 실패했습니다.');
+      }
+    };
+    fetchNotice();
+  }, [noticeId]);
+
+  // == 이벤트 핸들러들 =====
   // 입력 필드 변경 핸들러
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -26,7 +46,7 @@ const NoticeCreate = () => {
     }));
   };
 
-  // 등록하기 버튼 클릭 핸들러
+  // 수정하기 버튼 클릭 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -42,33 +62,24 @@ const NoticeCreate = () => {
     }
 
     try {
-      const response = await axios.post(`${url}/api/notice`, {
+      const response = await axios.put(`${url}/api/notice/${noticeId}`, {  // noticeId 문자열이므로 {}앞에 $
         title: formData.title,
         content: formData.content,
         pinYn: formData.pinYn,
         isHidden: formData.isHidden 
       });
 
-      if (response.status === 201) {
-        alert('공지사항이 등록되었습니다!');
+      if (response.status === 200) {
+        alert('공지사항이 수정되었습니다!');
         navigate('/admin/notice');
       }
     } catch (error) {
-      console.error('공지사항 등록 실패:', error);
-      alert('공지사항 등록에 실패했습니다.');
+      console.error('공지사항 수정 실패:', error);
+      alert('공지사항 수정에 실패했습니다.');
     }
   };
-  // 취소 버튼 클릭 핸들러
-  const handleCancel = () => {
-    if (window.confirm('작성 중인 내용이 있습니다. 정말 취소하시겠습니까?')) {
-      setFormData({
-        title: '',
-        content: '',
-        isHidden: false
-      });
-      // 페이지 이동 로직 추가 가능
-    }
-  };
+
+
 
   // ===== 렌더링 =====
   return (
@@ -76,10 +87,10 @@ const NoticeCreate = () => {
       {/* <div className="notice-createHY"> */}
         {/* 페이지 제목 */}
         <div className="page-titleHY">
-          <h1>공지사항 등록</h1>
+          <h1>공지사항 수정</h1>
         </div>
 
-        {/* 등록 폼 */}
+        {/* 수정 폼 */}
         <form className="notice-formHY" onSubmit={handleSubmit}>
           {/* 공개 여부 체크박스 */}
           <div className="form-group checkbox-groupHY">
@@ -130,7 +141,7 @@ const NoticeCreate = () => {
               type="submit"
               className="btn-submitHY"
             >
-              등록하기
+              수정하기
             </button>
           </div>
         </form>

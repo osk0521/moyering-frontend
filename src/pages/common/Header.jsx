@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Form, Input } from "reactstrap";
 import "./Header.css";
 import logoImage from '/logo.png';
+import React from "react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Header = () => {
             <a href="/userlogin">로그인</a>
           </span>
           <span className="Header_top-menu-link_osk">
-            <a href="">회원가입</a>
+            <a href="/join">회원가입</a>
           </span>
           <Button className="Header_icon-button_osk Header_heart-button_osk">
             <FaHeart className="Header_top-icon_osk" />

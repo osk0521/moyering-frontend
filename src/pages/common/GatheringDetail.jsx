@@ -442,7 +442,7 @@ export default function GatheringDetail() {
             {/* 이미지 섹션 */}
             <div className="GatheringDetail_image-section_osk">
               <img
-                src={gatheringData.thumbnailFileName ? `${url}/uploads/${gatheringData.thumbnailFileName}` : aImage}
+                src={gatheringData.thumbnailFileName ? `${url}/image?filename=${gatheringData.thumbnailFileName}` : aImage}
                 alt="모임 이미지"
                 className="GatheringDetail_main-image_osk"
               />
@@ -565,11 +565,6 @@ export default function GatheringDetail() {
                   위치
                 </h3>
                 <div className="GatheringDetail_map-container_osk">
-                  {/* <KakaoMap 
-                    latitude={gatheringData.latitude}
-                    longitude={gatheringData.longitude}
-                    address={`${gatheringData.address} ${gatheringData.detailAddress}`}
-                  /> */}
                   {gatheringData?.latitude && gatheringData?.longitude ? (
                     <KakaoMap
                       latitude={gatheringData.latitude}
@@ -596,7 +591,7 @@ export default function GatheringDetail() {
                 <div className="GatheringDetail_host-info_osk">
                   <div className="GatheringDetail_host-avatar_osk">
                     <img
-                      src={hostData.profileImage ? `${url}/uploads/${hostData.profileImage}` : aImage}
+                      src={hostData.profileImage ? `${url}/image?filename=${hostData.profileImage}` : aImage}
                       alt={hostData.nickname}
                       className="GatheringDetail_host-profile-image_osk"
                     />
@@ -636,7 +631,7 @@ export default function GatheringDetail() {
                 className="GatheringDetail_detail-section_osk"
               >
                 <h3 className="GatheringDetail_section-title_osk">질문</h3>
-
+    {/* <GatheringDetailInquiry gatheringId={gatheringId} /> */}
                 <div className="GatheringDetail_questions-board_osk">
                   <div className="GatheringDetail_questions-table_osk">
                     {/* Header */}
@@ -781,8 +776,8 @@ export default function GatheringDetail() {
                         >
                           <div className="GatheringDetail_member-card_osk">
                             <div className="GatheringDetail_member-avatar_osk">
-                              <img
-                                src={member.profileImage || aImage}
+                              <img 
+                                src={`${url}/image?filename=${member.profileImage || aImage}`}
                                 alt={`${member.name} 프로필`}
                                 className="GatheringDetail_member-profile-image_osk"
                               />
@@ -950,8 +945,7 @@ export default function GatheringDetail() {
           </ModalHeader>
           <ModalBody className="GatheringDetail_modal-body_osk">
             <div className="GatheringDetail_gathering-info_osk">
-              <img
-                src={gatheringData.thumbnailFileName ? `${url}/uploads/${gatheringData.thumbnailFileName}` : aImage}
+              <img src={gatheringData.thumbnailFileName? `${url}/image?filename=${gatheringData.thumbnailFileName}`:`/detail1.png`}
                 alt="모임 이미지"
                 className="GatheringDetail_gathering-image_osk"
               />

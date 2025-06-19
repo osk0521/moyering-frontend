@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { Button } from "reactstrap";
+import React, { useState, useEffect, useRef } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import { userAtom, tokenAtom } from "../../../atoms";
 import { CiSearch, CiLocationOn, CiHashtag } from "react-icons/ci";
 import { FiUpload } from "react-icons/fi";
 import { GoPeople } from "react-icons/go";
@@ -7,16 +8,85 @@ import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
 import axios from "axios";
-import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY } from "../../../config";
+import {
+  url,
+  KAKAO_REST_API_KEY,
+  KAKAO_JavaScript_API_KEY,
+} from "../../../config";
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 
-import Header from '../../common/Header';
+import Header from "../../common/Header";
 import { useNavigate } from "react-router-dom";
 import "./GatheringWrite.css";
 
+// 오늘 날짜를 YYYY-MM-DD 형식으로 반환
+const getTodayString = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+};
+
+// 현재 시간에서 3시간 후의 datetime-local 형식 반환
+const getMinDeadlineDateTime = () => {
+  const now = new Date();
+  now.setHours(now.getHours() + 3);
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
+// 특정 날짜의 23:59를 datetime-local 형식으로 반환
+const getMaxDeadlineDateTime = (meetingDate) => {
+  if (!meetingDate) return "";
+  return `${meetingDate}T23:59`;
+};
+
+// 날짜/시간 유효성 검증 함수
+const validateDateTime = (formData) => {
+  const errors = {};
+
+  // 모임 날짜가 오늘 이전인지 확인
+  if (formData.meetingDate && formData.meetingDate < getTodayString()) {
+    errors.meetingDate = "모임 날짜는 오늘 이후여야 합니다.";
+  }
+
+  // 시작시간과 종료시간 비교
+  if (
+    formData.startTime &&
+    formData.endTime &&
+    formData.startTime >= formData.endTime
+  ) {
+    errors.timeRange = "종료 시간은 시작 시간보다 늦어야 합니다.";
+  }
+
+  // 신청 마감일 검증
+  if (formData.deadlineDateTime) {
+    const minDeadline = getMinDeadlineDateTime();
+    const maxDeadline = getMaxDeadlineDateTime(formData.meetingDate);
+
+    if (formData.deadlineDateTime < minDeadline) {
+      errors.deadlineDateTime =
+        "신청 마감일은 현재 시간에서 최소 3시간 이후여야 합니다.";
+    }
+
+    if (formData.meetingDate && formData.deadlineDateTime > maxDeadline) {
+      errors.deadlineDateTime = "신청 마감일은 모임 날짜 이전이어야 합니다.";
+    }
+  }
+
+  return errors;
+};
+
 export default function GatheringWrite() {
+  const [user] = useAtom(userAtom);
+  const userId = user.id;
+  const navigate = useNavigate();
   //지오코딩용
   const [coordinates, setCoordinates] = useState({ x: "", y: "" });
   const [geocodingError, setGeocodingError] = useState("");
@@ -34,9 +104,10 @@ export default function GatheringWrite() {
   const [subCategory, setSubCategory] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("initial");
-  
+
   // 입력용 formData 상태 (사용자 입력을 받는 용도)
   const [formData, setFormData] = useState({
+    // user: user.userId,
     title: "",
     startTime: "",
     endTime: "",
@@ -47,14 +118,14 @@ export default function GatheringWrite() {
     meetingDate: "",
     minAttendees: 2,
     maxAttendees: "",
-    deadline: "",
+    deadlineDateTime: "",
     content: "",
     preparation: "",
-    locName:"",
+    locName: "",
     tags: [], // 문자열 배열로 변경
     intrOnln: "", // 한 줄 소개
   });
-  
+
   const [tagInput, setTagInput] = useState("");
 
   const convertAddressToCoordinates = async (address) => {
@@ -62,15 +133,6 @@ export default function GatheringWrite() {
       setGeocodingError("주소가 입력되지 않았습니다.");
       return null;
     }
-
-    if (
-      !KAKAO_REST_API_KEY ||
-      KAKAO_REST_API_KEY === `${KAKAO_REST_API_KEY}`
-    ) {
-      setGeocodingError("카카오 REST API 키를 설정해주세요.");
-      return null;
-    }
-
     setGeocodingLoading(true);
     setGeocodingError("");
 
@@ -82,10 +144,10 @@ export default function GatheringWrite() {
         {
           headers: {
             Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
+            "Content-Type": "application/json",
           },
         }
       );
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -127,7 +189,6 @@ export default function GatheringWrite() {
       setGeocodingLoading(false);
     }
   };
-
   // 새로운 파일 업로드 처리 함수 (100MB 제한으로 변경)
   const handleFileUpload = (file) => {
     const maxSize = 100 * 1024 * 1024; // 100MB로 변경
@@ -154,7 +215,7 @@ export default function GatheringWrite() {
     reader.readAsDataURL(file);
     setThumbnail(file);
   };
-  
+
   const handleFileInputChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       handleFileUpload(e.target.files[0]);
@@ -225,13 +286,26 @@ export default function GatheringWrite() {
       tags: prev.tags.filter((tag) => tag !== tagToDelete),
     }));
   };
-  // 태그 삭제 처리
+
+  // 수정된 handleInputChange 함수
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    setFormData((prev) => {
+      const newFormData = {
+        ...prev,
+        [name]: value,
+      };
+
+      // 실시간 유효성 검증
+      const validationErrors = validateDateTime(newFormData);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...validationErrors,
+      }));
+
+      return newFormData;
+    });
   };
 
   // 방법 실시간 검증하되 경고만 표시
@@ -313,9 +387,9 @@ export default function GatheringWrite() {
     }
 
     // locName 추출: 주소에서 시/도 + 구/군/시 부분만 추출
-    const addressParts = data.address.split(' ');
+    const addressParts = data.address.split(" ");
     let locName = "";
-    
+
     if (addressParts.length >= 2) {
       // 첫 번째와 두 번째 요소를 조합 (예: "서울 강남구")
       locName = `${addressParts[0]} ${addressParts[1]}`;
@@ -324,7 +398,7 @@ export default function GatheringWrite() {
       locName = addressParts[0];
     }
 
-    // 주소 상태 업데이트 
+    // 주소 상태 업데이트
     setFormData((prev) => ({
       ...prev,
       address: fullAddress,
@@ -341,17 +415,12 @@ export default function GatheringWrite() {
 
   // 1차 카테고리 데이터 가져오기
   useEffect(() => {
-    axios.get(`${url}/category`)
+    axios
+      .get(`${url}/category`)
       .then((res) => {
         console.log("1차 카테고리 API 응답:", res);
         const categoryArray = res.data.category;
         setCategory(categoryArray);
-        if (categoryArray.length > 0) {
-          setFormData((prev) => ({
-            ...prev,
-            category: categoryArray[0].categoryId.toString(),
-          }));
-        }
       })
       .catch((err) => {
         console.log("API 오류:", err);
@@ -370,12 +439,6 @@ export default function GatheringWrite() {
             subCategoryName: item.subCategoryName,
           }));
           setSubCategory(categoryArray);
-          if (categoryArray.length > 0) {
-            setFormData((prev) => ({
-              ...prev,
-              subCategory: categoryArray[0].subCategoryId.toString(),
-            }));
-          }
         })
         .catch((err) => {
           console.log("2차 카테고리 API 오류:", err);
@@ -401,8 +464,8 @@ export default function GatheringWrite() {
             initialEditType: "wysiwyg",
             placeholder: "모임에 대한 상세한 설명을 작성해주세요",
             hideModeSwitch: true,
-            previewStyle: 'vertical',
-            initialValue: '', // 초기값 비우기
+            previewStyle: "vertical",
+            initialValue: "", // 초기값 비우기
             // 툴바 설정
             toolbarItems: [
               ["heading", "bold", "italic", "strike"],
@@ -435,7 +498,7 @@ export default function GatheringWrite() {
               },
               // 에디터가 완전히 로드된 후 실행
               load: () => {
-                console.log("Editor loaded successfully");
+                console.log("Editor 초기화 완료");
               },
             },
           });
@@ -446,7 +509,6 @@ export default function GatheringWrite() {
       }
     };
 
-    // 약간의 딜레이를 주어 DOM이 완전히 렌더링되도록 함
     const timer = setTimeout(initEditor, 100);
 
     return () => {
@@ -460,309 +522,385 @@ export default function GatheringWrite() {
         setEditor(null);
       }
     };
-  }, []); // 빈 의존성 배열 유지
+  }, []);
 
+  // 수정된 submit 함수
   const submit = async (e) => {
-  e.preventDefault();
-  
-  // 시간 순서 검증
-  // if (formData.startTime >= formData.endTime) {
-  //   alert('종료 시간은 시작 시간보다 늦어야 합니다.');
-  //   return;
-  // }
-  
-  // 신청 마감일 검증
-  if (formData.deadline && formData.meetingDate && formData.deadline > formData.meetingDate) {
-    alert('신청 마감일은 모임 날짜보다 이전이어야 합니다.');
-    return;
-  }
+    e.preventDefault();
 
-  // 지오코딩 실행 (주소를 좌표로 변환)
-  console.log("지오코딩 시작...");
-  const coords = await convertAddressToCoordinates(formData.address);
-  console.log("지오코딩 완료..."+coords);
-  // if (!coords) {
-  //   alert('주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.');
-  //   return;
-  // }
+    // 필수 필드 검증
+    if (
+      !formData.title ||
+      !formData.meetingDate ||
+      !formData.startTime ||
+      !formData.endTime ||
+      !formData.category ||
+      !formData.subCategory ||
+      !formData.address ||
+      !formData.content ||
+      !thumbnail
+    ) {
+      alert("필수 항목을 모두 입력해주세요.");
+      return;
+    }
 
-  // formData를 최종 데이터로 변환 (좌표 추가)
-  const finalGatheringData = {
-    ...formData,
-  //   latitude: parseFloat(coords.y), // 위도
-  //   longitude: parseFloat(coords.x), // 경도
-    categoryId: parseInt(formData.category) || 0,
-    subCategoryId: parseInt(formData.subCategory) || 0,
-  //   userId: 10,
-    status: "모집중"
-  };
-  console.log("최종 데이터:", finalGatheringData);
+    // 유효성 검증
+    const validationErrors = validateDateTime(formData);
 
-  // FormData 객체 생성 (변수명 변경으로 충돌 방지)
-  const formDataToSend = new FormData();
-  
-  // 파일 추가 (thumbnail)
-  if (thumbnail != null) {
+    if (Object.keys(validationErrors).length > 0) {
+      // 첫 번째 에러 메시지 표시
+      const firstError = Object.values(validationErrors)[0];
+      alert(firstError);
+      return;
+    }
+
+    // 지오코딩 실행 (주소를 좌표로 변환)
+    console.log("지오코딩 시작...");
+    console.log("▶︎ 변환할 주소:", formData.address);
+    const coords = await convertAddressToCoordinates(formData.address);
+    console.log("지오코딩 완료:", coords);
+
+    if (!coords) {
+      alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
+      return;
+    }
+
+    // FormData 객체 생성
+    const formDataToSend = new FormData();
+
+    // 파일 추가 (thumbnail) - 필수 파라미터
     formDataToSend.append("thumbnail", thumbnail);
-  }
-  
-  // 기본 데이터 추가
-  formDataToSend.append('userId', 1);
-  formDataToSend.append("title", finalGatheringData.title || '');
-  formDataToSend.append("meetingDate", finalGatheringData.meetingDate || '');
-  formDataToSend.append("startTime", finalGatheringData.startTime); 
-  formDataToSend.append("endTime", finalGatheringData.endTime);
-  
-  // 숫자 필드
-  formDataToSend.append("categoryId", finalGatheringData.categoryId);
-  formDataToSend.append("subCategoryId", finalGatheringData.subCategoryId);
-  
-  formDataToSend.append("address", finalGatheringData.address || '');
-  formDataToSend.append("detailAddress", finalGatheringData.detailAddress || '');
-  formDataToSend.append("locName", finalGatheringData.locName || '');
-  
-  // 좌표 데이터 추가
-  if (coords.x && coords.y) {
-    const lat = parseFloat(coords.y).toFixed(7);
-    const lng = parseFloat(coords.x).toFixed(7);
-    console.log(lat, lng);
-    formDataToSend.append("latitude", lat);
-    formDataToSend.append("longitude", lng);
-  }
-  
-  // 인원수
-  const minPeople = parseInt(finalGatheringData.minAttendees) || 2;
-  formDataToSend.append("minAttendees", minPeople);
-  
-  // maxAttendees 처리
-  if (finalGatheringData.maxAttendees && finalGatheringData.maxAttendees.toString().trim() !== '') {
-    const maxPeople = parseInt(finalGatheringData.maxAttendees);
-    if (!isNaN(maxPeople) && maxPeople > 0) {
-      formDataToSend.append("maxAttendees", maxPeople);
+
+    // 기본 데이터 추가 (백엔드 GatheringDto 필드에 맞춰 설정)
+    formDataToSend.append("userId", user?.userId || 1); // 실제 유저 ID 사용
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("meetingDate", formData.meetingDate);
+    formDataToSend.append("startTime", formData.startTime);
+    formDataToSend.append("endTime", formData.endTime);
+
+    // 카테고리 정보
+    formDataToSend.append("categoryId", parseInt(formData.category));
+    formDataToSend.append("subCategoryId", parseInt(formData.subCategory));
+
+    // 주소 정보
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("detailAddress", formData.detailAddress || "");
+    formDataToSend.append("locName", formData.locName || "");
+
+    // 좌표 데이터 추가 (소수점 7자리로 정확도 유지)
+    formDataToSend.append("latitude", parseFloat(coords.y).toFixed(7));
+    formDataToSend.append("longitude", parseFloat(coords.x).toFixed(7));
+
+    // 인원수 정보
+    formDataToSend.append("minAttendees", parseInt(formData.minAttendees) || 2);
+
+    // maxAttendees 처리 (선택적 필드)
+    if (
+      formData.maxAttendees &&
+      formData.maxAttendees.toString().trim() !== ""
+    ) {
+      const maxPeople = parseInt(formData.maxAttendees);
+      if (!isNaN(maxPeople) && maxPeople > 0) {
+        formDataToSend.append("maxAttendees", maxPeople);
+      }
     }
-  }
-  
-  formDataToSend.append("applyDeadline", finalGatheringData.deadline || '');
-  formDataToSend.append("gatheringContent", finalGatheringData.content || '');
-  formDataToSend.append("preparationItems", finalGatheringData.preparation || '');
-  formDataToSend.append("intrOnln", finalGatheringData.intrOnln || 'N');
-  formDataToSend.append("status", "모집중");
-  
-  // tags 처리
-  const tagsToSend = finalGatheringData.tags && finalGatheringData.tags.length > 0 ? finalGatheringData.tags : [];
-  formDataToSend.append("tags", JSON.stringify(tagsToSend));
-  
-  // FormData 내용 확인 (디버깅용)
-  console.log('=== FormData 내용 ===');
-  for (let [key, value] of formDataToSend.entries()) {
-    console.log(`${key}:`, value);
-  }
-  
-  // axios 요청
-  try {
-    const response = await axios.post(`${url}/user/writeGathering`, formDataToSend, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      timeout: 10000,
-    });
-    
-    console.log('성공:', response);
-    if (response.data && response.data.num) {
-      // navigate(`/gatheringDetail/${response.data.num}`);
-    } else {
-      console.log('응답 데이터:', response.data);
+
+    // 신청 마감일 (datetime-local 형식을 MySQL datetime 형식으로 변환)
+    formDataToSend.append(
+      "applyDeadline",
+      formData.deadlineDateTime.replace("T", " ") + ":00"
+    );
+
+    // 모임 내용 및 준비물
+    formDataToSend.append("gatheringContent", formData.content);
+    formDataToSend.append("preparationItems", formData.preparation || "");
+
+    // 한 줄 소개 (있으면 Y, 없으면 N)
+    formDataToSend.append("intrOnln", formData.intrOnln || "");
+
+    // 상태 (기본값: 모집중)
+    formDataToSend.append("status", "모집중");
+
+    // tags 처리 (JSON 문자열로 변환)
+    const tagsToSend =
+      formData.tags && formData.tags.length > 0 ? formData.tags : [];
+    formDataToSend.append("tags", JSON.stringify(tagsToSend));
+
+    // FormData 내용 확인 (디버깅용)
+    console.log("=== FormData 내용 ===");
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(`${key}:`, value);
     }
-  } catch (err) {
-    console.error('요청 실패:', err);
-    
-    if (err.response) {
-      console.error('응답 상태:', err.response.status);
-      console.error('응답 데이터:', err.response.data);
-    } else if (err.request) {
-      console.error('요청이 전송되었지만 응답이 없음:', err.request);
-      alert('서버에 연결할 수 없습니다. 네트워크를 확인해주세요.');
-    } else {
-      console.error('요청 설정 오류:', err.message);
-      alert('요청 처리 중 오류가 발생했습니다.');
+
+    // axios 요청
+    try {
+      console.log("모임 등록 요청 시작...");
+
+      const response = await axios.post(
+        `${url}/user/writeGathering`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            // 토큰이 있다면 Authorization 헤더 추가
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+          timeout: 30000, // 30초로 타임아웃 증가 (파일 업로드 고려)
+        }
+      );
+
+      console.log("모임 등록 성공:", response);
+
+      // 백엔드에서 gatheringId를 직접 반환하므로 response.data가 gatheringId
+      const gatheringId = response.data;
+
+      if (gatheringId) {
+        console.log("새로 생성된 모임 ID:", gatheringId);
+        alert("모임이 성공적으로 등록되었습니다!");
+        navigate(`/gatheringDetail/${gatheringId}`);
+      } else {
+        console.error("gatheringId를 받지 못했습니다:", response.data);
+        alert("모임 등록은 완료되었지만 페이지 이동에 문제가 있습니다.");
+      }
+    } catch (err) {
+      console.error("모임 등록 실패:", err);
+
+      if (err.response) {
+        console.error("응답 상태:", err.response.status);
+        console.error("응답 데이터:", err.response.data);
+
+        // 상태 코드별 에러 메시지
+        switch (err.response.status) {
+          case 400:
+            alert("입력한 정보에 오류가 있습니다. 다시 확인해주세요.");
+            break;
+          case 401:
+            alert("로그인이 필요합니다.");
+            navigate("/userlogin");
+            break;
+          case 413:
+            alert("파일 크기가 너무 큽니다. 더 작은 파일을 선택해주세요.");
+            break;
+          case 500:
+            alert("서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            break;
+          default:
+            alert("모임 등록 중 오류가 발생했습니다.");
+        }
+      } else if (err.request) {
+        console.error("요청이 전송되었지만 응답이 없음:", err.request);
+        alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
+      } else {
+        console.error("요청 설정 오류:", err.message);
+        alert("요청 처리 중 오류가 발생했습니다.");
+      }
     }
-  }
-};
-  
+  };
+
   return (
-   <div>
-    <Header/>
-     <div className="GatheringWrite_gathering-write-container_osk">
-      <div className="GatheringWrite_content-wrapper_osk">
-        <div>
-          {/* 기본 정보 */}
-          <div className="GatheringWrite_section_osk">
-            <div className="GatheringWrite_section-header_osk">
-              <span className="GatheringWrite_section-icon_osk">
-                <HiOutlineInformationCircle />
-              </span>
-              <span className="GatheringWrite_section-title_osk">
-                기본 정보
-              </span>
-            </div>
-            <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">
+    <div>
+      <Header />
+      <form
+        className="GatheringWrite_gathering-write-container_osk"
+        onSubmit={submit}
+      >
+        <div className="GatheringWrite_content-wrapper_osk">
+          <div>
+            {/* 기본 정보 */}
+            <div className="GatheringWrite_section_osk">
+              <div className="GatheringWrite_section-header_osk">
                 <span className="GatheringWrite_section-icon_osk">
-                  <SlPicture />
+                  <HiOutlineInformationCircle />
                 </span>
-                대표 이미지{" "}
-                <span className="GatheringWrite_required_osk">*</span>
-              </label>
-
-              {/* 업로드 존 - 이미지가 이 div 내부에 완전히 배치됩니다 */}
-              <div
-                className={getUploadZoneClass()}
-                onClick={() =>
-                  document
-                    .getElementById("GatheringWrite_thumbnail_osk")
-                    .click()
-                }
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-              >
-                {uploadStatus === "success" ? (
-                  // 업로드 성공 시: 이미지가 업로드 존 전체를 채움
-                  <div className="GatheringWrite_preview-container_osk">
-                    <img
-                      src={previewUrl}
-                      alt="업로드된 이미지"
-                      className="GatheringWrite_preview-image_osk"
-                    />
-                    {/* 파일명 표시 */}
-                    <div className="GatheringWrite_file-name_osk">
-                      {fileName}
-                    </div>
-                  </div>
-                ) : (
-                  // 기본 상태: 업로드 대기 UI
-                  <>
-                    <div className="GatheringWrite_upload-icon_osk">
-                      <FiUpload />
-                    </div>
-                    <div className="GatheringWrite_upload-text_osk">
-                      이미지를 드래그하거나 클릭하여 업로드하세요
-                    </div>
-                    <div className="GatheringWrite_upload-info_osk">
-                      권장 크기: 1200 x 630px, 최대 100MB
-                    </div>
-                  </>
-                )}
+                <span className="GatheringWrite_section-title_osk">
+                  기본 정보
+                </span>
               </div>
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">
+                  <span className="GatheringWrite_section-icon_osk">
+                    <SlPicture />
+                  </span>
+                  대표 이미지{" "}
+                  <span className="GatheringWrite_required_osk">*</span>
+                </label>
 
-              {/* 숨겨진 파일 입력 */}
-              <input
-                type="file"
-                name="GatheringWrite_thumbnail_osk"
-                id="GatheringWrite_thumbnail_osk"
-                style={{ display: "none" }}
-                onChange={handleFileInputChange}
-                accept="image/*"
-                required
-              />
-            </div>
-            <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">
-                모임 이름 <span className="GatheringWrite_required_osk">*</span>
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="모임 이름을 입력해주세요"
-                className="GatheringWrite_custom-input_osk"
-                required
-              />
-            </div>
-
-            <div className="GatheringWrite_row_osk">
-              <div className="GatheringWrite_col-md-6_osk">
-                <div className="GatheringWrite_form-group_osk">
-                  <label className="GatheringWrite_field-label_osk">
-                    모임 날짜{" "}
-                    <span className="GatheringWrite_required_osk">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.meetingDate}
-                    onChange={handleInputChange}
-                    className="GatheringWrite_custom-input_osk GatheringWrite_date-input-container_osk"
-                    name="meetingDate"
-                    required
-                    placeholder="모임 날짜 입력"
-                  />
+                {/* 업로드 존 - 이미지가 이 div 내부에 완전히 배치됩니다 */}
+                <div
+                  className={getUploadZoneClass()}
+                  onClick={() =>
+                    document
+                      .getElementById("GatheringWrite_thumbnail_osk")
+                      .click()
+                  }
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  {uploadStatus === "success" ? (
+                    // 업로드 성공 시: 이미지가 업로드 존 전체를 채움
+                    <div className="GatheringWrite_preview-container_osk">
+                      <img
+                        src={previewUrl}
+                        alt="업로드된 이미지"
+                        className="GatheringWrite_preview-image_osk"
+                      />
+                      {/* 파일명 표시 */}
+                      <div className="GatheringWrite_file-name_osk">
+                        {fileName}
+                      </div>
+                    </div>
+                  ) : (
+                    // 기본 상태: 업로드 대기 UI
+                    <>
+                      <div className="GatheringWrite_upload-icon_osk">
+                        <FiUpload />
+                      </div>
+                      <div className="GatheringWrite_upload-text_osk">
+                        이미지를 드래그하거나 클릭하여 업로드하세요
+                      </div>
+                      <div className="GatheringWrite_upload-info_osk">
+                        권장 크기: 1200 x 630px, 최대 100MB
+                      </div>
+                    </>
+                  )}
                 </div>
-              </div>
-              <div className="GatheringWrite_col-md-6_osk">
-                <div className="GatheringWrite_form-group_osk">
-                  <label className="GatheringWrite_field-label_osk">
-                    모임 시간{" "}
-                    <span className="GatheringWrite_required_osk">*</span>
-                  </label>
-                  <div className="GatheringWrite_time-input-group_osk">
-                    <input
-                      type="time"
-                      name="startTime"
-                      value={formData.startTime}
-                      onChange={handleInputChange}
-                      placeholder="시작 시간 입력"
-                      className="GatheringWrite_custom-input_osk GatheringWrite_time-input_osk"
-                      required
-                    />
-                    <span className="GatheringWrite_time-separator_osk">~</span>
-                    <input
-                      type="time"
-                      name="endTime"
-                      value={formData.endTime}
-                      onChange={handleInputChange}
-                      placeholder="종료 시간 입력"
-                      className="GatheringWrite_custom-input_osk GatheringWrite_time-input_osk"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div className="GatheringWrite_row_osk">
-              {/* 1차 카테고리 */}
-              <div className="GatheringWrite_col-md-6_osk">
-                <div className="GatheringWrite_form-group_osk">
-                  <label className="GatheringWrite_field-label_osk">
-                    1차 카테고리{" "}
-                    <span className="GatheringWrite_required_osk">*</span>
-                  </label>
-                  <select
-                    name="category1"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className="GatheringWrite_custom-input_osk"
-                  >
-                    <option value="">1차 카테고리를 선택해주세요</option>
-                    {Array.isArray(category) &&
-                      category.map((category) => (
-                        <option
-                          key={category.categoryId}
-                          value={category.categoryId.toString()}
+                {/* 숨겨진 파일 입력 */}
+                <input
+                  type="file"
+                  name="GatheringWrite_thumbnail_osk"
+                  id="GatheringWrite_thumbnail_osk"
+                  style={{ display: "none" }}
+                  onChange={handleFileInputChange}
+                  accept="image/*"
+                  required
+                />
+              </div>
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">
+                  모임 이름{" "}
+                  <span className="GatheringWrite_required_osk">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  placeholder="모임 이름을 입력해주세요"
+                  className="GatheringWrite_custom-input_osk"
+                  required
+                />
+              </div>
+
+              <div className="GatheringWrite_row_osk">
+                <div className="GatheringWrite_col-md-6_osk">
+                  <div className="GatheringWrite_form-group_osk">
+                    <label className="GatheringWrite_field-label_osk">
+                      모임 날짜{" "}
+                      <span className="GatheringWrite_required_osk">*</span>
+                      {errors.meetingDate && (
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "12px",
+                            marginLeft: "8px",
+                          }}
                         >
-                          {category.categoryName}
-                        </option>
-                      ))}
-                  </select>
+                          {errors.meetingDate}
+                        </span>
+                      )}
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.meetingDate}
+                      onChange={handleInputChange}
+                      className="GatheringWrite_custom-input_osk GatheringWrite_date-input-container_osk"
+                      name="meetingDate"
+                      required
+                      min={getTodayString()} // 오늘 이전 날짜 선택 불가
+                      placeholder="모임 날짜 입력"
+                    />
+                  </div>
+                </div>
+                <div className="GatheringWrite_col-md-6_osk">
+                  <div className="GatheringWrite_form-group_osk">
+                    <label className="GatheringWrite_field-label_osk">
+                      모임 시간{" "}
+                      <span className="GatheringWrite_required_osk">*</span>
+                      {errors.timeRange && (
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "12px",
+                            marginLeft: "8px",
+                          }}
+                        >
+                          {errors.timeRange}
+                        </span>
+                      )}
+                    </label>
+                    <div className="GatheringWrite_time-input-group_osk">
+                      <input
+                        type="time"
+                        name="startTime"
+                        value={formData.startTime}
+                        onChange={handleInputChange}
+                        placeholder="시작 시간 입력"
+                        className="GatheringWrite_custom-input_osk GatheringWrite_time-input_osk"
+                        required
+                      />
+                      <span className="GatheringWrite_time-separator_osk">
+                        ~
+                      </span>
+                      <input
+                        type="time"
+                        name="endTime"
+                        value={formData.endTime}
+                        onChange={handleInputChange}
+                        placeholder="종료 시간 입력"
+                        className="GatheringWrite_custom-input_osk GatheringWrite_time-input_osk"
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="GatheringWrite_col-md-6_osk">
-                <div className="GatheringWrite_form-group_osk">
-                  <label className="GatheringWrite_field-label_osk">
-                    2차 카테고리{" "}
-                    <span className="GatheringWrite_required_osk">*</span>
-                  </label>
-                  <select
+
+              <div className="GatheringWrite_row_osk">
+                {/* 1차 카테고리 */}
+                <div className="GatheringWrite_col-md-6_osk">
+                  <div className="GatheringWrite_form-group_osk">
+                    <label className="GatheringWrite_field-label_osk">
+                      1차 카테고리{" "}
+                      <span className="GatheringWrite_required_osk">*</span>
+                    </label>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      className="GatheringWrite_custom-input_osk"
+                    >
+                      <option value="">1차 카테고리를 선택해주세요</option>
+                      {Array.isArray(category) &&
+                        category.map((category) => (
+                          <option
+                            key={category.categoryId}
+                            value={category.categoryId.toString()}
+                          >
+                            {category.categoryName}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="GatheringWrite_col-md-6_osk">
+                  <div className="GatheringWrite_form-group_osk">
+                    <label className="GatheringWrite_field-label_osk">
+                      2차 카테고리{" "}
+                      <span className="GatheringWrite_required_osk">*</span>
+                    </label>
+                    <select
                       name="subCategory"
                       value={formData.subCategory}
                       onChange={handleInputChange}
@@ -785,270 +923,286 @@ export default function GatheringWrite() {
                             </option>
                           ))}
                     </select>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* 모임 장소 */}
-          <div className="GatheringWrite_section_osk=">
-            <div className="GatheringWrite_section-header_osk">
-              <span className="GatheringWrite_section-icon_osk">
-                <CiLocationOn />
-              </span>
-              <span className="GatheringWrite_section-title_osk">
-                모임 장소
-                <span className="GatheringWrite_required_osk">*</span>
-              </span>
-            </div>
-
-            <div className="GatheringWrite_form-group_osk">
-              <div className="GatheringWrite_location-section_osk">
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  onClick={openPostcode}
-                  placeholder="주소를 입력해주세요"
-                  className="GatheringWrite_custom-input_osk"
-                  readOnly
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={openPostcode}
-                  className="GatheringWrite_address-search-btn_osk"
-                >
-                  <CiSearch size={16} />
-                </button>
+            {/* 모임 장소 */}
+            <div className="GatheringWrite_section_osk=">
+              <div className="GatheringWrite_section-header_osk">
+                <span className="GatheringWrite_section-icon_osk">
+                  <CiLocationOn />
+                </span>
+                <span className="GatheringWrite_section-title_osk">
+                  모임 장소
+                  <span className="GatheringWrite_required_osk">*</span>
+                </span>
               </div>
-            </div>
 
-            <div className="GatheringWrite_form-group_osk">
-              <input
-                type="text"
-                name="detailAddress"
-                value={formData.detailAddress}
-                onChange={handleInputChange}
-                placeholder="상세 주소를 입력해주세요"
-                className="GatheringWrite_custom-input_osk"
-                required
-              />
-            </div>
-          </div>
-
-          {/* 참여 정보 */}
-          <div className="GatheringWrite_section_osk">
-            <div className="GatheringWrite_section-header_osk">
-              <span className="GatheringWrite_section-icon_osk">
-                <GoPeople />
-              </span>
-              <span className="GatheringWrite_section-title_osk">
-                참여 정보
-              </span>
-            </div>
-
-            <div className="GatheringWrite_row_osk">
-              {/* 최소 인원 입력 부분 */}
-              <div className="GatheringWrite_col-md-6_osk">
-                <div className="GatheringWrite_form-group_osk">
-                  <label className="GatheringWrite_field-label_osk">
-                    최소 인원{" "}
-                    <span className="GatheringWrite_required_osk">*</span>
-                    {errors.minAttendees && (
-                      <span
-                        style={{
-                          color: "red",
-                          fontSize: "12px",
-                          marginLeft: "8px",
-                        }}
-                      >
-                        {errors.minAttendees}
-                      </span>
-                    )}
-                  </label>
+              <div className="GatheringWrite_form-group_osk">
+                <div className="GatheringWrite_location-section_osk">
                   <input
                     type="text"
-                    name="minAttendees"
-                    value={formData.minAttendees}
-                    onChange={handleNumberInput}
-                    placeholder="최소 인원 (2 이상)"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    onClick={openPostcode}
+                    placeholder="주소를 입력해주세요"
                     className="GatheringWrite_custom-input_osk"
+                    readOnly
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={openPostcode}
+                    className="GatheringWrite_address-search-btn_osk"
+                  >
+                    <CiSearch size={16} />
+                  </button>
                 </div>
               </div>
-              {/* 최대 인원 입력 부분 */}
-              <div className="GatheringWrite_col-md-6_osk">
-                <div className="GatheringWrite_form-group_osk">
-                  <label className="GatheringWrite_field-label_osk">
-                    최대 인원{" "}
-                    {errors.maxAttendees && (
-                      <span
-                        style={{
-                          color: "red",
-                          fontSize: "12px",
-                          marginLeft: "8px",
-                        }}
-                      >
-                        {errors.maxAttendees}
-                      </span>
-                    )}
-                  </label>
-                  <input
-                    type="text"
-                    name="maxAttendees"
-                    value={formData.maxAttendees}
-                    onChange={handleNumberInput}
-                    placeholder="최대 인원 (2 이상)"
-                    className="GatheringWrite_custom-input_osk"
-                  />
-                </div>
-              </div>
-            </div>
 
-            <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">
-                신청 마감일{" "}
-                {/* <span className="GatheringWrite_required_osk">*</span> */}
-              </label>
-              <input
-                type="date"
-                name="deadline"
-                value={formData.deadline}
-                onChange={handleInputChange}
-                className="GatheringWrite_custom-input_osk"
-              />
-            </div>
-          </div>
-
-          {/* 모임 상세 정보 */}
-          <div className="GatheringWrite_section_osk">
-            <div className="GatheringWrite_section-header_osk">
-              <span className="GatheringWrite_section-icon_osk">
-                <HiOutlineInformationCircle />
-              </span>
-              <span className="GatheringWrite_section-title_osk">
-                모임 상세 정보
-              </span>
-            </div>
-
-            <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">
-                모임 소개 <span className="GatheringWrite_required_osk">*</span>
-              </label>
-              <div className="toast-editor-container">
-                <div ref={editorRef} id="toast-editor"></div>
-              </div>
-              <div className="GatheringWrite_text-counter_osk">
-                <span></span>
-                <span>{(formData.content || "").length}/60000</span>
-              </div>
-            </div>
-          </div>
-
-          {/* 준비물 */}
-          <div className="GatheringWrite_section_osk">
-            <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">준비물</label>
-              <textarea
-                name="preparation"
-                value={formData.preparation}
-                onChange={handleInputChange}
-                placeholder="준비물을 입력해 주세요"
-                rows="4"
-                className="GatheringWrite_custom-textarea-simple_osk"
-              />
-            </div>
-          </div>
-
-          {/* 태그 */}
-          <div className="GatheringWrite_section_osk">
-            <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">태그</label>
-              <div className="GatheringWrite_tag-input-group_osk">
+              <div className="GatheringWrite_form-group_osk">
                 <input
                   type="text"
-                  name="tags"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagInput}
-                  placeholder="태그를 입력하고 Enter 또는 쉼표 사용하여 등록하세요"
-                  className="GatheringWrite_custom-input_osk GatheringWrite_tag-input_osk"
+                  name="detailAddress"
+                  value={formData.detailAddress}
+                  onChange={handleInputChange}
+                  placeholder="상세 주소를 입력해주세요"
+                  className="GatheringWrite_custom-input_osk"
+                  required
                 />
-                {/* <CiHashtag className="GatheringWrite_tag-add-btn_osk" /> */}
               </div>
             </div>
-          </div>
 
-          <div style={{ marginBottom: "20px" }}>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-              {formData.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="GatheringWrite_span-tag_osk"
-                  data-skill="tag"
-                >
-                  {tag}
-                  <button
-                    className="GatheringWrite_delete-tag-btn_osk"
-                    onClick={() => handleTagDelete(tag)}
-                  >
-                    ×
-                  </button>
+            {/* 참여 정보 */}
+            <div className="GatheringWrite_section_osk">
+              <div className="GatheringWrite_section-header_osk">
+                <span className="GatheringWrite_section-icon_osk">
+                  <GoPeople />
                 </span>
-              ))}
-            </div>
-          </div>
+                <span className="GatheringWrite_section-title_osk">
+                  참여 정보
+                </span>
+              </div>
 
-          <div className="GatheringWrite_section_osk">
-            <div className="GatheringWrite_form-group_osk">
-              <label className="GatheringWrite_field-label_osk">
-                한 줄 소개
-              </label>
+              <div className="GatheringWrite_row_osk">
+                {/* 최소 인원 입력 부분 */}
+                <div className="GatheringWrite_col-md-6_osk">
+                  <div className="GatheringWrite_form-group_osk">
+                    <label className="GatheringWrite_field-label_osk">
+                      최소 인원{" "}
+                      <span className="GatheringWrite_required_osk">*</span>
+                      {errors.minAttendees && (
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "12px",
+                            marginLeft: "8px",
+                          }}
+                        >
+                          {errors.minAttendees}
+                        </span>
+                      )}
+                    </label>
+                    <input
+                      type="text"
+                      name="minAttendees"
+                      value={formData.minAttendees}
+                      onChange={handleNumberInput}
+                      placeholder="최소 인원 (2 이상)"
+                      className="GatheringWrite_custom-input_osk"
+                      required
+                    />
+                  </div>
+                </div>
+                {/* 최대 인원 입력 부분 */}
+                <div className="GatheringWrite_col-md-6_osk">
+                  <div className="GatheringWrite_form-group_osk">
+                    <label className="GatheringWrite_field-label_osk">
+                      최대 인원{" "}
+                      {errors.maxAttendees && (
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "12px",
+                            marginLeft: "8px",
+                          }}
+                        >
+                          {errors.maxAttendees}
+                        </span>
+                      )}
+                    </label>
+                    <input
+                      type="text"
+                      name="maxAttendees"
+                      value={formData.maxAttendees}
+                      onChange={handleNumberInput}
+                      placeholder="최대 인원 (2 이상)"
+                      className="GatheringWrite_custom-input_osk"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">
+                  신청 마감일{" "}
+                  <span className="GatheringWrite_required_osk">*</span>
+                  {errors.deadlineDateTime && (
+                    <span
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        marginLeft: "8px",
+                      }}
+                    >
+                      {errors.deadlineDateTime}
+                    </span>
+                  )}
+                </label>
+                <input
+                  type="datetime-local"
+                  name="deadlineDateTime"
+                  value={formData.deadlineDateTime}
+                  onChange={handleInputChange}
+                  className="GatheringWrite_custom-input_osk"
+                  min={getMinDeadlineDateTime()} // 현재 + 3시간 이후만 선택 가능
+                  max={getMaxDeadlineDateTime(formData.meetingDate)} // 모임 날짜까지만 선택 가능
+                  required
+                />
+              </div>
+            </div>
+
+            {/* 모임 상세 정보 */}
+            <div className="GatheringWrite_section_osk">
+              <div className="GatheringWrite_section-header_osk">
+                <span className="GatheringWrite_section-icon_osk">
+                  <HiOutlineInformationCircle />
+                </span>
+                <span className="GatheringWrite_section-title_osk">
+                  모임 상세 정보
+                </span>
+              </div>
+
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">
+                  모임 소개{" "}
+                  <span className="GatheringWrite_required_osk">*</span>
+                </label>
+                <div className="toast-editor-container">
+                  <div ref={editorRef} id="toast-editor"></div>
+                </div>
+                <div className="GatheringWrite_text-counter_osk">
+                  <span></span>
+                  <span>{(formData.content || "").length}/60000</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 준비물 */}
+            <div className="GatheringWrite_section_osk">
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">준비물</label>
+                <textarea
+                  name="preparation"
+                  value={formData.preparation}
+                  onChange={handleInputChange}
+                  placeholder="준비물을 입력해 주세요"
+                  rows="4"
+                  className="GatheringWrite_custom-textarea-simple_osk"
+                />
+              </div>
+            </div>
+
+            {/* 태그 */}
+            <div className="GatheringWrite_section_osk">
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">태그</label>
+                <div className="GatheringWrite_tag-input-group_osk">
+                  <input
+                    type="text"
+                    name="tags"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagInput}
+                    placeholder="태그를 입력하고 Enter 또는 쉼표 사용하여 등록하세요"
+                    className="GatheringWrite_custom-input_osk GatheringWrite_tag-input_osk"
+                  />
+                  {/* <CiHashtag className="GatheringWrite_tag-add-btn_osk" /> */}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "20px" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                {formData.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="GatheringWrite_span-tag_osk"
+                    data-skill="tag"
+                  >
+                    {tag}
+                    <button
+                      className="GatheringWrite_delete-tag-btn_osk"
+                      onClick={() => handleTagDelete(tag)}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="GatheringWrite_section_osk">
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">
+                  한 줄 소개
+                </label>
+                <input
+                  type="text"
+                  name="intrOnln"
+                  value={formData.intrOnln}
+                  onChange={handleInputChange}
+                  placeholder="모임에 관련한 한 줄 소개글을 입력해주세요"
+                  className="GatheringWrite_custom-input_osk"
+                />
+              </div>
+            </div>
+
+            <div className="GatheringWrite_button-group_osk">
               <input
-                type="text"
-                name="intrOnln"
-                value={formData.intrOnln}
-                onChange={handleInputChange}
-                placeholder="모임에 관련한 한 줄 소개글을 입력해주세요"
-                className="GatheringWrite_custom-input_osk"
+                type="submit"
+                className="GatheringWrite_submit-btn_osk"
+                value="모임 등록"
               />
             </div>
           </div>
-
-          <div className="GatheringWrite_button-group_osk">
-            <Button onClick={submit} className="GatheringWrite_submit-btn_osk">
-              모임 등록
-            </Button>
-          </div>
         </div>
-      </div>
-
-      {/* 우편번호 검색 모달 */}
-      {isPostcodeOpen && (
-        <div className="postcode-modal">
-          <div className="postcode-modal-content">
-            <div className="postcode-modal-header">
-              <h3>주소 검색</h3>
-              <button
-                className="postcode-close-btn"
-                onClick={() => setIsPostcodeOpen(false)}
-              >
-                ×
-              </button>
+        {/* 우편번호 검색 모달 */}
+        {isPostcodeOpen && (
+          <div className="postcode-modal">
+            <div className="postcode-modal-content">
+              <div className="postcode-modal-header">
+                <h3>주소 검색</h3>
+                <button
+                  className="postcode-close-btn"
+                  onClick={() => setIsPostcodeOpen(false)}
+                >
+                  ×
+                </button>
+              </div>
+              <DaumPostcode
+                onComplete={handlePostcodeComplete}
+                autoClose={false}
+                defaultQuery=""
+                style={{ width: "100%" }}
+              />
             </div>
-            <DaumPostcode
-              onComplete={handlePostcodeComplete}
-              autoClose={false}
-              defaultQuery=""
-              style={{ width: "100%" }}
-            />
           </div>
-        </div>
-      )}
+        )}
+      </form>
     </div>
-   </div>
   );
 }

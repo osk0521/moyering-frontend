@@ -36,6 +36,7 @@ import MemberManagement from "./pages/admin/MemberManagement";
 import NoticeCreate from "./pages/admin/NoticeCreate";
 import NoticeEdit from "./pages/admin/NoticeEdit"
 import CouponManagement from './pages/admin/CouponManagement.jsx';
+import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
 
 
 
@@ -172,6 +173,7 @@ function App() {
         <Route path="/admin/report" element={<ReportManagement />} />       {/* 신고관리 페이지  */}
         <Route path="/admin/banner" element={<BannerManagement />} />    {/* 배너관리 페이지  */}
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
+        <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}      
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
         <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산관리 페이지  */}      
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}

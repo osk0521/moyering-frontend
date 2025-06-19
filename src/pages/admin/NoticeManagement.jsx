@@ -141,24 +141,7 @@ export default function NoticeList() {
     }
   };
 
-  // 보이기/ 숨기기 
-const toggleNoticeVisibility = async (noticeId, currentHiddenStatus) => {
-  try {
-    const newHiddenStatus = !currentHiddenStatus;
-    
-    // API 호출 - 현재 상태의 반대로 변경
-    const endpoint = newHiddenStatus ? 'hide' : 'show';
-    const response = await axios.patch(`${url}/api/notice/${noticeId}/${endpoint}`);
-    
-    if (response.status === 200) {
-      alert(`공지사항이 ${newHiddenStatus ? '숨기기' : '보이기'} 처리되었습니다.`);
-      loadNoticeList(); 
-    }
-  } catch (error) {
-    console.error('공지사항 표시 상태 변경 실패:', error);
-    alert('공지사항 표시 상태 변경에 실패했습니다.');
-  }
-};
+
 
   // 핀 상태 변경 API (메인화면 고정/해제)
   const togglePinStatus = async (noticeId, currentPinYn) => {
@@ -251,32 +234,110 @@ const toggleNoticeVisibility = async (noticeId, currentHiddenStatus) => {
     return [...pinnedItems, ...unpinnedItems];
   }, [noticeList, sortConfig]);
 
-  // 숨기기
-  const hideNotice = async(noticeId) => {
-    try {
-      const response = await axios.patch(`${url}/api/notice/${noticeId}/hide`);
-      if (response.status === 200){
-        alert("공지사항이 숨겨졌습니다.")
-        loadNoticeList();
-      }
-    } catch(error){
-      console.error("숨기기 실패", error);
-      alert("숨기기에 실패했습니다.")
-    }
-  }
+  // 🔍 디버깅용 코드로 교체해서 테스트
 
-  // 보이기
+const hideNotice = async (noticeId) => {
+  console.log('=== 숨기기 시작 ===');
+  console.log('요청 noticeId:', noticeId);
+  
+  try {
+    const response = await axios.patch(`${url}/api/notice/${noticeId}/hide`);
+    
+    console.log('=== 서버 응답 ===');
+    console.log('응답 상태:', response.status);
+    console.log('응답 데이터:', response.data);
+    console.log('응답 데이터 타입:', typeof response.data);
+    
+    if (response.status === 200) {
+      alert("공지사항이 숨겨졌습니다.");
+      
+      if (response.data) {
+        console.log('=== 상태 업데이트 시작 ===');
+        console.log('업데이트할 데이터:', response.data);
+        console.log('업데이트할 데이터의 isHidden:', response.data.isHidden);
+        
+        // 기존 목록 출력
+        console.log('=== 기존 noticeList ===');
+        console.log(noticeList);
+        
+        setNoticeList(prevList => {
+          const newList = prevList.map(notice => {
+            if (notice.noticeId === noticeId) {
+              console.log('=== 매칭된 notice 발견 ===');
+              console.log('기존 notice:', notice);
+              console.log('새로운 data:', response.data);
+              return response.data;
+            }
+            return notice;
+          });
+          
+          console.log('=== 업데이트된 noticeList ===');
+          console.log(newList);
+          return newList;
+        });
+        
+        console.log('=== 상태 업데이트 완료 ===');
+      } else {
+        console.log('=== 응답 데이터가 없어서 전체 새로고침 ===');
+        await loadNoticeList();
+      }
+    }
+  } catch (error) {
+    console.error("숨기기 실패:", error);
+    alert("숨기기에 실패했습니다.");
+  }
+  
+  console.log('=== 숨기기 끝 ===');
+};
+
 const showNotice = async (noticeId) => {
+  console.log('=== 보이기 시작 ===');
+  console.log('요청 noticeId:', noticeId);
+  
   try {
     const response = await axios.patch(`${url}/api/notice/${noticeId}/show`);
+    
+    console.log('=== 서버 응답 ===');
+    console.log('응답 상태:', response.status);
+    console.log('응답 데이터:', response.data);
+    console.log('응답 데이터 타입:', typeof response.data);
+    
     if (response.status === 200) {
       alert("공지사항이 게시되었습니다.");
-      loadNoticeList();
+      
+      if (response.data) {
+        console.log('=== 상태 업데이트 시작 ===');
+        console.log('업데이트할 데이터:', response.data);
+        console.log('업데이트할 데이터의 isHidden:', response.data.isHidden);
+        
+        setNoticeList(prevList => {
+          const newList = prevList.map(notice => {
+            if (notice.noticeId === noticeId) {
+              console.log('=== 매칭된 notice 발견 ===');
+              console.log('기존 notice:', notice);
+              console.log('새로운 data:', response.data);
+              return response.data;
+            }
+            return notice;
+          });
+          
+          console.log('=== 업데이트된 noticeList ===');
+          console.log(newList);
+          return newList;
+        });
+        
+        console.log('=== 상태 업데이트 완료 ===');
+      } else {
+        console.log('=== 응답 데이터가 없어서 전체 새로고침 ===');
+        await loadNoticeList();
+      }
     }
   } catch (error) {
     console.error("보이기 실패:", error);
     alert("보이기에 실패했습니다.");
   }
+  
+  console.log('=== 보이기 끝 ===');
 };
 
   // 페이지 번호 배열 생성 (최대 5개 페이지 번호 표시)
@@ -319,13 +380,13 @@ const showNotice = async (noticeId) => {
             className="search-inputHY"
           />
         </div>
-      </div>
-      
-      <div className="right-alignHY">
+        <div className="right-alignHY">
         <button className="btn-primary new-notice-btnHY" onClick={handleNewNotice}>
           + 새 공지사항
         </button>
       </div>
+      </div>
+      
 
       <br />
 
@@ -391,14 +452,25 @@ const showNotice = async (noticeId) => {
                     {truncateContent(notice.content)}
                   </td>
                   <td>
-                  <button
-                    className={`publish-btnHY ${!notice.isHidden ? 'published' : 'unpublished'}`}
-                    onClick={() => toggleNoticeVisibility(notice.noticeId, notice.isHidden)}
-                  >
-                    {!notice.isHidden ? '숨기기' : '보이기'}
-                  </button>
+                    {notice.isHidden ? (
+                      // 숨김 상태일 때는 "보이기" 버튼
+                      <button 
+                        className="publish-btnHY unpublished"
+                        onClick={() => showNotice(notice.noticeId)}
+                      >
+                        보이기
+                      </button>
+                    ) : (
+                      // 보임 상태일 때는 "숨기기" 버튼  
+                      <button 
+                        className="publish-btnHY published"
+                        onClick={() => hideNotice(notice.noticeId)}
+                      >
+                        숨기기
+                      </button>
+                    )}
                   </td>
-                  <td>
+                      <td>
                     <button 
                       className={`pin-btnHY ${notice.pinYn ? 'pinned' : 'unpinned'}`}
                       onClick={() => togglePinStatus(notice.noticeId, notice.pinYn)}
@@ -433,7 +505,7 @@ const showNotice = async (noticeId) => {
       {/* 페이지네이션 */}
       <div className="paginationHY">
         <button 
-          className="page-btn prevHY"
+          className="page-btnHY prev"
           onClick={() => changePage(pageInfo.number - 1)}
           disabled={pageInfo.first}
         >
@@ -451,7 +523,7 @@ const showNotice = async (noticeId) => {
           ))}
         </span>
         <button 
-          className="page-btn nextHY"
+          className="page-btnHY next"
           onClick={() => changePage(pageInfo.number + 1)}
           disabled={pageInfo.last}
         >

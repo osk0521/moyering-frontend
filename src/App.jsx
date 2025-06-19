@@ -34,7 +34,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Login from "./pages/admin/Login";
 import MemberManagement from "./pages/admin/MemberManagement";
 import NoticeCreate from "./pages/admin/NoticeCreate";
-
+import NoticeEdit from "./pages/admin/NoticeEdit"
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
@@ -112,7 +112,7 @@ function App() {
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />
-        <Route path="/host/regist" element={<HostRegist/>}/> 
+        {/* <Route path="/host/regist" element={<HostRegist/>}/>  */}
         <Route element={<DashboardLayout />}>
           <Route path="/host/hostMyPage/:num" element={<MainContent />} />
           <Route path="/host/profile" element={<HostProfile />} />
@@ -129,7 +129,6 @@ function App() {
         </Route>
         {/* 관리자 /admin/~~~~ */}
         {/* 1차 로그인 화면  */}
-        <Route path="/admin" element={<Login />} />
         <Route path="/admin/login" element={<Login />} />
 
       {/* 공통 /~~~으로 시작 */}
@@ -162,6 +161,7 @@ function App() {
         <Route path="/admin/class" element={<ClassManagement />} />   {/* 클래스 관리 페이지 */}
         <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
+        <Route path="/admin/notice/edit/:noticeId" element={<NoticeEdit />} />     {/* 공지사항 수정 페이지  */}
         <Route path="/admin/report" element={<ReportManagement />} />       {/* 신고관리 페이지  */}
         <Route path="/admin/banner" element={<BannerManagement />} />    {/* 배너관리 페이지  */}
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}

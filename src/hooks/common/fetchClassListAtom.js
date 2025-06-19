@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { atom } from 'jotai';
 import { classListAtom, currentPageAtom, totalPagesAtom, classFilterAtom } from '../../atom/classAtom';
+import { myAxios } from "../../config";
+import { userAtom, tokenAtom } from "../../atoms";
 
 export const fetchClassListAtom = atom(null, async (get, set) => {
   const page = get(currentPageAtom);
@@ -9,17 +11,23 @@ export const fetchClassListAtom = atom(null, async (get, set) => {
   const params = {
     page: page - 1,
     size: 12,
-    sido: filters.sido,
-    startDate: filters.startDate?.toISOString().slice(0, 10),
-    endDate: filters.endDate?.toISOString().slice(0, 10),
-    category1: filters.category1,
-    category2: filters.category2,
-    priceMin: filters.priceMin,
-    priceMax: filters.priceMax,
-    startTime: filters.startTime,
-    endTime: filters.endTime,
+    sido: filters.sido || null,
+    category1: filters.category1 || null,
+    category2: filters.category2 || null,
+    startDate: filters.startDate?.toISOString().split('T')[0] || null,
+    endDate: filters.endDate?.toISOString().split('T')[0] || null,
+    priceMin: filters.priceMin || null,
+    priceMax: filters.priceMax || null,
   };
-  const res = await axios.get('/classlist', { params });
-  set(classListAtom, res.data.content);
-  set(totalPagesAtom, res.data.totalPages);
+
+  try {
+    const res = await myAxios().get("/classRing/list", { params });
+    set(classListAtom, res.data.content || []);
+    set(totalPagesAtom, res.data.totalPages || 1);
+  } catch (err) {
+    console.error("❌ 클래스 리스트 조회 실패", err);
+    set(classListAtom, []);
+    set(totalPagesAtom, 1);
+  }
+
 });

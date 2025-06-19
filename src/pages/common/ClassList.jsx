@@ -215,7 +215,7 @@ const handleReset = () => {
 
       <section className={styles.sectionBlock}>
         <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
-        <p className={styles.sectionSub}>모여링이 추천해주는 맞춤 클래스</p>
+        <p className={styles.sectionSub}>모여링의 모든 원데이 클래스를 모아 모아~</p>
         <div className={styles.cardList}>
           {classList.length === 0 ? (
             <p>조건에 맞는 클래스가 없습니다.</p>
@@ -231,7 +231,7 @@ const handleReset = () => {
       </section>
 
       <div className={styles.pagination}>
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>〈</button>
+        <button className={styles.pageBtn} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>〈</button>
         {[...Array(totalPages)].map((_, i) => (
           <button
             key={i}
@@ -241,7 +241,7 @@ const handleReset = () => {
             {i + 1}
           </button>
         ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>〉</button>
+        <button className={styles.pageBtn}  onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>〉</button>
       </div>
     </main>
     </>

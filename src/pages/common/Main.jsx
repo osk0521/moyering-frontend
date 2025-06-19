@@ -36,10 +36,12 @@ const items = [
   useRecommendClasses(); // userId 없으면 null 넘기기
   const classes = useAtomValue(recommendClassAtom);
   const hotClasses = useAtomValue(hotClassAtom);
-  const gathers = useAtomValue(recommendGatheringAtom);
+  //const gathers = useAtomValue(recommendGatheringAtom);
+  const gathers = [];
   const mainBanners = useAtomValue(mainBannerList);
 
   console.log(mainBanners);
+  console.log(gathers);
   return (
     <>
       <Header />
@@ -112,11 +114,11 @@ const items = [
             {gathers.length === 0 ? (
               <p>데이터가 없습니다.</p>
             ) : (
-              gathers.map((classInfo, idx) => (
-              <ClassCard
+              gathers.map((gatherInfo, idx) => (
+              <GatheringCard
                 key={idx}
-                classInfo={classInfo}
-                onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
+                classInfo={gatherInfo}
+                onClick={() => navigate(`/gatheringDetail/${gatherInfo.gatheringId}`)}
               />
             )))}
           </div>

@@ -3,8 +3,8 @@ import styles from './GatheringCard.module.css';
 import { MdCalendarMonth } from "react-icons/md";
 
 export default function GatheringCard({ gatherInfo, onClick  }) {
-    if (!gatherInfo) return null;
-  console.log(gatherInfo);
+    //if (!gatherInfo) return null;
+  console.log(gatherInfo+"ssss");
   return (
     <div className={styles.card} onClick={onClick}>
       <div

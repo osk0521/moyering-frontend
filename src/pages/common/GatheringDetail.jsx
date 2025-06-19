@@ -160,7 +160,6 @@ export default function GatheringDetail() {
             });
             setMembersData({
                 name: members.name,
-                name: members.name,
                 profileImage: members.profile,
                 intro: members.intro,
                 likeCategory: "",

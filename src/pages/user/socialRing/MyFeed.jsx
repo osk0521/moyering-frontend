@@ -5,6 +5,7 @@ import './MyFeed.css';
 import badgeIcon from './icons/badge.jpg';
 import heartOutline from './icons/heart-outline.png';
 import heartFilled from './icons/heart-filled.png';
+import Header from '../../common/Header';
 
 const dummyMyPosts = [
   {
@@ -71,6 +72,8 @@ export default function MyFeed() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="myfeed-container">
       <h2 className="myfeed-title">내가 쓴 글</h2>
       <div className="myfeed-grid">
@@ -111,5 +114,6 @@ export default function MyFeed() {
         ))}
       </div>
     </div>
+  </>
   );
 }

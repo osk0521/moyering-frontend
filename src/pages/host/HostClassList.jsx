@@ -1,17 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './HostClassList.css';
 import { useNavigate } from 'react-router-dom';
 import React from 'react'; // 이 한 줄만 추가!
+import { myAxios } from '../../config';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { tokenAtom, userAtom } from '../../atoms';
 
 const ClassList = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [classStatus, setClassStatus] = useState({
-    ongoing: false,
-    upcoming: false,
-    completed: false,
-  });
+  const user = useAtomValue(userAtom);
+  const token = useAtomValue(tokenAtom)
 
   const [searchResults, setSearchResults] = useState([
     {
@@ -101,6 +98,17 @@ const ClassList = () => {
     navigate(path);
   };
 
+  useEffect(()=>{
+    myAxios().get("/host/HostclassList",user.hostId)
+    .then(res=>{
+      console.log(res);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  })
+
+
   return (
     <>
       <div className="KHJ-class-search-container">
@@ -112,8 +120,7 @@ const ClassList = () => {
             <input
               type="text"
               placeholder="클래스명을 입력하세요."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              
             />
             <select className="KHJ-search-filter">
               <option value="">필터</option>
@@ -131,14 +138,12 @@ const ClassList = () => {
             <div className="KHJ-date-range">
               <input
                 type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                
               />
               <span className="KHJ-date-tilde">~</span>
               <input
                 type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+               
               />
             </div>
           </div>
@@ -162,8 +167,7 @@ const ClassList = () => {
               <input
                 type="checkbox"
                 name="ongoing"
-                checked={classStatus.ongoing}
-                onChange={handleClassStatusChange}
+                
               />
               등록중
             </label>
@@ -171,8 +175,7 @@ const ClassList = () => {
               <input
                 type="checkbox"
                 name="upcoming"
-                checked={classStatus.upcoming}
-                onChange={handleClassStatusChange}
+                
               />
               오픈대기
             </label>
@@ -180,8 +183,7 @@ const ClassList = () => {
               <input
                 type="checkbox"
                 name="completed"
-                checked={classStatus.completed}
-                onChange={handleClassStatusChange}
+                
               />
               오픈
             </label>

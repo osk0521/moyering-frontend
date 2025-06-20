@@ -5,6 +5,7 @@ import './Login.css';
 import { myAxios, url } from '../../config';
 import { useSetAtom } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
+import React from 'react'; // 이 한 줄만 추가!
 
 const Login = () => {
   const [login,setLogin] = useState({username:'',password:''})
@@ -77,9 +78,10 @@ const Login = () => {
          <button 
            type="submit" 
            className="login-buttonHY"
-           disabled={loading}
+          //  disabled={loading}
          >
-           {loading ? '로그인 중...' : '로그인'}
+           {/* {loading ? '로그인 중...' : '로그인'} */}
+           로그인
          </button>
        </form>
      </div>

@@ -5,6 +5,7 @@ import DetailTabDescription from './DetailTabDescription';
 import DetailTabExtraInfo from './DetailTabExtraInfo';
 import DetailTabStudent from './DetailTabStudent';
 import DetailFooter from './DetailFooter';
+import React from 'react'; // 이 한 줄만 추가!
 // import './ClassDetail.module.css' → 제거
 import './ClassDetail.css'; // 일반 CSS로 import
 

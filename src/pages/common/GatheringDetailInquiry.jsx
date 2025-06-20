@@ -114,7 +114,7 @@ const exampleQuestionsData = {
     setCurrentPage(page);
   };
    useEffect(()=> {
-    axios.get(`${url}/detailGathering/?gatheringId=${gatheringId}`)
+    axios.get(`${url}/getGatheringInquiries/?gatheringId=${gatheringId}`)
         .then(res=> {
             console.log('API Response:', res.data); 
             

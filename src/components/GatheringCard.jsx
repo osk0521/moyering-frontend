@@ -20,8 +20,8 @@ export default function GatheringCard({ gatherInfo, onClick  }) {
       </div>
       <div className={styles.cardContent}>
         <div className={styles.cardTags}>
-          <span className={`${styles.tag} ${styles.yellow}`}>{gatherInfo.categoryName}-{gatherInfo.subCategoryName}</span>
-          <span className={`${styles.tag} ${styles.blue}`}>{gatherInfo.address}</span>
+          <span className={`${styles.tag} ${styles.yellow}`}>{gatherInfo.categoryName}&gt;{gatherInfo.subCategoryName}</span>
+          <span className={`${styles.tag} ${styles.blue}`}>{gatherInfo.locName}</span>
         </div>
         <h3 className={styles.cardTitle}>{gatherInfo.title}</h3>
         <p className={styles.cardInfo}><MdCalendarMonth/> {gatherInfo.meetingDate}</p>

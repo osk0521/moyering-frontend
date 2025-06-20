@@ -87,7 +87,7 @@ function App() {
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/userFeed" element={<UserFeed />} />
-        <Route path="/feedDetail" element={<FeedDetail />} />
+        <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
         <Route path="/feedCreate" element={<FeedCreate />} />
         <Route path="/feedEdit" element={<FeedEdit />} />

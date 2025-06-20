@@ -1,25 +1,30 @@
 import React from 'react';
-import styles from './GatheringCard.module.css';
+import styles from './ClassCard.module.css';
 import { MdCalendarMonth } from "react-icons/md";
+import { url } from '../config';
 
 export default function GatheringCard({ gatherInfo, onClick  }) {
-    if (!gatherInfo) return null;
-  console.log(gatherInfo);
+    //if (!gatherInfo) return null;
+  console.log(gatherInfo+"ssss");
   return (
     <div className={styles.card} onClick={onClick}>
       <div
         className={styles.cardImage}
-        style={{ backgroundImage: "url('/public/myclassList.png')" }}
+        style={{
+              backgroundImage: `url(${url}/image?filename=${gatherInfo.thumbnailFileName})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
       >
         <span className={styles.likeIcon}>🤍</span>
       </div>
       <div className={styles.cardContent}>
         <div className={styles.cardTags}>
-          <span className={`${styles.tag} ${styles.yellow}`}>{gatherInfo.category1}</span>
-          <span className={`${styles.tag} ${styles.blue}`}>{gatherInfo.addr}</span>
+          <span className={`${styles.tag} ${styles.yellow}`}>{gatherInfo.categoryName}-{gatherInfo.subCategoryName}</span>
+          <span className={`${styles.tag} ${styles.blue}`}>{gatherInfo.address}</span>
         </div>
-        <h3 className={styles.cardTitle}>{gatherInfo.name}</h3>
-        <p className={styles.cardInfo}><MdCalendarMonth/> {gatherInfo.startDate}</p>
+        <h3 className={styles.cardTitle}>{gatherInfo.title}</h3>
+        <p className={styles.cardInfo}><MdCalendarMonth/> {gatherInfo.meetingDate}</p>
       </div>
     </div>
   );

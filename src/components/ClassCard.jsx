@@ -11,7 +11,7 @@ export default function ClassCard({ classInfo, onClick  }) {
       <div
         className={styles.cardImage}
         style={{
-              backgroundImage: `url(${url}/image?filename=${classInfo.img1})`,
+              backgroundImage: `url(${url}/image?filename=${classInfo.imgName1})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -21,7 +21,7 @@ export default function ClassCard({ classInfo, onClick  }) {
       </div>
       <div className={styles.cardContent}>
         <div className={styles.cardTags}>
-          <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}</span>
+          <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}-{classInfo.category2}</span>
           <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
         </div>
         <h3 className={styles.cardTitle}>{classInfo.name}</h3>

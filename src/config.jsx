@@ -9,20 +9,20 @@ export const myAxios = (token) => {
       timeout: 5000,
    })
 
-   instance.interceptors.response.use(
-      function (error) {
-         if (error.response && error.response.status) {
-            switch (error.response.status) {
-               case 401:
-               case 403:
-                  window.location.href = `${reactUrl}/login`; break;
-               default:
-                  return Promise.reject(error);
-            }
-         }
-         return Promise.reject(error);
-      }
-   );
+   // instance.interceptors.response.use(
+   //    function (error) {
+   //       if (error.response && error.response.status) {
+   //          switch (error.response.status) {
+   //             case 401:
+   //             case 403:
+   //                window.location.href = `${reactUrl}/login`; break;
+   //             default:
+   //                return Promise.reject(error);
+   //          }
+   //       }
+   //       return Promise.reject(error);
+   //    }
+   // );
 
    token && instance.interceptors.request.use((config) => {
       config.headers.Authorization = token;

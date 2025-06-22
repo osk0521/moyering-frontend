@@ -130,7 +130,7 @@ function App() {
           <Route path="/host/settlementInfo" element={<SettlementInfo />} />
           <Route path="/host/inquiry" element={<Inquiry />} />
           <Route path="/host/calendar" element={<ClassCalendar />} />
-          <Route path="/host/detail/:classId" element={<ClassDetail />} />
+          <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
 

@@ -213,7 +213,7 @@ const ClassList = () => {
                   <div className="KHJ-dropdown-menu">
                     <button onClick={() => handleNavigate('/host/inquiry')}>문의 관리</button>
                     <button onClick={() => handleNavigate('/host/classReview')}>리뷰 관리</button>
-                    <button onClick={() => handleNavigate('/host/detail/${classId')}>상품 상세</button>
+                    <button onClick={() => handleNavigate(`/host/detail/${result.classId}/${result.calendarId}`)}>상품 상세</button>
                   </div>
                 )}
               </div>

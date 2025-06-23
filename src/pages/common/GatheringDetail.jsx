@@ -9,8 +9,6 @@ import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY, myAxios, } from "../
 import KakaoMap from "./KakaoMap";
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
-import { useAtom, useAtomValue } from "jotai";
-import { userAtom, tokenAtom } from "../../atoms";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from "./Header";

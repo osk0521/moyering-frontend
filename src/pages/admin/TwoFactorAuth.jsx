@@ -18,7 +18,7 @@ const TwoFactorAuth = () => {
     } else {
       // 이메일 정보가 없으면 로그인 페이지로 리다이렉트
       alert('잘못된 접근입니다. 다시 로그인해주세요.');
-      navigate('/login');
+      navigate('/admin');
     }
   }, [location, navigate]);
 

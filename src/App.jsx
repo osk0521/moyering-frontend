@@ -52,7 +52,7 @@ import ReportManagement from "./pages/admin/ReportManagement";
 import SettlementManagement from "./pages/admin/SettlementManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import ClassList from "./pages/common/ClassList.jsx";
-import ClassRingDetail from "./pages/common/classRingDetail.jsx";
+import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
 
 import Main from "./pages/common/Main.jsx";
 import ClassInquiry from "./pages/user/0myPage/classRing/ClassInquiry.jsx";
@@ -73,6 +73,7 @@ import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringAppl
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
 import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
+import GatheringList from './pages/common/GatheringList.jsx';
 
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
         {/* 공통 /~~~으로 시작 */}
         <Route path="/" element={<Main />} />
         <Route path="/classList" element={<ClassList />} />
+        <Route path="/gatheringList" element={<GatheringList />} />
         <Route path="/classRingDetail/:id" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feed" element={<FeedPage />} />
@@ -120,7 +122,7 @@ function App() {
         <Route path="/host/regist" element={<HostRegist />} />
         {/* <Route path="/host/regist" element={<HostRegist/>}/>  */}
         <Route element={<DashboardLayout />}>
-          <Route path="/host/hostMyPage/:num" element={<MainContent />} />
+          <Route path="/host/hostMyPage/" element={<MainContent />} />
           <Route path="/host/profile" element={<HostProfile />} />
           <Route path="/host/classRegist" element={<ClassRegisterPage />} />
           <Route path="/host/HostclassList" element={<HostClassList />} />
@@ -128,7 +130,7 @@ function App() {
           <Route path="/host/settlementInfo" element={<SettlementInfo />} />
           <Route path="/host/inquiry" element={<Inquiry />} />
           <Route path="/host/calendar" element={<ClassCalendar />} />
-          <Route path="/host/detail/:classId" element={<ClassDetail />} />
+          <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
 

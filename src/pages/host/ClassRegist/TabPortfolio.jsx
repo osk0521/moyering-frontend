@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './TabPortfolio.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const TabPortfolio = ({ registerValidator,classData,setClassData }) => {
   const {classPortfolio} = classData;

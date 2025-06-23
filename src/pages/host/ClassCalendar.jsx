@@ -2,6 +2,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import './ClassCalendar.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const events = [
   { title: "드로잉 클래스", start: "2025-06-11", color: "#ff9f89" },

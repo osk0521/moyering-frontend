@@ -1,64 +1,85 @@
 import './DetailTabExtraInfo.css';
+import React, { useEffect } from 'react';
 
-const DetailTabExtraInfo = () => {
+const DetailTabExtraInfo = ({ classData, registerValidator, isEditMode }) => {
+  const {
+    materialName,
+    incluision,
+    preparation,
+    keywords,
+    caution,
+    portfolioName,
+    classCalendars = []
+  } = classData || {};
+
+  useEffect(() => {
+    registerValidator(3, () => true); // 검증 로직이 필요하다면 여기에 추가
+  }, []);
+
   return (
     <div className="KHJ-extra-info-container">
       <h2 className="KHJ-section-title">클래스 부가정보</h2>
 
-      {/* 스케줄 */}
-      <section className="KHJ-schedule-block">
-        <div className="KHJ-schedule-title">스케줄</div>
-        <table className="KHJ-schedule-table">
-          <thead>
-            <tr>
-              <th colSpan="2">스케줄 1</th>
-            </tr>
-            <tr>
-              <th>스케줄명</th>
-              <th>시간</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>00:00~00:00</td>
-              <td>일정 내용</td>
-            </tr>
-            <tr>
-              <td>00:00~00:00</td>
-              <td>일정 내용</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+      {/* 스케줄 정보 */}
+      {classCalendars.length > 0 ? (
+        classCalendars.map((schedule, idx) => (
+          <section key={idx} className="KHJ-schedule-block">
+            <div className="KHJ-schedule-title">스케줄 {idx + 1}</div>
+            <table className="KHJ-schedule-table">
+              <thead>
+                <tr>
+                  <th>일정 시작</th>
+                  <th>일정 종료</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{schedule.startDate}</td>
+                  <td>{schedule.endDate}</td>
+                  <td>{schedule.status}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        ))
+      ) : (
+        <p style={{ marginTop: "1rem", color: "#888" }}>등록된 스케줄이 없습니다.</p>
+      )}
 
       {/* 강의자료 */}
       <div className="KHJ-info-row">
         <div className="KHJ-info-label">클래스 강의자료</div>
-        <div className="KHJ-info-value">빵굽는법.pdf</div>
+        <div className="KHJ-info-value">{materialName || '없음'}</div>
       </div>
 
-      {/* 태그 정보 */}
+      {/* 포함 사항 */}
       <div className="KHJ-info-row">
         <div className="KHJ-info-label">포함 사항(선택)</div>
-        <div className="KHJ-info-tag">베이킹도구</div>
+        <div className="KHJ-info-tag">{incluision || '없음'}</div>
       </div>
 
+      {/* 준비물 */}
       <div className="KHJ-info-row">
         <div className="KHJ-info-label">클래스 준비물(선택)</div>
-        <div className="KHJ-info-tag">앞치마</div>
+        <div className="KHJ-info-tag">{preparation || '없음'}</div>
       </div>
 
+      {/* 검색 키워드 */}
       <div className="KHJ-info-row">
         <div className="KHJ-info-label">검색 키워드(선택)</div>
-        <div className="KHJ-info-tag">베이킹</div>
+        <div className="KHJ-info-tag">{keywords || '없음'}</div>
       </div>
 
       {/* 유의사항 */}
       <div className="KHJ-info-row KHJ-notice-section">
         <div className="KHJ-info-label">신청 시 유의사항</div>
         <div className="KHJ-notice-box">
-          <p><strong>[신청 시 유의사항]</strong></p>
-          <p>· 최소 인원 미달로 인해 진행이 취소될 경우, 신청 마감 일시에 진행 취소 안내를 드리며 참가비는 전액 환불해 드립니다.</p>
+          {caution ? (
+            <p>{caution}</p>
+          ) : (
+            <p style={{ color: '#888' }}>유의사항 없음</p>
+          )}
         </div>
       </div>
     </div>

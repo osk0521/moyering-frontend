@@ -1,50 +1,50 @@
 import React, { useState , useEffect} from 'react';
-import ClassCard from '../../components/ClassCard';
-import styles from './ClassList.module.css';
+import GatheringCard from '../../components/GatheringCard';
+import styles from './GatheringList.module.css';
 import DatePicker from 'react-datepicker';
 import Header from './Header';
 import { useNavigate } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
-  classListAtom,
+  gatheringListAtom,
   currentPageAtom,
   totalPagesAtom,
-  classFilterAtom,
+  gatheringFilterAtom,
 } from '../../atom/classAtom';
-import {fetchClassListAtom} from '../../hooks/common/fetchClassListAtom';
+import {fetchGatheringListAtom} from '../../hooks/common/fetchGatheringListAtom';
 import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom';
 import { categoryListAtom } from '../../atom/classAtom';
 
-export default function ClassList() {
+export default function GatheringList() {
     const [selectedDate1, setSelectedDate1] = useState(null);
   const [selectedDate2, setSelectedDate2] = useState(null);
   const [selectedSido, setSelectedSido] = useState("");
   const [selectedCategory1, setSelectedCategory1] = useState('');
   const [selectedCategory2, setSelectedCategory2] = useState('');
-  const [selectedPriceMin, setSelectedPriceMin] = useState('');
-  const [selectedPriceMax, setSelectedPriceMax] = useState('');
-  const [selectedName, setSelectedName] = useState('');
+  const [selectedMaxAttendees, setSelectedMaxAttendees] = useState('');
+  const [selectedMinAttendees, setSelectedMinAttendees] = useState('');
+  const [selectedTitle, setSelectedTitle] = useState('');
   const navigate = useNavigate();
 
-  const classList = useAtomValue(classListAtom);
+  const gatheringList = useAtomValue(gatheringListAtom);
   const totalPages = useAtomValue(totalPagesAtom);
   const currentPage = useAtomValue(currentPageAtom);
 
   const setCurrentPage = useSetAtom(currentPageAtom);
-  const setFilter = useSetAtom(classFilterAtom);
-  const fetchClassList = useSetAtom(fetchClassListAtom);
+  const setFilter = useSetAtom(gatheringFilterAtom);
+  const fetchGatheringList = useSetAtom(fetchGatheringListAtom);
   //카테고리 끌고오기
   const categoryList = useAtomValue(categoryListAtom);
   const fetchCategories = useSetAtom(fetchCategoryListAtom);
 
   //처음에 클래스 끌고오기
-  const filters = useAtomValue(classFilterAtom);
+  const filters = useAtomValue(gatheringFilterAtom);
   console.log(categoryList);
   
   // useEffect로 최초 1회 호출
   useEffect(() => {
     fetchCategories();
-    fetchClassList();
+    fetchGatheringList();
   }, [currentPage, filters]);
 
   const firstCategoryList = Array.from(
@@ -70,12 +70,12 @@ setCurrentPage(1); // 페이지 초기화
     category2: selectedCategory2,
     startDate: selectedDate1,
     endDate: selectedDate2,
-    priceMin: selectedPriceMin,
-    priceMax: selectedPriceMax,
-    name: selectedName,
+    maxAttendees: selectedMaxAttendees,
+    minAttendees: selectedMinAttendees,
+    title: selectedTitle,
   }));
 
-  fetchClassList(); // 필터 적용 후 새 목록 요청
+  fetchGatheringList(); // 필터 적용 후 새 목록 요청
 };
 
 const handlePageChange = (page) => {
@@ -89,9 +89,9 @@ const handleReset = () => {
   setSelectedCategory2('');
   setSelectedDate1(null);
   setSelectedDate2(null);
-  setSelectedPriceMin('');
-  setSelectedPriceMax('');
-  setSelectedName('');
+  setSelectedMaxAttendees('');
+  setSelectedMinAttendees('');
+  setSelectedTitle('');
   setCurrentPage(1);
   setFilter({
     sido: '',
@@ -99,11 +99,11 @@ const handleReset = () => {
     category2: '',
     startDate: null,
     endDate: null,
-    priceMin: '',
-    priceMax: '',
-    name:'',
+    maxAttendees: '',
+    minAttendees:'',
+    title:'',
   });
-  fetchClassList();
+  fetchGatheringList();
 };
 
 
@@ -174,11 +174,10 @@ const handleReset = () => {
                 <label>제목</label>
                 <div className={styles.range}>
                   <input type="text" placeholder="제목" className={styles.datePickerInput}
-                  value={selectedName}
-                  onChange={(e) => setSelectedName(e.target.value)}/>   
+                  value={selectedTitle}
+                  onChange={(e) => setSelectedTitle(e.target.value)}/>   
                 </div>
               </div>
-              
       
               {/* 날짜 */}
               <div className={styles.formGroup}>
@@ -201,20 +200,21 @@ const handleReset = () => {
                   />
                 </div>
               </div>
-              {/* 금액 */}
+      
+              {/* 인원 */}
               <div className={styles.formGroup}>
-                <label>금액</label>
+                <label>인원</label>
                 <div className={styles.range}>
-                  <input type="number" placeholder="0원" className={styles.datePickerInput}
-                  value={selectedPriceMin}
-                  onChange={(e) => setSelectedPriceMin(e.target.value)}/>
+                  <input type="number" placeholder="최소인원" className={styles.datePickerInput}
+                  value={selectedMinAttendees}
+                  onChange={(e) => setSelectedMinAttendees(e.target.value)}/>
                   <span>~</span>
-                  <input type="number" placeholder="1,000,000원" className={styles.datePickerInput}
-                  value={selectedPriceMax}
-                  onChange={(e) => setSelectedPriceMax(e.target.value)}
+                  <input type="number" placeholder="최대인원" className={styles.datePickerInput}
+                  value={selectedMaxAttendees}
+                  onChange={(e) => setSelectedMaxAttendees(e.target.value)}
                   />    
                 </div>
-              </div>      
+              </div>
       
               {/* 하단 버튼 */}
               <div className={styles.formGroup}>
@@ -229,14 +229,14 @@ const handleReset = () => {
         <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
         <p className={styles.sectionSub}>모여링의 모든 원데이 클래스를 모아 모아~</p>
         <div className={styles.cardList}>
-          {classList.length === 0 ? (
-            <p>조건에 맞는 클래스가 없습니다.</p>
+          {gatheringList.length === 0 ? (
+            <p>조건에 맞는 게더링이 없습니다.</p>
           ) : (
-            classList.map((classInfo, idx) => (
-            <ClassCard
+            gatheringList.map((gatherInfo, idx) => (
+            <GatheringCard
               key={idx}
-              classInfo={classInfo}
-              onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
+              gatherInfo={gatherInfo}
+              onClick={() => navigate(`/gatheringDetail/${gatherInfo.gatheringId}`)}
             />
           )))}
         </div>

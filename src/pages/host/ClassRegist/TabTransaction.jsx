@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './TabTransaction.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const TabTransaction = ({ registerValidator,classData,setClassData }) => {
     const {transaction} = classData;

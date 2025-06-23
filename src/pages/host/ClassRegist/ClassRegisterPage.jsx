@@ -40,6 +40,11 @@ const ClassRegisterPage = () => {
       recruitMax: '',
       recruitMin: '',
       dates: [],
+      scheduleDetail:[{
+        content:'',
+        startTime:'',
+        endTime:'',
+      }]
     },
     description: {
       img1: null,

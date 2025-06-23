@@ -63,6 +63,7 @@ const BannerManagement = () => {
           bannerCode: 'BN1',
           imageUrl: 'banner1.jpg',
           title: '신규 요리 클래스 오픈',
+          content: '배너 내용입니다',
           isHidden: false,
           registerId: 'admin1',
           createdAt: '2024-02-15T10:00:00'
@@ -72,6 +73,7 @@ const BannerManagement = () => {
           bannerCode: 'PU2',
           imageUrl: 'popup2.jpg',
           title: '겨울 특별 할인 이벤트',
+          content: '배너 내용입니다',
           isHidden: true,
           registerId: 'admin1',
           createdAt: '2024-02-15T11:00:00'
@@ -81,6 +83,7 @@ const BannerManagement = () => {
           bannerCode: 'BN3',
           imageUrl: 'banner3.jpg',
           title: '도예 클래스 인기 급상승',
+          content: '배너 내용입니다',
           isHidden: false,
           registerId: 'admin1',
           createdAt: '2024-02-15T12:00:00'
@@ -90,6 +93,7 @@ const BannerManagement = () => {
           bannerCode: 'BN4',
           imageUrl: 'banner4.jpg',
           title: '봄맞이 새학기 특별 이벤트',
+          content: '배너 내용입니다',
           isHidden: false,
           registerId: 'admin2',
           createdAt: '2024-02-28T09:00:00'
@@ -99,6 +103,7 @@ const BannerManagement = () => {
           bannerCode: 'PU5',
           imageUrl: 'popup5.jpg',
           title: '모바일 앱 출시 기념 이벤트',
+          content: '배너 내용입니다',
           isHidden: true,
           registerId: 'admin1',
           createdAt: '2024-02-19T14:00:00'
@@ -305,6 +310,7 @@ const BannerManagement = () => {
               <th>ID</th>
               <th>배너 이미지</th>
               <th>제목</th>
+              <th>내용</th>
               <th>상태</th>
               <th>등록 ID</th>
               <th>등록일자</th>
@@ -335,6 +341,7 @@ const BannerManagement = () => {
                     </div>
                   </td>
                   <td className="banner-title">{banner.title}</td>
+                  <td className="banner-content">{banner.content}</td>
                   <td>
                     {banner.isHidden ? (
                       <button 

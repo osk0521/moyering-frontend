@@ -246,7 +246,7 @@ const reportHistory = [
                     <th>No.</th>
                     <th>카테고리</th>
                     <th>클래스명</th>
-                    <th>결제금액</th>
+                    <th>클래스 금액</th>
                     <th>클래스 금액</th>
                     <th>쿠폰 사용금액</th>
                     <th>쿠폰 유형</th>

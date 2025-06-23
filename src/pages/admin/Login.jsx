@@ -31,7 +31,7 @@ const Login = () => {
      // 실제 로그인 API 호출
      console.log('로그인 시도:', formData);
      
-     const response = await axios.post('/api/login', {
+     const response = await axios.post('/api', {
        username: formData.username,
        password: formData.password
      });
@@ -45,9 +45,9 @@ const Login = () => {
      
      console.log('로그인 성공:', response.data.role);
      
-     // 역할별 페이지 이동 - ROLE_MG일 경우에 /admin/verify로 넘어가야해
+     // 역할별 페이지 이동 - ROLE_MG일 경우에 /admin/dashboard 넘어가기 
      if (response.data.role === 'ROLE_MG') {
-       navigate('/admin/verify');
+       navigate('/admin/dashboard');
      } else {
        navigate('/'); // 일반 사용자는 메인 페이지로
      }

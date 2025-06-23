@@ -1,7 +1,9 @@
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { FaHeart } from "react-icons/fa";
 import { GoPeople } from "react-icons/go";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { useParams } from "react-router-dom";
@@ -16,21 +18,41 @@ import Header from "./Header";
 import KakaoMap from "./KakaoMap";
 import aImage from "/detail2.png";
 
-const handleJoinClick = () => {
-  console.log("참가 신청하기 클릭");
-};
-
-const handleWishlistClick = () => {
-  console.log("찜하기 클릭");
-};
-
 export default function GatheringDetail() {
-  
-  const user = useAtomValue(userAtom);    
+  const user = useAtomValue(userAtom);
   const token = useAtomValue(tokenAtom);
-  
-  const{gatheringId} = useParams();
-  
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [aspirationContent, setAspirationContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => {
+    // 약간의 지연을 두어 스토리지 로딩 완료 대기
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const { gatheringId } = useParams();
+  useEffect(() => {
+    if (!isLoaded) return; // 로딩 완료 전에는 실행하지 않음
+    if (token) {
+      myAxios(token).get(`/user/detailGathering?gatheringId=${gatheringId}`)
+        .then((res) => {
+          console.log("추가 데이터 API 응답:", res.data);
+          setIsLiked(res.data.isLiked);
+          setIsApplied(!res.data.canApply);
+        })
+        .catch((err) => {
+          console.log("에러 발생:", err.response?.status, err.response?.data);
+        });
+    } else {
+      console.log("토큰이 없음 " + token + " user " + user);
+    }
+  }, [gatheringId, token, isLoaded]);
   const [gatheringData, setGatheringData] = useState({
     gatheringId: null,
     title: "",
@@ -55,6 +77,8 @@ export default function GatheringDetail() {
     intrOnln: "",
     status: "",
     locName: "",
+    isLiked: "",
+    canApply: "",
   });
 
   const [hostData, setHostData] = useState({
@@ -66,97 +90,174 @@ export default function GatheringDetail() {
     tags: [],
   });
 
-  // 
+  //
   const [members, setMembers] = useState([]);
 
-  useEffect(()=> {
-    myAxios().get(`/detailGathering?gatheringId=${gatheringId}`)
-        .then(res=> {
-            console.log('API Response:', res.data); 
-            
-            // gathering 데이터 설정
-            const gathering = res.data.gathering;
-            const host = res.data.host;
-            const member = res.data.member || []; // member 배열 추출
-            
-            // tags 필드를 문자열에서 배열로 변환
-            let parsedTags = [];
-            if (gathering.tags && typeof gathering.tags === 'string') {
-                try {
-                    // 문자열 "['독서', '소모임', '홍대']"를 배열로 변환
-                    const validJsonString = gathering.tags.replace(/'/g, '"');
-                    parsedTags = JSON.parse(validJsonString);
-                } catch (error) {
-                    console.error('Tags 파싱 오류:', error);
-                    parsedTags = [];
-                }
-            }
-            setGatheringData({
-                gatheringId: gathering.gatheringId,
-                title: gathering.title,
-                userId: gathering.userId,
-                gatheringContent: gathering.gatheringContent,
-                thumbnailFileName: gathering.thumbnailFileName,
-                meetingDate: gathering.meetingDate,
-                startTime: gathering.startTime,
-                endTime: gathering.endTime,
-                address: gathering.address,
-                detailAddress: gathering.detailAddress,
-                minAttendees: gathering.minAttendees,
-                maxAttendees: gathering.maxAttendees,
-                applyDeadline: gathering.applyDeadline,
-                preparationItems: gathering.preparationItems,
-                tags: parsedTags,
-                createDate: gathering.createDate,
-                category: gathering.categoryName,
-                subCategory: gathering.subCategoryName,
-                latitude: gathering.latitude,
-                longitude: gathering.longitude,
-                intrOnln: gathering.intrOnln,
-                status: gathering.status,
-                locName: gathering.locName,
-            });
+  const handleApplyButtonClick = () => {
+    if (!user || !token) {
+      if (
+        confirm(
+          "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
+        )
+      ) {
+        navigate("/userlogin");
+      } else {
+        return;
+      }
+    } else {
+      if (isApplied) {
+        alert("이미 지원된 게더링입니다.");
+        return;
+      }
+      // 모달 열기
+      setIsApplyModalOpen(true);
+    }
+  };
 
-            setHostData({
-                nickname: host.nickName,
-                profileImage: host.profile,
-                followers: 0, // API에서 제공되지 않는 경우 기본값
-                intro: host.intro || "", 
-                likeCategory: "",
-                tags: [], // 호스트 태그가 없는 경우 빈 배열
-                categorys: [], // 호스트 카테고리를 배열로 저장
-            });
-            setMembers(member.map(m => ({
-                id: m.gatheringApplyId,
-                name: m.name,
-                profileImage: m.profile ? `${url}/image/${m.profile}` : null,
-                introduction: m.intro,
-                applyDate: m.applyDate,
-                aspiration: m.aspiration,
-                isApprove: m.isApprove,
-                userId: m.userId
-            })));
+  // 4. 실제 신청 처리 함수 (모달에서 폼 제출시)
+  const handleApplySubmit = async (e) => {
+    e.preventDefault();
 
-            console.log('변환된 tags:', parsedTags);
+    // 입력값 검증
+    if (!aspirationContent.trim()) {
+      alert("호스트에게 남길 말을 입력해주세요.");
+      return;
+    }
+
+    if (aspirationContent.length > 500) {
+      alert("메시지는 500자 이내로 작성해주세요.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+       const formData = {
+        gatheringId: parseInt(gatheringId),
+        aspiration: aspirationContent.trim()
+      };
+      const response = await myAxios(token).post('/user/applyGathering', formData);
+
+      // 성공 처리
+      console.log("API 성공:", response.data);
+      setIsApplied(true);
+      setIsApplyModalOpen(false);
+      setAspirationContent("");
+      alert("모임 신청이 완료되었습니다!");
+    } catch (error) {
+      console.error("신청 처리 중 오류:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  const handleLikeButtonClick = () => {
+     if (!user || !token) {
+      if ( confirm( "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?") ) {
+        navigate("/userlogin");
+      } else {
+        return;
+      }
+    } else {
+      const newLikedState = !isLiked;
+      setIsLiked(newLikedState);
+
+      myAxios(token)
+        .post(`/user/toggleGatheringLike?gatheringId=${gatheringId}`)
+        .then((res) => {
+          console.log("API 성공:", res.data);
+          // 서버 응답과 다르다면 다시 설정
+          if (Boolean(res.data) !== newLikedState) {
+            setIsLiked(Boolean(res.data));
+          }
         })
-        .catch(err=> {
-            console.log(err)
-        })
-        if(user){
-          myAxios(token).get(`/user/detailGathering?gatheringId=${gatheringId}`)
-          .then(res=> {
-            //추가 정보
-              const gathering = res.data.gathering;
-              console.log('');
-          })
-          .catch(err=> {
-              console.log(err)
-          })
+        .catch((err) => {
+          console.log("API 에러:", err);
+          // 에러 시 원래 상태로 복원
+          setIsLiked(!newLikedState);
+          alert("처리 중 오류가 발생했습니다.");
+        });
+    } 
+  };
+
+  useEffect(() => {
+    myAxios()
+      .get(`/detailGathering?gatheringId=${gatheringId}`)
+      .then((res) => {
+        console.log("API Response:", res.data);
+
+        // gathering 데이터 설정
+        const gathering = res.data.gathering;
+        const host = res.data.host;
+        const member = res.data.member || []; // member 배열 추출
+        // const totalLikeNum = res.data.totalLikeNum;
+        // tags 필드를 문자열에서 배열로 변환
+        let parsedTags = [];
+        if (gathering.tags && typeof gathering.tags === "string") {
+          try {
+            // 문자열 "['독서', '소모임', '홍대']"를 배열로 변환
+            const validJsonString = gathering.tags.replace(/'/g, '"');
+            parsedTags = JSON.parse(validJsonString);
+          } catch (error) {
+            console.error("Tags 파싱 오류:", error);
+            parsedTags = [];
+          }
         }
+        setGatheringData({
+          gatheringId: gathering.gatheringId,
+          title: gathering.title,
+          userId: gathering.userId,
+          gatheringContent: gathering.gatheringContent,
+          thumbnailFileName: gathering.thumbnailFileName,
+          meetingDate: gathering.meetingDate,
+          startTime: gathering.startTime,
+          endTime: gathering.endTime,
+          address: gathering.address,
+          detailAddress: gathering.detailAddress,
+          minAttendees: gathering.minAttendees,
+          maxAttendees: gathering.maxAttendees,
+          applyDeadline: gathering.applyDeadline,
+          preparationItems: gathering.preparationItems,
+          tags: parsedTags,
+          createDate: gathering.createDate,
+          category: gathering.categoryName,
+          subCategory: gathering.subCategoryName,
+          latitude: gathering.latitude,
+          longitude: gathering.longitude,
+          intrOnln: gathering.intrOnln,
+          status: gathering.status,
+          locName: gathering.locName,
+        });
+
+        setHostData({
+          nickname: host.nickName,
+          profileImage: host.profile,
+          followers: 0, // API에서 제공되지 않는 경우 기본값
+          intro: host.intro || "",
+          likeCategory: "",
+          tags: [], // 호스트 태그가 없는 경우 빈 배열
+          categorys: [], // 호스트 카테고리를 배열로 저장
+        });
+        setMembers(
+          member.map((m) => ({
+            id: m.gatheringApplyId,
+            name: m.name,
+            profileImage: m.profile ? `${url}/image/${m.profile}` : null,
+            introduction: m.intro,
+            applyDate: m.applyDate,
+            aspiration: m.aspiration,
+            isApprove: m.isApprove,
+            userId: m.userId,
+          }))
+        );
+
+        console.log("변환된 tags:", parsedTags);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [gatheringId]);
 
   const [activeTab, setActiveTab] = useState("details");
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const recommendations = [
@@ -216,7 +317,7 @@ export default function GatheringDetail() {
 
   // HTML 태그를 제거하고 순수 텍스트만 추출하는 함수
   const stripHtmlTags = (html) => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
   };
 
@@ -226,12 +327,12 @@ export default function GatheringDetail() {
     if (textContent.length <= maxLength) {
       return html;
     }
-    
+
     // 텍스트가 길면 간단하게 처리
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const doc = new DOMParser().parseFromString(html, "text/html");
     const textNodes = doc.body.textContent || "";
     const truncatedText = textNodes.substring(0, maxLength) + "...";
-    
+
     // 기본적인 HTML 구조 유지하면서 텍스트만 자르기
     return `<p>${truncatedText}</p>`;
   };
@@ -241,15 +342,15 @@ export default function GatheringDetail() {
 
   // 전체 상세 설명 텍스트 (gatheringContent 사용)
   const fullDescription = gatheringData.gatheringContent || "";
-  
+
   // HTML 태그를 제거한 순수 텍스트로 길이 판단
   const plainTextContent = stripHtmlTags(fullDescription);
-  
+
   // 더보기 버튼을 보여줄지 결정 (순수 텍스트 기준)
   const shouldShowMoreButton = plainTextContent.length > PREVIEW_LENGTH;
-  
+
   // 미리보기용 HTML 콘텐츠
-  const previewHtmlContent = shouldShowMoreButton 
+  const previewHtmlContent = shouldShowMoreButton
     ? truncateHtmlContent(fullDescription, PREVIEW_LENGTH)
     : fullDescription;
 
@@ -260,15 +361,15 @@ export default function GatheringDetail() {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    const weekDay = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+    const weekDay = ["일", "월", "화", "수", "목", "금", "토"][date.getDay()];
     return `${year}년 ${month}월 ${day}일 (${weekDay})`;
   };
   // 시간 포맷팅 함수
   const formatTime = (timeString) => {
     if (!timeString) return "";
-    const [hours, minutes] = timeString.split(':');
+    const [hours, minutes] = timeString.split(":");
     const hour = parseInt(hours);
-    const ampm = hour >= 12 ? '오후' : '오전';
+    const ampm = hour >= 12 ? "오후" : "오전";
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
     return `${ampm} ${displayHour}:${minutes}`;
   };
@@ -288,7 +389,13 @@ export default function GatheringDetail() {
     }
     setActiveTab(tabName);
   };
-
+  const toggleApplyModal = () => {
+    setIsApplyModalOpen(!isApplyModalOpen);
+    // 모달 닫을 때 입력값 초기화
+    if (isApplyModalOpen) {
+      setAspirationContent("");
+    }
+  };
   const handleExpandClick = () => {
     setIsExpanded(true);
   };
@@ -331,7 +438,7 @@ export default function GatheringDetail() {
             {/* 이미지 섹션 */}
             <div className="GatheringDetail_image-section_osk">
               <img
-                src={gatheringData.thumbnailFileName ? `${url}/image?filename=${gatheringData.thumbnailFileName}` : aImage}
+                src={`${url}/image?filename=${gatheringData.thumbnailFileName}`}
                 alt="모임 이미지"
                 className="GatheringDetail_main-image_osk"
               />
@@ -400,11 +507,11 @@ export default function GatheringDetail() {
                 <p className="mb-4 text-gray-700 leading-relaxed">
                   {gatheringData.intrOnln}
                 </p>
-                
+
                 {/* Toast UI Editor로 작성된 내용을 HTML로 렌더링 */}
                 {!isExpanded && shouldShowMoreButton && (
                   <>
-                    <div 
+                    <div
                       className="mb-4 text-gray-700 leading-relaxed"
                       dangerouslySetInnerHTML={{ __html: previewHtmlContent }}
                     />
@@ -418,22 +525,24 @@ export default function GatheringDetail() {
                 )}
 
                 {(isExpanded || !shouldShowMoreButton) && (
-                  <div 
+                  <div
                     className="text-gray-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: gatheringData.gatheringContent }}
+                    dangerouslySetInnerHTML={{
+                      __html: gatheringData.gatheringContent,
+                    }}
                   />
                 )}
 
-              {/* 태그 표시 */}
-              {gatheringData.tags && gatheringData.tags.length > 0 && (
-                <div className="GatheringDetail_tags_osk">
-                  {gatheringData.tags.map((tag, index) => (
-                    <span key={index} className="GatheringDetail_tag_osk">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+                {/* 태그 표시 */}
+                {gatheringData.tags && gatheringData.tags.length > 0 && (
+                  <div className="GatheringDetail_tags_osk">
+                    {gatheringData.tags.map((tag, index) => (
+                      <span key={index} className="GatheringDetail_tag_osk">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 {/* 준비물 */}
                 {gatheringData.preparationItems && (
                   <>
@@ -530,10 +639,9 @@ export default function GatheringDetail() {
                 className="GatheringDetail_detail-section_osk"
               >
                 <h3 className="GatheringDetail_section-title_osk">문의</h3>
-              <GatheringDetailInquiry gatheringId={gatheringId} /> 
-                
+                <GatheringDetailInquiry gatheringId={gatheringId} />
               </div>
-              
+
               {/* 멤버 섹션 */}
               <div
                 id="GatheringDetail_members_osk"
@@ -568,8 +676,8 @@ export default function GatheringDetail() {
                         >
                           <div className="GatheringDetail_member-card_osk">
                             <div className="GatheringDetail_member-avatar_osk">
-                              <img 
-                                src={`${url}/image?filename=${member.profileImage || aImage}`}
+                              <img
+                                src={`${url}/image?filename=${member.profileImage}`}
                                 alt={`${member.name} 프로필`}
                                 className="GatheringDetail_member-profile-image_osk"
                               />
@@ -664,7 +772,8 @@ export default function GatheringDetail() {
                   <CiClock1 />
                 </span>
                 <span>
-                  {formatTime(gatheringData.startTime)} - {formatTime(gatheringData.endTime)}
+                  {formatTime(gatheringData.startTime)} -{" "}
+                  {formatTime(gatheringData.endTime)}
                 </span>
               </div>
 
@@ -673,9 +782,8 @@ export default function GatheringDetail() {
                   <GoPeople />
                 </span>
                 <span>
-                  {members.length}명 참가 중 (최소{" "}
-                  {gatheringData.minAttendees}명, 최대{" "}
-                  {gatheringData.maxAttendees}명)
+                  {members.length}명 참가 중 (최소 {gatheringData.minAttendees}
+                  명, 최대 {gatheringData.maxAttendees}명)
                 </span>
               </div>
 
@@ -683,20 +791,32 @@ export default function GatheringDetail() {
                 <span className="GatheringDetail_info-icon_osk">
                   <CiLocationOn />
                 </span>
-                <span>{gatheringData.address} {gatheringData.detailAddress}</span>
+                <span>
+                  {gatheringData.address} {gatheringData.detailAddress}
+                </span>
               </div>
 
               <div className="GatheringDetail_button-group_osk">
                 <button
                   className="GatheringDetail_btn_osk GatheringDetail_btn-outline_osk"
-                  onClick={handleWishlistClick}
+                  onClick={handleLikeButtonClick}
                 >
-                  <CiHeart className="GatheringDetail_top-icon_osk" /> 찜하기
+                  {isLiked ? (
+                    <>
+                      <FaHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />{" "}
+                      찜해제
+                    </>
+                  ) : (
+                    <>
+                      <CiHeart className="GatheringDetail_top-icon_osk" />{" "}
+                      찜하기
+                    </>
+                  )}
                 </button>
                 <button
                   className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
                   id="GatheringDetail_apply_osk"
-                  onClick={handleJoinClick}
+                  onClick={handleApplyButtonClick} // ← 함수명 변경
                 >
                   신청하기
                 </button>
@@ -707,8 +827,115 @@ export default function GatheringDetail() {
             </div>
           </aside>
         </div>
-        
       </div>
+      {isApplyModalOpen && (
+        <Modal
+          isOpen={isApplyModalOpen}
+          toggle={toggleApplyModal}
+          className="GatheringDetail_apply-modal_osk"
+          size="lg"
+          centered
+        >
+          <form onSubmit={handleApplySubmit}>
+            {" "}
+            {/* ← onSubmit 위치 수정 */}
+            <ModalHeader
+              toggle={toggleApplyModal}
+              className="GatheringDetail_modal-header_osk"
+            >
+              <span className="GatheringDetail_modal-title_osk">
+                {gatheringData.title}
+              </span>
+            </ModalHeader>
+            <ModalBody className="GatheringDetail_modal-body_osk">
+              <div className="GatheringDetail_gathering-info_osk">
+                <img
+                  src={`${url}/image?filename=${gatheringData.thumbnailFileName}`}
+                  alt="모임 이미지"
+                  className="GatheringDetail_gathering-image_osk"
+                />
+                <div className="GatheringDetail_gathering-details_osk">
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <span>
+                      제목: {gatheringData.title} <br/>
+                    </span>
+                  </div>
+                  
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <span>
+                      소개: {gatheringData.introOnline} <br />
+                    </span>
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                      <CiCalendar className="GatheringDetail_gathering-info-icon_osk"/>
+                      <span>
+                        모임일: {formatDate(gatheringData.meetingDate)}{" "} {formatTime(gatheringData.startTime)} ~ {formatTime(gatheringData.endTime)}
+                      </span>
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <CiLocationOn className="GatheringDetail_gathering-info-icon_osk" />
+                    <span>
+                      장소: {gatheringData.address}{" "}
+                      {gatheringData.detailAddress}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {gatheringData.tags && gatheringData.tags.length > 0 && (
+                <div className="GatheringDetail_modal-tags_osk">
+                  {gatheringData.tags.map((tag, index) => (
+                    <span key={index} className="GatheringDetail_modal-tag_osk">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="GatheringDetail_input-section_osk">
+                <label
+                  htmlFor="aspiration-textarea"
+                  className="GatheringDetail_input-label_osk"
+                >
+                  호스트에게 남기고 싶은 말{" "}
+                  <span style={{ color: "red" }}>*</span>
+                </label>
+                <textarea
+                  id="aspiration-textarea"
+                  value={aspirationContent}
+                  onChange={(e) => setAspirationContent(e.target.value)}
+                  placeholder="호스트에게 남기고 싶은 말을 적어주세요"
+                  rows={6}
+                  className="GatheringDetail_textarea-field_osk"
+                  maxLength={500}
+                  required
+                  disabled={isSubmitting}
+                />
+                <small className="GatheringDetail_char-count_osk">
+                  {aspirationContent.length}/500자
+                </small>
+              </div>
+            </ModalBody>
+            <ModalFooter className="GatheringDetail_modal-footer_osk">
+              <button
+                type="button"
+                className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-cancel_osk"
+                onClick={toggleApplyModal}
+                disabled={isSubmitting}
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-submit_osk"
+                disabled={isSubmitting || !aspirationContent.trim()}
+              >
+                {isSubmitting ? "신청 중..." : "신청하기"}
+              </button>
+            </ModalFooter>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 }

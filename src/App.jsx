@@ -102,6 +102,7 @@ function App() {
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
+        <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}

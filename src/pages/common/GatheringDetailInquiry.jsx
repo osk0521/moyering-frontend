@@ -16,21 +16,23 @@ import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { useAtom, useAtomValue } from "jotai";
 import { userAtom, tokenAtom } from "../../atoms";
+import { useNavigate } from "react-router-dom";
 export default function GatheringDetailInquiry({ gatheringId }) {
   const [qnaData, setQnaData] = useState([]);
   const [gatheringData, setGatheringData] = useState({});
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
-  const [questionTitle, setQuestionTitle] = useState("");
   const [questionContent, setQuestionContent] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
-  const user = useAtomValue(userAtom);    
+
+  const user = useAtomValue(userAtom);
   const token = useAtomValue(tokenAtom);
   const userId = user.id;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    myAxios().get(`/getGatheringInquiries?gatheringId=${gatheringId}`)
+    myAxios()
+      .get(`/getGatheringInquiries?gatheringId=${gatheringId}`)
       .then((res) => {
         console.log("API Response:", res.data);
 
@@ -86,9 +88,6 @@ export default function GatheringDetailInquiry({ gatheringId }) {
             meetingDate: res.data.gatheringMeetingDate, // 모임 날짜
           }))
         );
-
-        console.log("변환된 tags:", parsedTags);
-        console.log("변환된 qnaData:", qnaList);
       })
       .catch((err) => {
         console.log(err);
@@ -97,35 +96,81 @@ export default function GatheringDetailInquiry({ gatheringId }) {
 
   // 질문하기 모달 관련 함수들
   const toggleQuestionModal = () => {
-    setIsQuestionModalOpen(!isQuestionModalOpen);
-    // 모달 닫을 때 입력값 초기화
-    if (isQuestionModalOpen) {
-      setQuestionTitle("");
-      setQuestionContent("");
+    if (!user || !token) {
+      if (
+        confirm(
+          "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
+        )
+      ) {
+        navigate("/userlogin");
+      } else {
+        return;
+      }
+    } else {
+      setIsQuestionModalOpen(!isQuestionModalOpen);
+      if (isQuestionModalOpen) {
+        setQuestionContent("");
+      }
     }
   };
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!questionTitle.trim()) {
-      alert("질문 제목을 입력해주세요.");
-      return;
-    }
+
     if (!questionContent.trim()) {
-      alert("질문 내용을 입력해주세요.");
+      alert("문의 내용을 입력해주세요.");
       return;
     }
 
-    console.log("질문 제출:", {
-      title: questionTitle,
-      content: questionContent,
-    });
+    const formDataToSend = {
+      gatheringId: gatheringId,
+      inquiryContent: questionContent.trim(),
+    };
 
-      // const response = await myAxios(token).post(`/user/writeGathering`,
-      //   formDataToSend
-      // );
-    // 성공 시 모달 닫기
-    toggleQuestionModal();
+    try {
+      const response = await myAxios(token).post(
+        `/user/writeGatheringInquiry`,
+        formDataToSend
+      );
+
+      if (response.status === 200 && typeof response.data === "number") {
+        alert("문의가 정상적으로 등록되었습니다.");
+        toggleQuestionModal(); // 모달 닫기
+        setQuestionContent(""); // 입력 초기화
+
+        // 문의 목록 갱신
+        const refreshed = await myAxios().get(
+          `/getGatheringInquiries?gatheringId=${gatheringId}`
+        );
+        const qnaList = refreshed.data.qnaList;
+
+        // tag parsing, gatheringData 설정은 생략 (이미 초기화돼 있음)
+        setQnaData(
+          qnaList.map((q) => ({
+            id: q.id,
+            status: q.status,
+            content: q.content,
+            author: q.author,
+            date: q.date,
+            answer: q.answer,
+            userId: q.userId || null,
+            nickName: q.author,
+            profile: q.profile || null,
+            questionContent: q.content,
+            questionDate: q.date,
+            responseDate: q.answer?.date || null,
+            responseContent: q.answer?.content || null,
+            responseState: q.status,
+            meetingDate: gatheringData.meetingDate,
+          }))
+        );
+      } else {
+        alert("문의 등록에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("문의 등록 중 오류 발생:", error);
+      alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   // 페이지네이션 설정
@@ -168,7 +213,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
     return `${ampm} ${displayHour}:${minutes}`;
   };
-  
+
   return (
     <div className="GatheringDetail_questions-board_osk">
       <div className="GatheringDetail_questions-table_osk">
@@ -304,10 +349,18 @@ export default function GatheringDetailInquiry({ gatheringId }) {
                 <div className="GatheringDetail_gathering-details_osk">
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <span>
-                      제목: {formatDate(gatheringData.gatheringTitle)}
-                      <br />
-                      소개: {formatDate(gatheringData.gatheringIntrOnln)} <br />
-                      <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
+                      제목: {gatheringData.title} <br />
+                    </span>
+                  </div>
+
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <span>
+                      소개: {gatheringData.introOnline} <br />
+                    </span>
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
+                    <span>
                       모임일: {formatDate(gatheringData.meetingDate)}{" "}
                       {formatTime(gatheringData.startTime)} ~{" "}
                       {formatTime(gatheringData.endTime)}
@@ -356,10 +409,9 @@ export default function GatheringDetailInquiry({ gatheringId }) {
               <input
                 type="submit"
                 className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-submit_osk"
-                onClick={handleQuestionSubmit}
-              >
-                문의하기
-              </input>
+                onClick={submit}
+                value="문의하기"
+              />
             </ModalFooter>
           </Modal>
         </form>

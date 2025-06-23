@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyGatheringApplyList.css";
 import { CiSearch, CiLocationOn, CiCalendar } from "react-icons/ci";
 import { GoPeople } from "react-icons/go";
+import Header from '../../../common/Header';
 
 const isGatheringInFuture = (gatheringDate, gatheringTime) => {
   try {
@@ -166,114 +167,116 @@ export default function MyGatheringApplyList() {
   };
   
   return (
-    <div className="MyGatheringApplyList_mypage-wrapper_osk">
-      
-      <main className="MyGatheringApplyList_gathering-main_osk">
-        <div className="MyGatheringApplyList_gathering-header_osk">
-          <h3>지원한 게더링 목록</h3>
-          <div className="MyGatheringApplyList_search-container_osk">
-            <input
-              type="text"
-              placeholder="제목으로 검색"
-              className="MyGatheringApplyList_search-input_osk"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <CiSearch className="MyGatheringApplyList_search-icon_osk" />
-          </div>
-        </div>
-
-        <div className="MyGatheringApplyList_tabs_osk">
-          {["전체", "수락됨", "대기중", "거절됨"].map((tab) => (
-            <button
-              key={tab}
-              className={`MyGatheringApplyList_tab_osk ${filter === tab ? "MyGatheringApplyList_active_osk" : ""}`}
-              onClick={() => {
-                setFilter(tab);
-                setPage(1);
-              }}
-            >
-              {tab} ({getStatusCount(tab)})
-            </button>
-          ))}
-        </div>
-
-        <div className="MyGatheringApplyList_gathering-list_osk">
-          {paginated.map((gathering) => (
-            <div key={gathering.id} className="MyGatheringApplyList_gathering-list-item_osk">
-              <div className="MyGatheringApplyList_gathering-image_osk">
-                <img src={gathering.image} alt={gathering.title} />
-              </div>
-              <div className="MyGatheringApplyList_gathering-content_osk">
-                <div className="MyGatheringApplyList_gathering-card_osk MyGatheringApplyList_gathering-header_osk">
-                    <span
-                      className={`MyGatheringApplyList_status-badge_osk ${
-                        {
-                          "수락됨": "MyGatheringApplyList_accepted_osk",
-                          "대기중": "MyGatheringApplyList_pending_osk", 
-                          "거절됨": "MyGatheringApplyList_rejected_osk",
-                          "취소됨": "MyGatheringApplyList_rejected_osk"
-                        }[gathering.status] || ""
-                      }`}
-                    >
-                    {gathering.status}
-                  </span>
-                  <h4 className="MyGatheringApplyList_gathering-title_osk">{gathering.title}</h4>
-                </div>
-                <p className="MyGatheringApplyList_gathering-description_osk">{gathering.description}</p>
-                <div className="MyGatheringApplyList_gathering-info_osk">
-                  <div className="MyGatheringApplyList_info-row_osk">
-                    <span className="MyGatheringApplyList_info-label_osk"><CiCalendar /> 개최일:</span>
-                    <span className="MyGatheringApplyList_info-value_osk">
-                      {gathering.date} {gathering.time}
-                    </span>
-                  </div>
-                  <div className="MyGatheringApplyList_info-row_osk">
-                    <span className="MyGatheringApplyList_info-label_osk"><CiLocationOn /> 장소:</span>
-                    <span className="MyGatheringApplyList_info-value_osk">{gathering.location}</span>
-                  </div>
-                  <div className="MyGatheringApplyList_info-row_osk">
-                    <span className="MyGatheringApplyList_info-label_osk"><GoPeople /> 참여:</span>
-                    <span className="MyGatheringApplyList_info-value_osk">{gathering.participants}</span>
-                  </div>
-                </div>
-                <div className="MyGatheringApplyList_gathering-tags_osk">
-                  {gathering.tags.map((tag, index) => (
-                    <span key={index} className="MyGatheringApplyList_tag_osk">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="MyGatheringApplyList_gathering-actions_osk">
-                {(gathering.status === "수락됨" || gathering.status === "대기중") && 
-                isGatheringInFuture(gathering.date, gathering.time) && (
-                  <button 
-                    className="MyGatheringApplyList_apply-complete-btn_osk"
-                    onClick={() => handleCancelParticipation(gathering)}
-                  >
-                    참여 취소
-                  </button>
-                )}
-              </div>
+    <div>
+      <Header />
+      <div className="MyGatheringApplyList_mypage-wrapper_osk">
+        <main className="MyGatheringApplyList_gathering-main_osk">
+          <div className="MyGatheringApplyList_gathering-header_osk">
+            <h3>지원한 게더링 목록</h3>
+            <div className="MyGatheringApplyList_search-container_osk">
+              <input
+                type="text"
+                placeholder="제목으로 검색"
+                className="MyGatheringApplyList_search-input_osk"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <CiSearch className="MyGatheringApplyList_search-icon_osk" />
             </div>
-          ))}
-        </div>
+          </div>
 
-        {pageCount > 1 && (
-          <div className="MyGatheringApplyList_pagination_osk">
-            {Array.from({ length: pageCount }, (_, idx) => (
+          <div className="MyGatheringApplyList_tabs_osk">
+            {["전체", "수락됨", "대기중", "거절됨"].map((tab) => (
               <button
-                key={idx}
-                onClick={() => setPage(idx + 1)}
-                className={page === idx + 1 ? "ApplyList_active_osk" : ""}
+                key={tab}
+                className={`MyGatheringApplyList_tab_osk ${filter === tab ? "MyGatheringApplyList_active_osk" : ""}`}
+                onClick={() => {
+                  setFilter(tab);
+                  setPage(1);
+                }}
               >
-                {idx + 1}
+                {tab} ({getStatusCount(tab)})
               </button>
             ))}
           </div>
-        )}
-      </main>
+
+          <div className="MyGatheringApplyList_gathering-list_osk">
+            {paginated.map((gathering) => (
+              <div key={gathering.id} className="MyGatheringApplyList_gathering-list-item_osk">
+                <div className="MyGatheringApplyList_gathering-image_osk">
+                  <img src={gathering.image} alt={gathering.title} />
+                </div>
+                <div className="MyGatheringApplyList_gathering-content_osk">
+                  <div className="MyGatheringApplyList_gathering-card_osk MyGatheringApplyList_gathering-header_osk">
+                      <span
+                        className={`MyGatheringApplyList_status-badge_osk ${
+                          {
+                            "수락됨": "MyGatheringApplyList_accepted_osk",
+                            "대기중": "MyGatheringApplyList_pending_osk", 
+                            "거절됨": "MyGatheringApplyList_rejected_osk",
+                            "취소됨": "MyGatheringApplyList_rejected_osk"
+                          }[gathering.status] || ""
+                        }`}
+                      >
+                      {gathering.status}
+                    </span>
+                    <h4 className="MyGatheringApplyList_gathering-title_osk">{gathering.title}</h4>
+                  </div>
+                  <p className="MyGatheringApplyList_gathering-description_osk">{gathering.description}</p>
+                  <div className="MyGatheringApplyList_gathering-info_osk">
+                    <div className="MyGatheringApplyList_info-row_osk">
+                      <span className="MyGatheringApplyList_info-label_osk"><CiCalendar /> 개최일:</span>
+                      <span className="MyGatheringApplyList_info-value_osk">
+                        {gathering.date} {gathering.time}
+                      </span>
+                    </div>
+                    <div className="MyGatheringApplyList_info-row_osk">
+                      <span className="MyGatheringApplyList_info-label_osk"><CiLocationOn /> 장소:</span>
+                      <span className="MyGatheringApplyList_info-value_osk">{gathering.location}</span>
+                    </div>
+                    <div className="MyGatheringApplyList_info-row_osk">
+                      <span className="MyGatheringApplyList_info-label_osk"><GoPeople /> 참여:</span>
+                      <span className="MyGatheringApplyList_info-value_osk">{gathering.participants}</span>
+                    </div>
+                  </div>
+                  <div className="MyGatheringApplyList_gathering-tags_osk">
+                    {gathering.tags.map((tag, index) => (
+                      <span key={index} className="MyGatheringApplyList_tag_osk">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="MyGatheringApplyList_gathering-actions_osk">
+                  {(gathering.status === "수락됨" || gathering.status === "대기중") && 
+                  isGatheringInFuture(gathering.date, gathering.time) && (
+                    <button 
+                      className="MyGatheringApplyList_apply-complete-btn_osk"
+                      onClick={() => handleCancelParticipation(gathering)}
+                    >
+                      참여 취소
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {pageCount > 1 && (
+            <div className="MyGatheringApplyList_pagination_osk">
+              {Array.from({ length: pageCount }, (_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setPage(idx + 1)}
+                  className={page === idx + 1 ? "ApplyList_active_osk" : ""}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

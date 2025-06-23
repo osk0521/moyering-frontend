@@ -3,6 +3,7 @@ import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Button } from
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyGatheringList.css";
 import { CiSearch } from "react-icons/ci";
+import Header from '../../../common/Header';
 
 const dummyData = [
   {
@@ -128,6 +129,8 @@ export default function MyGatheringList() {
   };
 
   return (
+    <div>
+      <Header />
     <div className="MyGatheringList_mypage-wrapper_osk">
       {/* <aside className="MyGatheringList_sidebar_osk">
         <div className="MyGatheringList_profile_osk">
@@ -329,6 +332,7 @@ export default function MyGatheringList() {
           </div>
         )}
       </main>
+    </div>
     </div>
   );
 }

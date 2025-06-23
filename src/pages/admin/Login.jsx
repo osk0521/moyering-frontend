@@ -1,41 +1,65 @@
 // src/components/Login.jsx
-import  { useState } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
-import { myAxios, url } from '../../config';
-import { useSetAtom } from 'jotai';
-import { tokenAtom, userAtom } from '../../atoms';
 import React from 'react'; // 이 한 줄만 추가!
 
 const Login = () => {
-  const [login,setLogin] = useState({username:'',password:''})
-  const setUser = useSetAtom(userAtom);
-  const setToken = useSetAtom(tokenAtom);
-  const navigate = useNavigate();
+ const navigate = useNavigate();
+ const [formData, setFormData] = useState({
+   username: '',
+   password: ''
+ });
+ const [error, setError] = useState('');
+ const [loading, setLoading] = useState(false);
 
-  const edit = (e) => {
-    setLogin({...login,[e.target.name]:e.target.value});
-  }
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let formData = new FormData();
-    formData.append("username",login.username);
-    formData.append("password",login.password);
-    myAxios().post("login", formData)
-      .then(res => {
-        console.log(res);
-        setToken(res.headers.authorization);
-        const user = res.data;
-        setUser({...user});
-        navigate("/admin/dashboard");
-      })
-      .catch(err=>{
-        console.log(err);
-      })
-    // 일단 간단하게 - 로그인 버튼 누르면 2차 인증으로 이동
-  };
- 
+ const handleInputChange = (e) => {
+   const { name, value } = e.target;
+   setFormData(prev => ({
+     ...prev,
+     [name]: value
+   }));
+ };
+
+ const handleSubmit = async (e) => {
+   e.preventDefault();
+   setLoading(true);
+   setError('');
+   
+   try {
+     // 실제 로그인 API 호출
+     console.log('로그인 시도:', formData);
+     
+     const response = await axios.post('/api', {
+       username: formData.username,
+       password: formData.password
+     });
+     
+     // 토큰과 역할 정보 저장
+     localStorage.setItem('token', response.data.token);
+     localStorage.setItem('role', response.data.role);
+     
+     // axios 헤더에 토큰 자동 설정
+     axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+     
+     console.log('로그인 성공:', response.data.role);
+     
+     // 역할별 페이지 이동 - ROLE_MG일 경우에 /admin/dashboard 넘어가기 
+     if (response.data.role === 'ROLE_MG') {
+       navigate('/admin/dashboard');
+     } else {
+       navigate('/'); // 일반 사용자는 메인 페이지로
+     }
+     
+   } catch (error) {
+     console.error('로그인 실패:', error);
+     setError('로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.');
+   } finally {
+     setLoading(false);
+   }
+ };
+
  return (
    <div className="login-containerHY">
      <div className="login-boxHY">
@@ -45,35 +69,37 @@ const Login = () => {
          </div>
        </div>
 
-        {/* 로그인 폼 */}
-        <form onSubmit={handleSubmit} className="login-formHY">
-          <div className="input-groupHY">
-            <label htmlFor="username" className="input-labelHY">아이디</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={login.username}
-              onChange={edit}
-              placeholder="관리자 아이디"
-              className="input-fieldHY"
-            />
-          </div>
-
-          <div className="input-groupHY">
-            <label htmlFor="password" className="input-labelHY">비밀번호</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={login.password}
-              onChange={edit}
-              placeholder="비밀번호"
-              className="input-fieldHY"
-            />
-          </div>
        {/* 로그인 폼 */}
-       
+       <form onSubmit={handleSubmit} className="login-formHY">
+         {error && <div className="error-message" style={{color: 'red', marginBottom: '10px'}}>{error}</div>}
+         
+         <div className="input-groupHY">
+           <label htmlFor="username" className="input-labelHY">아이디</label>
+           <input
+             type="text"
+             id="username"
+             name="username"
+             value={formData.username}
+             onChange={handleInputChange}
+             placeholder="관리자 아이디"
+             className="input-fieldHY"
+             required
+           />
+         </div>
+
+         <div className="input-groupHY">
+           <label htmlFor="password" className="input-labelHY">비밀번호</label>
+           <input
+             type="password"
+             id="password"
+             name="password"
+             value={formData.password}
+             onChange={handleInputChange}
+             placeholder="비밀번호"
+             className="input-fieldHY"
+             required
+           />
+         </div>
 
          <button 
            type="submit" 

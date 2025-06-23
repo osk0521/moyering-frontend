@@ -15,21 +15,19 @@ export default function useRecommendClasses() {
 
   console.log(user.name);
 
+
   useEffect(() => {
-    const isLoggedIn = !!token;
-    
     myAxios(token)
       .get(`/main`)
       .then((res) => {
+        console.log(res);
         setRecommendClasses(res.data.classes);
         setHotClasses(res.data.hotClasses);
         setGathers(res.data.gathers);
         setBanners(res.data.banners);
+        
       })
       .catch((err) => console.error("클래스 추천 데이터 로딩 실패", err));
-      setRecommendClasses([]);
-      setHotClasses([]);
-      setGathers([]);
-      setBanners([]);
+
   }, [token,user]);
 }

@@ -7,11 +7,11 @@ import { GoPeople } from "react-icons/go";
 import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
-import axios from "axios";
 import {
   url,
   KAKAO_REST_API_KEY,
   KAKAO_JavaScript_API_KEY,
+  myAxios,
 } from "../../../config";
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -84,7 +84,8 @@ const validateDateTime = (formData) => {
 };
 
 export default function GatheringWrite() {
-  const [user] = useAtom(userAtom);
+  const user = useAtomValue(userAtom);    
+  const token = useAtomValue(tokenAtom);
   const userId = user.id;
   const navigate = useNavigate();
   //지오코딩용
@@ -107,7 +108,6 @@ export default function GatheringWrite() {
 
   // 입력용 formData 상태 (사용자 입력을 받는 용도)
   const [formData, setFormData] = useState({
-    // user: user.userId,
     title: "",
     startTime: "",
     endTime: "",
@@ -175,15 +175,6 @@ export default function GatheringWrite() {
       }
     } catch (err) {
       console.error("지오코딩 오류:", err);
-      if (err.message.includes("CORS")) {
-        setGeocodingError(
-          "CORS 오류가 발생했습니다. 프록시 서버를 통해 요청하거나 서버 사이드에서 API를 호출해주세요."
-        );
-      } else {
-        setGeocodingError(
-          "좌표 변환 중 오류가 발생했습니다. API 키를 확인하거나 네트워크 상태를 점검해주세요."
-        );
-      }
       return null;
     } finally {
       setGeocodingLoading(false);
@@ -415,8 +406,7 @@ export default function GatheringWrite() {
 
   // 1차 카테고리 데이터 가져오기
   useEffect(() => {
-    axios
-      .get(`${url}/category`)
+    myAxios().get(`/category`)
       .then((res) => {
         console.log("1차 카테고리 API 응답:", res);
         const categoryArray = res.data.category;
@@ -430,8 +420,7 @@ export default function GatheringWrite() {
   // 2차 카테고리 데이터 가져오기
   useEffect(() => {
     if (formData.category && formData.category !== "") {
-      axios
-        .get(`${url}/subCategory/${formData.category}`)
+      myAxios().get(`/subCategory/${formData.category}`)
         .then((res) => {
           console.log("2차 카테고리 API 응답:", res);
           const categoryArray = res.data.subCategory.map((item) => ({
@@ -523,11 +512,8 @@ export default function GatheringWrite() {
       }
     };
   }, []);
-
-  // 수정된 submit 함수
   const submit = async (e) => {
     e.preventDefault();
-
     // 필수 필드 검증
     if (
       !formData.title ||
@@ -556,7 +542,6 @@ export default function GatheringWrite() {
 
     // 지오코딩 실행 (주소를 좌표로 변환)
     console.log("지오코딩 시작...");
-    console.log("▶︎ 변환할 주소:", formData.address);
     const coords = await convertAddressToCoordinates(formData.address);
     console.log("지오코딩 완료:", coords);
 
@@ -571,8 +556,7 @@ export default function GatheringWrite() {
     // 파일 추가 (thumbnail) - 필수 파라미터
     formDataToSend.append("thumbnail", thumbnail);
 
-    // 기본 데이터 추가 (백엔드 GatheringDto 필드에 맞춰 설정)
-    formDataToSend.append("userId", user?.userId || 1); // 실제 유저 ID 사용
+    formDataToSend.append("userId", user?.id); 
     formDataToSend.append("title", formData.title);
     formDataToSend.append("meetingDate", formData.meetingDate);
     formDataToSend.append("startTime", formData.startTime);
@@ -604,8 +588,6 @@ export default function GatheringWrite() {
         formDataToSend.append("maxAttendees", maxPeople);
       }
     }
-
-    // 신청 마감일 (datetime-local 형식을 MySQL datetime 형식으로 변환)
     formDataToSend.append(
       "applyDeadline",
       formData.deadlineDateTime.replace("T", " ") + ":00"
@@ -635,23 +617,10 @@ export default function GatheringWrite() {
     // axios 요청
     try {
       console.log("모임 등록 요청 시작...");
-
-      const response = await axios.post(
-        `${url}/user/writeGathering`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            // 토큰이 있다면 Authorization 헤더 추가
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-          timeout: 30000, // 30초로 타임아웃 증가 (파일 업로드 고려)
-        }
-      );
+      const response = await myAxios(token).post(`/user/writeGathering`, formDataToSend);
 
       console.log("모임 등록 성공:", response);
 
-      // 백엔드에서 gatheringId를 직접 반환하므로 response.data가 gatheringId
       const gatheringId = response.data;
 
       if (gatheringId) {

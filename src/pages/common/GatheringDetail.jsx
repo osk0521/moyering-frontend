@@ -1,27 +1,20 @@
 import React, { useState, useEffect, memo, useRef } from "react";
-import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
 import Slider from "react-slick";
 import ReactDOM from "react-dom";
-import { CiHeart } from "react-icons/ci";
 import { useAtom, useAtomValue } from "jotai";
 import { userAtom, tokenAtom } from "../../atoms";
-import { BiChevronRight, BiChevronDown } from "react-icons/bi";
 import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY, myAxios, } from "../../config"
 import KakaoMap from "./KakaoMap";
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
-import { tokenAtom, userAtom } from "../../atoms";
-import { myAxios, url } from "../../config";
+// import { myAxios, url } from "../../config";
 import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
 import Header from "./Header";
-import KakaoMap from "./KakaoMap";
 import aImage from "/detail2.png";
 
 const handleJoinClick = () => {

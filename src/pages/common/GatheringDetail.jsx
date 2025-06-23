@@ -1,27 +1,20 @@
-import React, { useState, useEffect, memo, useRef } from "react";
+import { useAtomValue } from "jotai";
+import { useEffect, useState } from "react";
+import { BiChevronDown, BiChevronRight } from "react-icons/bi";
+import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
+import { GoPeople } from "react-icons/go";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { useParams } from "react-router-dom";
 import Slider from "react-slick";
-import ReactDOM from "react-dom";
-import { CiHeart } from "react-icons/ci";
-import { useAtom, useAtomValue } from "jotai";
-import { userAtom, tokenAtom } from "../../atoms";
-import { BiChevronRight, BiChevronDown } from "react-icons/bi";
-import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY, myAxios, } from "../../config"
-import KakaoMap from "./KakaoMap";
-import axios from 'axios';
-import { useNavigate, useParams } from "react-router-dom";
-import { useAtom, useAtomValue } from "jotai";
-import { userAtom, tokenAtom } from "../../atoms";
-import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Header from "./Header";
-import {Table, Modal, ModalHeader,  ModalBody, ModalFooter, Button,} from "reactstrap";
+import "slick-carousel/slick/slick.css";
+import { tokenAtom, userAtom } from "../../atoms";
+import { myAxios, url } from "../../config";
 import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
-import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
-import { GoPeople } from "react-icons/go";
+import Header from "./Header";
+import KakaoMap from "./KakaoMap";
 import aImage from "/detail2.png";
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
 
 const handleJoinClick = () => {
   console.log("참가 신청하기 클릭");

@@ -202,7 +202,7 @@ const ClassList = () => {
                 />
               </div>
               <div className="KHJ-result-info">
-                <h5>{result.imgName1}</h5>
+                <h5>{result.name}</h5>
                 <p><strong>클래스 종료일:</strong> {result.startDate}</p>
                 <p><strong>카테고리:</strong> {result.category1}</p>
                 <p><strong>상태:</strong> {result.status}</p>

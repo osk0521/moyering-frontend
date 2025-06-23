@@ -1,5 +1,5 @@
 .KHJ-sidebar {
-  width: 200px;
+  width: 250px;
   background-color: white;
   padding: 20px;
   height: 100vh;
@@ -28,7 +28,7 @@
 
 .KHJ-sidebar__btn {
   flex: 1;
-  padding: 8px 0;
+  padding: 4px;
   background-color: white;
   border: 2px solid #ffbf00;
   color: #ffbf00;

@@ -1,7 +1,7 @@
 import './DetailTabExtraInfo.css';
 import React, { useEffect } from 'react';
 
-const DetailTabExtraInfo = ({ classData, registerValidator, isEditMode }) => {
+const DetailTabExtraInfo = ({ scheduleDetails, classData, registerValidator, isEditMode }) => {
   const {
     materialName,
     incluision,
@@ -12,6 +12,7 @@ const DetailTabExtraInfo = ({ classData, registerValidator, isEditMode }) => {
     classCalendars = []
   } = classData || {};
 
+
   useEffect(() => {
     registerValidator(3, () => true); // 검증 로직이 필요하다면 여기에 추가
   }, []);
@@ -21,28 +22,27 @@ const DetailTabExtraInfo = ({ classData, registerValidator, isEditMode }) => {
       <h2 className="KHJ-section-title">클래스 부가정보</h2>
 
       {/* 스케줄 정보 */}
-      {classCalendars.length > 0 ? (
-        classCalendars.map((schedule, idx) => (
-          <section key={idx} className="KHJ-schedule-block">
-            <div className="KHJ-schedule-title">스케줄 {idx + 1}</div>
-            <table className="KHJ-schedule-table">
-              <thead>
-                <tr>
-                  <th>일정 시작</th>
-                  <th>일정 종료</th>
-                  <th>상태</th>
+      {scheduleDetails.length > 0 ? (
+        <section className="KHJ-schedule-block">
+          <table className="KHJ-schedule-table">
+            <thead>
+              <tr>
+                <th>일정 시작</th>
+                <th>일정 종료</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scheduleDetails.map((schedule, idx) => (
+                <tr key={idx}>
+                  <td>{schedule.startTime}</td>
+                  <td>{schedule.endTime}</td>
+                  <td>{schedule.content}</td>
                 </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{schedule.startDate}</td>
-                  <td>{schedule.endDate}</td>
-                  <td>{schedule.status}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-        ))
+              ))}
+            </tbody>
+          </table>
+        </section>
       ) : (
         <p style={{ marginTop: "1rem", color: "#888" }}>등록된 스케줄이 없습니다.</p>
       )}

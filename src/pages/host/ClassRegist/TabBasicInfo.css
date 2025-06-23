@@ -165,18 +165,51 @@ select {
 }
 
 .KHJ-postcode-popup {
-  position: absolute;
-  top: 0;
-  left: 110%;
-  z-index: 9999;
-  background: white;
+  position: fixed; /* 👈 고정 위치로 변경 */
+  top: 50%;         /* 세로 중앙 기준 */
+  left: 50%;        /* 가로 중앙 기준 */
+  transform: translate(-50%, -50%); /* 중앙 정렬 */
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  background-color: #fff;
   border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  width: 400px;
-  max-height: 500px;
-  overflow: auto;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.KHJ-postcode-form-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.KHJ-postcode-search-side {
+  flex: 1;
+}
+
+.KHJ-locname-input,
+.KHJ-detailaddr-input {
+  width: 240px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.KHJ-location-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.KHJ-selected-addr {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .KHJ-postcode-close-btn {

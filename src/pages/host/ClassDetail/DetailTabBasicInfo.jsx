@@ -52,17 +52,17 @@ const DetailTabBasicInfo = ({ classData, registerValidator, isEditMode }) => {
             <table>
               <thead>
                 <tr>
-                  <th></th>
                   <th>장소명</th>
+                  <td>{locName}</td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>주소</td>
+                  <th>주소</th>
                   <td>{addr} {detailAddr}</td>
                 </tr>
                 <tr>
-                  <td>좌표</td>
+                  <th>좌표</th>
                   <td>위도: {latitude} 경도: {longitude}</td>
                 </tr>
               </tbody>

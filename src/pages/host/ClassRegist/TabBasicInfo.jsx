@@ -3,7 +3,7 @@ import DaumPostcode from 'react-daum-postcode';
 import './TabBasicInfo.css';
 import React from 'react'; // 이 한 줄만 추가!
 
-const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
+const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const categoryMap = {
     '스포츠': ['실내 & 수상 스포츠', '실외 스포츠', '기타'],
     '음식': ['베이킹', '음료', '요리', '기타'],
@@ -14,20 +14,38 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
     '자유모임': ['여행', '게임', '파티', '기타']
   };
 
-  const {basicInfo} = classData;
+  const category1Map = {
+    '스포츠': 1,
+    '음식': 2,
+    '공예/DIY': 3,
+    '뷰티': 4,
+    '문화예술': 5,
+    '심리/상담': 6,
+    '자유모임': 7
+  };
+
+  const category2Map = {};
+  let subCategoryId = 1;
+  Object.entries(categoryMap).forEach(([main, subs]) => {
+    subs.forEach(sub => {
+      category2Map[sub] = subCategoryId++;
+    });
+  });
+
+  const { basicInfo } = classData;
   const [tempLocName, setTempLocName] = useState('');
   const [showLocation, setShowLocation] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState('');
 
   const handleChange = (e) => {
-    const {name,value} = e.target;
-    setClassData(prev=>({
+    const { name, value } = e.target;
+    setClassData(prev => ({
       ...prev,
-      basicInfo : {
+      basicInfo: {
         ...prev.basicInfo,
-        basicInfo : {
+        basicInfo: {
           ...prev.basicInfo,
-          [name]:value,
+          [name]: value,
         },
       }
     }));
@@ -36,10 +54,10 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
   const handlePrimaryChange = (e) => {
     setClassData((prev) => ({
       ...prev,
-      basicInfo:{
+      basicInfo: {
         ...prev.basicInfo,
-        category1 : e.target.value,
-        category2:'', //1차 바뀌면 2차 초기화
+        category1: e.target.value,
+        category2: '', //1차 바뀌면 2차 초기화
       }
     }));
   };
@@ -47,9 +65,9 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
   const handleSecondaryChange = (e) => {
     setClassData((prev) => ({
       ...prev,
-      basicInfo:{
+      basicInfo: {
         ...prev.basicInfo,
-        category2:e.target.value,
+        category2: e.target.value,
       }
     }));
   };
@@ -57,9 +75,9 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
   const handleClassNameChange = (e) => {
     setClassData((prev) => ({
       ...prev,
-      basicInfo:{
+      basicInfo: {
         ...prev.basicInfo,
-        name:e.target.value,
+        name: e.target.value,
       }
     }));
   };
@@ -80,7 +98,7 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
 
     setClassData((prev) => ({
       ...prev,
-      basicInfo:{
+      basicInfo: {
         ...prev.basicInfo,
         locName: tempLocName,
         addr: selectedAddress,
@@ -97,7 +115,7 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
   const handleAddressClear = () => {
     setClassData((prev) => ({
       ...prev,
-      basicInfo:{
+      basicInfo: {
         ...prev.basicInfo,
         locName: '',
         addr: '',
@@ -113,12 +131,17 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
   };
 
   useEffect(() => {
-    const {category1,category2,name,addr} = classData.basicInfo;
+    const { category1, category2, name, addr } = classData.basicInfo;
     const isValid = category1 && category2 && name.trim() && addr;
-    registerValidator(0, ()=> isValid);
-  }, [classData.basicInfo,registerValidator]);
+    registerValidator(0, () => isValid);
+  }, [classData.basicInfo, registerValidator]);
 
-  const secondaryOptions = categoryMap[basicInfo.category1] || [];
+  const reverseCategory1Map = Object.fromEntries(
+  Object.entries(category1Map).map(([k, v]) => [v, k])
+);
+
+const selectedCategory1Name = reverseCategory1Map[basicInfo.category1];
+const secondaryOptions = categoryMap[selectedCategory1Name] || [];
 
   // const submit = (e) => {
   //   e.preventDefault();
@@ -151,23 +174,23 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
           <div className="KHJ-category-row">
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">1차카테고리</label>
-              <select value={basicInfo.category1} onChange={handlePrimaryChange}>
+              <select value={basicInfo.category1 || ''} onChange={handlePrimaryChange}>
                 <option value="" disabled hidden>1차 카테고리 선택</option>
-                {Object.keys(categoryMap).map((key) => (
-                  <option key={key} value={key}>{key}</option>
+                {Object.entries(category1Map).map(([label, value]) => (
+                  <option key={value} value={value}>{label}</option>
                 ))}
               </select>
             </div>
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">2차카테고리</label>
               <select
-                value={basicInfo.category2}
+                value={basicInfo.category2 || ''}
                 onChange={handleSecondaryChange}
                 disabled={!basicInfo.category1}
               >
                 <option value="" disabled hidden>2차카테고리 선택</option>
-                {secondaryOptions.map((sub) => (
-                  <option key={sub} value={sub}>{sub}</option>
+                {secondaryOptions.map(sub => (
+                  <option key={sub} value={category2Map[sub]}>{sub}</option>
                 ))}
               </select>
             </div>
@@ -191,20 +214,16 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
       <hr />
 
       <div className="KHJ-form-section">
-        <label className="KHJ-label">
-          장소 <span className="KHJ-required-text"><span className="KHJ-required-text-dot">*</span> 진행장소</span>
-        </label>
+        <label className="KHJ-label">장소 <span className="KHJ-required-text"><span className="KHJ-required-text-dot">*</span> 진행장소</span></label>
 
         {!basicInfo.addr ? (
           <div className="KHJ-location-add-wrapper">
             <div className="KHJ-location-relative">
-              <button className="KHJ-location-add-btn" onClick={() => setShowLocation(true)}>
-                장소 등록
-              </button>
+              <button className="KHJ-location-add-btn" onClick={() => setShowLocation(true)}>장소 등록</button>
 
               {showLocation && (
                 <div className="KHJ-postcode-popup">
-                  <div className="KHJ-locname-input-wrapper">
+                  <div className="KHJ-postcode-form-side">
                     <label className="KHJ-sub-label">장소명</label>
                     <input
                       type="text"
@@ -213,17 +232,32 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
                       value={tempLocName}
                       onChange={(e) => setTempLocName(e.target.value)}
                     />
+                    <label className="KHJ-sub-label">상세주소</label>
+                    <input
+                      type="text"
+                      className="KHJ-detailaddr-input"
+                      placeholder="예: 3층 301호"
+                      value={basicInfo.detailAddr || ''}
+                      onChange={(e) =>
+                        setClassData(prev => ({
+                          ...prev,
+                          basicInfo: {
+                            ...prev.basicInfo,
+                            detailAddr: e.target.value
+                          }
+                        }))
+                      }
+                    />
+                    <div className="KHJ-location-btn-row">
+                      <button className="KHJ-location-confirm-btn" onClick={handleAddressConfirm}>장소 등록</button>
+                      <button className="KHJ-postcode-close-btn" onClick={() => setShowLocation(false)}>닫기</button>
+                    </div>
                   </div>
-
-                  <DaumPostcode onComplete={handleAddressSelect} />
-
-                  {selectedAddress && (
-                    <div className="KHJ-selected-addr">선택된 주소: {selectedAddress}</div>
-                  )}
-
-                  <div className="KHJ-location-btn-row">
-                    <button className="KHJ-location-confirm-btn" onClick={handleAddressConfirm}>장소 등록</button>
-                    <button className="KHJ-postcode-close-btn" onClick={() => setShowLocation(false)}>닫기</button>
+                  <div className="KHJ-postcode-search-side">
+                    <DaumPostcode onComplete={handleAddressSelect} />
+                    {selectedAddress && (
+                      <div className="KHJ-selected-addr">선택된 주소: {selectedAddress}</div>
+                    )}
                   </div>
                 </div>
               )}
@@ -232,9 +266,7 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
         ) : (
           <div className="KHJ-location-wrapper">
             <div className="KHJ-location-close-absolute">
-              <button className="KHJ-location-remove-btn" onClick={handleAddressClear}>
-                ×
-              </button>
+              <button className="KHJ-location-remove-btn" onClick={handleAddressClear}>×</button>
             </div>
             <div className="KHJ-location-box">
               <table className="KHJ-location-table">
@@ -245,7 +277,7 @@ const TabBasicInfo = ({ registerValidator,classData,setClassData }) => {
                   </tr>
                   <tr>
                     <td className="KHJ-location-label">주소</td>
-                    <td>{basicInfo.addr}</td>
+                    <td>{basicInfo.addr} {basicInfo.detailAddr}</td>
                   </tr>
                   <tr>
                     <td className="KHJ-location-label">좌표</td>

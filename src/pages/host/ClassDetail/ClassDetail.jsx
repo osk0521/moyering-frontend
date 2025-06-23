@@ -25,7 +25,9 @@ const tabs = [
 const ClassDetail = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [classData, setClassData] = useState(null);
+  const [scheduleDetails,setScheduleDetails] = useState([]);
   const { classId, calendarId } = useParams();
+  
   const token = useAtomValue(tokenAtom)
   const validators = useRef([]);
   const user = useAtomValue(userAtom);
@@ -39,7 +41,8 @@ const ClassDetail = () => {
       }
     })
       .then(res => {
-        setClassData(res.data);
+        setClassData(res.data.hostClass);
+        setScheduleDetails(res.data.scheduleDetail);
         console.log(res.data);
       })
       .catch(err => {
@@ -62,7 +65,7 @@ const ClassDetail = () => {
   };
 
   const renderTabContent = () => {
-    const props = { registerValidator, classData, isEditMode: true };
+    const props = { registerValidator, classData,scheduleDetails, isEditMode: true };
     switch (activeTab) {
       case 0: return <DetailTabBasicInfo {...props} />;
       case 1: return <DetailTabSchedule {...props}/>;

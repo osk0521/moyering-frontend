@@ -7,57 +7,53 @@ import React from 'react';
 const TabSchedule = ({ classData, setClassData }) => {
   const { schedule } = classData;
 
-  // 최초 마운트 시 스케줄 1개 기본값 세팅
+  // 최초 마운트 시 스케줄 디테일 1개 기본값 세팅
   useEffect(() => {
-    if (!schedule.scheduleBlocks || schedule.scheduleBlocks.length === 0) {
+    if (!schedule.scheduleDetail || schedule.scheduleDetail.length === 0) {
       setClassData(prev => ({
         ...prev,
         schedule: {
           ...prev.schedule,
-          scheduleBlocks: [
-            { name: '스케줄 1', entries: [] }
+          scheduleDetail: [
+            { startTime: '00:00', endTime: '00:00', content: '' }
           ]
         }
       }));
     }
   }, []);
 
-  const addEntryToBlock = (blockIndex) => {
-    const newSchedules = [...(schedule.scheduleBlocks || [])];
-    newSchedules[blockIndex].entries.push({
-      startTime: '00:00',
-      endTime: '00:00',
-      content: ''
-    });
+  const addScheduleDetail = () => {
+    const newDetails = [...(schedule.scheduleDetail || [])];
+    newDetails.push({ startTime: '00:00', endTime: '00:00', content: '' });
     setClassData(prev => ({
       ...prev,
       schedule: {
         ...schedule,
-        scheduleBlocks: newSchedules
+        scheduleDetail: newDetails
       }
     }));
   };
 
-  const removeEntryFromBlock = (blockIndex, entryIndex) => {
-    const newSchedules = [...(schedule.scheduleBlocks || [])];
-    newSchedules[blockIndex].entries.splice(entryIndex, 1);
+  const removeScheduleDetail = (index) => {
+    const newDetails = [...(schedule.scheduleDetail || [])];
+    newDetails.splice(index, 1);
     setClassData(prev => ({
       ...prev,
       schedule: {
         ...schedule,
-        scheduleBlocks: newSchedules
+        scheduleDetail: newDetails
       }
     }));
   };
 
-  const updateEntry = (blockIndex, entryIndex, field, value) => {
-    const newSchedules = [...(schedule.scheduleBlocks || [])];
-    newSchedules[blockIndex].entries[entryIndex][field] = value;
+  const updateScheduleDetail = (index, field, value) => {
+    const newDetails = [...(schedule.scheduleDetail || [])];
+    newDetails[index][field] = value;
     setClassData(prev => ({
       ...prev,
       schedule: {
         ...schedule,
-        scheduleBlocks: newSchedules
+        scheduleDetail: newDetails
       }
     }));
   };
@@ -133,45 +129,36 @@ const TabSchedule = ({ classData, setClassData }) => {
 
         <hr />
         <div className="schedule-wrapper">
-          <h3>스케줄</h3>
-          {(schedule.scheduleBlocks || []).map((block, blockIndex) => (
-            <div key={blockIndex} className="schedule-block">
-              <div className="schedule-header">
-                <strong>{block.name}</strong>
-              </div>
-              <div className="schedule-table">
-                {block.entries.map((entry, entryIndex) => (
-                  <div key={entryIndex} className="schedule-entry">
-                    <input
-                      type="time"
-                      value={entry.startTime}
-                      onChange={(e) => updateEntry(blockIndex, entryIndex, 'startTime', e.target.value)}
-                    />
-                    <span> - </span>
-                    <input
-                      type="time"
-                      value={entry.endTime}
-                      onChange={(e) => updateEntry(blockIndex, entryIndex, 'endTime', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      value={entry.content}
-                      placeholder="일정 내용"
-                      onChange={(e) => updateEntry(blockIndex, entryIndex, 'content', e.target.value)}
-                      className="content-input"
-                    />
-                    <button
-                      className="entry-remove-btn"
-                      onClick={() => removeEntryFromBlock(blockIndex, entryIndex)}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                ))}
-                <div className="add-entry" onClick={() => addEntryToBlock(blockIndex)}>+ 내용 추가하기</div>
-              </div>
+          <h3>스케줄 상세</h3>
+          {(schedule.scheduleDetail || []).map((entry, index) => (
+            <div key={index} className="schedule-entry">
+              <input
+                type="time"
+                value={entry.startTime}
+                onChange={(e) => updateScheduleDetail(index, 'startTime', e.target.value)}
+              />
+              <span> - </span>
+              <input
+                type="time"
+                value={entry.endTime}
+                onChange={(e) => updateScheduleDetail(index, 'endTime', e.target.value)}
+              />
+              <input
+                type="text"
+                value={entry.content}
+                placeholder="일정 내용"
+                onChange={(e) => updateScheduleDetail(index, 'content', e.target.value)}
+                className="content-input"
+              />
+              <button
+                className="entry-remove-btn"
+                onClick={() => removeScheduleDetail(index)}
+              >
+                삭제
+              </button>
             </div>
           ))}
+          <div className="add-entry" onClick={addScheduleDetail}>+ 내용 추가하기</div>
         </div>
 
         <div className="KHJ-inline-form-row">

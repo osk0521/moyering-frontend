@@ -9,7 +9,7 @@ import TabSchedule from './TabSchedule';
 import TabTransaction from './TabTransaction';
 import axios from 'axios';
 import { myAxios } from '../../../config';
-import { tokenAtom,userAtom } from '../../../atoms';
+import { tokenAtom, userAtom } from '../../../atoms';
 import { useAtomValue } from 'jotai';
 import React from 'react'; // 이 한 줄만 추가!
 
@@ -33,6 +33,7 @@ const ClassRegisterPage = () => {
       name: '',
       locName: '',
       addr: '',
+      detailAddr: '',
       longitude: '',
       latitude: ''
     },
@@ -40,10 +41,10 @@ const ClassRegisterPage = () => {
       recruitMax: '',
       recruitMin: '',
       dates: [],
-      scheduleDetail:[{
-        content:'',
-        startTime:'',
-        endTime:'',
+      scheduleDetail: [{
+        content: '',
+        startTime: '',
+        endTime: '',
       }]
     },
     description: {
@@ -113,45 +114,55 @@ const ClassRegisterPage = () => {
   console.log(token)
   const submit = () => {
 
-    let reqData = {...classData.basicInfo, 
-                   ...classData.classPortfolio,
-                   ...classData.description,
-                   ...classData.extraInfo,
-                   ...classData.schedule,
-                   ...classData.transaction};
+    let reqData = {
+      ...classData.basicInfo,
+      ...classData.classPortfolio,
+      ...classData.description,
+      ...classData.extraInfo,
+      ...classData.schedule,
+      ...classData.transaction
+    };
 
     let formData = new FormData();
-    formData.append("hostId",user.hostId)
-    formData.append("addr",reqData.addr)
-    formData.append("category1",reqData.category1)
-    formData.append("category2",reqData.category2)
-    formData.append("caution",reqData.caution)
-    formData.append("dates",reqData.dates)
-    formData.append("detailDescription",reqData.detailDescription)
-    if(reqData.img1)formData.append("img1",reqData.img1);
-    if(reqData.img2)formData.append("img2",reqData.img2);
-    if(reqData.img3)formData.append("img3",reqData.img3);
-    if(reqData.img4)formData.append("img4",reqData.img4);
-    if(reqData.img5)formData.append("img5",reqData.img5);
-    formData.append("incluision",reqData.incluision)
-    formData.append("keywords",reqData.keywords)
-    formData.append("latitude",reqData.latitude)
-    formData.append("locName",reqData.locName)
-    formData.append("longitude",reqData.longitude)
-    formData.append("material",reqData.material)
-    formData.append("name",reqData.name)
-    formData.append("portfolio",reqData.portfolio)
-    formData.append("preparation",reqData.preparation)
-    formData.append("recruitMax",reqData.recruitMax)
-    formData.append("recruitMin",reqData.recruitMin)
+    formData.append("hostId", user.hostId)
+    formData.append("addr", reqData.addr)
+    formData.append("category1", reqData.category1)
+    formData.append("category2", reqData.category2)
+    formData.append("caution", reqData.caution)
+    formData.append("dates", reqData.dates)
+    formData.append("scheduleDetail", JSON.stringify(reqData.scheduleDetail))
+    formData.append("detailDescription", reqData.detailDescription)
+    if (reqData.img1) formData.append("img1", reqData.img1);
+    if (reqData.img2) formData.append("img2", reqData.img2);
+    if (reqData.img3) formData.append("img3", reqData.img3);
+    if (reqData.img4) formData.append("img4", reqData.img4);
+    if (reqData.img5) formData.append("img5", reqData.img5);
+    formData.append("incluision", reqData.incluision)
+    formData.append("keywords", reqData.keywords)
+    formData.append("latitude", reqData.latitude)
+    formData.append("locName", reqData.locName)
+    formData.append("longitude", reqData.longitude)
+    formData.append("material", reqData.material)
+    formData.append("name", reqData.name)
+    formData.append("portfolio", reqData.portfolio)
+    formData.append("preparation", reqData.preparation)
+    formData.append("recruitMax", reqData.recruitMax)
+    formData.append("recruitMin", reqData.recruitMin)
+
+    // FormData 내용 확인
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
 
     console.log(reqData);
     myAxios(token).post('/host/classRegist/submit', formData)
       .then(res => {
         console.log(res);
+        console.log(formData);
         let classId = res.data;
       })
       .catch(err => {
+        console.log(formData);
         console.log(token);
         console.log(err);
       })

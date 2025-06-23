@@ -10,10 +10,14 @@ import heartFilled from './icons/heart-filled.png';
 import ReportModal from './ReportModal';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import Header from '../../common/Header';
+import FeedCreate from '../socialRing/FeedCreate';
+import { tokenAtom } from '../../../atoms';
+import { useAtomValue } from 'jotai';
 
 const POSTS_PER_PAGE = 3;
 
 export default function FeedPage() {
+  const token = useAtomValue(tokenAtom);
   const filters = ['전체', '좋아요순', '댓글순', '팔로워'];
   const [feeds, setFeeds] = useState([]);
   const [activeFilter, setActiveFilter] = useState(filters[0]);
@@ -25,6 +29,9 @@ export default function FeedPage() {
   const navigate = useNavigate();
   const intervalRef = useRef(null);
   const slideRef = useRef(null);
+
+  //create모달
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const totalPopularPages = Math.ceil(popularFeeds.length / POSTS_PER_PAGE);
 
@@ -41,7 +48,8 @@ export default function FeedPage() {
     }[activeFilter];
 
     axios.get(`http://localhost:8080/socialing/feeds?sort=${sortKey}&userId=${userId}`)
-      .then(res => setFeeds(res.data))
+      .then(res => {setFeeds(res.data);console.log(res.data)})
+
       .catch(err => console.error('피드 불러오기 실패:', err));
 
     // 인기 피드도 (예시용 더미)
@@ -91,7 +99,16 @@ export default function FeedPage() {
   );
 
   return (
-    <>
+    <div className="KYM-feed-page">
+    {showCreateModal && (
+  <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+    <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <FeedCreate
+        onCancel={() => setShowCreateModal(false)}
+      />
+    </div>
+  </div>
+)}
     <Header/>
     <div className="KYM-feed-container">
       <div className="KYM-feed-title">
@@ -207,9 +224,19 @@ export default function FeedPage() {
           </div>
         </aside>
 
-        <button className="KYM-create-post-button" onClick={() => navigate('/feed/create')}>
+        {/* <button className="KYM-create-post-button" onClick={() => navigate('/feed/create')}> */}
+        
+        {/* <button className="KYM-create-post-button" onClick={() => setShowCreateModal(true)}>
           <img src={plusIcon} alt="새 글 작성" />
-        </button>
+        </button> */}
+        {token && (
+          <button
+            className="KYM-create-post-button"
+            onClick={() => setShowCreateModal(true)}
+          >
+            <img src={plusIcon} alt="새 글 작성" />
+          </button>
+        )}
       </div>
 
       <ReportModal
@@ -220,7 +247,20 @@ export default function FeedPage() {
           setReportTargetId(null);
         }}
       />
+      {showCreateModal && (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowCreateModal(false)}
+          >
+            <div
+              className="modal-content"
+              onClick={e => e.stopPropagation()}
+            >
+              <FeedCreate onCancel={() => setShowCreateModal(false)} />
+            </div>
+          </div>
+        )}
     </div>
-    </>
+    </div>
   );
 }

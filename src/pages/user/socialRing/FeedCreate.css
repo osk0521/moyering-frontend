@@ -1,13 +1,25 @@
 /* src/components/FeedCreate.css */
 
 .KYM-FeedCreate-container {
-    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    /* 반응형 너비/높이 설정 */
+    /* width: 90vw;
+    max-width: 1200px; */
+    width: 100%;
+    max-width: none;
+    max-height: 100%;
     margin: 0 auto;
     padding: 20px;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden; /* 내부에서 스크롤 처리 */
 }
 
 .KYM-FeedCreate-container .KYM-FeedCreate-header {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -49,15 +61,16 @@
 }
 
 .KYM-FeedCreate-container .KYM-FeedCreate-main {
+    flex: 1;
     display: flex;
     gap: 24px;
     margin-top: 24px;
-    min-height: 500px;
-    min-width: 1000px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .KYM-FeedCreate-container .KYM-FeedCreate-image-box {
-    flex: 0 0 500px;
+    flex: 0 0 40%;
     background: #797878;
     border-radius: 8px;
     position: relative;
@@ -67,20 +80,15 @@
 }
 
 .KYM-FeedCreate-container .KYM-FeedCreate-image-box img {
-    /* 1) 잘리지 않게, 비율 유지하며 컨테이너 안에 꽉 채우도록 */
-  object-fit: contain;
-
-  /* 2) 너비·높이를 고정 박스에 맞추지 말고, 최대한으로만 늘리기 */
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-
-  /* 3) 박스 중앙에 위치시키기 */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    object-fit: contain;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .KYM-FeedCreate-container .KYM-FeedCreate-placeholder {
@@ -95,7 +103,6 @@
 
 .KYM-FeedCreate-container .KYM-FeedCreate-form {
     flex: 1;
-    /* max-width: 400px; */
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -154,4 +161,85 @@
     line-height: 1;
     cursor: pointer;
     color: #ff8c00;
+}
+
+/* 작성자 정보 블록 */
+.KYM-FeedCreate-author-info {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.KYM-FeedCreate-author-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.KYM-FeedCreate-author-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.KYM-FeedCreate-author-nickname {
+  font-weight: bold;
+}
+
+.KYM-FeedCreate-author-badge {
+  width: 20px;
+  height: 20px;
+}
+.KYM-FeedCreate-carousel {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 75%; /* 원하는 비율로 조정 */
+  background: #f5f5f5;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-img {
+  position: absolute;
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.carousel-btn.left  { left: 8px; }
+.carousel-btn.right { right: 8px; }
+
+.carousel-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 50%;
 }

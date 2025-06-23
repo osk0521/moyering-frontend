@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import UserLogin from './pages/common/UserLogin';
-import UserJoin from './pages/common/UserJoin'; 
+import UserJoin from './pages/common/UserJoin';
 import UserJoinCategory from './pages/common/UserJoinCategory';
 import UserJoinSuccess from './pages/common/UserJoinSuccess';
 import ClassCalendar from './pages/host/ClassCalendar';
@@ -85,11 +85,11 @@ function App() {
         <Route path="/gatheringList" element={<GatheringList />} />
         <Route path="/classRingDetail/:id" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/userFeed" element={<UserFeed />} />
+        <Route path="/feeds" element={<FeedPage />} />
+        <Route path="/userFeed/:nickName" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
-        <Route path="/feedCreate" element={<FeedCreate />} />
+
         <Route path="/feedEdit" element={<FeedEdit />} />
         <Route path="/myFeed" element={<MyFeed />} />
         <Route path="/scrapList" element={<ScrapList />} />
@@ -103,6 +103,7 @@ function App() {
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
+        <Route path="/user/feedCreate" element={<FeedCreate />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
@@ -135,7 +136,7 @@ function App() {
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
 
         </Route>
-        
+
         {/* 1차 로그인 화면  */}
         {/* 공통 /~~~으로 시작 */}
         <Route path="/" element={<Main />} />
@@ -172,11 +173,11 @@ function App() {
         <Route path="/admin/report" element={<ReportManagement />} />       {/* 신고관리 페이지  */}
         <Route path="/admin/banner" element={<BannerManagement />} />    {/* 배너관리 페이지  */}
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
-        <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}      
+        <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
-        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산관리 페이지  */}      
+        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산관리 페이지  */}
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
-        </Routes>
+      </Routes>
     </Router>
   );
 }

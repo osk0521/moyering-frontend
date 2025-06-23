@@ -53,8 +53,6 @@ const Layout = ({ children }) => {
         </nav>
       </aside>
 
-    
-      
         {/* 헤더 */}
         <header className="headerHY">
           <div className="header-leftHY">

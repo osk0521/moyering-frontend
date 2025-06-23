@@ -1,6 +1,28 @@
 import './DetailTabBasicInfo.css';
+import React, { useEffect } from 'react';
 
-const DetailTabBasicInfo = () => {
+const DetailTabBasicInfo = ({ classData, registerValidator, isEditMode }) => {
+  const {
+    category1,
+    category2,
+    name,
+    locName,
+    addr,
+    detailAddr,
+    latitude,
+    longitude,
+  } = classData || {};
+
+  useEffect(() => {
+    registerValidator(0, () => {
+      if (!name || !addr) {
+        alert("클래스명과 주소는 필수입니다.");
+        return false;
+      }
+      return true;
+    });
+  }, [classData]);
+
   return (
     <div className="KHJ-class-detail-container">
       <div className="KHJ-detail-basic-section">
@@ -10,18 +32,18 @@ const DetailTabBasicInfo = () => {
           <div className="KHJ-detail-basic-category-box">
             <div className="KHJ-detail-basic-category-item">
               <label className="KHJ-detail-basic-label">1차 카테고리</label>
-              <input className="KHJ-detail-basic-input" value="음식" readOnly />
+              <input className="KHJ-detail-basic-input" value={category1 || ''} readOnly />
             </div>
             <div className="KHJ-detail-basic-category-item">
               <label className="KHJ-detail-basic-label">2차 카테고리</label>
-              <input className="KHJ-detail-basic-input" value="베이킹" readOnly />
+              <input className="KHJ-detail-basic-input" value={category2 || ''} readOnly />
             </div>
           </div>
         </div>
 
         <div className="KHJ-detail-basic-row">
           <label className="KHJ-detail-basic-label">클래스 명</label>
-          <input className="KHJ-detail-basic-full-input" value="밤을 굽자" readOnly />
+          <input className="KHJ-detail-basic-full-input" value={name || ''} readOnly />
         </div>
 
         <div className="KHJ-detail-basic-row">
@@ -37,11 +59,11 @@ const DetailTabBasicInfo = () => {
               <tbody>
                 <tr>
                   <td>주소</td>
-                  <td>서울 강남구 논현로123길 4-1</td>
+                  <td>{addr} {detailAddr}</td>
                 </tr>
                 <tr>
                   <td>좌표</td>
-                  <td>위도: 12.3456 경도: 12.3456</td>
+                  <td>위도: {latitude} 경도: {longitude}</td>
                 </tr>
               </tbody>
             </table>

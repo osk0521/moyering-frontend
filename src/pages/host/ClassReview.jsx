@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ClassReview.css';
 
+
 const ClassReview = () => {
   const [searchFilter, setSearchFilter] = useState('클래스명');
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,73 +1,100 @@
-// GatheringDetail_questions.jsx
 import React, { useState, useEffect, memo, useRef } from "react";
-import { useParams } from "react-router-dom";
-import "./GatheringDetail.css";
-
+import { url, myAxios } from "../../config";
+import axios from "axios";
+import {
+  Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "reactstrap";
+import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
+import { GoPeople } from "react-icons/go";
+import aImage from "/detail2.png";
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
+import { useAtom, useAtomValue } from "jotai";
+import { userAtom, tokenAtom } from "../../atoms";
 export default function GatheringDetailInquiry({ gatheringId }) {
-//   const{gatheringId} = useParams();
-const exampleQuestionsData = {
-    questions: [
-      {
-        id: 1,
-        status: "답변대기",
-        content: "준비물 필수인가요?",
-        author: "id18****",
-        date: "2025-03-29",
-        answer: null,
-      },
-      {
-        id: 2,
-        status: "답변완료",
-        content: "처의 집문이옵니다.",
-        author: "id335****",
-        date: "2025-03-29",
-        answer: null,
-      },
-      {
-        id: 3,
-        status: "답변완료",
-        content: "또 다른 질문이용",
-        author: "id877****",
-        date: "2025-02-21",
-        answer: null,
-      },
-      {
-        id: 4,
-        status: "답변완료",
-        content: "수업에 상황 늦을 것같은데 초반을 놓치면 따라가기 힘들까요?",
-        author: "id877****",
-        date: "2025-02-21",
-        answer: {
-          author: "호스트명",
-          date: "2025-02-21",
-          content: [
-            "안녕하세요. 고객님 처의 1대1로 수강생분들의 속도에 맞춰서 수업을 진행합니다.",
-            "또한, 시간 강의자료를 업로드해드리오니 크게 문제는 없을 것으로 예상됩니다.",
-            "다만, 많이 늦을실 경우에 한정된 시간 내에 완성이 어려우실 수 있습니다.",
-          ],
-        },
-      },
-      {
-        id: 5,
-        status: "답변완료",
-        content: "어기도 있어요 질문",
-        author: "id18id18id18id18id18id18",
-        date: "2025-02-21",
-        answer: null,
-      },
-      {
-        id: 6,
-        status: "답변완료",
-        content: "나두 질문이요",
-        author: "id335****",
-        date: "2025-01-01",
-        answer: null,
-      },
-    ],
-    totalPages: 3,
-    currentPage: 1,
-  };
+  const [qnaData, setQnaData] = useState([]);
+  const [gatheringData, setGatheringData] = useState({});
+  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionContent, setQuestionContent] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   
+  const user = useAtomValue(userAtom);    
+  const token = useAtomValue(tokenAtom);
+  const userId = user.id;
+
+  useEffect(() => {
+    myAxios().get(`/getGatheringInquiries?gatheringId=${gatheringId}`)
+      .then((res) => {
+        console.log("API Response:", res.data);
+
+        const qnaList = res.data.qnaList;
+
+        let parsedTags = [];
+        if (
+          res.data.gatheringTags &&
+          typeof res.data.gatheringTags === "string"
+        ) {
+          try {
+            // 문자열를 배열로 변환
+            const validJsonString = res.data.gatheringTags.replace(/'/g, '"');
+            parsedTags = JSON.parse(validJsonString);
+          } catch (error) {
+            console.error("Tags 파싱 오류:", error);
+            parsedTags = [];
+          }
+        }
+
+        // 모임 데이터 설정
+        setGatheringData({
+          gatheringId: gatheringId,
+          title: res.data.gatheringTitle,
+          thumbnailFileName: res.data.gatheringThumbnailFileName,
+          meetingDate: res.data.gatheringMeetingDate,
+          startTime: res.data.gatheringStartTime,
+          endTime: res.data.gatheringEndTime,
+          address: res.data.gatheringAddress,
+          detailAddress: res.data.gatheringDetailAddress,
+          introOnline: res.data.gatheringIntrOnln,
+          tags: parsedTags,
+        });
+
+        // Q&A 데이터 변환 - 새로운 구조에 맞게 수정
+        setQnaData(
+          qnaList.map((q) => ({
+            id: q.id, // 기존: q.inquiryId
+            status: q.status, // 새로 추가: "답변대기" 또는 "답변완료"
+            content: q.content, // 기존: q.inquiryContent → questionContent
+            author: q.author, // 기존: q.nickName → name
+            date: q.date, // 기존: q.inquiryDate → questionDate
+            answer: q.answer, // 새로 추가: 답변 정보 (객체 또는 null)
+
+            userId: q.userId || null, // 새 구조에는 없으므로 null
+            nickName: q.author,
+            profile: q.profile || null, // 새 구조에는 없으므로 null
+            questionContent: q.content, // content를 questionContent로도 매핑
+            questionDate: q.date, // date를 questionDate로도 매핑
+            responseDate: q.answer?.date || null, // answer 객체에서 추출
+            responseContent: q.answer?.content || null, // answer 객체에서 추출 (배열)
+            responseState: q.status, // status를 responseState로도 매핑
+            meetingDate: res.data.gatheringMeetingDate, // 모임 날짜
+          }))
+        );
+
+        console.log("변환된 tags:", parsedTags);
+        console.log("변환된 qnaData:", qnaList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [gatheringId]);
+
   // 질문하기 모달 관련 함수들
   const toggleQuestionModal = () => {
     setIsQuestionModalOpen(!isQuestionModalOpen);
@@ -78,7 +105,8 @@ const exampleQuestionsData = {
     }
   };
 
-  const handleQuestionSubmit = () => {
+  const submit = async (e) => {
+    e.preventDefault();
     if (!questionTitle.trim()) {
       alert("질문 제목을 입력해주세요.");
       return;
@@ -93,146 +121,249 @@ const exampleQuestionsData = {
       content: questionContent,
     });
 
-    // 여기서 백엔드로 질문 데이터를 전송하는 로직 추가
-    // submitQuestion(questionTitle, questionContent);
-
+      // const response = await myAxios(token).post(`/user/writeGathering`,
+      //   formDataToSend
+      // );
     // 성공 시 모달 닫기
     toggleQuestionModal();
   };
 
+  // 페이지네이션 설정
   const questionsPerPage = 5;
-  const startIndex = (currentPage - 1) * questionsPerPage;
-  const endIndex = startIndex + questionsPerPage;
-  const currentQuestions = questions.slice(startIndex, endIndex);
+  const totalQuestionsCount = qnaData.length;
+  const calculatedTotalPages = Math.ceil(
+    totalQuestionsCount / questionsPerPage
+  );
 
-    setQuestions(exampleQuestionsData.questions);
-    setTotalPages(exampleQuestionsData.totalPages);
-    setCurrentPage(exampleQuestionsData.currentPage);
+  useEffect(() => {
+    setTotalPages(calculatedTotalPages);
+  }, [calculatedTotalPages]);
 
   // 페이지 변경 핸들러
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-   useEffect(()=> {
-    axios.get(`${url}/getGatheringInquiries/?gatheringId=${gatheringId}`)
-        .then(res=> {
-            console.log('API Response:', res.data); 
-            
-            // gathering 데이터 설정
-            const gathering = res.data.gathering;
-            const host = res.data.host;
-            const member = res.data.member || []; // member 배열 추출
-            
-            // tags 필드를 문자열에서 배열로 변환
-            let parsedTags = [];
-            if (gathering.tags && typeof gathering.tags === 'string') {
-                try {
-                    // 문자열 "['독서', '소모임', '홍대']"를 배열로 변환
-                    const validJsonString = gathering.tags.replace(/'/g, '"');
-                    parsedTags = JSON.parse(validJsonString);
-                } catch (error) {
-                    console.error('Tags 파싱 오류:', error);
-                    parsedTags = [];
-                }
-            }
-            
-            setInquiryData({
-                gatheringId: gathering.gatheringId,
-                title: gathering.title,
-                userId: gathering.userId,
-                gatheringContent: gathering.gatheringContent,
-                thumbnailFileName: gathering.thumbnailFileName,
-                meetingDate: gathering.meetingDate,
-                startTime: gathering.startTime,
-                endTime: gathering.endTime,
-                address: gathering.address,
-                detailAddress: gathering.detailAddress,
-                minAttendees: gathering.minAttendees,
-                maxAttendees: gathering.maxAttendees,
-                applyDeadline: gathering.applyDeadline,
-                preparationItems: gathering.preparationItems,
-                tags: parsedTags,
-                createDate: gathering.createDate,
-                category: gathering.categoryName,
-                subCategory: gathering.subCategoryName,
-                latitude: gathering.latitude,
-                longitude: gathering.longitude,
-                intrOnln: gathering.intrOnln,
-                status: gathering.status,
-                locName: gathering.locName,
-            });
 
-            console.log('변환된 tags:', parsedTags);
-        })
-        .catch(err=> {
-            console.log(err)
-        })
-  }, [gatheringId]);
-  const questions = [
-    { 
-      id: 1, 
-      status: "답변대기", 
-      title: "존비롤 필수인가요?", 
-      author: "id18****", 
-      date: "2025-03-29", 
-      hasAnswer: false 
-    },
-    { 
-      id: 2, 
-      status: "답변완료", 
-      title: "저의 질문이습니다.", 
-      author: "id335****", 
-      date: "2025-03-29", 
-      hasAnswer: false 
-    },
-    {
-      id: 3,
-      status: "답변완료",
-      title: "수업에 상착 늘을 것같은데 초반을 툴지면 따라가기 힘들까요?",
-      author: "id877****",
-      date: "2025-02-21",
-      hasAnswer: true,
-      answer: {
-        content:
-          "안녕하세요. 고객님 저희 1대1로 수강생분들의 속도에 맞춰서 수업을 진행합니다.\n\n또한, 사전 강의자료를 업로드해드리오니 크게 문제는 없을 것으로 예상됩니다.\n\n다만, 많이 늦을실 경우에 한정된 시간 내에 완성이 어려우실 수 있습니다.",
-        author: "모임장",
-        date: "2025-02-21"
-      }
-    }
-  ];
+  // 현재 페이지의 질문들
+  const startIndex = (currentPage - 1) * questionsPerPage;
+  const endIndex = startIndex + questionsPerPage;
+  const currentQuestions = qnaData.slice(startIndex, endIndex);
 
+  // 날짜 포맷팅 함수
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+  // 시간 포맷팅 함수
+  const formatTime = (timeString) => {
+    if (!timeString) return "";
+    const [hours, minutes] = timeString.split(":");
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? "오후" : "오전";
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    return `${ampm} ${displayHour}:${minutes}`;
+  };
+  
   return (
-    <section className={styles.section} id="questions">
-      <h2>질문</h2>
-      <div className={styles.questionsTable}>
-        <div className={styles.questionsHeader}>
-          <div>답변상태</div>
-          <div>제목</div>
-          <div>작성자</div>
-          <div>작성일</div>
+    <div className="GatheringDetail_questions-board_osk">
+      <div className="GatheringDetail_questions-table_osk">
+        {/* Header */}
+        <div className="GatheringDetail_questions-header_osk">
+          <div className="GatheringDetail_questions-grid-header_osk">
+            <div>답변상태</div>
+            <div>문의/답변 내용</div>
+            <div>작성자</div>
+            <div>작성일</div>
+          </div>
         </div>
 
-        {questions.map((q, i) => (
-          <div key={q.id} className={`${styles.questionsRow} ${i % 2 === 1 ? styles.alternate : ""}`}>
-            <div className={styles.questionsGrid}>
-              <div>{q.status}</div>
-              <div>{q.title}</div>
-              <div>{q.author}</div>
-              <div>{q.date}</div>
-            </div>
-            {q.hasAnswer && q.answer && (
-              <div className={styles.answerSection}>
-                <div className={styles.answerHeader}>
-                  <span className={styles.answerBadge}>답변</span>
-                  <span className={styles.answerAuthor}>{q.answer.author}</span>
-                  <span className={styles.answerDate}>{q.answer.date}</span>
-                </div>
-                <div className={styles.answerContent}>{q.answer.content}</div>
-              </div>
-            )}
+        {/* 질문이 없는 경우 */}
+        {currentQuestions.length === 0 ? (
+          <div className="GatheringDetail_no-questions_osk">
+            <p>아직 등록된 문의가 없습니다.</p>
           </div>
-        ))}
+        ) : (
+          /* Dynamic Question Rows */
+          currentQuestions.map((question, index) => (
+            <React.Fragment key={question.id}>
+              <div
+                className={`GatheringDetail_questions-row_osk ${
+                  index % 2 === 1 ? "GatheringDetail_alternate_osk" : ""
+                }`}
+              >
+                <div className="GatheringDetail_questions-grid_osk">
+                  <div className="GatheringDetail_status_osk">
+                    <span
+                      className={`GatheringDetail_status-badge_osk ${
+                        question.status === "답변완료"
+                          ? "GatheringDetail_status-completed_osk"
+                          : "GatheringDetail_status-pending_osk"
+                      }`}
+                    >
+                      {question.status}
+                    </span>
+                  </div>
+                  <div className="GatheringDetail_title_osk">
+                    {question.content}
+                  </div>
+                  <div className="GatheringDetail_author_osk">
+                    {question.author}
+                  </div>
+                  <div className="GatheringDetail_date_osk">
+                    {question.date}
+                  </div>
+                </div>
+              </div>
+
+              {/* Answer section */}
+              {question.answer && (
+                <div className="GatheringDetail_answer-section_osk">
+                  <div className="GatheringDetail_answer-header_osk">
+                    <span className="GatheringDetail_answer-badge_osk">
+                      답변
+                    </span>
+                    <span className="GatheringDetail_answer-author_osk">
+                      {question.answer.author}
+                    </span>
+                    <span className="GatheringDetail_answer-date_osk">
+                      {question.answer.date}
+                    </span>
+                  </div>
+                  <div className="GatheringDetail_answer-content_osk">
+                    {/* 답변 내용이 배열인 경우 각 줄을 p 태그로 렌더링 */}
+                    {Array.isArray(question.answer.content) ? (
+                      question.answer.content.map((line, lineIndex) => (
+                        <p key={lineIndex}>{line}</p>
+                      ))
+                    ) : (
+                      <p>{question.answer.content}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
+          ))
+        )}
       </div>
-    </section>
+
+      {/* Question Button */}
+      <button
+        className="GatheringDetail_question-button_osk"
+        onClick={toggleQuestionModal}
+      >
+        문의하기
+      </button>
+
+      {/* Pagination - 질문이 있을 때만 표시 */}
+      {qnaData.length > 0 && (
+        <div className="GatheringDetail_questions-pagination_osk">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+            (pageNum) => (
+              <button
+                key={pageNum}
+                className={`GatheringDetail_pagination-btn_osk ${
+                  currentPage === pageNum ? "GatheringDetail_active_osk" : ""
+                }`}
+                onClick={() => handlePageChange(pageNum)}
+              >
+                {pageNum}
+              </button>
+            )
+          )}
+        </div>
+      )}
+      {isQuestionModalOpen && (
+        <form>
+          <Modal
+            isOpen={isQuestionModalOpen}
+            toggle={toggleQuestionModal}
+            className="GatheringDetail_question-modal_osk"
+            size="lg"
+            centered
+          >
+            <ModalHeader
+              toggle={toggleQuestionModal}
+              className="GatheringDetail_modal-header_osk"
+            >
+              <span className="GatheringDetail_modal-title_osk">
+                {gatheringData.title}
+              </span>
+            </ModalHeader>
+            <ModalBody className="GatheringDetail_modal-body_osk">
+              <div className="GatheringDetail_gathering-info_osk">
+                <img
+                  src={`${url}/image?filename=${gatheringData.thumbnailFileName}`}
+                  alt="모임 이미지"
+                  className="GatheringDetail_gathering-image_osk"
+                />
+                <div className="GatheringDetail_gathering-details_osk">
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <span>
+                      제목: {formatDate(gatheringData.gatheringTitle)}
+                      <br />
+                      소개: {formatDate(gatheringData.gatheringIntrOnln)} <br />
+                      <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
+                      모임일: {formatDate(gatheringData.meetingDate)}{" "}
+                      {formatTime(gatheringData.startTime)} ~{" "}
+                      {formatTime(gatheringData.endTime)}
+                    </span>
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <CiLocationOn className="GatheringDetail_gathering-info-icon_osk" />
+                    <span>
+                      장소: {gatheringData.address}{" "}
+                      {gatheringData.detailAddress}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {gatheringData.tags && gatheringData.tags.length > 0 && (
+                <div className="GatheringDetail_modal-tags_osk">
+                  {gatheringData.tags.map((tag, index) => (
+                    <span key={index} className="GatheringDetail_modal-tag_osk">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="GatheringDetail_input-section_osk">
+                <label className="GatheringDetail_input-label_osk">
+                  문의 사항
+                </label>
+                <textarea
+                  value={questionContent}
+                  onChange={(e) => setQuestionContent(e.target.value)}
+                  placeholder="문의 사항에 대해 자세히 알려주세요"
+                  rows={6}
+                  className="GatheringDetail_textarea-field_osk"
+                />
+              </div>
+            </ModalBody>
+            <ModalFooter className="GatheringDetail_modal-footer_osk">
+              <button
+                className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-cancel_osk"
+                onClick={toggleQuestionModal}
+              >
+                취소
+              </button>
+              <input
+                type="submit"
+                className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-submit_osk"
+                onClick={handleQuestionSubmit}
+              >
+                문의하기
+              </input>
+            </ModalFooter>
+          </Modal>
+        </form>
+      )}
+    </div>
   );
 }

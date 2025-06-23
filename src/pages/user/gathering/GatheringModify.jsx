@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import { userAtom, tokenAtom } from "../../../atoms";
 import { Button } from "reactstrap";
 import { CiSearch, CiLocationOn, CiHashtag } from "react-icons/ci";
 import { FiUpload } from "react-icons/fi";
@@ -6,8 +8,7 @@ import { GoPeople } from "react-icons/go";
 import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
-import axios from "axios";
-import { url, KAKAO_REST_API_KEY } from "../../../config";
+import { url, KAKAO_REST_API_KEY, myAxios, } from "../../../config";
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -53,6 +54,10 @@ export default function GatheringModify() {
   const navigate = useNavigate();
   const { gatheringId } = useParams();
   
+    const user = useAtomValue(userAtom);    
+    const token = useAtomValue(tokenAtom);
+    const userId = user.id;
+  
   // 지오코딩용
   const [coordinates, setCoordinates] = useState({ x: "", y: "" });
   const [geocodingError, setGeocodingError] = useState("");
@@ -95,8 +100,8 @@ export default function GatheringModify() {
   // 기존 모임 데이터 가져오기
   useEffect(() => {
     if (gatheringId) {
-      axios
-        .get(`${url}/detailForModifyGathering/?gatheringId=${gatheringId}`)
+      
+  myAxios().get(`/detailForModifyGathering/?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("API Response:", res.data);
           
@@ -114,7 +119,6 @@ export default function GatheringModify() {
             }
           }
 
-          // formData 구조에 맞게 데이터 설정
           setFormData({
             title: gathering.title || "",
             startTime: gathering.startTime || "",
@@ -405,8 +409,7 @@ export default function GatheringModify() {
 
   // 1차 카테고리 데이터 가져오기
   useEffect(() => {
-    axios
-      .get(`${url}/category`)
+    myAxios().get(`/category`)
       .then((res) => {
         const categoryArray = res.data.category;
         setCategory(categoryArray);
@@ -418,8 +421,7 @@ export default function GatheringModify() {
   // 2차 카테고리 데이터 가져오기
   useEffect(() => {
     if (formData.category && formData.category !== "") {
-      axios
-        .get(`${url}/subCategory/${formData.category}`)
+        myAxios().get(`/subCategory/${formData.category}`)
         .then((res) => {
           const categoryArray = res.data.subCategory.map((item) => ({
             subCategoryId: item.subCategoryId,
@@ -634,17 +636,8 @@ export default function GatheringModify() {
     try {
       console.log("모임 수정 요청 시작...");
 
-      const response = await axios.post(
-        `${url}/user/modifyGathering`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            // 토큰이 있다면 Authorization 헤더 추가
-            //...(token && { Authorization: `Bearer ${token}` }),
-          },
-          timeout: 30000,
-        }
+      const response = await myAxios(token).post(`/user/modifyGathering`,
+        formDataToSend
       );
 
       console.log("모임 수정 성공:", response);

@@ -1,9 +1,9 @@
 // src/components/Login.jsx
-import React from 'react';
+import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './Login.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const Login = () => {
  const navigate = useNavigate();
@@ -104,9 +104,10 @@ const Login = () => {
          <button 
            type="submit" 
            className="login-buttonHY"
-           disabled={loading}
+          //  disabled={loading}
          >
-           {loading ? '로그인 중...' : '로그인'}
+           {/* {loading ? '로그인 중...' : '로그인'} */}
+           로그인
          </button>
        </form>
      </div>

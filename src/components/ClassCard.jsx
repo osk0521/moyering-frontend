@@ -21,7 +21,7 @@ export default function ClassCard({ classInfo, onClick  }) {
       </div>
       <div className={styles.cardContent}>
         <div className={styles.cardTags}>
-          <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}-{classInfo.category2}</span>
+          <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}&gt;{classInfo.category2}</span>
           <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
         </div>
         <h3 className={styles.cardTitle}>{classInfo.name}</h3>

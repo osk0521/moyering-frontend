@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './TabDescription.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const TabDescription = ({ classData, setClassData }) => {
     const { description } = classData;

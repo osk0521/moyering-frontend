@@ -65,13 +65,13 @@
 }
 
 .yellow {
-  background-color: #fff2cc;
-  color: #d49b00;
+  background: #fff3e0;
+  color: #f57c00;
 }
 
 .blue {
-  background-color: #dff5ff;
-  color: #359ecf;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
 .cardTitle {

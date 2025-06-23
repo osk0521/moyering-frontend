@@ -2,6 +2,7 @@ import { useAtomValue } from 'jotai';
 import { Navigate, useNavigate } from 'react-router';
 import { userAtom } from '../../atoms';
 import './HostIntroPage.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const HostIntroPage = () => {
   const user = useAtomValue(userAtom);

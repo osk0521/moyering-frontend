@@ -11,6 +11,7 @@ import axios from 'axios';
 import { myAxios } from '../../../config';
 import { tokenAtom,userAtom } from '../../../atoms';
 import { useAtomValue } from 'jotai';
+import React from 'react'; // 이 한 줄만 추가!
 
 const tabs = [
   '기본정보',
@@ -39,6 +40,11 @@ const ClassRegisterPage = () => {
       recruitMax: '',
       recruitMin: '',
       dates: [],
+      scheduleDetail:[{
+        content:'',
+        startTime:'',
+        endTime:'',
+      }]
     },
     description: {
       img1: null,
@@ -122,11 +128,11 @@ const ClassRegisterPage = () => {
     formData.append("caution",reqData.caution)
     formData.append("dates",reqData.dates)
     formData.append("detailDescription",reqData.detailDescription)
-    formData.append("img1",reqData.img1)
-    formData.append("img2",reqData.img2)
-    formData.append("img3",reqData.img3)
-    formData.append("img4",reqData.img4)
-    formData.append("img5",reqData.img5)
+    if(reqData.img1)formData.append("img1",reqData.img1);
+    if(reqData.img2)formData.append("img2",reqData.img2);
+    if(reqData.img3)formData.append("img3",reqData.img3);
+    if(reqData.img4)formData.append("img4",reqData.img4);
+    if(reqData.img5)formData.append("img5",reqData.img5);
     formData.append("incluision",reqData.incluision)
     formData.append("keywords",reqData.keywords)
     formData.append("latitude",reqData.latitude)

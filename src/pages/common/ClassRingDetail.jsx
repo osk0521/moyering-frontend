@@ -1,6 +1,10 @@
 // ClassRingDetail.jsx (전체 섹션 포함, module.css 적용)
 import React, { useState, useEffect } from "react";
 import { CiHeart } from "react-icons/ci";
+import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
+import { GoPeople } from "react-icons/go";
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
 import { BiChevronRight, BiChevronDown } from "react-icons/bi";
 import styles from "./ClassRingDetail.module.css";
 import Header from "./Header";
@@ -132,14 +136,29 @@ export default function ClassRingDetail() {
           </div>
           <h1 className={styles.title}>클래스명</h1>
 
-          <div className={styles.row}><span>📅</span><span>2023년 11월 25일 (토)</span></div>
-          <div className={styles.row}><span>🕘</span><span>오전 9:00 - 오후 3:00</span></div>
-          <div className={styles.row}><span>👥</span><span>8/15 명 참가</span></div>
-          <div className={styles.row}><span>📍</span><span>서울대입구역</span></div>
-
+          <div className={styles.row}><span className={styles.infoIcon}><CiCalendar /></span>
+            <select className={styles.couponList}>
+              <option value="">2023년 11월 25일 (토)</option>
+              <option value="쿠폰1">2023년 11월 25일 (토)</option>
+              <option value="쿠폰2">2023년 11월 25일 (토)</option>
+            </select>
+          </div>
+          <div className={styles.row}><span className={styles.infoIcon}><CiClock1 /></span><span>오전 9:00 - 오후 3:00</span></div>
+          <div className={styles.row}><span className={styles.infoIcon}><GoPeople /></span><span>8/15 명 참가</span></div>
+          <div className={styles.row}><span className={styles.infoIcon}><CiLocationOn /></span><span>서울대입구역</span></div>
+          <div className={styles.row}>
+                <select className={styles.couponList}>
+                  <option value="">쿠폰 다운받기</option>
+                  <option value="쿠폰1">쿠폰1</option>
+                  <option value="쿠폰2">쿠폰2</option>
+                </select>
+              </div>
           <div className={styles.buttonGroup}>
             <button className={styles.outlineBtn}><CiHeart /> 찜하기</button>
             <button className={styles.applyBtn}>신청하기</button>
+          </div>
+          <div>
+            <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>
           </div>
         </div>
       </aside>

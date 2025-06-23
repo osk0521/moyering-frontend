@@ -2,7 +2,9 @@ import React, { useRef, useState } from 'react';
 import './HostRegist.css';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import { url } from './../../config';
+import { myAxios, url } from './../../config';
+import { tokenAtom } from '../../atoms';
+import { useAtomValue } from 'jotai';
 
 const HostRegist = () => {
   const [host, setHost] =
@@ -73,10 +75,10 @@ const HostRegist = () => {
 
     if (ifile != null) formData.append("ifile", ifile);
 
-    axios.post(`${url}/host/regist`, formData)
+    myAxios(token).post(`/host/regist`, formData)
       .then(res => {
         console.log('res:', res);
-        console.log('res.data:', res.data); // 👉 여기 찍어봐
+        console.log('res.data:', res.data); 
         navigate(`/host/hostMyPage/${res.data}`)
       })
       .catch(err => {

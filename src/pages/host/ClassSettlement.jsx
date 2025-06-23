@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './ClassSettlement.css'
+import React from 'react'; // 이 한 줄만 추가!
 
 const ClassSettlement = () => {
      const [startDate, setStartDate] = useState('');

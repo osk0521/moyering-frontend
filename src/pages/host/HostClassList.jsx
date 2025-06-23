@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './HostClassList.css';
 import { useNavigate } from 'react-router-dom';
+import React from 'react'; // 이 한 줄만 추가!
+import { myAxios } from '../../config';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { tokenAtom, userAtom } from '../../atoms';
 
 const ClassList = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [classStatus, setClassStatus] = useState({
-    ongoing: false,
-    upcoming: false,
-    completed: false,
-  });
+  const user = useAtomValue(userAtom);
+  const token = useAtomValue(tokenAtom);
+  const [classData,setClassData] = useState([]);
 
   const [searchResults, setSearchResults] = useState([
     {
@@ -81,13 +80,7 @@ const ClassList = () => {
     setDateFilter(months);
   };
 
-  const handleClassStatusChange = (e) => {
-    const { name, checked } = e.target;
-    setClassStatus((prevState) => ({
-      ...prevState,
-      [name]: checked,
-    }));
-  };
+  
 
   const navigate = useNavigate();
   const [dropdownIndex, setDropdownIndex] = useState(null);
@@ -100,6 +93,21 @@ const ClassList = () => {
     navigate(path);
   };
 
+  useEffect(()=>{
+    myAxios(token).get(`/host/HostclassList?hostId=${user.hostId}`)
+    .then(res=>{
+      setClassData(res.data);
+      console.log("==데이터==")
+      console.log(res.data);
+      console.log("======")
+    })
+    .catch(err=>{
+      console.log("token"+token)
+      console.log(err);
+    })
+  },[token,user.hostId])
+
+
   return (
     <>
       <div className="KHJ-class-search-container">
@@ -111,8 +119,7 @@ const ClassList = () => {
             <input
               type="text"
               placeholder="클래스명을 입력하세요."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              
             />
             <select className="KHJ-search-filter">
               <option value="">필터</option>
@@ -130,14 +137,12 @@ const ClassList = () => {
             <div className="KHJ-date-range">
               <input
                 type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                
               />
               <span className="KHJ-date-tilde">~</span>
               <input
                 type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+               
               />
             </div>
           </div>
@@ -161,8 +166,7 @@ const ClassList = () => {
               <input
                 type="checkbox"
                 name="ongoing"
-                checked={classStatus.ongoing}
-                onChange={handleClassStatusChange}
+                
               />
               등록중
             </label>
@@ -170,8 +174,7 @@ const ClassList = () => {
               <input
                 type="checkbox"
                 name="upcoming"
-                checked={classStatus.upcoming}
-                onChange={handleClassStatusChange}
+                
               />
               오픈대기
             </label>
@@ -179,8 +182,7 @@ const ClassList = () => {
               <input
                 type="checkbox"
                 name="completed"
-                checked={classStatus.completed}
-                onChange={handleClassStatusChange}
+                
               />
               오픈
             </label>
@@ -190,19 +192,19 @@ const ClassList = () => {
 
       <div className="KHJ-class-result-container">
         <div className="KHJ-result-section">
-          <h4>검색 결과: {searchResults.length} 건</h4>
-          {searchResults.map((result, index) => (
+          <h4>검색 결과: {classData.length} 건</h4>
+          {classData.map((result, index) => (
             <div key={index} className="KHJ-result-item">
               <div className="KHJ-result-image">
                 <img
-                  src={result.imageUrl}
+                  src={result.imgName1}
                   alt={result.className}
                 />
               </div>
               <div className="KHJ-result-info">
-                <h5>{result.className}</h5>
-                <p><strong>클래스 종료일:</strong> {result.classEndDate}</p>
-                <p><strong>카테고리:</strong> {result.category}</p>
+                <h5>{result.imgName1}</h5>
+                <p><strong>클래스 종료일:</strong> {result.startDate}</p>
+                <p><strong>카테고리:</strong> {result.category1}</p>
                 <p><strong>상태:</strong> {result.status}</p>
               </div>
               <div className="KHJ-result-actions">
@@ -211,7 +213,7 @@ const ClassList = () => {
                   <div className="KHJ-dropdown-menu">
                     <button onClick={() => handleNavigate('/host/inquiry')}>문의 관리</button>
                     <button onClick={() => handleNavigate('/host/classReview')}>리뷰 관리</button>
-                    <button onClick={() => handleNavigate('/host/detail')}>상품 상세</button>
+                    <button onClick={() => handleNavigate(`/host/detail/${result.classId}/${result.calendarId}`)}>상품 상세</button>
                   </div>
                 )}
               </div>

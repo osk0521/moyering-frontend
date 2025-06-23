@@ -148,3 +148,77 @@ hr {
   margin-right: 4px;
   font-weight: bold;
 }
+
+.schedule-wrapper {
+  padding: 20px;
+}
+
+.schedule-block {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.schedule-header {
+  background-color: #f6f8fc;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #888;
+  cursor: pointer;
+}
+
+.schedule-table {
+  background-color: #fffaf0;
+  padding: 10px;
+}
+
+.schedule-entry {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.schedule-entry input[type="time"],
+.schedule-entry .content-input {
+  margin-right: 8px;
+}
+
+.entry-remove-btn {
+  background: #ffeaea;
+  border: 1px solid #ff8888;
+  padding: 2px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #d00;
+}
+
+.add-entry {
+  margin-top: 5px;
+  cursor: pointer;
+  color: #007acc;
+}
+
+.content-input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+.add-block-btn {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid orange;
+  background: white;
+  color: orange;
+  cursor: pointer;
+  font-size: 14px;
+}

@@ -242,7 +242,7 @@ const BannerManagement = () => {
 
   const getBannerImageUrl = (ifile) => {
     if (!ifile) return null;
-    return `${url}/uploads/banner/${ifile}`;
+    return `${url}/uploads/${ifile}`;
   };
 
   const getPageNumbers = () => {

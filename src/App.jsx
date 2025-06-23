@@ -75,8 +75,6 @@ import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
 import GatheringList from './pages/common/GatheringList.jsx';
 
-
-
 function App() {
   return (
     <Router>

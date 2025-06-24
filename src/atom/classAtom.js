@@ -50,3 +50,6 @@ export const currListAtom = atom([]);
 export const hostAtom = atom();
 export const reviewListAtom = atom([]);
 export const inquiryListAtom = atom([]);
+
+//클래스 리뷰
+export const allReviewListAtom = atom([]);

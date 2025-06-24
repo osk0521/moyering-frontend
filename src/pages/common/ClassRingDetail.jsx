@@ -19,6 +19,8 @@ import { tokenAtom, userAtom } from "../../atoms";
 import { myAxios } from "../../config";
 import KakaoMap from "./KakaoMap";
 import { url } from '../../config';
+import { FaStar } from "react-icons/fa";
+import ClassRingDetailInquiryList from "./ClassRingDetailInquiryList";
 
 export default function ClassRingDetail() {
   const [activeTab, setActiveTab] = useState("details");
@@ -34,30 +36,17 @@ export default function ClassRingDetail() {
   const setCurrListAtom = useSetAtom(currListAtom);
   const setHostAtom = useSetAtom(hostAtom);
   const setReviewListAtom = useSetAtom(reviewListAtom);
-  const setInquiryListAtom = useSetAtom(inquiryListAtom);
 
   const calendarList = useAtomValue(calendarListAtom);
   const classDetail = useAtomValue(classDetailAtom);
   const currList = useAtomValue(currListAtom);
   const host = useAtomValue(hostAtom);
   const reviews = useAtomValue(reviewListAtom);
-  const inquiryList = useAtomValue(inquiryListAtom);
 
   const description = classDetail? classDetail.detailDescription:'';
   const previewText = description.length > PREVIEW_LENGTH ? description.slice(0, PREVIEW_LENGTH) + "..." : description;
   const shouldShowMore = description.length > PREVIEW_LENGTH;
 
-  const questions = [
-    { id: 1, status: "답변대기", title: "준비물 필요하나요?", author: "id1234***", date: "2025-06-19", hasAnswer: false },
-    { id: 2, status: "답변완료", title: "수업 분위기는 어떤가요?", author: "id5678***", date: "2025-06-18", hasAnswer: true,
-      answer: { author: "강사명", date: "2025-06-18", content: "편안하고 즐거운 분위기에서 진행됩니다. 걱정하지 않으셔도 됩니다 :)" }
-    },
-    { id: 3, status: "답변완료", title: "수업에 살짝 늦을 것 같은데 괜찮을까요?", author: "id877***", date: "2025-02-21", hasAnswer: true,
-      answer: { author: "호스트명", date: "2025-02-21", content: "네! 가능합니다. 고객님 계정 아래 오픈채팅주소로 안내되며 시작 전에는 접속하시면 됩니다. 단, 사전 공지된 집결장소와 인터벌조율이 불가피할 경우 참여가 어려울 수 있습니다." }
-    },
-    { id: 4, status: "답변대기", title: "여기도 있으면 질문", author: "id189***", date: "2025-02-21", hasAnswer: false },
-    { id: 5, status: "답변대기", title: "나도 질문이요", author: "id353***", date: "2025-01-01", hasAnswer: false }
-  ];
   const recommendedClasses = [
     {
       id: 1,
@@ -105,11 +94,12 @@ export default function ClassRingDetail() {
     const fetchData = async () => {
       try {
         const res = await myAxios(token).get(`/classRingDetail/${classId}`);
-        setCalendarList(res.data.calendar);
-        setClassDetailAtom(res.data.class);
+        setCalendarList(res.data.calendarList);
+        setClassDetailAtom(res.data.hostClass);
         setCurrListAtom(res.data.currList);
         setHostAtom(res.data.host);
         setReviewListAtom(res.data.reviews);
+        console.log(res);
       } catch (err) {
         console.error("클래스 상세 데이터 로딩 실패", err);
       }
@@ -124,7 +114,6 @@ export default function ClassRingDetail() {
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
   const selectedCalendar = calendarList.find(c => c.calendarId == selectedCalendarId);
-
 
   return (
     <>
@@ -222,7 +211,12 @@ export default function ClassRingDetail() {
                 <div className={styles.reviewHeader}>
                   <div className={styles.reviewAuthor}>
                     <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
-                    {r?.studentName}<span className={styles.reviewStars}>★★★★★</span>
+                    {r?.studentName}
+                    <span className={styles.reviewStars}>
+                      {[...Array(r.star)].map((_, i) => (
+                        <FaStar key={i} color="#FFD700" />
+                      ))}
+                    </span>
                   </div>
                   <span>{r?.reviewDate}</span>
                 </div>
@@ -231,52 +225,33 @@ export default function ClassRingDetail() {
                 </div>
                 {r?.revRegCotnent && 
                 <div className={styles.reviewReply}>
-                  <div className={styles.reviewReplyHeader}>
+                  <div className={styles.reviewAuthor}>
+                    <div className={styles.reviewReplyHeader}>
                     <img src={`${url}/image?filename=${r?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
-                    <span>{r?.hostName}</span></div>
+                    {r?.hostName}
+                    </div>
+                    <span className={styles.responseDate}>{r?.responseDate}</span>
+                  </div>
                   <div>
-                    {r?.studentName}
+                    {r?.revRegCotnent}
                   </div>
                 </div>
                 }
                 </div>
               ))}
             </div>
-            
-            <button className={styles.reviewMoreBtn} onClick={()=> navigate(`/classRingReviewList`)}>더보기</button>
+              {host && (
+                <button
+                  className={styles.reviewMoreBtn}
+                  onClick={() => navigate(`/classRingReviewList/${host.hostId}`)}
+                >
+                  더보기
+                </button>
+              )}          
           </section>
           {/* 질문 */}
           <section className={styles.section} id="questions">
-            <h2>질문</h2>
-            <div className={styles.questionsTable}>
-              <div className={styles.questionsHeader}>
-                <div>답변상태</div>
-                <div>제목</div>
-                <div>작성자</div>
-                <div>작성일</div>
-              </div>
-              {questions.map((q, i) => (
-                <div key={q.id} className={`${styles.questionsRow} ${i % 2 === 1 ? styles.alternate : ""}`}>
-                  <div className={styles.questionsGrid}>
-                    <div>{q.status}</div>
-                    <div>{q.title}</div>
-                    <div>{q.author}</div>
-                    <div>{q.date}</div>
-                  </div>
-                  {q.hasAnswer && q.answer && (
-                    <div className={styles.answerSection}>
-                      <div className={styles.answerHeader}>
-                        <span className={styles.answerBadge}>답변</span>
-                        <span className={styles.answerAuthor}>{q.answer.author}</span>
-                        <span className={styles.answerDate}>{q.answer.date}</span>
-                      </div>
-                      <div className={styles.answerContent}>{q.answer.content}</div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className={styles.questionButtonWrap}><button className={styles.questionButton}>질문하기</button></div>
+            <ClassRingDetailInquiryList classId={classId} />
           </section>
           {/* 추천 클래스 섹션 */}
           <section className={styles.section} id="recommend">
@@ -328,7 +303,7 @@ export default function ClassRingDetail() {
             <div className={styles.row}>
               <GoPeople className={styles.infoIcon} />
               <span>
-                모집 {classDetail?.recruitMax ?? "-"}명 &gt; 신청 {selectedCalendar?.registeredCount ?? 0}명
+                {selectedCalendar?.registeredCount ?? 0}명 참가 중 (최소 {classDetail?.recruitMin}명, 최대 {classDetail?.recruitMax +"명"?? "제한없음"}) 
               </span>
             </div>
             <div className={styles.row}><CiLocationOn className={styles.infoIcon} />

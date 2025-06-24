@@ -42,3 +42,11 @@ export const gatheringFilterAtom = atom({
   minAttendees:'',
   title:'',
 });
+
+//클래스 detail
+export const calendarListAtom  = atom([]);
+export const classDetailAtom = atom();
+export const currListAtom = atom([]);
+export const hostAtom = atom();
+export const reviewListAtom = atom([]);
+export const inquiryListAtom = atom([]);

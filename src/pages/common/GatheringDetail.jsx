@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";

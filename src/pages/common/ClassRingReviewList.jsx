@@ -5,21 +5,25 @@ import { FaArrowLeft } from "react-icons/fa";
 import { myAxios } from "../../config";
 import { useNavigate,useParams } from "react-router";
 import { url } from '../../config';
-
+import { useSetAtom, useAtomValue } from "jotai";
+import {
+  allReviewListAtom,
+} from '../../atom/classAtom';
 export default function ClassRingReviewList() {
-  const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { hostId } = useParams(); 
   const navigate = useNavigate();
-
+  const setAllReviewListAtom= useSetAtom(allReviewListAtom);
+  const reviews = useAtomValue(allReviewListAtom);
+  
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         const res = await myAxios().get(
           `/classRingReviewList/${hostId}?page=${currentPage - 1}&size=5`
         );
-        setReviews(res.data.content);
+        setAllReviewListAtom(res.data.content);
         setTotalPages(res.data.totalPages);
       } catch (err) {
         console.error("리뷰 불러오기 실패", err);

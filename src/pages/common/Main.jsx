@@ -55,7 +55,7 @@ const items = [
               <div key={banner.bannerId}>
                 <img
                   src={`${url}/image?filename=${banner.bannerImg}`}
-                  alt={banner.title}
+                  alt={banner.bannerImg}
                   className={styles.bannerImage}
                 />
               </div>

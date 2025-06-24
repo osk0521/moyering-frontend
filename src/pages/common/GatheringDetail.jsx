@@ -8,16 +8,23 @@ import { GoPeople } from "react-icons/go";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
+import ReactDOM from "react-dom";
+import { useAtom, useAtomValue } from "jotai";
+import { userAtom, tokenAtom } from "../../atoms";
+import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY, myAxios, } from "../../config"
+import KakaoMap from "./KakaoMap";
+import axios from 'axios';
+import { useNavigate, useParams } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
-import { tokenAtom, userAtom } from "../../atoms";
-import { myAxios, url } from "../../config";
+import "slick-carousel/slick/slick-theme.css";
+// import { myAxios, url } from "../../config";
 import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
 import Header from "./Header";
-import KakaoMap from "./KakaoMap";
 import aImage from "/detail2.png";
 
+const handleJoinClick = () => {
+};
 export default function GatheringDetail() {
   const user = useAtomValue(userAtom);
   const token = useAtomValue(tokenAtom);

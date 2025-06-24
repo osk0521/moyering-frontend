@@ -1,22 +1,18 @@
 import { useAtomValue } from "jotai";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { FaHeart } from "react-icons/fa";
 import { GoPeople } from "react-icons/go";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
-import ReactDOM from "react-dom";
-import { useAtom, useAtomValue } from "jotai";
-import { userAtom, tokenAtom } from "../../atoms";
-import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY, myAxios, } from "../../config"
-import KakaoMap from "./KakaoMap";
-import axios from 'axios';
-import { useNavigate, useParams } from "react-router-dom";
-import "slick-carousel/slick/slick.css";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import { tokenAtom, userAtom } from "../../atoms";
+import { myAxios, url } from "../../config";
+import KakaoMap from "./KakaoMap";
 // import { myAxios, url } from "../../config";
 import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";

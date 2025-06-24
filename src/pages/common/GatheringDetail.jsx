@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
@@ -12,24 +12,23 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { tokenAtom, userAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
+import { useNavigate } from "react-router-dom";
 import KakaoMap from "./KakaoMap";
-// import { myAxios, url } from "../../config";
 import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
 import Header from "./Header";
 import aImage from "/detail2.png";
-
-const handleJoinClick = () => {
-};
 export default function GatheringDetail() {
   const user = useAtomValue(userAtom);
   const token = useAtomValue(tokenAtom);
+  const userId = user.id;
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [aspirationContent, setAspirationContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     // 약간의 지연을 두어 스토리지 로딩 완료 대기
     const timer = setTimeout(() => {
@@ -40,10 +39,17 @@ export default function GatheringDetail() {
   }, []);
 
   const { gatheringId } = useParams();
+
+  const navigate = useNavigate();
+  const handleModifyButtonClick = () => {
+    navigate(`/user/gatheringModify/${gatheringId}`);
+  };
+
   useEffect(() => {
     if (!isLoaded) return; // 로딩 완료 전에는 실행하지 않음
     if (token) {
-      myAxios(token).get(`/user/detailGathering?gatheringId=${gatheringId}`)
+      myAxios(token)
+        .get(`/user/detailGathering?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("추가 데이터 API 응답:", res.data);
           setIsLiked(res.data.isLiked);
@@ -84,7 +90,7 @@ export default function GatheringDetail() {
     canApply: "",
   });
 
-  const [hostData, setHostData] = useState({
+  const [organizerData, setorganizerData] = useState({
     nickname: "",
     profileImage: "",
     followers: 0,
@@ -135,11 +141,14 @@ export default function GatheringDetail() {
     setIsSubmitting(true);
 
     try {
-       const formData = {
+      const formData = {
         gatheringId: parseInt(gatheringId),
-        aspiration: aspirationContent.trim()
+        aspiration: aspirationContent.trim(),
       };
-      const response = await myAxios(token).post('/user/applyGathering', formData);
+      const response = await myAxios(token).post(
+        "/user/applyGathering",
+        formData
+      );
 
       // 성공 처리
       console.log("API 성공:", response.data);
@@ -154,8 +163,12 @@ export default function GatheringDetail() {
     }
   };
   const handleLikeButtonClick = () => {
-     if (!user || !token) {
-      if ( confirm( "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?") ) {
+    if (!user || !token) {
+      if (
+        confirm(
+          "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
+        )
+      ) {
         navigate("/userlogin");
       } else {
         return;
@@ -179,7 +192,7 @@ export default function GatheringDetail() {
           setIsLiked(!newLikedState);
           alert("처리 중 오류가 발생했습니다.");
         });
-    } 
+    }
   };
 
   useEffect(() => {
@@ -190,7 +203,7 @@ export default function GatheringDetail() {
 
         // gathering 데이터 설정
         const gathering = res.data.gathering;
-        const host = res.data.host;
+        const organizer = res.data.organizer;
         const member = res.data.member || []; // member 배열 추출
         // const totalLikeNum = res.data.totalLikeNum;
         // tags 필드를 문자열에서 배열로 변환
@@ -231,14 +244,21 @@ export default function GatheringDetail() {
           locName: gathering.locName,
         });
 
-        setHostData({
-          nickname: host.nickName,
-          profileImage: host.profile,
-          followers: 0, // API에서 제공되지 않는 경우 기본값
-          intro: host.intro || "",
-          likeCategory: "",
-          tags: [], // 호스트 태그가 없는 경우 빈 배열
-          categorys: [], // 호스트 카테고리를 배열로 저장
+        const organizerCategories = organizer
+          ? [
+              organizer.category1,
+              organizer.category2,
+              organizer.category3,
+              organizer.category4,
+              organizer.category5,
+            ].filter((category) => category && category.trim() !== "")
+          : [];
+        setorganizerData({
+          nickname: organizer.nickName,
+          profileImage: organizer.profile,
+          followers: organizer.followers || 0, // followers가 객체가 아닌 숫자값으로 설정
+          intro: organizer.intro || "",
+          tags: organizerCategories,
         });
         setMembers(
           member.map((m) => ({
@@ -376,7 +396,32 @@ export default function GatheringDetail() {
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
     return `${ampm} ${displayHour}:${minutes}`;
   };
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return "";
 
+    try {
+      const date = new Date(dateTimeString);
+
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+
+      // 날짜 부분만 추출 (YYYY-MM-DD 형식)
+      const dateOnly = date.toISOString().split("T")[0];
+
+      // 시간 부분만 추출 (HH:mm 형식)
+      const timeOnly = date.toTimeString().slice(0, 5);
+
+      // 기존 함수들 활용
+      const formattedDate = formatDate(dateOnly);
+      const formattedTime = formatTime(timeOnly);
+
+      return `${formattedDate} ${formattedTime}`;
+    } catch (error) {
+      console.error("날짜 변환 오류:", error);
+      return "";
+    }
+  };
   // 탭 클릭 시 해당 섹션으로 스크롤 이동
   const handleTabClick = (tabName) => {
     const element = document.getElementById(`GatheringDetail_${tabName}_osk`);
@@ -407,7 +452,7 @@ export default function GatheringDetail() {
     const handleScroll = () => {
       const sections = [
         "details",
-        "host",
+        "organizer",
         "questions",
         "members",
         "recommendations",
@@ -460,9 +505,9 @@ export default function GatheringDetail() {
                 </button>
                 <button
                   className={`GatheringDetail_tab_osk ${
-                    activeTab === "host" ? "GatheringDetail_active_osk" : ""
+                    activeTab === "organizer" ? "GatheringDetail_active_osk" : ""
                   }`}
-                  onClick={() => handleTabClick("host")}
+                  onClick={() => handleTabClick("organizer")}
                 >
                   모임장
                 </button>
@@ -536,6 +581,27 @@ export default function GatheringDetail() {
                   />
                 )}
 
+                {/* 위치 */}
+                <h3
+                  className="GatheringDetail_section-title_osk"
+                  style={{ marginTop: "32px" }}
+                >
+                  위치
+                </h3>
+                <div className="GatheringDetail_map-container_osk">
+                  {gatheringData?.latitude && gatheringData?.longitude ? (
+                    <KakaoMap
+                      latitude={gatheringData.latitude}
+                      longitude={gatheringData.longitude}
+                      address={`${gatheringData.address} ${gatheringData.detailAddress}`}
+                    />
+                  ) : (
+                    <div>지도를 로드할 데이터를 불러오는 중입니다...</div>
+                  )}
+                </div>
+                <p className="GatheringDetail_description_osk">
+                  {gatheringData.address} {gatheringData.detailAddress}
+                </p>
                 {/* 태그 표시 */}
                 {gatheringData.tags && gatheringData.tags.length > 0 && (
                   <div className="GatheringDetail_tags_osk">
@@ -567,69 +633,42 @@ export default function GatheringDetail() {
                     </ul>
                   </>
                 )}
-
-                {/* 위치 */}
-                <h3
-                  className="GatheringDetail_section-title_osk"
-                  style={{ marginTop: "32px" }}
-                >
-                  위치
-                </h3>
-                <div className="GatheringDetail_map-container_osk">
-                  {gatheringData?.latitude && gatheringData?.longitude ? (
-                    <KakaoMap
-                      latitude={gatheringData.latitude}
-                      longitude={gatheringData.longitude}
-                      address={`${gatheringData.address} ${gatheringData.detailAddress}`}
-                    />
-                  ) : (
-                    <div>지도를 로드할 데이터를 불러오는 중입니다...</div>
-                  )}
-                </div>
-                <p className="GatheringDetail_description_osk">
-                  {gatheringData.address} {gatheringData.detailAddress}
-                </p>
               </div>
 
               {/* 모임장 섹션 */}
               <div
-                id="GatheringDetail_host_osk"
+                id="GatheringDetail_organizer_osk"
                 className="GatheringDetail_detail-section_osk"
               >
                 <h3 className="GatheringDetail_section-title_osk">
                   같이 할 모임장을 소개해요
                 </h3>
-                <div className="GatheringDetail_host-info_osk">
-                  <div className="GatheringDetail_host-avatar_osk">
+                <div className="GatheringDetail_organizer-info_osk">
+                  <div className="GatheringDetail_organizer-avatar_osk">
                     <img
-                      src={`${url}/image?filename=${hostData.profileImage}`}
-                      alt={hostData.nickname}
-                      className="GatheringDetail_host-profile-image_osk"
+                      src={`${url}/image?filename=${organizerData.profileImage}`}
+                      alt={organizerData.nickname}
+                      className="GatheringDetail_organizer-profile-image_osk"
                     />
                   </div>
-                  <div className="GatheringDetail_host-details_osk">
-                    <h4>{hostData.nickname}</h4>
-                    <div className="GatheringDetail_host-stats_osk">
-                      팔로워 {hostData.followers}명
+                  <div className="GatheringDetail_organizer-details_osk">
+                    <h4>{organizerData.nickname}</h4>
+                    <div className="GatheringDetail_organizer-stats_osk">
+                      팔로워 {organizerData.followers}명
                     </div>
-                    <div className="GatheringDetail_host-description_osk">
-                      {hostData.intro}
+                    <div className="GatheringDetail_organizer-description_osk">
+                      {organizerData.intro}
                     </div>
-                    {hostData.tags && hostData.tags.length > 0 && (
-                      <div className="GatheringDetail_host-tags_osk">
-                        {hostData.tags.slice(0, 5).map((tag, index) => (
+                    {organizerData.tags && organizerData.tags.length > 0 && (
+                      <div className="GatheringDetail_organizer-tags_osk">
+                        {organizerData.tags.slice(0, 5).map((tag, index) => (
                           <span
                             key={index}
-                            className="GatheringDetail_host-tag_osk"
+                            className="GatheringDetail_organizer-tag_osk"
                           >
                             {tag}
                           </span>
                         ))}
-                        {hostData.tags.length > 5 && (
-                          <span className="GatheringDetail_host-tag_osk">
-                            +{hostData.tags.length - 5}
-                          </span>
-                        )}
                       </div>
                     )}
                   </div>
@@ -816,16 +855,28 @@ export default function GatheringDetail() {
                     </>
                   )}
                 </button>
-                <button
-                  className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
-                  id="GatheringDetail_apply_osk"
-                  onClick={handleApplyButtonClick} // ← 함수명 변경
-                >
-                  신청하기
-                </button>
+
+                {/* userId와 gatheringData.userId가 일치하는지 확인하여 버튼 변경 */}
+                {userId === gatheringData.userId ? (
+                  <button
+                    className="GatheringDetail_btn_osk GatheringDetail_btn-modify_osk"
+                    id="GatheringDetail_modify_osk"
+                    onClick={handleModifyButtonClick}
+                  >
+                    수정하기
+                  </button>
+                ) : (
+                  <button
+                    className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
+                    id="GatheringDetail_apply_osk"
+                    onClick={handleApplyButtonClick}
+                  >
+                    신청하기
+                  </button>
+                )}
               </div>
               <div className="GatheringDetail_notice-text_osk">
-                신청 마감: {formatDate(gatheringData.applyDeadline)}까지
+                신청 마감: {formatDateTime(gatheringData.applyDeadline)}까지
               </div>
             </div>
           </aside>
@@ -860,20 +911,22 @@ export default function GatheringDetail() {
                 <div className="GatheringDetail_gathering-details_osk">
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <span>
-                      제목: {gatheringData.title} <br/>
+                      제목: {gatheringData.title} <br />
                     </span>
                   </div>
-                  
+
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <span>
                       소개: {gatheringData.introOnline} <br />
                     </span>
                   </div>
                   <div className="GatheringDetail_gathering-info-item_osk">
-                      <CiCalendar className="GatheringDetail_gathering-info-icon_osk"/>
-                      <span>
-                        모임일: {formatDate(gatheringData.meetingDate)}{" "} {formatTime(gatheringData.startTime)} ~ {formatTime(gatheringData.endTime)}
-                      </span>
+                    <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
+                    <span>
+                      모임일: {formatDate(gatheringData.meetingDate)}{" "}
+                      {formatTime(gatheringData.startTime)} ~{" "}
+                      {formatTime(gatheringData.endTime)}
+                    </span>
                   </div>
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <CiLocationOn className="GatheringDetail_gathering-info-icon_osk" />

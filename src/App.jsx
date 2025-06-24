@@ -75,6 +75,7 @@ import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
 import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
+import Token from './components/Token';
 
 function App() {
   return (
@@ -90,6 +91,7 @@ function App() {
         <Route path="/userFeed/:nickName" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
+        <Route path="/token" element={<Token />} />
 
         <Route path="/feedEdit" element={<FeedEdit />} />
         <Route path="/myFeed" element={<MyFeed />} />

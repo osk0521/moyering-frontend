@@ -1,10 +1,16 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Layout.css';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { tokenAtom, userAtom } from '../../atoms';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const user = useAtomValue(userAtom);
+  const token = useAtomValue(tokenAtom);
+  const setUser = useSetAtom(userAtom);
+  const setToken = useSetAtom(tokenAtom);
 
   const menuItems = [
     { id: 'dashboard', label: '대시보드', icon: '📊', path: '/admin/dashboard' },
@@ -26,7 +32,11 @@ const Layout = ({ children }) => {
   };
 
   const handleLogout = () => {
-    navigate('/login');
+    setUser(null);
+    setToken(null);
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    window.location.href = '/admin'; // 로그인 페이지로 이동
   };
 
   return (
@@ -53,27 +63,27 @@ const Layout = ({ children }) => {
         </nav>
       </aside>
 
-        {/* 헤더 */}
-        <header className="headerHY">
-          <div className="header-leftHY">
-            <div className="header-logoHY">
-              <img src="/logo_managerHeader.png" alt="모여링 로고" className="header-logo-iconHY" />
-            </div>
+      {/* 헤더 */}
+      <header className="headerHY">
+        <div className="header-leftHY">
+          <div className="header-logoHY">
+            <img src="/logo_managerHeader.png" alt="모여링 로고" className="header-logo-iconHY" />
           </div>
-          <div className="header-rightHY">
-            <span className="admin-nameHY">관리자123</span>
-            <button className="logout-btnHY" onClick={handleLogout}>
-              로그아웃
-            </button>
-          </div>
-        </header>
-
-        {/* 메인 컨텐츠 */}
-        <div className="main-contentHY">
-          <main className="page-contentHY">{children}</main>
         </div>
+        <div className="header-rightHY">
+          <span className="admin-nameHY">관리자123</span>
+          <button className="logout-btnHY" onClick={handleLogout}>
+            로그아웃
+          </button>
+        </div>
+      </header>
+
+      {/* 메인 컨텐츠 */}
+      <div className="main-contentHY">
+        <main className="page-contentHY">{children}</main>
       </div>
-  
+    </div>
+
   );
 };
 

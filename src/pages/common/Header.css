@@ -200,3 +200,9 @@
 .Header_nav-item_osk:hover {
   color: #FFB22C;
 }
+
+.Header_top-menu-logout{
+  background-color: white;
+  border: none;
+  color: #6b7280;
+}

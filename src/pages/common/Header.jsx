@@ -79,7 +79,7 @@ const Header = () => {
                 <a href="/">호스트페이지</a>
               </span>
               <span className="Header_top-menu-link_osk">
-                <button onClick={logout}>로그아웃</button>
+                <button className="Header_top-menu-logout"onClick={logout}>로그아웃</button>
               </span>
             </>
           ) : (

@@ -295,3 +295,25 @@
       display: none;
     }
   }
+
+.usage-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  color: #333;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-block;
+}
+.usage-badge.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.usage-badge.warning {
+  background: #fef9c3;
+  color: #b45309;
+}
+.usage-badge.normal {
+  background: #e5e7eb;
+  color: #374151;
+}

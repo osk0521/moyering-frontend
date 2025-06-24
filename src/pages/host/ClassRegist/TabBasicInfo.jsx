@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import './TabBasicInfo.css';
 import React from 'react'; // 이 한 줄만 추가!
+import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress'
 
 const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const categoryMap = {
@@ -36,6 +37,8 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const [tempLocName, setTempLocName] = useState('');
   const [showLocation, setShowLocation] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState('');
+  const [coordLat,setCoordLat] = useState('');
+  const [coordLng,setCoordLng] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,6 +88,31 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const handleAddressSelect = (data) => {
     setSelectedAddress(data.address);
   };
+  useEffect(()=>{
+    if(!basicInfo.addr) return;
+
+    getLatLngFromAddress(basicInfo.addr)
+    .then(coords => {
+      if(coords) {
+        console.log(coords.lat);
+        console.log(coords.lng);
+        setCoordLat(coords.lat);
+        setCoordLng(coords.lng);
+
+        setClassData(prev=>({
+          ...prev,
+          basicInfo:{
+            ...prev.basicInfo,
+            latitude:coords.lat,
+            longitude:coords.lng
+          }
+        }))
+      }
+    })
+    .catch(err=>{
+      console.error("좌표변환 실패",err);
+    })
+  },[basicInfo.addr])
 
   const handleAddressConfirm = () => {
     if (!tempLocName.trim()) {
@@ -102,8 +130,8 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
         ...prev.basicInfo,
         locName: tempLocName,
         addr: selectedAddress,
-        longitude: '12.3456',
-        latitude: '12.3456'
+        longitude: coordLng,
+        latitude: coordLat,
       }
     }));
     // 초기화
@@ -237,6 +265,7 @@ const secondaryOptions = categoryMap[selectedCategory1Name] || [];
                       type="text"
                       className="KHJ-detailaddr-input"
                       placeholder="예: 3층 301호"
+                      name='detailAddr'
                       value={basicInfo.detailAddr || ''}
                       onChange={(e) =>
                         setClassData(prev => ({

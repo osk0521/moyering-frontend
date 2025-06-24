@@ -82,10 +82,6 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
           {/* 쿠폰 구분 */}
           <div className="form-group">
             <label className="form-label">쿠폰 구분</label>
-            <div className="coupon-type-toggle">
-              <span className="toggle-label">H</span>
-              <span className="toggle-label">S</span>
-            </div>
             <div className="radio-group">
               <label className="radio-item">
                 <input
@@ -138,19 +134,22 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
             <small className="form-hint">할인 유형 &gt; 금액 클릭하면 '금액'으로 변경</small>
           </div>
 
-          {/* 할인율 */}
+          {/* 할인율/할인금액 */}
           <div className="form-group">
-            <label className="form-label">할인율</label>
+            <label className="form-label">
+              {formData.discountType === '금액' ? '할인금액' : '할인율'}
+            </label>
             <div className="input-with-icon">
-              <span className="input-icon">김</span>
               <input
                 type="number"
                 className="form-input"
                 value={formData.discountValue}
                 onChange={(e) => handleInputChange('discountValue', e.target.value)}
-                placeholder="020"
+                placeholder={formData.discountType === '금액' ? '10000' : '10'}
               />
-              <span className="input-suffix">%</span>
+              <span className="input-suffix">
+                {formData.discountType === '금액' ? '원' : '%'}
+              </span>
             </div>
           </div>
 
@@ -158,13 +157,11 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
           <div className="form-group">
             <label className="form-label">발급 수량</label>
             <div className="input-with-icon">
-              <span className="input-icon">김</span>
               <input
                 type="number"
                 className="form-input"
                 value={formData.issueCount}
                 onChange={(e) => handleInputChange('issueCount', e.target.value)}
-                placeholder="80"
               />
             </div>
           </div>
@@ -192,7 +189,6 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
               </div>
             </div>
             <div className="date-center-icon">
-              <span className="input-icon">김</span>
             </div>
           </div>
         </div>

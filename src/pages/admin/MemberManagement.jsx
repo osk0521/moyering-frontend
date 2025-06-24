@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { url } from "/src/config"; // config 오타 수정
+import { url } from "/src/config"; 
 import axios from "axios";
 import Layout from "./Layout";
 import { useNavigate } from 'react-router-dom';

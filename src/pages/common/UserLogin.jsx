@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './UserLogin.css';
 import { useSetAtom } from 'jotai';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { tokenAtom, userAtom } from '../../atoms';
 import axios from 'axios';
-import { myAxios } from './../../config';
+import { myAxios, url } from './../../config';
 
 const Login = () => {
   const [login, setLogin] = useState({ username: '', password: '' })
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom)
+  const [params] = useSearchParams();
   const navigate = useNavigate();
 
   const edit = (e) => {
@@ -34,9 +35,7 @@ const Login = () => {
     // 실제 로그인 처리 로직은 여기에 추가
   };
 
-  const handleKakaoLogin = () => {
-    alert('카카오 로그인 연동 예정');
-  };
+  
 
   return (
     <div className="KHJ-login-container">
@@ -62,10 +61,10 @@ const Login = () => {
           />
           <button type="submit" className="KHJ-login-btn">로그인</button>
         </form>
-        <button className="KHJ-kakao-btn" onClick={handleKakaoLogin}>
+        <a href={`${url}/oauth2/authorization/kakao`} className="KHJ-kakao-btn" >
           <img src="/kakao.png" alt="카카오" className="KHJ-kakao-icon" />
           카카오로 시작하기
-        </button>
+        </a>
       </div>
     </div>
   );

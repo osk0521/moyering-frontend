@@ -75,6 +75,7 @@ import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
 import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
+import Token from './components/Token';
 
 function App() {
   return (
@@ -90,6 +91,7 @@ function App() {
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
+        <Route path="/token" element={<Token />} />
 
         
         <Route path="/myFeed" element={<MyFeed />} />
@@ -99,7 +101,7 @@ function App() {
         <Route path="/joinCategory" element={<UserJoinCategory />} />
         <Route path="/joinSuccess" element={<UserJoinSuccess />} />
         <Route path="/userlogin" element={<UserLogin />} />
-        <Route path="/classRingReviewList" element={<ClassRingReviewList />} />
+        <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
         
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />

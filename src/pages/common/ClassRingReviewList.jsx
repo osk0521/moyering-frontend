@@ -1,41 +1,49 @@
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import styles from "./ClassRingReviewList.module.css";
 import { FaStar } from "react-icons/fa";
-
-const dummyReviews = [
-  {
-    id: 1,
-    author: "루카스",
-    date: "25.5.18",
-    rating: 5,
-    content:
-      "과연 제 직업과 MBTI와의 궁합은 얼마나 궁금했었는데 이번기회를 알게되었구 앞으로 생각하던 직업과의 궁합을 어떨지도 알게되었습니다...",
-    reply: {
-      author: "강사명",
-      date: "25.5.18",
-      content:
-        "MBTI에 대해 더 깊이 이해하시고 이를 통해 더 나에 대해 깊이 알게되신거 같아 뿌듯하네요👏 전직은 이미 존재합니다...",
-    },
-  },
-  {
-    id: 2,
-    author: "유용",
-    date: "25.5.20",
-    rating: 5,
-    content: "인터뷰처럼 면접과 회차가 확실하니깐, 딱 확실해요!",
-  },
-];
-
+import { FaArrowLeft } from "react-icons/fa";
+import { myAxios } from "../../config";
+import { useNavigate,useParams } from "react-router";
+import { url } from '../../config';
+import { useSetAtom, useAtomValue } from "jotai";
+import {
+  allReviewListAtom,
+} from '../../atom/classAtom';
 export default function ClassRingReviewList() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const { hostId } = useParams(); 
+  const navigate = useNavigate();
+  const setAllReviewListAtom= useSetAtom(allReviewListAtom);
+  const reviews = useAtomValue(allReviewListAtom);
+  
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await myAxios().get(
+          `/classRingReviewList/${hostId}?page=${currentPage - 1}&size=5`
+        );
+        setAllReviewListAtom(res.data.content);
+        setTotalPages(res.data.totalPages);
+      } catch (err) {
+        console.error("리뷰 불러오기 실패", err);
+      }
+    };
 
+    fetchReviews();
+  }, [currentPage]);
   return (
     <div className={styles.container}>
+      <div style={{display:'flex'}}>
+      <button onClick={() => navigate(-1)} className={styles.backBtn}>
+        <FaArrowLeft style={{ marginRight: "6px" }} />
+      </button>
       <h2 className={styles.pageTitle}>강사 평점 및 후기</h2>
-
+      </div>
       <div className={styles.summaryBox}>
         <div>
-          <strong>강사명</strong>
+          <img src={`${url}/image?filename=${reviews[0]?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+          <strong>{reviews[0]?.hostName}</strong>
           <div className={styles.starsRow}><FaStar color="#FFD700" /><span>5</span></div>
         </div>
         <div>
@@ -45,25 +53,29 @@ export default function ClassRingReviewList() {
       </div>
 
       <div className={styles.reviewList}>
-        {dummyReviews.map((r) => (
-          <div key={r.id} className={styles.reviewCard}>
+        {reviews.map((r) => (
+          <div key={r.reviewId} className={styles.reviewCard}>
             <div className={styles.reviewHeader}>
-              <strong>{r.author}</strong>
+              <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+              <strong>{r.studentName}</strong>
               <span className={styles.rating}>
-                {[...Array(r.rating)].map((_, i) => (
+                {[...Array(r.star)].map((_, i) => (
                   <FaStar key={i} color="#FFD700" />
                 ))}
               </span>
-              <span className={styles.date}>{r.date}</span>
+              <span className={styles.date}>{r.reviewDate}</span>
             </div>
             <div className={styles.reviewContent}>{r.content}</div>
-            {r.reply && (
+            {r.revRegCotnent && (
               <div className={styles.reviewReply}>
                 <div className={styles.replyHeader}>
-                  <strong>{r.reply.author}</strong>
-                  <span>{r.reply.date}</span>
+                  <div>
+                  <img src={`${url}/image?filename=${reviews[0]?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+                  <strong>{r.hostName}</strong>
+                  </div>
+                  <span>{r.responseDate}</span>
                 </div>
-                <div>{r.reply.content}</div>
+                <div>{r.revRegCotnent}</div>
               </div>
             )}
           </div>
@@ -71,10 +83,34 @@ export default function ClassRingReviewList() {
       </div>
 
       <div className={styles.pagination}>
-        <button className={styles.pageBtn}>1</button>
-        <button className={styles.pageBtn}>2</button>
-        <button className={styles.pageBtn}>3</button>
+        <button
+          className={styles.pageBtn}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            className={`${styles.pageBtn} ${currentPage === i + 1 ? styles.pageBtnActive : ""}`}
+            onClick={() => setCurrentPage(i + 1)}
+            disabled={currentPage === i + 1}
+          >
+            {i + 1}
+          </button>
+        ))}
+
+        <button
+          className={styles.pageBtn}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </button>
       </div>
-    </div>
+
+      </div>
   );
 } 

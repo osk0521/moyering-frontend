@@ -11,20 +11,6 @@ const ClassList = () => {
   const token = useAtomValue(tokenAtom);
   const [classData,setClassData] = useState([]);
 
-  const [searchResults, setSearchResults] = useState([
-    {
-      className: '클래스 명',
-      classEndDate: '2026-05-25 23:59',
-      category: '운동',
-      status: '등록중',
-    },
-    {
-      className: '클래스 명 2',
-      classEndDate: '2026-05-30 23:59',
-      category: '음악',
-      status: '오픈대기',
-    },
-  ]);
 
   const [dateFilter, setDateFilter] = useState('');
 
@@ -97,13 +83,8 @@ const ClassList = () => {
     myAxios(token).get(`/host/HostclassList?hostId=${user.hostId}`)
     .then(res=>{
       setClassData(res.data);
-      console.log("==데이터==")
-      console.log(res.data);
-      console.log("======")
     })
     .catch(err=>{
-      console.log("token"+token)
-      console.log(err);
     })
   },[token,user.hostId])
 
@@ -122,7 +103,6 @@ const ClassList = () => {
               
             />
             <select className="KHJ-search-filter">
-              <option value="">필터</option>
               <option value="name">이름</option>
               <option value="category">카테고리</option>
             </select>

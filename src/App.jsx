@@ -74,6 +74,7 @@ import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
 import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
 import GatheringChat from './pages/user/gathering/GatheringChat';
 import GatheringList from './pages/common/GatheringList.jsx';
+import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
 
 function App() {
   return (
@@ -83,7 +84,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/classList" element={<ClassList />} />
         <Route path="/gatheringList" element={<GatheringList />} />
-        <Route path="/classRingDetail/:id" element={<ClassRingDetail />} />
+        <Route path="/classRingDetail/:classId" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feeds" element={<FeedPage />} />
         <Route path="/userFeed/:nickName" element={<UserFeed />} />
@@ -98,10 +99,13 @@ function App() {
         <Route path="/joinCategory" element={<UserJoinCategory />} />
         <Route path="/joinSuccess" element={<UserJoinSuccess />} />
         <Route path="/userlogin" element={<UserLogin />} />
+        <Route path="/classRingReviewList" element={<ClassRingReviewList />} />
+        
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
+        <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
 

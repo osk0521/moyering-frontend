@@ -16,25 +16,26 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.imageSection {
-  margin-bottom: 16px;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
 .mainImage {
   width: 100%;
   height: 500px;
   object-fit: cover;
   display: block;
   border-radius: 12px;
+  margin-bottom: 20px;
 }
 
 .tabs {
+  position: sticky;
+  top: 0px; 
+  background-color: #fff;
+  z-index: 10;
   display: flex;
-  margin: 16px 0;
-  border-bottom: 1px solid #e9ecef;
+  gap: 1rem;
+  border-bottom: 1px solid #eee;
+  padding: 1rem 0 0.5rem;
 }
+
 
 .tab {
   flex: 1;
@@ -58,6 +59,14 @@
   padding: 20px 0;
 }
 
+.section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+/* 상세정보 */
 .moreBtn {
   width: 100%;
   padding: 10px;
@@ -67,70 +76,352 @@
   font-size: 14px;
   color: #666;
   cursor: pointer;
+  margin-top: 12px;
+}
+/* 준비물 섹션 */
+.preparation {
+  margin-top: 32px;
+  padding-top: 12px;
+  font-size: 15px;
 }
 
-/* 문의(질문) 영역 */
-.questionsTable {
-  margin-top: 20px;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
+/* 커리큘럼 섹션 */
+.curriculum {
+  margin-top: 32px;
+}
+
+.preparation h3,
+.curriculum h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.curriculumList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.curriculumList li {
+  display: flex;
+  align-items: center;
+  margin: 0.25rem 0;
+}
+
+.curriculumTime {
+  width: 60px;
+  font-weight: bold;
+}
+
+.curriculumContent {
+  flex: 1;
+}
+
+/* 위치 */
+.mapPlaceholder {
+  width: 100%;
+  background: #f5f6f8;
+  border-radius: 12px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
   font-size: 14px;
 }
 
-.questionsHeader,
-.questionsGrid {
-  display: grid;
-  grid-template-columns: 100px 1fr 120px 120px;
-  padding: 12px 16px;
-  border-bottom: 1px solid #f1f3f4;
-  align-items: center;
-  color: #444;
-  font-weight: 600;
-}
-
-.questionsRow {
-  padding: 12px 16px;
-  border-bottom: 1px solid #f5f5f5;
-}
-
-.alternate {
-  background-color: #fcfcfc;
-}
-
-.answerSection {
-  background: #f9f9f9;
+/* 강사소개 */
+.instructorCard {
+  display: flex;
+  gap: 16px;
   padding: 16px;
-  border-left: 3px solid #28a745;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.instructorImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.instructorInfo {
+  flex: 1;
+}
+
+.instructorInfo h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.instructorInfo p {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.instructorTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.instructorTags span {
+  background: #f1f3f5;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+}
+/* 후기 */
+.reviewSection {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.reviewCard {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+}
+
+.reviewAuthor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.reviewStars {
+  color: #fbbc04;
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.reviewContent {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-wrap;
+  margin-top: 4px;
+}
+
+.reviewReply {
+  background: #f9f9f9;
+  padding: 12px 16px;
+  border-left: 3px solid #2196f3;
   border-radius: 8px;
-  margin: 10px 0 20px 0;
+  margin-top: 12px;
   font-size: 14px;
   color: #555;
 }
 
-.answerHeader {
+.reviewReplyHeader {
   display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
   font-size: 13px;
   color: #333;
-}
-
-.answerBadge {
-  background: #28a745;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 12px;
   font-weight: bold;
 }
 
-.answerContent {
-  line-height: 1.5;
-  white-space: pre-line;
+.reviewMoreBtn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #555;
+  cursor: pointer;
+}
+.reviewDiv{
+  margin-bottom: inherit;
+}
+/* 질문 */
+.questionsTable {
+  border-top: 2px solid #333;
+  font-size: 0.95rem;
 }
 
+.questionsHeader {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1.5fr 1.5fr;
+  background: #f5f5f5;
+  padding: 0.75rem;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+.questionsRow {
+  border-bottom: 1px solid #eee;
+}
+
+.questionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1.5fr 1.5fr;
+  padding: 0.75rem;
+}
+
+.alternate {
+  background: #fdfdfd;
+}
+
+.answerSection {
+  background: #f9f9f9;
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid #ddd;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.answerHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.answerBadge {
+  background: #d4f4e7;
+  color: #2e7d32;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+.answerAuthor {
+  font-weight: bold;
+}
+
+.answerDate {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.questionButtonWrap {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.questionButton {
+  background-color: #65B741;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 추천 클래스 섹션 */
+/* 추천 클래스 섹션 */
+.recommendHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.recommendMoreBtn {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #999;
+  cursor: pointer;
+}
+
+.subText {
+  color: #f4a261;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.recommendGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.recommendCard {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding-bottom: 0.75rem;
+}
+
+.recommendImage {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+}
+
+.recommendTags {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0.75rem;
+}
+
+.categoryTag {
+  background-color: #FFD59E;
+  color: #333;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+}
+
+.locationTag {
+  background-color: #B8F3FF;
+  color: #333;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+}
+
+.recommendTitle {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0 0.75rem 0.25rem;
+  line-height: 1.2;
+}
+
+.recommendTime {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0 0.75rem;
+}
+
+
+/* 사이드바 */
 .sidebar {
   width: 320px;
   position: sticky;
@@ -184,6 +475,7 @@
   font-size: 16px;
   font-weight: 500;
 }
+
 .infoIcon {
   width: 20px;
   margin-right: 12px;
@@ -192,20 +484,28 @@
   color: #FFB22C;
   font-weight: bold;
 }
+
 .buttonGroup {
   display: flex;
   gap: 12px;
-  /* margin: 24px 0; */
+  margin: 20px 0;
 }
-.etc{
+
+.etc {
   font-size: 0.8rem;
+  color: #777;
+  margin-top: 8px;
 }
+
 .couponList {
   width: 100%;
   font-size: 13px;
-  border: 0.848164px solid #FFB22C;
-  border-radius: 6.78531px;
+  border: 1px solid #FFB22C;
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-top: 8px;
 }
+
 .outlineBtn {
   flex: 1;
   padding: 12px;
@@ -231,3 +531,4 @@
   border: none;
   cursor: pointer;
 }
+

@@ -5,6 +5,7 @@ export const initUser = {
     username:'',
     name:'',
     nickName:'',
+    profile:'',
     userType:'',
     hostId:'',
 }

@@ -19,6 +19,7 @@ import { tokenAtom, userAtom } from "../../atoms";
 import { myAxios } from "../../config";
 import KakaoMap from "./KakaoMap";
 import { url } from '../../config';
+import { FaStar } from "react-icons/fa";
 
 export default function ClassRingDetail() {
   const [activeTab, setActiveTab] = useState("details");
@@ -105,11 +106,12 @@ export default function ClassRingDetail() {
     const fetchData = async () => {
       try {
         const res = await myAxios(token).get(`/classRingDetail/${classId}`);
-        setCalendarList(res.data.calendar);
-        setClassDetailAtom(res.data.class);
+        setCalendarList(res.data.calendarList);
+        setClassDetailAtom(res.data.hostClass);
         setCurrListAtom(res.data.currList);
         setHostAtom(res.data.host);
         setReviewListAtom(res.data.reviews);
+        console.log(res);
       } catch (err) {
         console.error("클래스 상세 데이터 로딩 실패", err);
       }
@@ -124,7 +126,6 @@ export default function ClassRingDetail() {
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
   const selectedCalendar = calendarList.find(c => c.calendarId == selectedCalendarId);
-
 
   return (
     <>
@@ -222,7 +223,12 @@ export default function ClassRingDetail() {
                 <div className={styles.reviewHeader}>
                   <div className={styles.reviewAuthor}>
                     <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
-                    {r?.studentName}<span className={styles.reviewStars}>★★★★★</span>
+                    {r?.studentName}
+                    <span className={styles.reviewStars}>
+                      {[...Array(r.star)].map((_, i) => (
+                        <FaStar key={i} color="#FFD700" />
+                      ))}
+                    </span>
                   </div>
                   <span>{r?.reviewDate}</span>
                 </div>
@@ -231,19 +237,29 @@ export default function ClassRingDetail() {
                 </div>
                 {r?.revRegCotnent && 
                 <div className={styles.reviewReply}>
-                  <div className={styles.reviewReplyHeader}>
+                  <div className={styles.reviewAuthor}>
+                    <div className={styles.reviewReplyHeader}>
                     <img src={`${url}/image?filename=${r?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
-                    <span>{r?.hostName}</span></div>
+                    {r?.hostName}
+                    </div>
+                    <span className={styles.responseDate}>{r?.responseDate}</span>
+                  </div>
                   <div>
-                    {r?.studentName}
+                    {r?.revRegCotnent}
                   </div>
                 </div>
                 }
                 </div>
               ))}
             </div>
-            
-            <button className={styles.reviewMoreBtn} onClick={()=> navigate(`/classRingReviewList`)}>더보기</button>
+              {host && (
+                <button
+                  className={styles.reviewMoreBtn}
+                  onClick={() => navigate(`/classRingReviewList/${host.hostId}`)}
+                >
+                  더보기
+                </button>
+              )}          
           </section>
           {/* 질문 */}
           <section className={styles.section} id="questions">

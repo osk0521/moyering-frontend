@@ -101,7 +101,7 @@ function App() {
         <Route path="/joinCategory" element={<UserJoinCategory />} />
         <Route path="/joinSuccess" element={<UserJoinSuccess />} />
         <Route path="/userlogin" element={<UserLogin />} />
-        <Route path="/classRingReviewList" element={<ClassRingReviewList />} />
+        <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
         
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/ClassPayment" element={<ClassPayment />} />

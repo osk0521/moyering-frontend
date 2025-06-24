@@ -88,10 +88,22 @@ const SettlementInfo = () => {
   const submit = () => {
     const formData = new FormData();
     formData.append("hostId", user.hostId);
-    if (host.bankName) formData.append("bankName", host.bankName);
-    if (host.accName) formData.append("accName", host.accName);
-    if (host.accNum) formData.append("accNum", host.accNum);
-    if (idImage) formData.append("idCard", idImage); // 파일
+    if (initialHost.bankName != host.bankName) {
+      formData.append("bankName", host.bankName);
+    }
+    if (initialHost.accName != host.accName) {
+      formData.append("accName", host.accName);
+    }
+    if (initialHost.accNum != host.accNum) {
+      formData.append("accNum", host.accNum);
+    }
+    if (initialHost.idCard != idImage) {
+      formData.append("idCard", idImage); // 파일
+    }
+    // if (host.bankName)
+    //   if (host.accName)
+    //     if (host.accNum)
+    //       if (idImage)
     for (let [key, value] of formData.entries()) {
       console.log(key, value);  // 여기에 파일 객체도 나와야 정상!
     }

@@ -7,18 +7,30 @@ import { Button, Form, Input } from "reactstrap";
 import "./Header.css";
 import logoImage from "/logo.png";
 import React, { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { tokenAtom, userAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
 
 const Header = () => {
   const user = useAtomValue(userAtom);
   const token = useAtomValue(tokenAtom);
+  const setUser = useSetAtom(userAtom);
+  const setToken = useSetAtom(tokenAtom);
+  
   const [userInfo, setUserInfo] = useState({
     userId: "",
     nickName: "",
     profile: "",
   });
+
+  const logout= ()=>{
+    setUser(null);
+    setToken(null);
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+     window.location.href = '/'; // 로그인 페이지로 이동
+  }
+
   useEffect(() => {
     console.log(user);
     if (user) {
@@ -67,7 +79,7 @@ const Header = () => {
                 <a href="/">호스트페이지</a>
               </span>
               <span className="Header_top-menu-link_osk">
-                <a href="/user/logout">로그아웃</a>
+                <button onClick={logout}>로그아웃</button>
               </span>
             </>
           ) : (

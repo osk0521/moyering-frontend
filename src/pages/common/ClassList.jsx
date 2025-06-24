@@ -10,10 +10,10 @@ import {
   currentPageAtom,
   totalPagesAtom,
   classFilterAtom,
+  categoryListAtom,
 } from '../../atom/classAtom';
 import {fetchClassListAtom} from '../../hooks/common/fetchClassListAtom';
 import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom';
-import { categoryListAtom } from '../../atom/classAtom';
 
 export default function ClassList() {
     const [selectedDate1, setSelectedDate1] = useState(null);

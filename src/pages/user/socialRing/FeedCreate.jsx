@@ -1,53 +1,120 @@
-// src/components/FeedCreate.jsx
-
 import React, { useState, useRef } from 'react';
 import './FeedCreate.css';
-import plusIcon from './icons/plus.svg';    // 변경: SVG 파일을 경로로 import
+import plusIcon from './icons/plus.svg';
+import { useAtomValue } from 'jotai';
+import { tokenAtom, userAtom } from '../../../atoms';
+import { useNavigate } from 'react-router-dom';
+import { myAxios, url } from '../../../config';
 
-export default function FeedCreate({ onCancel, onSubmit }) {
-    const [imageFile, setImageFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState('');
+export default function FeedCreate() {
+    const user = useAtomValue(userAtom);
+    const token = useAtomValue(tokenAtom);
+    const navigate = useNavigate();
+
+    // 상태 관리
     const [text, setText] = useState('');
-    const [tags, setTags] = useState([]);
+    const [imageFiles, setImageFiles] = useState([]);
+    const [previewUrls, setPreviewUrls] = useState([]);
     const [tagInput, setTagInput] = useState('');
-    const fileInputRef = useRef();
+    const [tags, setTags] = useState([]);
+    const fileInputRef = useRef(null);
+    const [currentIndex, setCurrentIndex] = useState(0);  // 슬라이드 인덱스
 
-    const handleImageChange = e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        setImageFile(file);
-        setPreviewUrl(URL.createObjectURL(file));
+    // 취소
+    const handleCancel = () => navigate(-1);
+
+    // 이미지 선택
+    const openFileDialog = () => fileInputRef.current.click();
+    const readUrl = e => {
+        const files = Array.from(e.target.files || [])
+            .slice(0, 5);                                        // 최대 5개
+        setImageFiles(files);
+        // 브라우저 미리보기 URL 생성
+        const urls = files.map(f => URL.createObjectURL(f));
+        setPreviewUrls(urls);
+        setCurrentIndex(0);  // 새로 선택할 때는 첫번째로
+    };
+    // ◀ 이전, 다음, 삭제 함수
+    const prevImage = () => {
+        setCurrentIndex(i => (i === 0 ? previewUrls.length - 1 : i - 1));
+    };
+    const nextImage = () => {
+        setCurrentIndex(i => (i === previewUrls.length - 1 ? 0 : i + 1));
+    };
+    const removeCurrent = () => {
+        const idx = currentIndex;
+        const newFiles = imageFiles.filter((_, i) => i !== idx);
+        const newUrls = previewUrls.filter((_, i) => i !== idx);
+        setImageFiles(newFiles);
+        setPreviewUrls(newUrls);
+        // 인덱스 조정
+        if (idx === newUrls.length && idx > 0) {
+            setCurrentIndex(idx - 1);
+        }
     };
 
+    // 글 내용 변경
     const handleTextChange = e => {
         if (e.target.value.length <= 2000) {
             setText(e.target.value);
         }
     };
 
+    // 태그 추가/제거
     const handleAddTag = () => {
         const tag = tagInput.trim();
         if (!tag || tags.includes(tag) || tags.length >= 5) return;
         setTags(prev => [...prev, tag]);
         setTagInput('');
     };
-
-    const handleRemoveTag = removed => {
-        setTags(prev => prev.filter(t => t !== removed));
+    const handleRemoveTag = tag => {
+        setTags(prev => prev.filter(t => t !== tag));
     };
 
-    const handleSubmit = () => {
-        onSubmit({ imageFile, text, tags });
+    // 제출
+    const handleSubmit = async e => {
+        e.preventDefault();
+        try {
+            const feedDto = {
+                content: text,
+                tag1: tags[0] || '',
+                tag2: tags[1] || '',
+                tag3: tags[2] || '',
+                tag4: tags[3] || '',
+                tag5: tags[4] || ''
+            };
+            const formData = new FormData();
+            //   Object.entries(payload).forEach(([k, v]) => formData.append(k, v));
+            formData.append(
+                'feed',
+                new Blob([JSON.stringify(feedDto)], { type: 'application/json' })
+            );
+            // 배열 순회하며 모두 append
+            imageFiles.forEach(file => {
+                formData.append('images', file);
+            });
+            const res = await myAxios(token).post(
+                `${url}/user/socialing/feed`,
+                formData
+            );
+            const created = res.data;
+            navigate(`/feed/${created.feedId}`);
+        } catch (err) {
+            console.error('피드 등록 실패:', err);
+            alert('피드 작성에 실패했습니다.');
+        }
     };
 
     return (
         <div className="KYM-FeedCreate-container">
-            <header className="KYM-FeedCreate-header">
-                <button className="KYM-FeedCreate-btn-cancel" onClick={onCancel}>
+            <div className="KYM-FeedCreate-header">
+                <button
+                    className="KYM-FeedCreate-btn-cancel"
+                    onClick={handleCancel}
+                >
                     취소
                 </button>
                 <div className="KYM-FeedCreate-title">
-                    {/* 변경: PlusIcon 컴포넌트 대신 img 태그 사용 */}
                     <img
                         src={plusIcon}
                         className="KYM-FeedCreate-icon-plus"
@@ -61,32 +128,67 @@ export default function FeedCreate({ onCancel, onSubmit }) {
                 >
                     피드 작성
                 </button>
-            </header>
+            </div>
 
             <div className="KYM-FeedCreate-main">
-                {/* 왼쪽: 이미지 업로드 */}
-                <div
-                    className="KYM-FeedCreate-image-box"
-                    onClick={() => fileInputRef.current.click()}
-                >
-                    {previewUrl ? (
-                        <img src={previewUrl} alt="preview" />
+                {/* 이미지 업로드 & 슬라이드 */}
+                <div className="KYM-FeedCreate-carousel" onClick={() => fileInputRef.current.click()}>
+                    {previewUrls.length > 0 ? (
+                        <>
+                            <button className="carousel-btn left" onClick={e => { e.stopPropagation(); prevImage(); }}>
+                                ‹
+                            </button>
+                            <img
+                                className="carousel-img"
+                                src={previewUrls[currentIndex]}
+                                alt={`preview-${currentIndex}`}
+                            />
+                            <button className="carousel-btn right" onClick={e => { e.stopPropagation(); nextImage(); }}>
+                                ›
+                            </button>
+                            <button className="carousel-remove" onClick={e => { e.stopPropagation(); removeCurrent(); }}>
+                                ×
+                            </button>
+                        </>
                     ) : (
-                        <span className="KYM-FeedCreate-placeholder">
-                            사진 선택
-                        </span>
+                        <span className="KYM-FeedCreate-placeholder">사진 선택 (최대 5장)</span>
                     )}
                     <input
                         type="file"
                         accept="image/*"
+                        multiple
                         ref={fileInputRef}
-                        onChange={handleImageChange}
+                        onChange={readUrl}
                         style={{ display: 'none' }}
                     />
                 </div>
 
-                {/* 오른쪽: 텍스트 + 태그 */}
-                <div className="KYM-FeedCreate-form">
+
+                {/* 폼 */}
+                <form
+                    className="KYM-FeedCreate-form"
+                    onSubmit={handleSubmit}
+                >
+                    {/* 작성자 정보 */}
+                    <div className="KYM-FeedCreate-author-info">
+                        <img
+                            src={user.profile}
+                            alt={user.nickName}
+                            className="KYM-FeedCreate-author-profile"
+                        />
+                        <div className="KYM-FeedCreate-author-meta">
+                            <span className="KYM-FeedCreate-author-nickname">
+                                {user.nickName}
+                            </span>
+                            <img
+                                src={`/badges/${user.userBadgeId}.png`}
+                                alt="배지"
+                                className="KYM-FeedCreate-author-badge"
+                            />
+                        </div>
+                    </div>
+
+                    {/* 글 내용 */}
                     <textarea
                         className="KYM-FeedCreate-text"
                         placeholder="글을 작성해 주세요"
@@ -97,6 +199,7 @@ export default function FeedCreate({ onCancel, onSubmit }) {
                         {text.length}/2000
                     </div>
 
+                    {/* 태그 */}
                     <div className="KYM-FeedCreate-tags">
                         <label>태그추가</label>
                         <div className="KYM-FeedCreate-tag-input-wrap">
@@ -104,9 +207,7 @@ export default function FeedCreate({ onCancel, onSubmit }) {
                                 type="text"
                                 value={tagInput}
                                 onChange={e => setTagInput(e.target.value)}
-                                onKeyDown={e =>
-                                    e.key === 'Enter' && handleAddTag()
-                                }
+                                onKeyDown={e => e.key === 'Enter' && handleAddTag()}
                                 placeholder="태그 입력 후 Enter"
                             />
                         </div>
@@ -118,6 +219,7 @@ export default function FeedCreate({ onCancel, onSubmit }) {
                                 >
                                     {t}
                                     <button
+                                        type="button"
                                         onClick={() => handleRemoveTag(t)}
                                     >
                                         ×
@@ -126,7 +228,7 @@ export default function FeedCreate({ onCancel, onSubmit }) {
                             ))}
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

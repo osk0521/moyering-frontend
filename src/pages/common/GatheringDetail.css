@@ -1083,7 +1083,7 @@ button.GatheringDetail_more_osk {
   background: #f8f9fa;
 }
 
-.GatheringDetail_pagination-btn_osk.GatheringDetail_active_osk {
+.GatheringDetail_pagination-btn_osk .GatheringDetail_active_osk {
   background: #ff6b6b;
   color: white;
   border-color: #ff6b6b;
@@ -1092,7 +1092,9 @@ button.GatheringDetail_more_osk {
 .GatheringDetail_top-icon_osk {
   font-size: 16px;
 }
-
+svg.GatheringDetail_liked_osk{
+  color: red;
+}
 .GatheringDetail_info-row_osk > .GatheringDetail_info-icon_osk {
   height: 30px;
   display: inline-block;
@@ -1108,15 +1110,15 @@ button.GatheringDetail_more_osk {
   display: block;
 }
 /* 질문하기 모달 스타일 */
-.GatheringDetail_question-modal_osk .modal-dialog {
+.GatheringDetail_question-modal_osk .modal-dialog, .GatheringDetail_apply-modal_osk .modal-dialog {
   max-width: 600px;
 }
 
-.GatheringDetail_question-modal_osk .modal-content {
+.GatheringDetail_question-modal_osk .modal-content, .GatheringDetail_apply-modal_osk .modal-content {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   border: none;
-  max-width:600px;
+  max-width:750px;
   padding:unset;
 }
 
@@ -1177,8 +1179,8 @@ button.GatheringDetail_more_osk {
 }
 
 .GatheringDetail_gathering-image_osk {
-  width: 80px;
-  height: 60px;
+  width: 256px;
+  height: 192px;
   border-radius: 6px;
   object-fit: cover;
   flex-shrink: 0;

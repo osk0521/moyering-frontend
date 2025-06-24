@@ -1,119 +1,145 @@
-// src/components/ProfilePage/ProfilePage.jsx
+// src/components/UserFeed/UserFeed.jsx
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
-import axios from 'axios';                     // ← 꼭 import
 import { tokenAtom } from '../../../atoms';
 import { myAxios, url } from '../../../config';
+import axios from 'axios';
 
 import './UserFeed.css';
 import Header from '../../common/Header';
 import moreIcon from './icons/more.png';
 import heartOutline from './icons/heart-outline.png';
-import heartFilled  from './icons/heart-filled.png';
-import commentIcon  from './icons/comment.svg';
+import heartFilled from './icons/heart-filled.png';
+import commentIcon from './icons/comment.svg';
 
 export default function UserFeed() {
-  const { nickname } = useParams();            // /socialing/feeds/:nickname
+  const params = useParams();
+  console.log('🐞 useParams →', params);
+  const { nickname } = useParams();     
+  const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
 
-  // 프로필과 게시물 상태
-  const [user, setUser]   = useState(null);
+  const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
 
-  // 1) 유저 프로필 API
-  useEffect(() => {
-    if (!nickname) return;                     // nickname 없으면 스킵
-    const fetchUser = async () => {
-      try {
-        const { data: u } = await myAxios(token)
-          .get(`${url}/socialing/users/${nickname}`);
-        setUser({
-          profile:   u.profile,                 // 빈 문자열 대신 null 체크
-          nickname:  u.nickName || u.username,
-          badgeUrl:  `/badges/${u.userBadgeId}.png`,
-          intro:     u.intro || '',
-          stats: {
-            posts:     u.postsCount     || 0,
-            followers: u.followersCount || 0,
-            following: u.followingCount || 0
-          }
-        });
-      } catch (err) {
-        console.error('유저 정보 조회 실패', err);
-      }
-    };
-    fetchUser();
-  }, [nickname, token]);
+  // 기본 프로필 이미지 경로
+  const defaultProfile = '/images/default-profile.png';
 
-  // 2) 피드 리스트 API
+  // 1) 프로필 정보 조회
   useEffect(() => {
     if (!nickname) return;
-    const fetchFeeds = async () => {
+    (async () => {
       try {
-        const { data } = await axios
-          .get(`${url}/socialing/feeds/${nickname}`);
-        setPosts(data.map(feed => ({
-          id:           feed.feedId,
-          imageUrl:     feed.img1,       // null이면 뒤에서 체크 가능
-          content:      feed.content,
-          liked:        false,
-          likeCount:    feed.likesCount,
-          commentCount: feed.commentsCount
-        })));
-      } catch (err) {
-        console.error('피드 리스트 조회 실패', err);
-      }
-    };
-    fetchFeeds();
-  }, [nickname]);
+        console.log('▶ fetchUser 호출, nickname=', nickname,' token=', token);
+        // 토큰 없으면 인증 헤더 없이 호출
+        const api = token
+          ? myAxios(token)
+          : axios.create({ baseURL: url });
 
-  // 3) 로컬 좋아요 토글
+        const { data: u } = await api
+          .get(`/socialing/feedUser/${nickname}`);
+        // const { data: u } = await myAxios(token)
+        //   .get(`${url}/socialing/userFeed/${nickname}`);
+        console.log('◀ fetchUser 응답 u=', u);
+
+        setUser({
+          profile: u.profile,
+          nickname: u.nickName || u.username,
+          badgeUrl: `/badges/${u.userBadgeId}.png`,
+          intro: u.intro || '',
+          stats: {
+            posts: u.postsCount ?? 0,
+            followers: u.followersCount ?? 0,
+            following: u.followingCount ?? 0,
+          },
+        });
+      } catch (err) {
+        if (err.response?.status === 404) {
+          navigate('/not-found', { replace: true });
+        } else {
+          console.error('유저 정보 조회 실패:', err);
+        }
+      }
+    })();
+  }, [nickname, token, navigate]);
+
+  // 2) 피드 리스트 조회
+  useEffect(() => {
+    if (!nickname) return;
+    (async () => {
+      try {
+        const { data: feeds } = await myAxios(token)
+          .get(`${url}/socialing/memberFeed/${nickname}`);
+
+        setPosts(
+          feeds.map(feed => ({
+            id: feed.feedId,
+            imageUrl: feed.img1,
+            content: feed.content,
+            liked: feed.likedByUser,
+            likeCount: feed.likesCount,
+            commentCount: feed.commentsCount,
+            mine: feed.mine,
+            createdAt: feed.createdAt,
+          }))
+        );
+      } catch (err) {
+        console.error('피드 리스트 조회 실패:', err);
+      }
+    })();
+  }, [nickname, token]);
+
+  // 3) 좋아요 토글 (로컬 UI 반영)
   const toggleLike = id => {
     setPosts(posts.map(p =>
       p.id !== id
         ? p
         : {
-            ...p,
-            liked:     !p.liked,
-            likeCount: p.liked ? p.likeCount - 1 : p.likeCount + 1
-          }
+          ...p,
+          liked: !p.liked,
+          likeCount: p.liked ? p.likeCount - 1 : p.likeCount + 1,
+        }
     ));
+    // TODO: 서버 좋아요/취소 API 호출 추가
   };
 
-//   // 4) 렌더링 전 null 체크
-//   if (user === null) {
-//     return <div className="KYM-loading">로딩 중...</div>;
-//   }
+  // // 프로필도 없고 포스트도 없으면 로딩
+  // if (!user && posts.length === 0) {
+  //   return <div className="KYM-loading">로딩 중…</div>;
+  // }
 
   return (
     <>
       <Header />
+
       <div className="KYM-profile-container">
         <div className="KYM-profile-header">
-          {user.profile && (
-            <img className="KYM-avatar" src={user.profile} alt="프로필" />
-          )}
+          <img
+            className="KYM-avatar"
+            src={user?.profile || defaultProfile}
+            alt="프로필"
+          />
           <div className="KYM-profile-info">
             <div className="KYM-name-line">
-              <h2 className="KYM-nickname">{user.nickname}</h2>
-              <img className="KYM-badge" src={user.badgeUrl} alt="배지" />
+              <h2 className="KYM-nickname">{user?.nickname}</h2>
+              <img className="KYM-badge" src={user?.badgeUrl} alt="배지" />
               <img src={moreIcon} alt="더보기" className="KYM-more-icon" />
             </div>
             <p className="KYM-intro">
-              {user.intro.split('\n').map((line, i) => (
-                <span key={i}>{line}<br/></span>
+              {user?.intro.split('\n').map((line, i) => (
+                <span key={i}>{line}<br /></span>
               ))}
             </p>
             <div className="KYM-action-buttons">
               <button className="KYM-btn KYM-follow">팔로우</button>
-              <button className="KYM-btn KYM-message">메시지 보내기</button>
+              <button className="KYM-btn KYM-message">메시지</button>
             </div>
             <ul className="KYM-stat-list">
-              <li><strong>{user.stats.posts}</strong><span>게시물</span></li>
-              <li><strong>{user.stats.followers}</strong><span>팔로워</span></li>
-              <li><strong>{user.stats.following}</strong><span>팔로잉</span></li>
+              <li><strong>{user?.stats.posts}</strong><span>게시물</span></li>
+              <li><strong>{user?.stats.followers}</strong><span>팔로워</span></li>
+              <li><strong>{user?.stats.following}</strong><span>팔로잉</span></li>
             </ul>
           </div>
         </div>
@@ -141,7 +167,7 @@ export default function UserFeed() {
                     <span>{post.likeCount}</span>
                   </button>
                   <span className="KYM-comment-count">
-                    <img src={commentIcon} alt="댓글" className="KYM-icon" /> 
+                    <img src={commentIcon} alt="댓글" className="KYM-icon" />
                     {post.commentCount}
                   </span>
                 </div>

@@ -87,11 +87,11 @@ function App() {
         <Route path="/classRingDetail/:classId" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feeds" element={<FeedPage />} />
-        <Route path="/userFeed/:nickName" element={<UserFeed />} />
+        <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
 
-        <Route path="/feedEdit" element={<FeedEdit />} />
+        
         <Route path="/myFeed" element={<MyFeed />} />
         <Route path="/scrapList" element={<ScrapList />} />
         <Route path="/followList" element={<FollowList />} />
@@ -108,6 +108,7 @@ function App() {
         <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
+        <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />

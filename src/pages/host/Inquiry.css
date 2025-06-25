@@ -14,6 +14,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -111,6 +112,7 @@
   background-color: #fff6da;
 }
 
+
 .KHJ-inquiry-content-box {
   display: flex;
   justify-content: space-between;
@@ -152,8 +154,9 @@
 
 .KHJ-reply-form button {
   align-self: flex-end;
-  padding: 8px 16px;
-  background-color: #218838;
+  margin: 15px;
+  padding: 6px 12px;
+  background-color: #ffbf00;
   color: white;
   border: none;
   border-radius: 4px;
@@ -172,4 +175,49 @@
 .KHJ-reply-dropdown.open {
   max-height: 1000px;
   opacity: 1;
+}
+
+/* 상세 내용을 감싸는 래퍼 (애니메이션용) */
+.KHJ-inquiry-dropdown-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+/* 열릴 때 애니메이션 */
+.KHJ-inquiry-dropdown-wrapper.open {
+  max-height: 1000px; /* 충분히 큰 값으로 설정 */
+  opacity: 1;
+}
+
+/* 답변폼 영역 (내부 드롭다운) */
+.KHJ-reply-dropdown {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+.KHJ-reply-dropdown.open {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* 기존 td 스타일은 유지 */
+.KHJ-inquiry-detail-row td {
+  background-color: #fff6da;
+  padding: 0;
+}
+
+/* 내용 박스 여백 */
+.KHJ-inquiry-content-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+.KHJ-reply-textarea{
+  height: 100px;
+  margin: 0 auto;
 }

@@ -3,10 +3,13 @@ import './HostRegist.css';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { myAxios, url } from './../../config';
-import { tokenAtom } from '../../atoms';
-import { useAtomValue } from 'jotai';
+import { tokenAtom, userAtom } from '../../atoms';
+import { useAtom, useAtomValue } from 'jotai';
 
 const HostRegist = () => {
+  // const user = useAtomValue(userAtom);
+  const [user,setUser] = useAtom(userAtom);
+  const token = useAtomValue(tokenAtom);
   const [host, setHost] =
     useState({ id: 0, name: '', tel: '', publicTel: '', email: '', intro: '', tag1: '', tag2: '', tag3: '', tag4: '', tag5: '' })
   const [ifile, setIfile] = useState(null);
@@ -74,12 +77,16 @@ const HostRegist = () => {
     });
 
     if (ifile != null) formData.append("ifile", ifile);
-
+    if(user.id!=null) formData.append("userId",user.id)
     myAxios(token).post(`/host/regist`, formData)
       .then(res => {
-        console.log('res:', res);
-        console.log('res.data:', res.data); 
-        navigate(`/host/hostMyPage/${res.data}`)
+        const hostId=res.data;
+        if(hostId){
+          sessionStorage.setItem("hostId",hostId)
+          setUser(prev=>({...prev,hostId}));
+        }
+        // navigate(`/host/hostMyPage`)
+        window.location.href="/host/hostMyPage"
       })
       .catch(err => {
         console.log(err);

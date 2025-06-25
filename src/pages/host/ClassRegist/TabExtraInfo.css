@@ -126,9 +126,57 @@
   background: white;
   border-radius: 10px;
   padding: 24px;
-  width: 400px;
+  width: 600px; /* 기존보다 넓게 */
   max-width: 90%;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.KHJ-coupon-option {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  gap: 12px;
+  background-color: #fafafa;
+}
+
+.KHJ-coupon-details {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
+}
+
+.KHJ-coupon-details div {
+  margin-bottom: 4px;
+}
+
+.KHJ-coupon-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 160px;
+}
+
+.KHJ-coupon-name-input,
+.KHJ-coupon-count-input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+.KHJ-coupon-option label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: bold;
+  margin-bottom: 6px;
 }
 
 .KHJ-coupon-list {

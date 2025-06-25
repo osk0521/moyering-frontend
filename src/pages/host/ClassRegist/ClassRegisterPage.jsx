@@ -12,6 +12,7 @@ import { myAxios } from '../../../config';
 import { tokenAtom, userAtom } from '../../../atoms';
 import { useAtomValue } from 'jotai';
 import React from 'react'; // 이 한 줄만 추가!
+import { useNavigate } from 'react-router';
 
 const tabs = [
   '기본정보',
@@ -24,6 +25,7 @@ const tabs = [
 
 const ClassRegisterPage = () => {
   const user = useAtomValue(userAtom);
+  const navigate = useNavigate();
   console.log(user);
   const [classData, setClassData] = useState({
     basicInfo: {
@@ -113,6 +115,11 @@ const ClassRegisterPage = () => {
   const token = useAtomValue(tokenAtom);
   console.log(token)
   const submit = () => {
+    const cleanDates = [...new Set(
+      (classData.schedule.dates || []).map(date =>
+        new Date(date).toISOString().slice(0, 10)
+      )
+    )].sort((a, b) => new Date(a) - new Date(b));
 
     let reqData = {
       ...classData.basicInfo,
@@ -129,7 +136,7 @@ const ClassRegisterPage = () => {
     formData.append("category1", reqData.category1)
     formData.append("category2", reqData.category2)
     formData.append("caution", reqData.caution)
-    formData.append("dates", reqData.dates)
+    formData.append("dates", cleanDates)
     formData.append("scheduleDetail", JSON.stringify(reqData.scheduleDetail))
     formData.append("detailDescription", reqData.detailDescription)
     if (reqData.img1) formData.append("img1", reqData.img1);
@@ -160,6 +167,7 @@ const ClassRegisterPage = () => {
         console.log(res);
         console.log(formData);
         let classId = res.data;
+        navigate("/host/HostclassList");
       })
       .catch(err => {
         console.log(formData);

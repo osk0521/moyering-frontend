@@ -1,11 +1,72 @@
 import { useEffect, useState } from 'react';
 import './TabExtraInfo.css';
-import React from 'react'; // 이 한 줄만 추가!
+import React from 'react';
+import { myAxios } from '../../../config';
+import { useAtomValue } from 'jotai';
+import { tokenAtom } from '../../../atoms';
 
 const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   const { extraInfo } = classData;
+  const token = useAtomValue(tokenAtom);
+  const [couponList, setCouponList] = useState([]);
+  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+  const [selectedCoupons, setSelectedCoupons] = useState([]); // 실제 선택된 raw 데이터
+  const [selectedCouponInfo, setSelectedCouponInfo] = useState([]); // 사용자 입력 반영한 쿠폰
 
-  // 파일 변경
+  useEffect(() => {
+    myAxios(token).get("/host/couponList")
+      .then(res => {
+        console.log(res.data);
+        setCouponList(res.data);
+      })
+      .catch(err => {
+        console.log("쿠폰 불러오기 실패", err);
+      });
+  }, [token]);
+
+  // 쿠폰 선택/해제
+  const toggleCouponSelection = (couponCode) => {
+    setSelectedCoupons((prev) => {
+      const isSelected = prev.some(c => c.couponCode === couponCode);
+      if (isSelected) {
+        return prev.filter(c => c.couponCode !== couponCode);
+      } else {
+        const coupon = couponList.find(c => c.couponCode === couponCode);
+        if (!coupon) return prev;
+
+        return [...prev, {
+          couponCode: coupon.couponCode,
+          couponName: coupon.couponName || '',
+          discount: coupon.discount,
+          validFrom: coupon.validFrom,
+          validUntil: coupon.validUntil,
+          customName: '',
+          count: 1
+        }];
+      }
+    });
+  };
+
+  // 입력값 변경
+  const updateCouponField = (couponCode, key, value) => {
+    setSelectedCoupons(prev =>
+      prev.map(c =>
+        c.couponCode === couponCode ? { ...c, [key]: value } : c
+      )
+    );
+  };
+
+  const handleCouponApply = () => {
+    setClassData(prev => ({
+      ...prev,
+      extraInfo: {
+        ...prev.extraInfo,
+        coupons: selectedCoupons // 백엔드 보낼 때 사용 가능
+      }
+    }));
+    setIsCouponModalOpen(false);
+  };
+
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
@@ -19,7 +80,6 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
     }
   };
 
-  // 태그 추가/제거 (콤마로 관리)
   const addTag = (key, input) => {
     const tags = (extraInfo[key] || '').split(',').filter(Boolean);
     if (input && !tags.includes(input) && tags.length < 20) {
@@ -46,7 +106,6 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
     }));
   };
 
-  // 검증 함수
   const validate = () => {
     const hasMaterial = extraInfo.material != null;
     const hasIncluision = extraInfo.incluision?.split(',').filter(Boolean).length > 0;
@@ -59,12 +118,11 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
     registerValidator(3, validate);
   }, [extraInfo]);
 
-  // 태그 입력용 컴포넌트
   const TagInput = ({ label, keyName, placeholder }) => {
     const [input, setInput] = useState('');
     const tags = (extraInfo[keyName] || '').split(',').filter(Boolean);
 
-  return (
+    return (
       <div className="KHJ-form-section">
         <label className="KHJ-tags-label">{label}</label>
         <div className="KHJ-tags-input-container">
@@ -113,25 +171,11 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
         </div>
       </div>
 
-      <TagInput
-        label="포함 사항"
-        keyName="incluision"
-        placeholder="예: 재료비 포함, 음료 제공"
-      />
+      <TagInput label="포함 사항" keyName="incluision" placeholder="예: 재료비 포함, 음료 제공" />
+      <TagInput label="클래스 준비물" keyName="preparation" placeholder="예: 필기도구, 앞치마" />
+      <TagInput label="검색 키워드" keyName="keywords" placeholder="예: 베이킹, 원데이클래스" />
 
-      <TagInput
-        label="클래스 준비물"
-        keyName="preparation"
-        placeholder="예: 필기도구, 앞치마"
-      />
-
-      <TagInput
-        label="검색 키워드"
-        keyName="keywords"
-        placeholder="예: 베이킹, 원데이클래스"
-      />
-
-      {/* <div className="KHJ-form-section">
+      <div className="KHJ-form-section">
         <label className="KHJ-coupon-label"><span className="KHJ-required-text-dot">*</span>쿠폰 등록(선택)</label>
         <div className="KHJ-coupon-input-container">
           <button className="KHJ-coupon-input-btn" onClick={() => setIsCouponModalOpen(true)}>쿠폰 선택</button>
@@ -139,7 +183,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
             <div className="KHJ-selected-coupon-info">
               {selectedCouponInfo.map((c, i) => (
                 <div key={i}>
-                  <strong>{c.customName}</strong> ({c.name}, {c.discount}, {c.count}매)
+                  <strong>{c.customName || '(쿠폰 이름 미지정)'}</strong> ({c.name}, {c.discount}%, {c.count}매)
                 </div>
               ))}
             </div>
@@ -152,26 +196,34 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
           <div className="KHJ-coupon-modal">
             <h4>쿠폰 선택</h4>
             <div className="KHJ-coupon-list">
-              {dummyCoupons.map((coupon) => {
-                const selected = selectedCoupons.find(c => c.code === coupon.code);
+              {couponList.map((coupon) => {
+                const selected = selectedCoupons.find(c => c.couponCode === coupon.couponCode);
+                const discountUnit = coupon.discountType === 'RT' ? '%' : '원';
+
                 return (
-                  <div key={coupon.code} className="KHJ-coupon-option">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={!!selected}
-                        onChange={() => toggleCouponSelection(coupon.code)}
-                      />
-                      <strong>{coupon.name}</strong> ({coupon.discount}, {coupon.valid})
-                    </label>
+                  <div key={coupon.couponCode} className="KHJ-coupon-option">
+                    <div className="KHJ-coupon-details">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={!!selected}
+                          onChange={() => toggleCouponSelection(coupon.couponCode)}
+                        />
+                        {coupon.couponName || '(이름없음)'}
+                      </label>
+                      <div>코드: {coupon.couponCode}</div>
+                      <div>할인: {coupon.discount}{discountUnit}</div>
+                      <div>유형: {coupon.discountType}</div>
+                      <div>기간: {coupon.validFrom} ~ {coupon.validUntil}</div>
+                    </div>
 
                     {selected && (
                       <div className="KHJ-coupon-inputs">
                         <input
                           type="text"
-                          placeholder="쿠폰 이름 입력"
+                          placeholder="사용자 정의 쿠폰 이름"
                           value={selected.customName}
-                          onChange={(e) => updateCouponField(coupon.code, 'customName', e.target.value)}
+                          onChange={(e) => updateCouponField(coupon.couponCode, 'customName', e.target.value)}
                           className="KHJ-coupon-name-input"
                         />
                         <input
@@ -179,8 +231,8 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
                           min="1"
                           placeholder="발급 매수"
                           value={selected.count}
-                          onChange={(e) => updateCouponField(coupon.code, 'count', parseInt(e.target.value))}
-                          className="KHJ-coupon-name-input"
+                          onChange={(e) => updateCouponField(coupon.couponCode, 'count', parseInt(e.target.value))}
+                          className="KHJ-coupon-count-input"
                         />
                       </div>
                     )}
@@ -194,7 +246,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

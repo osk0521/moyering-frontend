@@ -24,6 +24,7 @@ export default function FeedEdit() {
   useEffect(() => {
     (async () => {
       try {
+        console.log(token)
         const { data } = await myAxios(token).get(`/user/socialing/feed/${feedId}`);
         setPreviewUrl(data.img1 || '');
         setText(data.content);
@@ -70,8 +71,8 @@ export default function FeedEdit() {
     try {
       await myAxios(token).put(
         `/user/socialing/feed/${feedId}`,
-        form,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
+        form
+        // { headers: { 'Content-Type': 'multipart/form-data' } }
       );
       navigate(`/feed/${feedId}`);
     } catch (e) {

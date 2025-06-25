@@ -5,7 +5,7 @@ import { GoPeople } from "react-icons/go";
 import { BiChevronDown } from "react-icons/bi";
 import styles from "./ClassRingDetail.module.css";
 import Header from "./Header";
-import { useNavigate,useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useSetAtom, useAtomValue } from "jotai";
 import {
   calendarListAtom,
@@ -28,7 +28,7 @@ export default function ClassRingDetail() {
   const PREVIEW_LENGTH = 300;
   const navigate = useNavigate();
 
-  const { classId } = useParams(); 
+  const { classId } = useParams();
   const token = useAtomValue(tokenAtom);
   const user = useAtomValue(userAtom);
   const setCalendarList = useSetAtom(calendarListAtom);
@@ -43,7 +43,7 @@ export default function ClassRingDetail() {
   const host = useAtomValue(hostAtom);
   const reviews = useAtomValue(reviewListAtom);
 
-  const description = classDetail? classDetail.detailDescription:'';
+  const description = classDetail ? classDetail.detailDescription : '';
   const previewText = description.length > PREVIEW_LENGTH ? description.slice(0, PREVIEW_LENGTH) + "..." : description;
   const shouldShowMore = description.length > PREVIEW_LENGTH;
 
@@ -149,24 +149,24 @@ export default function ClassRingDetail() {
               <button onClick={handleExpandClick} className={styles.moreBtn}>더보기 <BiChevronDown /></button>
             )}
 
-          {/* 준비물 섹션 */}
-          <div className={styles.preparation}>
-            <h3>준비물</h3>
-            <p>{classDetail?.preparation}</p>
-          </div>
+            {/* 준비물 섹션 */}
+            <div className={styles.preparation}>
+              <h3>준비물</h3>
+              <p>{classDetail?.preparation}</p>
+            </div>
             <hr />
-          {/* 커리큘럼 섹션 */}
-          <div className={styles.curriculum}><h3><CiClock1 className={styles.infoIcon} />커리큘럼</h3>
-            <ul className={styles.curriculumList}>{currList.map((currList) => {
-                  return (
-                    <li key={currList.calendarId}>
-                      <span className={styles.curriculumTime}>9:00</span> 
-                      <span className={styles.curriculumContent}>하산 및 뒷풀이 참여 희망자 모임</span>
-                    </li>       
-                  );
-                })}
-            </ul>
-          </div>
+            {/* 커리큘럼 섹션 */}
+            <div className={styles.curriculum}><h3><CiClock1 className={styles.infoIcon} />커리큘럼</h3>
+              <ul className={styles.curriculumList}>{currList.map((currList) => {
+                return (
+                  <li key={currList.calendarId}>
+                    <span className={styles.curriculumTime}>9:00</span>
+                    <span className={styles.curriculumContent}>하산 및 뒷풀이 참여 희망자 모임</span>
+                  </li>
+                );
+              })}
+              </ul>
+            </div>
           </section>
           {/* 위치 */}
           <section className={styles.section} id="location">
@@ -193,11 +193,11 @@ export default function ClassRingDetail() {
                 <h3>{host?.name} ⭐ 5(138)</h3>
                 <p>{host?.intro}</p>
                 <div className={styles.instructorTags}>
-                  {host?.tag1 && <span>{host.tag1}</span> }
-                  {host?.tag2 && <span>{host.tag2}</span> }
-                  {host?.tag3 && <span>{host.tag3}</span> }
-                  {host?.tag4 && <span>{host.tag4}</span> }
-                  {host?.tag5 && <span>{host.tag5}</span> }
+                  {host?.tag1 && <span>{host.tag1}</span>}
+                  {host?.tag2 && <span>{host.tag2}</span>}
+                  {host?.tag3 && <span>{host.tag3}</span>}
+                  {host?.tag4 && <span>{host.tag4}</span>}
+                  {host?.tag5 && <span>{host.tag5}</span>}
                 </div>
               </div>
             </div>
@@ -208,46 +208,46 @@ export default function ClassRingDetail() {
             <div className={styles.reviewCard}>
               {reviews.map((r, i) => (
                 <div key={r?.reviewId} className={styles.reviewDiv}>
-                <div className={styles.reviewHeader}>
-                  <div className={styles.reviewAuthor}>
-                    <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
-                    {r?.studentName}
-                    <span className={styles.reviewStars}>
-                      {[...Array(r.star)].map((_, i) => (
-                        <FaStar key={i} color="#FFD700" />
-                      ))}
-                    </span>
-                  </div>
-                  <span>{r?.reviewDate}</span>
-                </div>
-                <div className={styles.reviewContent}>
-                  {r?.content}
-                </div>
-                {r?.revRegCotnent && 
-                <div className={styles.reviewReply}>
-                  <div className={styles.reviewAuthor}>
-                    <div className={styles.reviewReplyHeader}>
-                    <img src={`${url}/image?filename=${r?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
-                    {r?.hostName}
+                  <div className={styles.reviewHeader}>
+                    <div className={styles.reviewAuthor}>
+                      <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+                      {r?.studentName}
+                      <span className={styles.reviewStars}>
+                        {[...Array(r.star)].map((_, i) => (
+                          <FaStar key={i} color="#FFD700" />
+                        ))}
+                      </span>
                     </div>
-                    <span className={styles.responseDate}>{r?.responseDate}</span>
+                    <span>{r?.reviewDate}</span>
                   </div>
-                  <div>
-                    {r?.revRegCotnent}
+                  <div className={styles.reviewContent}>
+                    {r?.content}
                   </div>
-                </div>
-                }
+                  {r?.revRegCotnent &&
+                    <div className={styles.reviewReply}>
+                      <div className={styles.reviewAuthor}>
+                        <div className={styles.reviewReplyHeader}>
+                          <img src={`${url}/image?filename=${r?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+                          {r?.hostName}
+                        </div>
+                        <span className={styles.responseDate}>{r?.responseDate}</span>
+                      </div>
+                      <div>
+                        {r?.revRegCotnent}
+                      </div>
+                    </div>
+                  }
                 </div>
               ))}
             </div>
-              {host && (
-                <button
-                  className={styles.reviewMoreBtn}
-                  onClick={() => navigate(`/classRingReviewList/${host.hostId}`)}
-                >
-                  더보기
-                </button>
-              )}          
+            {host && (
+              <button
+                className={styles.reviewMoreBtn}
+                onClick={() => navigate(`/classRingReviewList/${host.hostId}`)}
+              >
+                더보기
+              </button>
+            )}
           </section>
           {/* 질문 */}
           <section className={styles.section} id="questions">
@@ -285,16 +285,16 @@ export default function ClassRingDetail() {
             <h1 className={styles.title}>{classDetail?.name}</h1>
             <div className={styles.row}><CiCalendar className={styles.infoIcon} />
               <select className={styles.couponList}
-                  value={selectedCalendarId}
-                  onChange={(e) => setSelectedCalendarId(e.target.value)}
+                value={selectedCalendarId}
+                onChange={(e) => setSelectedCalendarId(e.target.value)}
               >
                 {calendarList.map((calendar) => {
                   const date = new Date(calendar.startDate);
-                  const dayName = date.toLocaleDateString('ko-KR', { weekday: 'short' }); 
+                  const dayName = date.toLocaleDateString('ko-KR', { weekday: 'short' });
                   return (
                     <option value={calendar.calendarId} key={calendar.calendarId}>
                       {calendar.startDate} ({dayName})
-                    </option>       
+                    </option>
                   );
                 })}
               </select>
@@ -303,7 +303,7 @@ export default function ClassRingDetail() {
             <div className={styles.row}>
               <GoPeople className={styles.infoIcon} />
               <span>
-                {selectedCalendar?.registeredCount ?? 0}명 참가 중 (최소 {classDetail?.recruitMin}명, 최대 {classDetail?.recruitMax +"명"?? "제한없음"}) 
+                {selectedCalendar?.registeredCount ?? 0}명 참가 중 (최소 {classDetail?.recruitMin}명, 최대 {classDetail?.recruitMax || "제한없음"})
               </span>
             </div>
             <div className={styles.row}><CiLocationOn className={styles.infoIcon} />

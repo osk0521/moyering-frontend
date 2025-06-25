@@ -53,7 +53,7 @@ const Header = () => {
                 <img
                   src={
                     userInfo.profile 
-                      ? `${url}/image?filename=${userInfo.profile}` 
+                      ?  userInfo.profile.startsWith("http")? userInfo.profile: `${url}/image?filename=${userInfo.profile}` 
                       : '/profile.png'
                   }
                   alt={`${userInfo.nickName}`}

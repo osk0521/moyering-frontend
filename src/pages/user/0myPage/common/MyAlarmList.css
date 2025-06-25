@@ -3,13 +3,14 @@
   width: 100%;
 }
 
-.react-datepicker__input-container input {
+/* .react-datepicker__input-container input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 14px;
-}.MyAlarmList_date_range_container_osk {
+} */
+.MyAlarmList_date_range_container_osk {
   position: relative;
 }
 

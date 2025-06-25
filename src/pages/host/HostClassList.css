@@ -257,3 +257,33 @@
 .KHJ-dropdown-menu button:hover {
   background-color: #f6f6f6;
 }
+
+.KHJ-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.KHJ-page-button {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  background-color: #f7f7f7;
+  color: #333;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.KHJ-page-button:hover {
+  background-color: #e0e0e0;
+}
+
+.KHJ-page-button.active {
+  background-color: #ffbf00;
+  color: white;
+  font-weight: bold;
+  border-color: #ffbf00;
+}

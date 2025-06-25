@@ -90,7 +90,6 @@ function App() {
         <Route path="/feeds" element={<FeedPage />} />
         <Route path="/userFeed/:nickName" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
-        <Route path="/sidebar" element={<Sidebar />} />
         <Route path="/token" element={<Token />} />
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
 

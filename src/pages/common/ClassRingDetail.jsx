@@ -303,7 +303,7 @@ export default function ClassRingDetail() {
             <div className={styles.row}>
               <GoPeople className={styles.infoIcon} />
               <span>
-                {selectedCalendar?.registeredCount ?? 0}명 참가 중 (최소 {classDetail?.recruitMin}명, 최대 {classDetail?.recruitMax +"명"?? "제한없음"}) 
+                {selectedCalendar?.registeredCount ?? '0'}명 참가 중 (최소 {classDetail?.recruitMin}명, 최대 {classDetail?.recruitMax === 0 ? "제한없음" : classDetail?.recruitMax + "명"})
               </span>
             </div>
             <div className={styles.row}><CiLocationOn className={styles.infoIcon} />

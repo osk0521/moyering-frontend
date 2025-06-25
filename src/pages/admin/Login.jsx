@@ -41,6 +41,9 @@ const Login = () => {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
+      console.log('전체 응답:', response);
+      console.log('응답 헤더:', response.headers);
+      console.log('Authorization 헤더:', response.headers['authorization']);
      
      // 2. 백엔드 응답(헤더: 토큰, 바디: 사용자정보)에 맞춰 파싱
      const rawTokenHeader = response.headers['authorization'];
@@ -51,6 +54,7 @@ const Login = () => {
      const tokenInfo = JSON.parse(rawTokenHeader);
      const accessToken = tokenInfo.access_token;
      const userType = response.data.userType;
+     console.log('파싱된 accessToken:', accessToken);
 
      // 토큰과 역할 정보 저장
      localStorage.setItem('token', accessToken);

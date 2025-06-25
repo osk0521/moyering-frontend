@@ -317,3 +317,40 @@
   background: #e5e7eb;
   color: #374151;
 }
+
+.manage-cell {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-btn, .delete-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.edit-btn {
+  background: #f1f5ff;
+  color: #3757c6;
+  border: 1px solid #b6c6f5;
+}
+.edit-btn:hover {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.delete-btn {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fbcfe8;
+}
+.delete-btn:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}

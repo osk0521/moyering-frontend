@@ -74,3 +74,37 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+.pagination {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.pageBtn {
+  border: none;
+  padding: 0.5rem 0.9rem;
+  background-color: #eee;
+  border-radius: 80%;
+  cursor: pointer;
+}
+
+.pageBtnActive {
+  background-color: #65B741;
+  color: white;
+  font-weight: bold;
+  border-radius: 80%;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 8px 14px;
+  border: none;
+  background-color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}

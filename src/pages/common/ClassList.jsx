@@ -236,7 +236,7 @@ const handleReset = () => {
             <ClassCard
               key={idx}
               classInfo={classInfo}
-              onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
+              onClick={() => navigate(`/class/classRingDetail/${classInfo.classId}`)}
             />
           )))}
         </div>

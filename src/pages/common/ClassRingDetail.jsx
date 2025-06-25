@@ -97,7 +97,7 @@ export default function ClassRingDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await myAxios(token).get(`/classRingDetail/${classId}`);
+        const res = await myAxios(token).get(`/class/classRingDetail/${classId}`);
         setCalendarList(res.data.calendarList);
         setClassDetailAtom(res.data.hostClass);
         setCurrListAtom(res.data.currList);
@@ -142,7 +142,7 @@ export default function ClassRingDetail() {
         alert("쿠폰이 다운로드되었습니다!");
 
         // 예: usedCnt 증가 반영을 위해 다시 불러오기
-        const updated = await myAxios(token).get(`/classRingDetail/${classId}`);
+        const updated = await myAxios(token).get(`/class/classRingDetail/${classId}`);
         setCoupons(updated.data.coupons);
 
       } catch (err) {
@@ -152,22 +152,18 @@ export default function ClassRingDetail() {
     };
 
     //찜하기
+    const [isLiked, setIsLiked] = useState(false);
     const handleHeart = async(classId) => {
       try {
-        const res = await myAxios(token).post("/user/classCoupons/download", {
-          classCouponId : classCouponId
-        });
-
-        // 성공 후 쿠폰 리스트 갱신 or UI 업데이트
-        alert("쿠폰이 다운로드되었습니다!");
-
-        // 예: usedCnt 증가 반영을 위해 다시 불러오기
-        const updated = await myAxios(token).get(`/classRingDetail/${classId}`);
-        setCoupons(updated.data.coupons);
+        const res = await myAxios(token).post("/user/toggle-like", {
+          classId : classId
+        })
+        const updated = await myAxios(token).get(`/class/classRingDetail/${classId}`);
+        setIsLiked(!isLiked);
 
       } catch (err) {
-        console.error("쿠폰 다운로드 실패", err);
-        alert(err.response?.data?.message || "쿠폰 다운로드 중 오류 발생");
+        console.error("좋아요 실패", err);
+        alert(err.response?.data?.message || "쿠폰 좋아요 중 오류 발생");
       }
     };
   return (
@@ -420,7 +416,24 @@ export default function ClassRingDetail() {
               </div>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.outlineBtn} onClick={handleHeart(classId)}><CiHeart /> 찜하기</button>
+              <button className={styles.outlineBtn} 
+              onClick={(e) => {
+                            e.stopPropagation();
+                            handleHeart(classId);
+                          }}
+              >
+                {isLiked ? (
+                <>
+                  <CiHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />{" "}
+                  찜해제
+                </>
+              ) : (
+                <>
+                  <CiHeart className="GatheringDetail_top-icon_osk" />{" "}
+                  찜하기
+                </>
+              )}
+              </button>
               <button className={styles.applyBtn}>신청하기</button>
             </div>
             <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>

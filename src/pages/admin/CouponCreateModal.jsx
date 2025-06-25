@@ -70,10 +70,9 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
                 className="form-input"
                 value={formData.couponCode}
                 onChange={(e) => handleInputChange('couponCode', e.target.value)}
-                placeholder="YRJS9J15"
               />
               <button className="generate-btn" onClick={generateCouponCode}>
-                🔄 자동 생성
+                자동 생성
               </button>
             </div>
             <small className="form-hint">영문 대문자와 숫자만 사용 가능합니다</small>
@@ -131,7 +130,6 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
                 비율
               </label>
             </div>
-            <small className="form-hint">할인 유형 &gt; 금액 클릭하면 '금액'으로 변경</small>
           </div>
 
           {/* 할인율/할인금액 */}
@@ -145,7 +143,6 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
                 className="form-input"
                 value={formData.discountValue}
                 onChange={(e) => handleInputChange('discountValue', e.target.value)}
-                placeholder={formData.discountType === '금액' ? '10000' : '10'}
               />
               <span className="input-suffix">
                 {formData.discountType === '금액' ? '원' : '%'}
@@ -153,53 +150,60 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
             </div>
           </div>
 
-          {/* 발급 수량 */}
-          <div className="form-group">
-            <label className="form-label">발급 수량</label>
-            <div className="input-with-icon">
-              <input
-                type="number"
-                className="form-input"
-                value={formData.issueCount}
-                onChange={(e) => handleInputChange('issueCount', e.target.value)}
-              />
-            </div>
-          </div>
+          {/* 관리자 쿠폰일 때만 발급수량, 기간 설정 */}
+          {formData.couponType === '관리자' && (
+            <>
+              {/* 발급 수량 */}
+              <div className="form-group">
+                <label className="form-label">발급 수량</label>
+                <div className="input-with-icon">
+                  <input
+                    type="number"
+                    className="form-input"
+                    value={formData.issueCount}
+                    onChange={(e) => handleInputChange('issueCount', e.target.value)}
+                  />
+                </div>
+              </div>
 
-          {/* 시작일 / 종료일 */}
-          <div className="form-group">
-            <div className="date-row">
-              <div className="date-field">
-                <label className="form-label">시작일</label>
-                <input
-                  type="date"
-                  className="form-input date-input"
-                  value={formData.startDate}
-                  onChange={(e) => handleInputChange('startDate', e.target.value)}
-                />
+              {/* 시작일 / 종료일 */}
+              <div className="form-group">
+                <div className="date-row">
+                  <div className="date-field">
+                    <label className="form-label">시작일</label>
+                    <input
+                      type="date"
+                      className="form-input date-input"
+                      value={formData.startDate}
+                      onChange={(e) => handleInputChange('startDate', e.target.value)}
+                    />
+                  </div>
+                  <div className="date-field">
+                    <label className="form-label">종료일</label>
+                    <input
+                      type="date"
+                      className="form-input date-input"
+                      value={formData.endDate}
+                      onChange={(e) => handleInputChange('endDate', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="date-center-icon">
+                </div>
               </div>
-              <div className="date-field">
-                <label className="form-label">종료일</label>
-                <input
-                  type="date"
-                  className="form-input date-input"
-                  value={formData.endDate}
-                  onChange={(e) => handleInputChange('endDate', e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="date-center-icon">
-            </div>
-          </div>
+            </>
+          )}
         </div>
 
         <div className="modal-footer">
-          <button className="cancel-btn" onClick={onClose}>
-            취소
-          </button>
-          <button className="submit-btn" onClick={handleSubmit}>
-            생성
-          </button>
+          <div className="modal-action-buttons">
+            <button className="cancel-btn" onClick={onClose}>
+              취소
+            </button>
+            <button className="submit-btn" onClick={handleSubmit}>
+              생성
+            </button>
+          </div>
         </div>
       </div>
     </div>

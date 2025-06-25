@@ -89,6 +89,7 @@
     transition: all 0.3s ease;
     box-sizing: border-box;
     background-color: #fafbfc;
+    letter-spacing: normal;
   }
   
   .form-input:focus {
@@ -159,7 +160,18 @@
   }
   
   .input-with-icon .form-input {
-    padding-left: 56px;
+    padding-left: 20px;
+    padding-right: 45px;
+  }
+  
+  /* 숫자 입력 필드의 기본 화살표(스피너) 숨기기 */
+  .form-input[type="number"]::-webkit-inner-spin-button,
+  .form-input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .form-input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
   }
   
   .input-suffix {
@@ -258,24 +270,41 @@
   .modal-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
-    padding: 20px 28px 28px 28px;
+    padding: 20=px 28px;
     border-top: 2px solid #f0f2f5;
-    background: white;
+    background-color: #f8f9fa;
     border-radius: 0 0 16px 16px;
   }
   
-  .cancel-btn {
-    background: white;
+  .modal-action-buttons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .cancel-btn,
+  .submit-btn {
+    background: #e9ecef;
     color: #7f8c8d;
     border: 2px solid #e1e8ed;
     border-radius: 12px;
-    padding: 16px 32px;
+    padding: 16px 24px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
   }
+  
+  /* .cancel-btn {
+    background: #e9ecef;
+    color: #7f8c8d;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  } */
   
   .cancel-btn:hover {
     background: #f8f9fa;

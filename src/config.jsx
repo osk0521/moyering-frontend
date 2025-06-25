@@ -9,6 +9,8 @@ export const myAxios = (token) => {
       timeout: 5000,
    })
 
+   axios.defaults.withCredentials = true; // 세션 쿠키를 요청에 포함 (방문자 기록용)
+
    // instance.interceptors.response.use(
    //    function (error) {
    //       if (error.response && error.response.status) {

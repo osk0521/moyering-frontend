@@ -17,6 +17,7 @@ const PaymentManagement = () => {
     const [endDate, setEndDate] = useState('');
 
   // 결제 데이터 
+  // eslint-disable-next-line no-unused-vars
   const [payments, setPayments] = useState([
     {
       id: 1,
@@ -125,58 +126,59 @@ const PaymentManagement = () => {
 
 
       {/* 검색 및 필터 영역 */}
-          <div className="search-sectionHY">
-            {/* 검색 박스 */}
-            <div className="search-boxHY">
-              <span className="search-iconHY">🔍</span>
-              <input
-                type="text"
-                placeholder="주문번호, 주문명, 결제아이디 검색"
-                value={searchTerm}
-                onChange={handleSearch}
-                className="search-inputHY"
-              />
-            </div>
-                 {/* 가입기간 필터 */}
-            <label className="date-labelHY">결제 기간</label>
-            <input
-              type="date"
-              className="date-inputHY"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <span className="date-separatorHY">~</span>
-            <input
-              type="date"
-              className="date-inputHY"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
+      <div className="search-sectionHY">
+        {/* 검색 박스 */}
+        <div className="search-boxHY">
+          <span className="search-iconHY">🔍</span>
+          <input
+            type="text"
+            placeholder="주문번호, 주문명, 결제아이디 검색"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="search-inputHY"
+          />
+        </div>
 
-          <br/>
-    
+        {/* 결제 기간 필터 */}
+        <div className="date-filter-group">
+          <label className="date-labelHY">결제 기간</label>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <span className="date-separatorHY">~</span>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </div>
 
-        {/* 상태 필터 섹션 (결제완료, 취소됨)) */}
+        {/* 상태 필터 */}
         <div className="filter-sectionHY">
           {['전체', '결제완료', '취소됨'].map(status => (
             <button
-            key={status}
-            className={`filter-btnHY ${payStatus === status ? 'actrive' : ''}`}
-            onClilck={() => handlePayStatusChange(status)}
+              key={status}
+              className={`filter-btnHY ${payStatus === status ? 'active' : ''}`}
+              onClick={() => handlePayStatusChange(status)}
             >
               {status}
             </button>
           ))}
         </div>
-      
-  
+
+        {/* 오른쪽 엑셀 다운로드 버튼 */}
         <div className="right-alignHY">
-  <button className="btn-excel-downloadHY" onClick={handleExcelDownload}>
-    엑셀 다운로드
-  </button>
+          <button className="btn-excel-downloadHY" onClick={handleExcelDownload}>
+            엑셀 다운로드
+          </button>
         </div>
-  <span className="result-countHY">
+      </div>
+
+      <span className="result-countHY">
           총 <strong>{filteredPayments.length}</strong>건
         </span><br />
           

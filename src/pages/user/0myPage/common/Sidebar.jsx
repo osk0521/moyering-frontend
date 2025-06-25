@@ -1,6 +1,6 @@
 import React from 'react';
 import './Sidebar.css';
-import badgeIcon from './icons/badge.jpg';
+// import badgeIcon from './icons/badge.jpg';
 // import avatarImg from '../icons/avatar.jpg'; // 기본 아바타 이미지
 
 // 더미 유저 데이터
@@ -31,7 +31,7 @@ export default function Sidebar({ user = dummyUser }) {
                     <div className="KYM-member-text">
                         <div className="KYM-member-name-line">
                             <strong className="KYM-member-name">{user.username}</strong>
-                            <img className="KYM-member-badge" src={badgeIcon} alt="배지" />
+                            {/* <img className="KYM-member-badge" src={badgeIcon} alt="배지" /> */}
                         </div>
                         <div className="KYM-member-stats">
                             <span>게시물 {user.stats.posts}</span>

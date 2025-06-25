@@ -123,20 +123,22 @@ const CouponManagement = () => {
           </div>
 
           {/* 쿠폰 유효기간 필터 */}
-          <label className="date-labelHY">쿠폰 유효 기간</label>
-          <input
-            type="date"
-            className="date-inputHY"
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
-          />
-          <span className="date-separatorHY">~</span>
-          <input
-            type="date"
-            className="date-inputHY"
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
-          />
+          <div className="date-filter-group">
+            <label className="date-labelHY">쿠폰 유효 기간</label>
+            <input
+              type="date"
+              className="date-inputHY"
+              value={startDate}
+              onChange={e => setStartDate(e.target.value)}
+            />
+            <span className="date-separatorHY">~</span>
+            <input
+              type="date"
+              className="date-inputHY"
+              value={endDate}
+              onChange={e => setEndDate(e.target.value)}
+            />
+          </div>
 
           {/* 상태 필터 */}
           <div className="status-filter-sectionHY">
@@ -184,6 +186,7 @@ const CouponManagement = () => {
           <table className="tableHY">
             <thead>
               <tr>
+                {/* <th>쿠폰 아이디</th> */}
                 <th>쿠폰 구분</th>
                 <th>유형</th>
                 <th>쿠폰코드</th>

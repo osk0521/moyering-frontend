@@ -22,7 +22,7 @@ import StudentSearch from './pages/host/StudentSearch';
 import './App.css';
 import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
-import Sidebar from './pages/user/socialRing/Sidebar';
+// import Sidebar from './pages/user/socialRing/Sidebar';
 import UserFeed from './pages/user/socialRing/UserFeed';
 
 // 관리자 페이지
@@ -71,7 +71,7 @@ import GatheringModify from "./pages/user/gathering/GatheringModify";
 import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
-import MyGatherInquiry from "./pages/user/0myPage/gathering/MyGatherInquiry";
+import MyGatherInquiryList from "./pages/user/0myPage/gathering/MyGatherInquiryList.jsx";
 import GatheringChat from './pages/user/gathering/GatheringChat';
 import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
@@ -90,8 +90,8 @@ function App() {
         <Route path="/feeds" element={<FeedPage />} />
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
-        <Route path="/sidebar" element={<Sidebar />} />
         <Route path="/token" element={<Token />} />
+        {/* <Route path="/sidebar" element={<Sidebar />} /> */}
 
         
         <Route path="/myFeed" element={<MyFeed />} />
@@ -122,7 +122,7 @@ function App() {
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
         <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
         <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
-        <Route exact path="/user/mypage/myGatherInquiry" element={<MyGatherInquiry />}></Route>
+        <Route exact path="/user/mypage/myGatherInquiryList" element={<MyGatherInquiryList />}></Route>
         <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
 
         {/* 강사 /host/~~~~~ */}

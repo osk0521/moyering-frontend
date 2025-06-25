@@ -186,6 +186,7 @@ const CouponManagement = () => {
           <table className="tableHY">
             <thead>
               <tr>
+                {/* <th>쿠폰 아이디</th> */}
                 <th>쿠폰 구분</th>
                 <th>유형</th>
                 <th>쿠폰코드</th>

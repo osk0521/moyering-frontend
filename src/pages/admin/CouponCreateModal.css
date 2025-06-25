@@ -270,7 +270,7 @@
   .modal-footer {
     display: flex;
     justify-content: flex-end;
-    padding: 20px 28px;
+    padding: 20=px 28px;
     border-top: 2px solid #f0f2f5;
     background-color: #f8f9fa;
     border-radius: 0 0 16px 16px;
@@ -283,12 +283,6 @@
   
   .cancel-btn,
   .submit-btn {
-    width: auto !important;
-    flex-grow: 0 !important;
-    flex-shrink: 0 !important;
-  }
-  
-  .cancel-btn {
     background: #e9ecef;
     color: #7f8c8d;
     border: 2px solid #e1e8ed;
@@ -299,6 +293,18 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
+  
+  /* .cancel-btn {
+    background: #e9ecef;
+    color: #7f8c8d;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  } */
   
   .cancel-btn:hover {
     background: #f8f9fa;

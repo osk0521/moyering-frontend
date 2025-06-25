@@ -13,6 +13,7 @@ import Header from '../../common/Header';
 import FeedCreate from '../socialRing/FeedCreate';
 import { tokenAtom } from '../../../atoms';
 import { useAtomValue } from 'jotai';
+import { myAxios, url } from '../../../config';
 
 const POSTS_PER_PAGE = 3;
 
@@ -48,11 +49,11 @@ export default function FeedPage() {
     }[activeFilter];
 
     axios.get(`http://localhost:8080/socialing/feeds?sort=${sortKey}&userId=${userId}`)
-      .then(res => {setFeeds(res.data);console.log(res.data)})
+      .then(res => { setFeeds(res.data); console.log(res.data) })
 
       .catch(err => console.error('피드 불러오기 실패:', err));
 
-    // 인기 피드도 (예시용 더미)
+    // 인기 피드
     axios.get(`http://localhost:8080/socialing/feeds?sort=likes`)
       .then(res => setPopularFeeds(res.data))
       .catch(err => console.error('인기 피드 불러오기 실패:', err));
@@ -65,18 +66,34 @@ export default function FeedPage() {
     return () => clearInterval(intervalRef.current);
   }, [totalPopularPages]);
 
-  const toggleLike = feedId => {
-    setFeeds(prev =>
-      prev.map(f =>
-        f.feedId !== feedId
-          ? f
-          : {
+  const toggleLike = async feedId => {
+    // const userId = localStorage.getItem('userId');
+    try {
+      // 1) 백엔드에 좋아요/취소 요청
+      await myAxios(token).post(
+        `/user/socialing/likes/${feedId}`,
+        {},
+        {
+          // params: { userId },
+          // headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      // 2) 요청 성공 시, 로컬 UI 업데이트 (optimistic)
+      setFeeds(prev =>
+        prev.map(f =>
+          f.feedId !== feedId
+            ? f
+            : {
               ...f,
               liked: !f.liked,
               likesCount: f.liked ? f.likesCount - 1 : f.likesCount + 1
             }
-      )
-    );
+        )
+      );
+    } catch (err) {
+      console.error('좋아요 처리 실패:', err);
+    }
   };
 
   const handleMenuToggle = id => setOpenMenuId(openMenuId === id ? null : id);
@@ -100,154 +117,159 @@ export default function FeedPage() {
 
   return (
     <div className="KYM-feed-page">
-    {showCreateModal && (
-  <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
-    <div className="modal-content" onClick={e => e.stopPropagation()}>
-      <FeedCreate
-        onCancel={() => setShowCreateModal(false)}
-      />
-    </div>
-  </div>
-)}
-    <Header/>
-    <div className="KYM-feed-container">
-      <div className="KYM-feed-title">
-        <h2>커뮤니티 피드</h2>
-      </div>
-
-      <div className="KYM-feed-filters">
-        {filters.map(f => (
-          <button
-            key={f}
-            className={`KYM-filter-button${activeFilter === f ? ' active' : ''}`}
-            onClick={() => setActiveFilter(f)}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
-
-      <div className="KYM-feed-main">
-        <div className="KYM-posts-grid">
-          {feeds.map(feed => {
-            const images = getFeedImages(feed);
-            const currentIdx = imageIndexes[feed.feedId] || 0;
-            return (
-              <div key={feed.feedId} className="KYM-post-card">
-                <div className="KYM-post-header">
-                  <div className="KYM-user-info">
-                    <img src={feed.writerProfile} alt="프로필" className="KYM-avatar" />
-                    <span className="KYM-nickname">{feed.writerId}</span>
-                    <img src={badgeIcon} alt="배지" className="KYM-badge-icon" />
-                  </div>
-                  <div className="KYM-more-container">
-                    <img src={moreIcon} alt="더보기" className="KYM-more-icon" onClick={() => handleMenuToggle(feed.feedId)} />
-                    {openMenuId === feed.feedId && (
-                      <ul className="KYM-post-menu open">
-                        <li onClick={() => setReportTargetId(feed.feedId)}>신고하기</li>
-                        <li onClick={() => navigate(`/feed/${feed.feedId}`)}>게시물로 이동</li>
-                      </ul>
-                    )}
-                  </div>
-                </div>
-
-                <div className="KYM-image-slider">
-                  <img src={images[currentIdx]} alt={`피드 이미지 ${currentIdx + 1}`} className="KYM-post-image" />
-                  {images.length > 1 && (
-                    <>
-                      <button className="KYM-image-nav left" onClick={() => handlePrevImage(feed.feedId, images.length)}>◀</button>
-                      <button className="KYM-image-nav right" onClick={() => handleNextImage(feed.feedId, images.length)}>▶</button>
-                      <div className="KYM-image-dots">
-                        {images.map((_, i) => (
-                          <span key={i} className={i === currentIdx ? 'dot active' : 'dot'}>●</span>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                <div className="KYM-post-content">
-                  <p>{feed.content}</p>
-                  <div className="KYM-hashtags">
-                    {getFeedTags(feed).map((tag, i) => (
-                      
-                      <span key={i} className="KYM-hashtag">#{tag}</span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="KYM-post-footer">
-                  <div className="KYM-stats">
-                    <button className={`KYM-like-button${feed.liked ? ' active' : ''}`} onClick={() => toggleLike(feed.feedId)}>
-                      <img src={feed.liked ? heartFilled : heartOutline} alt="좋아요" />
-                      <span>{feed.likesCount}</span>
-                    </button>
-                    <span className="KYM-comment-count">💬 {feed.commentsCount}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+      {showCreateModal && (
+        <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <FeedCreate
+              onCancel={() => setShowCreateModal(false)}
+            />
+          </div>
+        </div>
+      )}
+      <Header />
+      <div className="KYM-feed-container">
+        <div className="KYM-feed-title">
+          <h2>커뮤니티 피드</h2>
         </div>
 
-        <aside
-          className="KYM-feed-sidebar"
-          onMouseDown={e => setDragStartX(e.clientX)}
-          onMouseUp={e => setDragStartX(null)}
-        >
-          <h3>인기 피드</h3>
-          <SwitchTransition mode="out-in">
-            <CSSTransition key={popularPage} nodeRef={slideRef} timeout={300} classNames="slide" unmountOnExit>
-              <ul ref={slideRef} className="KYM-popular-list">
-                {paginatedPopular.map((item, idx) => (
-                  <li key={item.feedId} className="KYM-popular-item">
-                    <span className="KYM-rank">{(popularPage - 1) * POSTS_PER_PAGE + idx + 1}.</span>
-                    <img src={getFeedImages(item)[0]} alt="썸네일" className="KYM-pop-thumb" />
-                    <div className="KYM-info">
-                      <span className="KYM-pop-nickname">{item.writerId}</span>
-                      <span className="KYM-pop-count">❤️ {item.likesCount}</span>
+        <div className="KYM-feed-filters">
+          {filters.map(f => (
+            <button
+              key={f}
+              className={`KYM-filter-button${activeFilter === f ? ' active' : ''}`}
+              onClick={() => setActiveFilter(f)}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        <div className="KYM-feed-main">
+          <div className="KYM-posts-grid">
+            {feeds.map(feed => {
+              const images = getFeedImages(feed);
+              const currentIdx = imageIndexes[feed.feedId] || 0;
+              return (
+                <div key={feed.feedId} className="KYM-post-card">
+                  <div className="KYM-post-header">
+                    <div className="KYM-user-info">
+                      <img src={feed.writerProfile} alt="프로필" className="KYM-avatar" />
+                      <span className="KYM-nickname">{feed.writerId}</span>
+                      <img src={badgeIcon} alt="배지" className="KYM-badge-icon" />
                     </div>
-                  </li>
-                ))}
-              </ul>
-            </CSSTransition>
-          </SwitchTransition>
+                    <div className="KYM-more-container">
+                      <img src={moreIcon} alt="더보기" className="KYM-more-icon" onClick={() => handleMenuToggle(feed.feedId)} />
+                      {openMenuId === feed.feedId && (
+                        <ul className="KYM-post-menu open">
+                          <li onClick={() => setReportTargetId(feed.feedId)}>신고하기</li>
+                          <li onClick={() => navigate(`/feed/${feed.feedId}`)}>게시물로 이동</li>
+                        </ul>
+                      )}
+                    </div>
+                  </div>
 
-          <div className="KYM-pagination-dots">
-            {Array.from({ length: totalPopularPages }).map((_, idx) => (
-              <button
-                key={idx}
-                className={`KYM-dot${popularPage === idx + 1 ? ' active' : ''}`}
-                onClick={() => setPopularPage(idx + 1)}
-              />
-            ))}
+                  <div className="KYM-image-slider">
+                    <img src={`${url}/iupload/${images[currentIdx]}`} alt={`피드 이미지 `} className="KYM-post-image" />
+                    {images.length > 1 && (
+                      <>
+                        <button className="KYM-image-nav left" onClick={() => handlePrevImage(feed.feedId, images.length)}>◀</button>
+                        <button className="KYM-image-nav right" onClick={() => handleNextImage(feed.feedId, images.length)}>▶</button>
+                        <div className="KYM-image-dots">
+                          {images.map((_, i) => (
+                            <span key={i} className={i === currentIdx ? 'dot active' : 'dot'}>●</span>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="KYM-post-content">
+                    <p>{feed.content}</p>
+                    <div className="KYM-hashtags">
+                      {getFeedTags(feed).map((tag, i) => (
+
+                        <span key={i} className="KYM-hashtag">#{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="KYM-post-footer">
+                    <div className="KYM-stats">
+                      <button className={`KYM-like-button${feed.liked ? ' active' : ''}`} onClick={() => toggleLike(feed.feedId)}>
+                        <img src={feed.liked ? heartFilled : heartOutline} alt="좋아요" />
+                        <span>{feed.likesCount}</span>
+                      </button>
+                      <button
+                        className="KYM-comment-button"
+                        onClick={() => navigate(`/feed/${feed.feedId}`)}
+                      >
+                        💬 {feed.commentsCount}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </aside>
 
-        {/* <button className="KYM-create-post-button" onClick={() => navigate('/feed/create')}> */}
-        
-        {/* <button className="KYM-create-post-button" onClick={() => setShowCreateModal(true)}>
+          <aside
+            className="KYM-feed-sidebar"
+            onMouseDown={e => setDragStartX(e.clientX)}
+            onMouseUp={e => setDragStartX(null)}
+          >
+            <h3>인기 피드</h3>
+            <SwitchTransition mode="out-in">
+              <CSSTransition key={popularPage} nodeRef={slideRef} timeout={300} classNames="slide" unmountOnExit>
+                <ul ref={slideRef} className="KYM-popular-list">
+                  {paginatedPopular.map((item, idx) => (
+                    <li key={item.feedId} className="KYM-popular-item">
+                      <span className="KYM-rank">{(popularPage - 1) * POSTS_PER_PAGE + idx + 1}.</span>
+                      <img src={getFeedImages(item)[0]} alt="썸네일" className="KYM-pop-thumb" />
+                      <div className="KYM-info">
+                        <span className="KYM-pop-nickname">{item.writerId}</span>
+                        <span className="KYM-pop-count">❤️ {item.likesCount}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </CSSTransition>
+            </SwitchTransition>
+
+            <div className="KYM-pagination-dots">
+              {Array.from({ length: totalPopularPages }).map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`KYM-dot${popularPage === idx + 1 ? ' active' : ''}`}
+                  onClick={() => setPopularPage(idx + 1)}
+                />
+              ))}
+            </div>
+          </aside>
+
+          {/* <button className="KYM-create-post-button" onClick={() => navigate('/feed/create')}> */}
+
+          {/* <button className="KYM-create-post-button" onClick={() => setShowCreateModal(true)}>
           <img src={plusIcon} alt="새 글 작성" />
         </button> */}
-        {token && (
-          <button
-            className="KYM-create-post-button"
-            onClick={() => setShowCreateModal(true)}
-          >
-            <img src={plusIcon} alt="새 글 작성" />
-          </button>
-        )}
-      </div>
+          {token && (
+            <button
+              className="KYM-create-post-button"
+              onClick={() => setShowCreateModal(true)}
+            >
+              <img src={plusIcon} alt="새 글 작성" />
+            </button>
+          )}
+        </div>
 
-      <ReportModal
-        show={reportTargetId !== null}
-        onClose={() => setReportTargetId(null)}
-        onSubmit={({ reason }) => {
-          console.log(`피드 ${reportTargetId} 신고됨 - 사유: ${reason}`);
-          setReportTargetId(null);
-        }}
-      />
-      {showCreateModal && (
+        <ReportModal
+          show={reportTargetId !== null}
+          onClose={() => setReportTargetId(null)}
+          onSubmit={({ reason }) => {
+            console.log(`피드 ${reportTargetId} 신고됨 - 사유: ${reason}`);
+            setReportTargetId(null);
+          }}
+        />
+        {showCreateModal && (
           <div
             className="modal-overlay"
             onClick={() => setShowCreateModal(false)}
@@ -260,7 +282,7 @@ export default function FeedPage() {
             </div>
           </div>
         )}
-    </div>
+      </div>
     </div>
   );
 }

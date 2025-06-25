@@ -151,6 +151,25 @@ export default function ClassRingDetail() {
       }
     };
 
+    //찜하기
+    const handleHeart = async(classId) => {
+      try {
+        const res = await myAxios(token).post("/user/classCoupons/download", {
+          classCouponId : classCouponId
+        });
+
+        // 성공 후 쿠폰 리스트 갱신 or UI 업데이트
+        alert("쿠폰이 다운로드되었습니다!");
+
+        // 예: usedCnt 증가 반영을 위해 다시 불러오기
+        const updated = await myAxios(token).get(`/classRingDetail/${classId}`);
+        setCoupons(updated.data.coupons);
+
+      } catch (err) {
+        console.error("쿠폰 다운로드 실패", err);
+        alert(err.response?.data?.message || "쿠폰 다운로드 중 오류 발생");
+      }
+    };
   return (
     <>
       <Header />
@@ -381,7 +400,8 @@ export default function ClassRingDetail() {
                             ? ` ${c.discount}%`
                             : ` ${c.discount.toLocaleString()}원`} 
                         </span>
-                        <button 
+                        { c.amount - c.usedCnt === 0 ? '' :
+                          <button 
                           disabled={c.amount - c.usedCnt === 0}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -391,6 +411,8 @@ export default function ClassRingDetail() {
                         >
                           다운
                         </button>
+                        }
+                        
                       </li>
                     ))}
                   </ul>
@@ -398,7 +420,7 @@ export default function ClassRingDetail() {
               </div>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.outlineBtn}><CiHeart /> 찜하기</button>
+              <button className={styles.outlineBtn} onClick={handleHeart(classId)}><CiHeart /> 찜하기</button>
               <button className={styles.applyBtn}>신청하기</button>
             </div>
             <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>

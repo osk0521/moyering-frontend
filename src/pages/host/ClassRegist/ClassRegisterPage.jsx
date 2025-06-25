@@ -61,7 +61,8 @@ const ClassRegisterPage = () => {
       material: '',
       incluision: '',
       preparation: '',
-      keywords: ''
+      keywords: '',
+      coupons:[]
     },
     transaction: {
       caution: ''
@@ -146,6 +147,7 @@ const ClassRegisterPage = () => {
     if (reqData.img5) formData.append("img5", reqData.img5);
     formData.append("incluision", reqData.incluision)
     formData.append("keywords", reqData.keywords)
+    formData.append("coupons", JSON.stringify(reqData.coupons));
     formData.append("latitude", reqData.latitude)
     formData.append("locName", reqData.locName)
     formData.append("longitude", reqData.longitude)

@@ -1,3 +1,4 @@
+// TabExtraInfo.jsx
 import { useEffect, useState } from 'react';
 import './TabExtraInfo.css';
 import React from 'react';
@@ -10,44 +11,38 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   const token = useAtomValue(tokenAtom);
   const [couponList, setCouponList] = useState([]);
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
-  const [selectedCoupons, setSelectedCoupons] = useState([]); // 실제 선택된 raw 데이터
-  const [selectedCouponInfo, setSelectedCouponInfo] = useState([]); // 사용자 입력 반영한 쿠폰
+  const [selectedCoupons, setSelectedCoupons] = useState([]);
 
   useEffect(() => {
     myAxios(token).get("/host/couponList")
-      .then(res => {
-        console.log(res.data);
-        setCouponList(res.data);
-      })
-      .catch(err => {
-        console.log("쿠폰 불러오기 실패", err);
-      });
+      .then(res => setCouponList(res.data))
+      .catch(err => console.log("쿠폰 불러오기 실패", err));
   }, [token]);
 
-  // 쿠폰 선택/해제
+  useEffect(() => {
+    console.log('선택된 쿠폰 목록:', selectedCoupons);
+  }, [selectedCoupons]);
+
   const toggleCouponSelection = (couponCode) => {
     setSelectedCoupons((prev) => {
       const isSelected = prev.some(c => c.couponCode === couponCode);
-      if (isSelected) {
-        return prev.filter(c => c.couponCode !== couponCode);
-      } else {
-        const coupon = couponList.find(c => c.couponCode === couponCode);
-        if (!coupon) return prev;
+      if (isSelected) return prev.filter(c => c.couponCode !== couponCode);
 
-        return [...prev, {
-          couponCode: coupon.couponCode,
-          couponName: coupon.couponName || '',
-          discount: coupon.discount,
-          validFrom: coupon.validFrom,
-          validUntil: coupon.validUntil,
-          customName: '',
-          count: 1
-        }];
-      }
+      const coupon = couponList.find(c => c.couponCode === couponCode);
+      if (!coupon) return prev;
+
+      return [...prev, {
+        couponCode: coupon.couponCode,
+        couponName: coupon.couponName || '',
+        discount: coupon.discount,
+        discountType: coupon.discountType,
+        validFrom: coupon.validFrom,
+        validUntil: coupon.validUntil,
+        amount: 1
+      }];
     });
   };
 
-  // 입력값 변경
   const updateCouponField = (couponCode, key, value) => {
     setSelectedCoupons(prev =>
       prev.map(c =>
@@ -61,7 +56,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
       ...prev,
       extraInfo: {
         ...prev.extraInfo,
-        coupons: selectedCoupons // 백엔드 보낼 때 사용 가능
+        coupons: selectedCoupons
       }
     }));
     setIsCouponModalOpen(false);
@@ -140,13 +135,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
           {tags.map((tag, index) => (
             <span key={index} className="KHJ-tag">
               {tag}
-              <button
-                type="button"
-                className="KHJ-tag-remove"
-                onClick={() => removeTag(keyName, tag)}
-              >
-                ×
-              </button>
+              <button type="button" className="KHJ-tag-remove" onClick={() => removeTag(keyName, tag)}>×</button>
             </span>
           ))}
         </div>
@@ -179,17 +168,36 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
         <label className="KHJ-coupon-label"><span className="KHJ-required-text-dot">*</span>쿠폰 등록(선택)</label>
         <div className="KHJ-coupon-input-container">
           <button className="KHJ-coupon-input-btn" onClick={() => setIsCouponModalOpen(true)}>쿠폰 선택</button>
-          {selectedCouponInfo.length > 0 && (
-            <div className="KHJ-selected-coupon-info">
-              {selectedCouponInfo.map((c, i) => (
-                <div key={i}>
-                  <strong>{c.customName || '(쿠폰 이름 미지정)'}</strong> ({c.name}, {c.discount}%, {c.count}매)
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
+
+      {extraInfo.coupons && extraInfo.coupons.length > 0 && (
+        <div className="KHJ-coupon-table-container">
+          <h4>📋 적용된 쿠폰 목록</h4>
+          <table className="KHJ-coupon-table">
+            <thead>
+              <tr>
+                <th>코드</th>
+                <th>쿠폰 이름</th>
+                <th>할인</th>
+                <th>기간</th>
+                <th>매수</th>
+              </tr>
+            </thead>
+            <tbody>
+              {extraInfo.coupons.map((c, i) => (
+                <tr key={i}>
+                  <td>{c.couponCode}</td>
+                  <td>{c.couponName || '(미지정)'}</td>
+                  <td>{c.discount}{c.discountType === 'RT' ? '%' : '원'}</td>
+                  <td>{c.validFrom} ~ {c.validUntil}</td>
+                  <td>{c.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {isCouponModalOpen && (
         <div className="KHJ-modal-backdrop">
@@ -213,26 +221,23 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
                       </label>
                       <div>코드: {coupon.couponCode}</div>
                       <div>할인: {coupon.discount}{discountUnit}</div>
-                      <div>유형: {coupon.discountType}</div>
                       <div>기간: {coupon.validFrom} ~ {coupon.validUntil}</div>
                     </div>
-
                     {selected && (
                       <div className="KHJ-coupon-inputs">
                         <input
                           type="text"
-                          placeholder="사용자 정의 쿠폰 이름"
-                          value={selected.customName}
-                          onChange={(e) => updateCouponField(coupon.couponCode, 'customName', e.target.value)}
+                          placeholder="쿠폰 이름"
+                          value={selected.couponName}
+                          onChange={(e) => updateCouponField(coupon.couponCode, 'couponName', e.target.value)}
                           className="KHJ-coupon-name-input"
                         />
                         <input
                           type="number"
                           min="1"
-                          placeholder="발급 매수"
-                          value={selected.count}
-                          onChange={(e) => updateCouponField(coupon.couponCode, 'count', parseInt(e.target.value))}
-                          className="KHJ-coupon-count-input"
+                          placeholder="매수"
+                          value={selected.amount}
+                          onChange={(e) => updateCouponField(coupon.couponCode, 'amount', parseInt(e.target.value))}
                         />
                       </div>
                     )}

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import {registerServiceWorker, firebaseReqPermission } from "./firebaseconfig";
 import UserLogin from './pages/common/UserLogin';
 import UserJoin from './pages/common/UserJoin';
 import UserJoinCategory from './pages/common/UserJoinCategory';
@@ -38,9 +39,6 @@ import NoticeEdit from "./pages/admin/NoticeEdit"
 import CouponManagement from './pages/admin/CouponManagement.jsx';
 import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
 
-
-
-
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
@@ -76,8 +74,22 @@ import GatheringChat from './pages/user/gathering/GatheringChat';
 import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
 import Token from './components/Token';
+import{useSetAtom, useAtom} from 'jotai'
+import{fcmTokenAtom, alarmsAtom} from './atoms'
 
 function App() {
+  const [alarm, setAlarm] = useState({});
+  const setFcmToken = useSetAtom(fcmTokenAtom);  
+  const [alarms, setAlarms] = useAtom(alarmsAtom);
+
+  useEffect(async ()=> {
+    registerServiceWorker();
+    await navigator.serviceWorker.ready;
+    firebaseReqPermission(setFcmToken, setAlarm);
+  },[])
+  useEffect(() => {
+    JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
+  }, [alarm]);
   return (
     <Router>
       <Routes>

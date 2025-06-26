@@ -89,8 +89,7 @@ const Inquiry = () => {
             className="KHJ-inquiry-select"
           >
             <option value="클래스명">클래스명</option>
-            <option value="강사명">강사명</option>
-            <option value="사용자명">사용자명</option>
+            <option value="학생명">사용자명</option>
           </select>
 
           <input
@@ -124,7 +123,7 @@ const Inquiry = () => {
       </div>
 
       <div className="KHJ-inquiry-result-container">
-        <h4>검색 결과 : {inquiry.length}건</h4>
+        <h4 className="KHJ-inquiry-result">검색 결과 : {inquiry.length}건</h4>
         <table className="KHJ-inquiry-table">
           <thead>
             <tr>

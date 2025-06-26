@@ -76,20 +76,24 @@ import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
 import Token from './components/Token';
 import{useSetAtom, useAtom} from 'jotai'
 import{fcmTokenAtom, alarmsAtom} from './atoms'
+import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
   const setFcmToken = useSetAtom(fcmTokenAtom);  
   const [alarms, setAlarms] = useAtom(alarmsAtom);
 
-  useEffect(async ()=> {
+  useEffect(()=> {
     registerServiceWorker();
-    await navigator.serviceWorker.ready;
-    firebaseReqPermission(setFcmToken, setAlarm);
+    navigator.serviceWorker.ready.then(()=> {
+      firebaseReqPermission(setFcmToken, setAlarm);
+    })
   },[])
+
   useEffect(() => {
     JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
   }, [alarm]);
+  
   return (
     <Router>
       <Routes>
@@ -153,7 +157,7 @@ function App() {
           <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
-
+          <Route path="/host/classUpdate/:classId" element={<ClassUpdatePage/>}/>
         </Route>
 
         {/* 1차 로그인 화면  */}

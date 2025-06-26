@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
 import DaumPostcode from 'react-daum-postcode';
-import './TabBasicInfo.css';
+import './UpdateTabBasicInfo.css';
 import React from 'react';
-import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress';
 import { myAxios } from '../../../config';
 import { useAtom } from 'jotai';
 import { tokenAtom } from '../../../atoms';
 
-const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
-  const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-
+const UpdateTabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const [categories, setCategories] = useState([]); // 1차 카테고리 저장
   const [subCategories, setSubCategories] = useState([]); // 서브카테고리 저장
   const [category1, setCategory1] = useState(''); // 1차 카테고리
@@ -39,31 +36,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
       });
   }, [token]);
 
-  useEffect(() => {
-    if (!basicInfo.addr) return;
 
-    getLatLngFromAddress(basicInfo.addr)
-      .then(coords => {
-        if (!coords?.lat || !coords?.lng) {
-          console.warn('좌표값이 유효하지 않음', coords);
-          return;
-        }
-
-        setCoordLat(coords.lat);
-        setCoordLng(coords.lng);
-        setClassData(prev => ({
-          ...prev,
-          basicInfo: {
-            ...prev.basicInfo,
-            latitude: coords.lat,
-            longitude: coords.lng,
-          }
-        }));
-      })
-      .catch(err => {
-        console.error('좌표변환 실패', err);
-      });
-  }, [basicInfo.addr, setClassData]);
 
   const handlePrimaryChange = (e) => {
     const selectedCategory1 = e.target.value;
@@ -175,7 +148,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">1차카테고리</label>
               <select value={category1 || ''} onChange={handlePrimaryChange}>
-                <option value="" disabled hidden>1차 카테고리 선택</option>
+                <option value={basicInfo.category1} disabled hidden>1차 카테고리 선택</option>
                 {categories.map(category => (
                   <option key={category.categoryId} value={category.categoryId}>
                     {category.categoryName}
@@ -185,12 +158,8 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
             </div>
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">2차카테고리</label>
-              <select
-                value={category2 || ''}
-                onChange={handleSecondaryChange}
-                disabled={!category1}
-              >
-                <option value="" disabled hidden>2차 카테고리 선택</option>
+              <select value={basicInfo.category2 || ''} onChange={handleSecondaryChange}>
+                <option value={basicInfo.category2} disabled hidden>2차 카테고리 선택</option>
                 {secondaryOptions.map(subCategory => (
                   <option key={subCategory.subCategoryId} value={subCategory.subCategoryId}>
                     {subCategory.subCategoryName}
@@ -298,4 +267,4 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   );
 };
 
-export default TabBasicInfo;
+export default UpdateTabBasicInfo;

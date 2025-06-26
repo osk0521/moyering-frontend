@@ -1,0 +1,336 @@
+.KHJ-class-info-box {
+  background: white;
+  padding: 16px 24px;
+  margin-bottom: 20px;
+  animation: KHJ-fadeIn 0.4s ease-in-out;
+}
+
+@keyframes KHJ-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.KHJ-section-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.KHJ-form-section {
+  margin-bottom: 32px;
+}
+
+.KHJ-file-label,
+.KHJ-tags-label,
+.KHJ-keywords-label,
+.KHJ-coupon-label {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.KHJ-file-input {
+  display: none;
+}
+
+.KHJ-file-upload-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.KHJ-file-upload-button {
+  width: 300px;
+  padding: 10px 12px;
+  background-color: #ffbf00;
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.KHJ-file-placeholder {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.KHJ-tags-input-container,
+.KHJ-keywords-input-container,
+.KHJ-coupon-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.KHJ-tags-input,
+.KHJ-keywords-input,
+.KHJ-coupon-input {
+  padding: 10px 12px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.KHJ-required-text-dot {
+  color: red;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.KHJ-form-section input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+.KHJ-tags-input-btn,
+.KHJ-keywords-input-btn,
+.KHJ-coupon-input-btn {
+  padding: 8px 16px;
+  background-color: #ffbf00;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.KHJ-tags-input-btn:hover,
+.KHJ-keywords-input-btn:hover,
+.KHJ-coupon-input-btn:hover {
+  background-color: #e69a00;
+}
+
+.KHJ-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.KHJ-coupon-modal {
+  background: white;
+  border-radius: 10px;
+  padding: 24px;
+  width: 600px; /* 기존보다 넓게 */
+  max-width: 90%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.KHJ-coupon-option {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  gap: 12px;
+  background-color: #fafafa;
+}
+
+.KHJ-coupon-details {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
+}
+
+.KHJ-coupon-details div {
+  margin-bottom: 4px;
+}
+
+.KHJ-coupon-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 160px;
+}
+
+.KHJ-coupon-name-input,
+.KHJ-coupon-count-input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+.KHJ-coupon-option label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.KHJ-coupon-list {
+  margin-bottom: 16px;
+}
+
+.KHJ-coupon-option {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.KHJ-coupon-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: 10px;
+}
+
+.KHJ-coupon-name-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.KHJ-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.KHJ-apply-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.KHJ-cancel-btn {
+  background-color: #ccc;
+  color: black;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.KHJ-selected-coupon-info>div {
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.KHJ-tags-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.KHJ-tag {
+   display: inline-flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin: 5px 5px 0 0;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.KHJ-tag-remove {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: #00796b;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.KHJ-add-tag-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.KHJ-add-tag-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.KHJ-add-tag-btn {
+  padding: 8px 12px;
+  background-color: #ffbf00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.KHJ-add-tag-btn:hover {
+  background-color: #e69a00;
+}
+
+/* 쿠폰 테이블 영역 */
+.KHJ-coupon-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 14px;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.KHJ-coupon-table thead {
+  background-color: #f5f5f5;
+}
+
+.KHJ-coupon-table th,
+.KHJ-coupon-table td {
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.KHJ-coupon-table th {
+  font-weight: bold;
+  color: #333;
+}
+
+.KHJ-coupon-table td {
+  color: #555;
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+  .KHJ-coupon-table {
+    font-size: 12px;
+  }
+
+  .KHJ-coupon-table th,
+  .KHJ-coupon-table td {
+    padding: 8px;
+  }
+}

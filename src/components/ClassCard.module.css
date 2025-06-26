@@ -1,16 +1,17 @@
 .card {
-  width: 285px;
+  width: 278px;
   border-radius: 20px;
   overflow: hidden;
   background: white;
   box-shadow: 2px 2px 7px 2px rgb(0 0 0 / 8%);
-  transition: transform 0.2s ease;
+  /* transition: transform 0.2s ease; */
   height: 331px;
   cursor: pointer;
+  margin: 12px 7px;
 }
-.card:hover {
+/* .card:hover {
   transform: translateY(-3px);
-}
+} */
 
 .cardImage {
   position: relative;

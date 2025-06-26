@@ -123,12 +123,17 @@ export default function ClassRingDetail() {
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
   const selectedCalendar = calendarList.find(c => c.calendarId == selectedCalendarId);
-  useEffect(() => {
-    if (calendarList.length > 0 && !selectedCalendarId) {
-      setSelectedCalendarId(calendarList[0].calendarId);
-    }
-  }, [calendarList, selectedCalendarId]);
+  // useEffect(() => {
+  //   if (calendarList.length > 0 && !selectedCalendarId) {
+  //     setSelectedCalendarId(calendarList[0].calendarId);
+  //   }
+  // }, [calendarList, selectedCalendarId]);
 
+  useEffect(() => {
+  if (calendarList.length > 0) {
+    setSelectedCalendarId(calendarList[0].calendarId);
+  }
+}, [classId, calendarList]);
   //쿠폰 데이터
   // 쿠폰 상태 바뀔 때마다 실행됨
   useEffect(() => {

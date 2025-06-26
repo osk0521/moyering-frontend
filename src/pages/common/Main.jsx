@@ -3,6 +3,7 @@ import styles from "./Main.module.css";
 import ClassCard from "../../components/ClassCard";
 import { recommendClassAtom,hotClassAtom ,recommendGatheringAtom,mainBannerList } from "../../atom/classAtom";
 import useRecommendClasses from "../../hooks/common/useRecommendClasses";
+import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 import { useAtomValue } from "jotai";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -14,6 +15,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 export default function Main() {
+    useRecommendClasses(); // userId 없으면 null 넘기기
+  useFetchUserClassLikes();
 //슬라이더 
 const settings = {
   dots: true,
@@ -33,15 +36,13 @@ const items = [
   { title: "강사 홍보 게시판", desc: "원하는 강사를 찾아보세요.", icon: "🗂️", link: "/" },
   { title: "소셜링", desc: "사람들은 어떤 이야기를 나눌까?", icon: "💬", link: "/feeds" },
 ];
-  useRecommendClasses(); // userId 없으면 null 넘기기
+
+
   const classes = useAtomValue(recommendClassAtom);
   const hotClasses = useAtomValue(hotClassAtom);
   const gathers = useAtomValue(recommendGatheringAtom);
   //const gathers = [];
   const mainBanners = useAtomValue(mainBannerList);
-
-  console.log(mainBanners);
-  console.log(gathers);
   return (
     <>
       <Header />

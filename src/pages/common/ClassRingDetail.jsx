@@ -13,7 +13,7 @@ import {
   currListAtom,
   hostAtom,
   reviewListAtom,
-  inquiryListAtom,
+  classLikesAtom,
 } from '../../atom/classAtom';
 import { tokenAtom, userAtom } from "../../atoms";
 import { myAxios } from "../../config";
@@ -21,8 +21,13 @@ import KakaoMap from "./KakaoMap";
 import { url } from '../../config';
 import { FaStar } from "react-icons/fa";
 import ClassRingDetailInquiryList from "./ClassRingDetailInquiryList";
+import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
+import Footer from "../../components/Footer";
+
 
 export default function ClassRingDetail() {
+  useFetchUserClassLikes();
+  const classLikes = useAtomValue(classLikesAtom);
   const [activeTab, setActiveTab] = useState("details");
   const [isExpanded, setIsExpanded] = useState(false);
   const PREVIEW_LENGTH = 300;
@@ -153,6 +158,12 @@ export default function ClassRingDetail() {
 
     //찜하기
     const [isLiked, setIsLiked] = useState(false);
+    useEffect(() => {
+      
+      const liked = classLikes.some((like) => like.classId ===  Number(classId));
+      setIsLiked(liked);
+    }, [classLikes, classId]);
+
     const handleHeart = async(classId) => {
       try {
         const res = await myAxios(token).post("/user/toggle-like", {
@@ -434,12 +445,13 @@ export default function ClassRingDetail() {
                 </>
               )}
               </button>
-              <button className={styles.applyBtn}>신청하기</button>
+              <button className={styles.applyBtn} onClick={()=> navigate(`/user/ClassPayment/${classId}/${selectedCalendarId}`)}>신청하기</button>
             </div>
             <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>
           </div>
         </aside>
       </div>
+      <Footer/>
     </>
   );
 }

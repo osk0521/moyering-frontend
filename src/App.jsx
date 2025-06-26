@@ -116,7 +116,7 @@ function App() {
         <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
         
         {/* 로그인한 유저 /user/~~~ */}
-        <Route path="/user/ClassPayment" element={<ClassPayment />} />
+        <Route path="/user/ClassPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route path="/user/logout"/>

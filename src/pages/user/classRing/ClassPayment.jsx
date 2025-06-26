@@ -1,12 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import styles from './ClassPayment.module.css';
+import { useNavigate, useParams } from "react-router";
+import Header from "../../../pages/common/Header";
+import Footer from "../../../pages/common/Footer";
+import { myAxios } from "../../../config";
+import { useSetAtom, useAtomValue } from "jotai";
+import { tokenAtom, userAtom } from "../../../atoms";
 
 export default function ClassPayment() {
+  const navigate = useNavigate();
+  const { classId,selectedCalendarId } = useParams();
   const [selectedCoupon, setSelectedCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
-  const basePrice = 89000;
-  const discount = selectedCoupon === '10% 할인 쿠폰' ? 10000 : selectedCoupon === '봄맞이 쿠폰 3000원' ? 3000 : 0;
+  const token = useAtomValue(tokenAtom);
+  const user = useAtomValue(userAtom);
+  const selectedCouponObj = paymentInfo?.userCoupons.find(
+    (c) => c.ucId == selectedCoupon
+  );
+
+
+  useEffect(() => {
+    const fetchPaymentInfo = async () => {
+      try {
+        const res = await myAxios(token).get(`/user/payment/${classId}/${selectedCalendarId}`);
+        setPaymentInfo(res.data);
+        console.log("결제 정보:", res.data);
+      } catch (err) {
+        console.error("결제 정보 조회 실패", err);
+      }
+    };
+
+    if (classId && selectedCalendarId) {
+      fetchPaymentInfo();
+    }
+  }, [classId, selectedCalendarId,token]);
+
+  const basePrice = paymentInfo?.hostClass?.price || 0;
+  const discount = selectedCouponObj?.discountAmount ??
+                  Math.round((selectedCouponObj?.discountRate || 0) * paymentInfo?.hostClass.price) ??
+                  0;
   const finalPrice = basePrice - discount;
 
   const handleApplyCoupon = () => {
@@ -14,6 +48,8 @@ export default function ClassPayment() {
   };
 
   return (
+    <>
+    <Header/>
     <div className={styles.wrapper}>
       <h2 className={styles.pageTitle}>클래스링 결제</h2>
 
@@ -24,10 +60,10 @@ export default function ClassPayment() {
             <div className={styles.classInfoBox}>
               <img src="/public/myclassList.png" alt="class" className={styles.classImage} />
               <div>
-                <h4 className={styles.classTitle}>초급자를 위한 요가 기초 클래스</h4>
-                <p>강사: 김소연</p>
-                <p>수업 시간: 60분</p>
-                <p className={styles.classPrice}>₩89,000</p>
+                <h4 className={styles.classTitle}>{paymentInfo?.hostClass.name}</h4>
+                <p>강사 : {paymentInfo?.hostName}</p>
+                <p>수업 일자 : {paymentInfo?.startDate}</p>
+                <p className={styles.classPrice}>₩{paymentInfo?.hostClass.price.toLocaleString()}원</p>
               </div>
             </div>
           </div>
@@ -53,8 +89,11 @@ export default function ClassPayment() {
                 }}
               >
                 <option value="">마이 쿠폰</option>
-                <option value="봄맞이 쿠폰 3000원">봄맞이 쿠폰 3000원</option>
-                <option value="10% 할인 쿠폰">10% 할인 쿠폰</option>
+                {paymentInfo?.userCoupons.map((coupon) => (
+                  <option key={coupon.ucId} value={coupon.ucId}>
+                    {coupon.couponName}
+                  </option>
+                ))}
               </select>
               <button onClick={handleApplyCoupon}>적용</button>
             </div>
@@ -74,7 +113,7 @@ export default function ClassPayment() {
             <h3>결제 정보</h3>
             <div className={styles.summaryRow}>
               <span>상품 금액</span>
-              <span>₩{basePrice.toLocaleString()}</span>
+              <span>₩{paymentInfo?.hostClass.price.toLocaleString()}원</span>
             </div>
             <div className={styles.summaryRow}>
               <span>쿠폰 할인</span>
@@ -90,5 +129,7 @@ export default function ClassPayment() {
         </aside>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }

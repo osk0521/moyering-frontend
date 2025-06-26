@@ -11,14 +11,17 @@ import ReportModal from './ReportModal';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import Header from '../../common/Header';
 import FeedCreate from '../socialRing/FeedCreate';
-import { tokenAtom } from '../../../atoms';
+import { tokenAtom, userAtom } from '../../../atoms';
 import { useAtomValue } from 'jotai';
 import { myAxios, url } from '../../../config';
 
 const POSTS_PER_PAGE = 3;
 
 export default function FeedPage() {
+  const user = useAtomValue(userAtom);
+  const userId = user?.id;
   const token = useAtomValue(tokenAtom);
+  console.log('🌟 FeedPage token:', token);
   const filters = ['전체', '좋아요순', '댓글순', '팔로워'];
   const [feeds, setFeeds] = useState([]);
   const [activeFilter, setActiveFilter] = useState(filters[0]);
@@ -40,24 +43,34 @@ export default function FeedPage() {
   const getFeedTags = feed => [feed.tag1, feed.tag2, feed.tag3, feed.tag4, feed.tag5].filter(Boolean);
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId');
+    console.log("user:",user)
     const sortKey = {
       '전체': 'all',
       '좋아요순': 'likes',
       '댓글순': 'comments',
       '팔로워': 'follow'
     }[activeFilter];
-
-    axios.get(`http://localhost:8080/socialing/feeds?sort=${sortKey}&userId=${userId}`)
-      .then(res => { setFeeds(res.data); console.log(res.data) })
-
+console.log('userId:', userId);
+    myAxios(token).get(`/socialing/feeds?sort=${sortKey}`
+      // {
+      // headers: {
+      // Authorization :`Bearer ${token}`}}
+      )
+      .then(res => {
+        const mapped = res.data.map(feed => ({
+          ...feed,
+          liked: !!feed.likedByUser // ← likedByUser → liked 매핑
+        }));
+        console.log("여기데이터 확인!!!",res.data)
+        setFeeds(mapped); // 매핑된 결과로 교체
+      })
       .catch(err => console.error('피드 불러오기 실패:', err));
 
     // 인기 피드
-    axios.get(`http://localhost:8080/socialing/feeds?sort=likes`)
+    myAxios().get(`/socialing/feeds?sort=likes`)
       .then(res => setPopularFeeds(res.data))
       .catch(err => console.error('인기 피드 불러오기 실패:', err));
-  }, [activeFilter]);
+  }, [activeFilter,token]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {

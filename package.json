@@ -20,6 +20,7 @@
     "bootstrap": "^5.3.6",
     "date-fns": "^4.1.0",
     "emoji-picker-react": "^4.12.2",
+    "firebase": "^8.10.0",
     "jotai": "^2.12.5",
     "react": "^19.1.0",
     "react-calendar": "^6.0.0",

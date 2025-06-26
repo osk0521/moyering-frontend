@@ -11,9 +11,9 @@ import { myAxios, url } from "../../../../config";
 export default function GatherInquiry() {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
-  const [participated, setParticipated] = useState([]);
+  const token = useAtomValue(tokenAtom); 
   const [organized, setOrganized] = useState([]);
+  const [participated, setParticipated] = useState([]);
   const [activeTab, setActiveTab] = useState("participated");
   const [selectedStatus, setSelectedStatus] = useState("전체");
   const [openId, setOpenId] = useState(null);
@@ -23,8 +23,8 @@ export default function GatherInquiry() {
   useEffect(() => {
     if (user || token) {
       console.log("전달하는 토큰:", token); // 이 값이 실제로 무엇인지
-      if(activeTab == "participated"){
-      myAxios(token).get(`/user/getGatheringInquiriesByUserId`)
+      if(activeTab == "organized") {
+        myAxios(token).get(`/user/getGatheringInquiriesByOrganizerUserId`)
         .then((res) => {
           console.log("API Response:", res.data);
         })
@@ -32,7 +32,18 @@ export default function GatherInquiry() {
           if (err.response) {
             console.log("데이터 로딩 오류:", err);
             if (err.response.status === 404) {
-              alert("존재하지 않는 게더링입니다.");
+            }
+          }
+        });
+      } else {
+        myAxios(token).get(`/user/getGatheringInquiriesByUserId`)
+        .then((res) => {
+          console.log("API Response:", res.data);
+        })
+        .catch((err) => {
+          if (err.response) {
+            console.log("데이터 로딩 오류:", err);
+            if (err.response.status === 404) {
             }
           }
         });

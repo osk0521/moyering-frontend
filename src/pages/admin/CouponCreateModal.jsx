@@ -29,15 +29,20 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
 
   // 폼 제출 핸들러
   const handleSubmit = () => {
-    // 유효성 검사
-    if (!formData.couponCode || !formData.discountValue || !formData.issueCount || !formData.startDate || !formData.endDate) {
+    // 공통 필수값 체크
+    if (!formData.couponCode || !formData.discountValue) {
       alert('모든 필드를 입력해주세요.');
       return;
     }
-
+    // 관리자 쿠폰일 때만 추가 필수값 체크
+    if (formData.couponType === '관리자') {
+      if (!formData.issueCount || !formData.startDate || !formData.endDate) {
+        alert('모든 필드를 입력해주세요.');
+        return;
+      }
+    }
     // 부모 컴포넌트에 데이터 전달
     onSubmit(formData);
-    
     // 폼 초기화
     setFormData({
       couponCode: '',

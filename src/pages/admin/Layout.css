@@ -19,14 +19,14 @@
 #FEF3E2;
   border-bottom: 1px solid 
 #E2E8F0;
-  padding: 12px 24px;
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   top: 0;
   z-index: 1000;
-  height: 60px;
+  height: 80px;
   width: 100%;
 }
 
@@ -79,7 +79,7 @@
 
 /* 사이드바 */
 .sidebarHY {
-  width: 180px;
+  width: 220px;
   background-color: #2D3748;
   color: white;
   display: flex;
@@ -182,8 +182,8 @@
 
 /* 메인 컨텐츠 영역 */
 .main-contentHY {
-  margin-top: 30px;
-  margin-left : 150px;
+  margin-top: 80px;
+  margin-left: 220px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -195,7 +195,7 @@
 .page-contentHY {
   flex: 1;
   padding: 50px;
-    width: 100%;  
+  width: 100%;  
   overflow-y: auto;
   background-color: #FFFFFF;
 }
@@ -224,15 +224,27 @@
 .search-sectionHY {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 8px;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+/* 필터와 액션 버튼을 같은 줄에 배치 */
+.filter-and-action-sectionHY {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
 }
 
 .search-boxHY {
+  width: 220px;
+  min-width: 180px;
+  max-width: 250px;
   position: relative;
   outline: none;
-  width: 250px;
   font-size: 14px;
 }
 
@@ -368,6 +380,51 @@
 
 .date-separatorHY {
   color: #A0AEC0;
+}
+
+/* 결과 수 표시 */
+.result-countHY {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  padding: 12px 0;
+}
+
+/* 페이징 */
+.paginationHY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.page-btnHY {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  background-color: #fff;
+  color: #4a5568;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.page-btnHY:hover:not(:disabled) {
+  background-color: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.page-btnHY.active {
+  background-color: #2d6dcc;
+  color: #fff;
+  border-color: #2d6dcc;
+}
+
+.page-btnHY:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 

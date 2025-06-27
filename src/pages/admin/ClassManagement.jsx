@@ -39,7 +39,7 @@ const ClassManagement = () => {
 
   // 카테고리 데이터 fetch
   useEffect(() => {
-    myAxios(token)
+    myAxios(token) 
       .get('/categories/suball')
       .then(res => {
         setCategoryList(res.data || []);
@@ -170,7 +170,7 @@ const ClassManagement = () => {
           </select>
         </div>
       </div>
-      <br />
+   
       
       {/* 상태 필터 */}
       <div className="filter-sectionHY">
@@ -184,10 +184,7 @@ const ClassManagement = () => {
           </button>
         ))}
       </div>
-      <br />
-      <div className="result-countHY">
-        총 <strong>{totalElements}</strong>건
-      </div>
+      총 <strong>{totalElements}</strong>건
       <div className="table-containerHY">
         <table className="tableHY">
           <thead>

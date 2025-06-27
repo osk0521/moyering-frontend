@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { url } from "/src/config"; 
-import axios from "axios";
+import { myAxios } from "/src/config"; 
 import Layout from "./Layout";
 import { useNavigate } from 'react-router-dom';
 import './MemberManagement.css';
 import MemberDetailModal from './MemberDetailModal';
+import { useAtomValue } from 'jotai';
+import { tokenAtom } from '../../atoms';
 
 const MemberManagement = () => {
   const [searchTerm, setSearchTerm] = useState(''); // 검색어
@@ -29,6 +30,9 @@ const MemberManagement = () => {
 
   // 디바운스를 위한 타이머
   const [searchTimer, setSearchTimer] = useState(null);
+
+  const navigate = useNavigate();
+  const token = useAtomValue(tokenAtom);
 
   // 컴포넌트 마운트 시 회원 목록 조회
   useEffect(() => {
@@ -93,7 +97,7 @@ const MemberManagement = () => {
         params.endDate = endDate;
       }
 
-      const response = await axios.get(`${url}/api/member`, { params });
+      const response = await myAxios(token).get('/api/member', { params });
       
       if (response.data) {
         const { content, totalPages, totalElements, number } = response.data;
@@ -126,7 +130,7 @@ const MemberManagement = () => {
     try {
       setLoading(true);
       // DTO의 userId 사용
-      const response = await axios.get(`${url}/api/member/${member.userId}`);
+      const response = await myAxios(token).get(`/api/member/${member.userId}`);
       
       if (response.data) {
         setSelectedMember(response.data);
@@ -149,7 +153,7 @@ const MemberManagement = () => {
   // 회원 상태 변경 (모달에서 호출될 수 있도록 prop으로 전달)
   const handleUpdateMemberStatus = async (userId, status) => {
     try {
-      await axios.patch(`${url}/api/member/${userId}/status`, null, {
+      await myAxios(token).patch(`/api/member/${userId}/status`, null, {
         params: { status }
       });
       
@@ -182,6 +186,28 @@ const MemberManagement = () => {
     return d.toISOString().split('T')[0];
   };
 
+  // 결제내역 페이지로 이동
+  const handlePaymentHistory = (member) => {
+    navigate('/admin/payment', { 
+      state: { 
+        userId: member.userId,
+        username: member.username,
+        userType: member.userType 
+      } 
+    });
+  };
+
+  // 정산내역 페이지로 이동
+  const handleSettlementHistory = (member) => {
+    navigate('/admin/settlement', { 
+      state: { 
+        userId: member.userId,
+        username: member.username,
+        userType: member.userType 
+      } 
+    });
+  };
+
   return (
     <Layout>
       {/* 페이지 제목 */}
@@ -191,7 +217,6 @@ const MemberManagement = () => {
 
       {/* 검색 및 필터 영역 */}
       <div className="search-sectionHY">
-        {/* 검색 박스 */}
         <div className="search-boxHY">
           <span className="search-iconHY">🔍</span>
           <input
@@ -200,32 +225,28 @@ const MemberManagement = () => {
             value={searchTerm}
             onChange={handleSearch}
             className="search-inputHY"
+            />
+        </div>
+        <div className="date-filter-group">
+          <label className="date-labelHY">가입기간</label>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <span className="date-separatorHY">~</span>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        
-        {/* 가입기간 필터 */}
-        <label className="date-labelHY">가입기간</label>
-        <input
-          type="date"
-          className="date-inputHY"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <span className="date-separatorHY">~</span>
-        <input
-          type="date"
-          className="date-inputHY"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-
-      </div>
-      
-      <br/>
+        </div>
       
       {/* 회원 유형 필터 */}
       <div className="filter-sectionHY">
-        <div></div>
         {['전체', '일반', '강사'].map(type => (
           <button 
             key={type}
@@ -272,6 +293,7 @@ const MemberManagement = () => {
               <th>연락처</th>
               <th>가입일</th>
               <th>사용여부</th>
+              <th>관리</th>
             </tr>
           </thead>
           <tbody>
@@ -303,11 +325,34 @@ const MemberManagement = () => {
                       {member.useYn === 'Y' ? '사용' : '미사용'}
                     </span>
                   </td>
+                  <td>
+                    <div className="action-buttonsHY">
+                      {/* 모든 사용자에게 결제내역 버튼 표시 */}
+                      <button 
+                        className="action-btnHY payment-btnHY"
+                        onClick={() => handlePaymentHistory(member)}
+                        title="결제내역 보기"
+                      >
+                        결제내역
+                      </button>
+                      
+                      {/* 강사인 경우에만 정산내역 버튼 표시 */}
+                      {member.userType === '강사' && (
+                        <button 
+                          className="action-btnHY settlement-btnHY"
+                          onClick={() => handleSettlementHistory(member)}
+                          title="정산내역 보기"
+                        >
+                          정산내역
+                        </button>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="no-dataHY">
+                <td colSpan="9" className="no-dataHY">
                   {loading ? '데이터를 불러오는 중...' : '검색 결과가 없습니다.'}
                 </td>
               </tr>

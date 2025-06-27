@@ -1,15 +1,18 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from "./Layout";
 import './SettlementManagement.css';
+import { useLocation } from 'react-router-dom';
 
 const SettlementManagement = () => {
+  const location = useLocation();
+  const userInfo = location.state; // MemberManagement에서 전달받은 사용자 정보
+  
   // ===== 상태 관리 =====
   // 검색 상태
   const [searchTerm, setSearchTerm] = useState('');
 
-
-  const [settlements, setSettlements] = useState([
+  // 더미 데이터
+  const [allSettlements] = useState([
     {
       id: 1,
       no: 1,
@@ -72,6 +75,13 @@ const SettlementManagement = () => {
     }
   ]);
 
+  // 사용자 정보가 있으면 검색어를 자동으로 설정
+  useEffect(() => {
+    if (userInfo && userInfo.username) {
+      setSearchTerm(userInfo.username);
+    }
+  }, [userInfo]);
+
   // ===== 헬퍼 함수들 =====
   // 금액 포맷팅 (천 단위 구분자)
   const formatAmount = (amount) => {
@@ -90,8 +100,14 @@ const SettlementManagement = () => {
     // 실제 구현에서는 정산 로직 추가
   };
 
-  // 필터링된 정산 목록
-  const filteredSettlements = settlements.filter(settlement => {
+  // 필터링된 정산 목록 (사용자 정보가 있으면 해당 사용자만, 없으면 검색어로 필터링)
+  const filteredSettlements = allSettlements.filter(settlement => {
+    // 사용자 정보가 있으면 해당 사용자의 데이터만 필터링
+    if (userInfo && userInfo.username) {
+      return settlement.settlementId === userInfo.username;
+    }
+    
+    // 사용자 정보가 없으면 검색어로 필터링
     const matchesSearch = 
       settlement.settlementId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       settlement.className.toLowerCase().includes(searchTerm.toLowerCase());
@@ -104,7 +120,14 @@ const SettlementManagement = () => {
     <Layout>
         {/* 페이지 헤더 */}
         <div className="page-titleHY">
-          <h1>오늘 정산할 내역</h1>
+          <h1>
+            {userInfo ? `${userInfo.username}님의 정산 내역` : '오늘 정산할 내역'}
+          </h1>
+          {userInfo && (
+            <div style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+              회원 구분: {userInfo.userType}
+            </div>
+          )}
         </div>
 
         {/* 검색 영역 */}
@@ -121,10 +144,14 @@ const SettlementManagement = () => {
           </div>
         </div>
 
-          <br/>
+        <br/>
+
+        {/* 결과 수 표시 */}
+        <span className="result-countHY">
+          총 <strong>{filteredSettlements.length}</strong>건
+        </span>
 
         {/* 정산 테이블 */}
-   
         <div className="table-containerHY">
         <table className="tableHY">
             <thead>
@@ -141,26 +168,34 @@ const SettlementManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredSettlements.map(settlement => (
-                <tr key={settlement.id}>
-                  <td className="no-columnHY">{settlement.no}</td>
-                  <td className="settlement-idHY">{settlement.settlementId}</td>
-                  <td className="class-nameHY">{settlement.className}</td>
-                  <td>{settlement.settlementRequestDate}</td>
-                  <td className="amountHY">{formatAmount(settlement.settlementRequestAmount)}</td>
-                  <td>{settlement.classDate}</td>
-                  <td className="amountHY">{formatAmount(settlement.classAmount)}</td>
-                  <td className="participantsHY">{settlement.participants}</td>
-                  <td>
-                    <button 
-                      className="btn-settlementHY"
-                      onClick={() => handleSettlement(settlement.settlementId)}
-                    >
-                      정산하기
-                    </button>
+              {filteredSettlements.length > 0 ? (
+                filteredSettlements.map((settlement, index) => (
+                  <tr key={settlement.id}>
+                    <td className="no-columnHY">{index + 1}</td>
+                    <td className="settlement-idHY">{settlement.settlementId}</td>
+                    <td className="class-nameHY">{settlement.className}</td>
+                    <td>{settlement.settlementRequestDate}</td>
+                    <td className="amountHY">{formatAmount(settlement.settlementRequestAmount)}</td>
+                    <td>{settlement.classDate}</td>
+                    <td className="amountHY">{formatAmount(settlement.classAmount)}</td>
+                    <td className="participantsHY">{settlement.participants}</td>
+                    <td>
+                      <button 
+                        className="btn-settlementHY"
+                        onClick={() => handleSettlement(settlement.settlementId)}
+                      >
+                        정산하기
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '20px' }}>
+                    {userInfo ? `${userInfo.username}님의 정산 내역이 없습니다.` : '정산 내역이 없습니다.'}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

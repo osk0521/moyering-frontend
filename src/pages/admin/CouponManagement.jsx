@@ -192,165 +192,160 @@ const CouponManagement = () => {
     <Layout>
       <div className="page-titleHY">
         <h1>쿠폰 관리</h1>
-        <br />
-        <div className="search-sectionHY">
-          {/* 검색 박스 */}
-          <div className="search-boxHY">
-            <span className="search-iconHY">🔍</span>
-            <input
-              type="text"
-              placeholder="쿠폰코드 검색"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="search-inputHY"
-            />
-          </div>
-
-          {/* 쿠폰 유효기간 필터 */}
-          <div className="date-filter-group">
-            <label className="date-labelHY">쿠폰 유효 기간</label>
-            <input
-              type="date"
-              className="date-inputHY"
-              value={startDate}
-              onChange={e => setStartDate(e.target.value)}
-            />
-            <span className="date-separatorHY">~</span>
-            <input
-              type="date"
-              className="date-inputHY"
-              value={endDate}
-              onChange={e => setEndDate(e.target.value)}
-            />
-          </div>
-
-          {/* 상태 필터 */}
-          <div className="status-filter-sectionHY">
-            <label className="data-labelHY">상태</label>
-            <select
-              className="status-filterHY"
-              value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value)}
-            >
-              <option value="전체">전체</option>
-              <option value="활성">활성</option>
-              <option value="만료">만료</option>
-            </select>
-          </div>
-        </div>
-        <br />
-
-        {/* 발급주체 필터 버튼과 새 쿠폰 생성 버튼을 같은 줄에 배치 */}
-        <div className="filter-and-action-sectionHY">
-          <div className="filter-sectionHY">
-            {['전체', '관리자', '호스트'].map(type => (
-              <button
-                key={type}
-                className={`filter-btnHY ${couponType === type ? 'active' : ''}`}
-                onClick={() => handleCouponTypeChange(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-
-          <div className="right-alignHY">
-            <button className="btn-primary new-notice-btnHY" onClick={handleNewCoupon}>
-              + 새 쿠폰 생성
-            </button>
-          </div>
-        </div>
-
-        {/* 검색 결과 수 */}
-        <span className="result-countHY">
-          총 <strong>{pageInfo.totalElements}</strong>건
-        </span>
-
-        <div className="table-containerHY">
-          <table className="tableHY">
-            <thead>
-              <tr>
-                {/* <th>쿠폰 아이디</th> */}
-                <th>쿠폰 ID</th>
-                <th>쿠폰 구분</th>
-                <th>유형</th>
-                <th>쿠폰코드</th>
-                <th>할인</th>
-                <th>사용/발급</th>
-                <th>쿠폰 시작일</th>
-                <th>쿠폰 종료일</th>
-                <th>쿠폰 생성일</th>
-                <th>상태</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan="9">로딩 중...</td></tr>
-              ) : filteredData.length > 0 ? (
-                filteredData.map((coupon, idx) => (
-                  <tr key={coupon.couponId || idx}>
-                    <td>{coupon.couponId}</td>
-                    <td>
-                      <span className={`type-badge ${coupon.couponType === 'MG' ? 'admin' : 'host'}`}>
-                        {coupon.couponType === 'MG' ? '관리자' : '호스트'}
-                      </span>
-                    </td>
-                    <td>{coupon.discountType === 'RT' ? '비율' : '금액'}</td>
-                    <td>{coupon.couponCode}</td>
-                    <td className="highlight-red">{coupon.discountType === 'RT' ? `${coupon.discount}%` : `${coupon.discount.toLocaleString()}원`}</td>
-                    <td>
-                      <span className={
-                        coupon.issueCount > 0 && coupon.usedCount / coupon.issueCount >= 0.8
-                          ? 'usage-badge danger'
-                          : coupon.issueCount > 0 && coupon.usedCount / coupon.issueCount >= 0.5
-                          ? 'usage-badge warning'
-                          : 'usage-badge normal'
-                      }>
-                        {coupon.usedCount}/{coupon.issueCount}
-                      </span>
-                    </td>
-                    <td>{formatDate(coupon.validFrom)}</td>
-                    <td>{formatDate(coupon.validUntil)}</td>
-                    <td>{formatDate(coupon.createdAt)}</td>
-                    <td>
-                      <span className={`status-badge ${coupon.status === 'ACTIVE' ? 'active' : coupon.status === 'EXPIRED' ? 'expired' : 'pending'}`}>
-                        {coupon.status === 'ACTIVE' ? '활성' : coupon.status === 'EXPIRED' ? '만료' : coupon.status}
-                      </span>
-                    </td>
-                    <td className="manage-cell">
-                      <button
-                        className="edit-btn"
-                        onClick={() => handleEditCoupon(coupon)}
-                      >수정</button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDeleteCoupon(coupon)}
-                      >삭제</button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="9" className="no-data">검색 결과가 없습니다.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        <CouponCreateModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={handleCouponSubmit}
-        />
-        <CouponEditModal
-          isOpen={editModalOpen}
-          coupon={editCoupon}
-          onClose={() => setEditModalOpen(false)}
-          onSubmit={handleEditCouponSubmit}
-        />
       </div>
+
+      {/* 검색 및 필터 영역 */}
+      <div className="search-sectionHY">
+        <div className="search-boxHY">
+          <span className="search-iconHY">🔍</span>
+          <input
+            type="text"
+            placeholder="쿠폰코드 검색"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="search-inputHY"
+          />
+        </div>
+        <div className="date-filter-group">
+          <label className="date-labelHY">쿠폰 유효 기간</label>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
+          <span className="date-separatorHY">~</span>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* 필터 버튼들과 새 쿠폰 생성 버튼 */}
+      <div className="filter-and-action-sectionHY">
+        <div className="filter-sectionHY">
+          {/* 상태 필터 */}
+          <select
+            className="status-filterHY"
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+          >
+            <option value="전체">전체</option>
+            <option value="활성">활성</option>
+            <option value="만료">만료</option>
+          </select>
+
+          {/* 발급주체 필터 */}
+          {['전체', '관리자', '호스트'].map(type => (
+            <button
+              key={type}
+              className={`filter-btnHY ${couponType === type ? 'active' : ''}`}
+              onClick={() => handleCouponTypeChange(type)}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+
+        <div className="right-alignHY">
+          <button className="btn-primary new-notice-btnHY" onClick={handleNewCoupon}>
+            + 새 쿠폰 생성
+          </button>
+        </div>
+      </div>
+
+      {/* 검색 결과 수 */}
+      <span className="result-countHY">
+        총 <strong>{pageInfo.totalElements}</strong>건
+      </span>
+
+      <div className="table-containerHY">
+        <table className="tableHY">
+          <thead>
+            <tr>
+              {/* <th>쿠폰 아이디</th> */}
+              <th>쿠폰 ID</th>
+              <th>쿠폰 구분</th>
+              <th>유형</th>
+              <th>쿠폰코드</th>
+              <th>할인</th>
+              <th>사용/발급</th>
+              <th>쿠폰 시작일</th>
+              <th>쿠폰 종료일</th>
+              <th>쿠폰 생성일</th>
+              <th>상태</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr><td colSpan="9">로딩 중...</td></tr>
+            ) : filteredData.length > 0 ? (
+              filteredData.map((coupon, idx) => (
+                <tr key={coupon.couponId || idx}>
+                  <td>{coupon.couponId}</td>
+                  <td>
+                    <span className={`type-badge ${coupon.couponType === 'MG' ? 'admin' : 'host'}`}>
+                      {coupon.couponType === 'MG' ? '관리자' : '호스트'}
+                    </span>
+                  </td>
+                  <td>{coupon.discountType === 'RT' ? '비율' : '금액'}</td>
+                  <td>{coupon.couponCode}</td>
+                  <td className="highlight-red">{coupon.discountType === 'RT' ? `${coupon.discount}%` : `${coupon.discount.toLocaleString()}원`}</td>
+                  <td>
+                    <span className={
+                      coupon.issueCount > 0 && coupon.usedCount / coupon.issueCount >= 0.8
+                        ? 'usage-badge danger'
+                        : coupon.issueCount > 0 && coupon.usedCount / coupon.issueCount >= 0.5
+                        ? 'usage-badge warning'
+                        : 'usage-badge normal'
+                    }>
+                      {coupon.usedCount}/{coupon.issueCount}
+                    </span>
+                  </td>
+                  <td>{formatDate(coupon.validFrom)}</td>
+                  <td>{formatDate(coupon.validUntil)}</td>
+                  <td>{formatDate(coupon.createdAt)}</td>
+                  <td>
+                    <span className={`status-badge ${coupon.status === 'ACTIVE' ? 'active' : coupon.status === 'EXPIRED' ? 'expired' : 'pending'}`}>
+                      {coupon.status === 'ACTIVE' ? '활성' : coupon.status === 'EXPIRED' ? '만료' : coupon.status}
+                    </span>
+                  </td>
+                  <td className="manage-cell">
+                    <button
+                      className="edit-btn"
+                      onClick={() => handleEditCoupon(coupon)}
+                    >수정</button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDeleteCoupon(coupon)}
+                    >삭제</button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="9" className="no-data">검색 결과가 없습니다.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <CouponCreateModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleCouponSubmit}
+      />
+      <CouponEditModal
+        isOpen={editModalOpen}
+        coupon={editCoupon}
+        onClose={() => setEditModalOpen(false)}
+        onSubmit={handleEditCouponSubmit}
+      />
     </Layout>
   );
 };

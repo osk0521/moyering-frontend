@@ -258,9 +258,8 @@ const CouponManagement = () => {
       </div>
 
       {/* 검색 결과 수 */}
-      <span className="result-countHY">
         총 <strong>{pageInfo.totalElements}</strong>건
-      </span>
+     
 
       <div className="table-containerHY">
         <table className="tableHY">

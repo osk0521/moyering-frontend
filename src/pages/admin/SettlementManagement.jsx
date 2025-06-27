@@ -144,12 +144,10 @@ const SettlementManagement = () => {
           </div>
         </div>
 
-        <br/>
-
+  
         {/* 결과 수 표시 */}
-        <span className="result-countHY">
           총 <strong>{filteredSettlements.length}</strong>건
-        </span>
+    
 
         {/* 정산 테이블 */}
         <div className="table-containerHY">

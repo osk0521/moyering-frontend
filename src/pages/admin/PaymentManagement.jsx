@@ -127,7 +127,7 @@ const PaymentManagement = () => {
         <input
           type="date"
           className="date-inputHY"
-          value={startDate}
+          value={startDate} 
           onChange={(e) => setStartDate(e.target.value)}
         />
         <span className="date-separatorHY">~</span>
@@ -158,10 +158,9 @@ const PaymentManagement = () => {
           </button>
         </div>
       </div>
-
-      <span className="result-countHY">
         총 <strong>{totalElements}</strong>건
-      </span><br />
+        
+    
       <div className="table-wrapperHY">
         <table className="tableHY">
           <thead>

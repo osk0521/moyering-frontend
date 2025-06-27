@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from "./Layout";
 import './ClassManagement.css';
-import ClassDetailModal from './ClassDetailModal';
 import { myAxios } from '../../config';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { tokenAtom } from '../../atoms';
 
 const statusOptions = [
@@ -16,7 +16,9 @@ const statusOptions = [
 ];
 
 const ClassManagement = () => {
-  const [token,setToken] = useAtom(tokenAtom)
+  const navigate = useNavigate();
+  const token = useAtomValue(tokenAtom);
+  
   // 검색/필터 상태
   const [searchTerm, setSearchTerm] = useState('');
   const [firstCategory, setFirstCategory] = useState('');
@@ -33,14 +35,10 @@ const ClassManagement = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
-  // 모달
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedClass, setSelectedClass] = useState(null);
-
   // 카테고리 데이터 fetch
   useEffect(() => {
-    token && myAxios(token,setToken)
-      .get('/admin/categories/suball')
+    myAxios(token) 
+      .get('/categories/suball')
       .then(res => {
         setCategoryList(res.data || []);
       })
@@ -71,18 +69,22 @@ const ClassManagement = () => {
       toDate: endDate || undefined,
       statusFilter: statusFilter || undefined,
     };
-    token && myAxios(token,setToken)
-      .get('/api/class', { params })
-      .then(res => {
-        setClassList(res.data.content || []);
-        setTotalElements(res.data.totalElements || 0);
-        setTotalPages(res.data.totalPages || 1);
-      })
-      .catch(() => {
-        setClassList([]);
-        setTotalElements(0);
-        setTotalPages(1);
-      });
+    if (token) {
+      myAxios(token)
+        .get('/api/class', { params })
+        .then(res => {
+          console.log("클래스 데이터 수신:", res.data);
+          setClassList(res.data.content || []);
+          setTotalElements(res.data.totalElements || 0);
+          setTotalPages(res.data.totalPages || 1);
+        })
+        .catch((err) => {
+          console.error("클래스 데이터 로딩 실패:", err);
+          setClassList([]);
+          setTotalElements(0);
+          setTotalPages(1);
+        });
+    }
   }, [token, firstCategory, secondCategory, statusFilter, searchTerm, startDate, endDate, currentPage]);
 
   // 필터/검색 핸들러
@@ -105,14 +107,9 @@ const ClassManagement = () => {
     }
   };
 
-  // 모달 오픈/클로즈
-  const openClassModal = (classItem) => {
-    setSelectedClass(classItem);
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedClass(null);
+  // 클래스 상세 페이지로 이동
+  const openClassDetail = (classItem) => {
+    navigate(`/admin/class/${classItem.classId}`);
   };
 
   // 페이지네이션
@@ -211,7 +208,7 @@ const ClassManagement = () => {
                 <td className="instructor-idHY">{item.hostUserName}</td>
                 <td>{item.hostName}</td>
                 <td className="class-nameHY">
-                  <button className="class-name-buttonHY" onClick={() => openClassModal(item)}>
+                  <button className="class-name-buttonHY" onClick={() => openClassDetail(item)}>
                     {item.className}
                   </button>
                 </td>
@@ -233,11 +230,6 @@ const ClassManagement = () => {
         <span style={{ margin: '0 10px' }}>{currentPage + 1} / {totalPages}</span>
         <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage + 1 >= totalPages}>다음</button>
       </div>
-      <ClassDetailModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        classData={selectedClass}
-      />
     </Layout>
   );
 };

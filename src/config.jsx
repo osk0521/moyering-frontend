@@ -24,7 +24,6 @@ export const myAxios = (token,setToken) => {
       ,
       (error)=>{
          console.log(error)
-         console.log("=======")
           if (error.response && error.response.status) {
             switch (error.response.status) {
                case 401:

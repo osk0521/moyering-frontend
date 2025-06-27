@@ -1,10 +1,29 @@
-.MyGatheringList_gather-inquiry-page_osk {
+.MyGatherPage_container {
   display: flex;
-  font-family: 'Pretendard', sans-serif;
+  font-family: "Pretendard", sans-serif;
   background-color: #fafafa;
   min-height: 100vh;
+  max-width: 1920px;
+  margin: 31px 100px 00px 100px;
 }
-
+.MyGatheringList_mypage-wrapper_osk{
+    display: flex;
+    font-family: "Pretendard", sans-serif;
+    background-color: #fafafa;
+    min-height: 100vh;
+}
+.MyGatheringList_gathering-main_osk {
+    flex: 1;
+    padding: 32px;
+    background-color: #fff;
+    margin: 16px 32px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.MyGatheringList_info_applicant-profile_osk{
+  width: 64px;
+  border-radius: 50%;
+}
 .MyGatheringList_inquiry-section_osk {
   flex: 1;
   padding: 32px;
@@ -190,6 +209,9 @@
   gap: 1rem;
   font-size: 0.85rem;
   color: #666;
+}
+.MyGatheringList_thumbnail_osk {
+  width: 300px;
 }
 
 .MyGatheringList_accordion-toggle_osk {

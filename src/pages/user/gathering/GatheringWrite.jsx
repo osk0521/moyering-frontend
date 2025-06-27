@@ -7,12 +7,9 @@ import { GoPeople } from "react-icons/go";
 import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
-import {
-  url,
-  KAKAO_REST_API_KEY,
-  KAKAO_JavaScript_API_KEY,
-  myAxios,
-} from "../../../config";
+import { url, myAxios } from "../../../config";
+const KAKAO_REST_API_KEY = import.meta.env.KAKAO_REST_API_KEY;
+const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -596,13 +593,10 @@ export default function GatheringWrite() {
     // 모임 내용 및 준비물
     formDataToSend.append("gatheringContent", formData.content);
     formDataToSend.append("preparationItems", formData.preparation || "");
-
     // 한 줄 소개 (있으면 Y, 없으면 N)
     formDataToSend.append("intrOnln", formData.intrOnln || "");
-
-    // 상태 (기본값: 모집중)
     formDataToSend.append("status", "모집중");
-
+    formDataToSend.append("canceled", "false");
     // tags 처리 (JSON 문자열로 변환)
     const tagsToSend =
       formData.tags && formData.tags.length > 0 ? formData.tags : [];

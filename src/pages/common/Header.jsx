@@ -148,7 +148,7 @@ const Header = () => {
               클래스잉
             </span>
             <span className="Header_nav-item_osk">게더링</span>
-            <span className="Header_nav-item_osk">소셜링</span>
+            <span className="Header_nav-item_osk" onClick={()=> navigate(`/feeds`)}>소셜링</span>
             <span className="Header_nav-item_osk">공지사항</span>
             <span className="Header_nav-item_osk">고객센터</span>
           </div>

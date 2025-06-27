@@ -20,19 +20,19 @@ export default function GatherInquiry() {
   const [replyText, setReplyText] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     if (user || token) {
-      console.log("전달하는 토큰:", token); // 이 값이 실제로 무엇인지
+      //console.log("전달하는 토큰:", token); // 이 값이 실제로 무엇인지
       if(activeTab == "organized") {
         myAxios(token).get(`/user/getGatheringInquiriesByOrganizerUserId`)
         .then((res) => {
-          console.log("API Response:", res.data);
+          console.log("API Response:", res);
+          
         })
         .catch((err) => {
           if (err.response) {
             console.log("데이터 로딩 오류:", err);
-            if (err.response.status === 404) {
-            }
           }
         });
       } else {
@@ -94,7 +94,7 @@ export default function GatherInquiry() {
   return (
     <div>
       <Header />
-      <main className="MyGatherInquiryList_gather-inquiry-page_osk">
+      <main className="MyGatherPage_container MyGatherInquiryList_gather-inquiry-page_osk">
         <Sidebar />
         <section className="MyGatherInquiryList_inquiry-section_osk">
           <div className="MyGatherInquiryList_inquiry-header_osk">

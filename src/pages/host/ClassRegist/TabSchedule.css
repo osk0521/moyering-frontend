@@ -11,6 +11,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -137,6 +138,7 @@ hr {
 }
 
 .KHJ-people-label {
+  margin-left: 20px;
   display: flex;
   font-size: 0.9rem;
   color: #777;
@@ -144,6 +146,19 @@ hr {
 }
 
 .KHJ-people-label span {
+  color: red;
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+.KHJ-schedule-label {
+  display: flex;
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: -60px;
+}
+
+.KHJ-schedule-label span {
   color: red;
   margin-right: 4px;
   font-weight: bold;
@@ -181,25 +196,36 @@ hr {
   padding: 10px;
 }
 
-.schedule-entry {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 14px;
 }
 
-.schedule-entry input[type="time"] {
-  width: 120px;
-  padding: 5px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
 }
 
-.schedule-entry .content-input {
-  flex: 1;
-  padding: 5px;
-  border: 1px solid #aaa;
+.schedule-table thead {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.schedule-table tbody tr:nth-child(odd) {
+  background-color: #fffaf0;
+}
+
+.schedule-table input[type="time"],
+.schedule-table input[type="text"] {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  font-family: inherit;
 }
 
 .entry-remove-btn {
@@ -226,6 +252,7 @@ hr {
 .add-entry:hover {
   color: #0056b3;
 }
+
 .content-input {
   flex: 1;
   padding: 5px;

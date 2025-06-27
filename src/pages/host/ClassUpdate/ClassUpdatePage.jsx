@@ -18,7 +18,6 @@ const tabs = [
   '클래스 설명',
   '클래스 부가정보',
   '거래 정보',
-  '포트폴리오 검수',
 ];
 
 const ClassUpdatePage = () => {
@@ -167,7 +166,6 @@ const ClassUpdatePage = () => {
       case 2: return <UpdateTabDescription {...props} />;
       case 3: return <UpdateTabExtraInfo {...props} />;
       case 4: return <UpdateTabTransaction {...props} />;
-      case 5: return <UpdateTabPortfolio {...props} />;
       default: return null;
     }
   };

@@ -129,35 +129,48 @@ const UpdateTabSchedule = ({ classData, setClassData }) => {
 
         <hr />
         <div className="schedule-wrapper">
-          <h3>스케줄 상세</h3>
-          {(schedule.scheduleDetail || []).map((entry, index) => (
-            <div key={index} className="schedule-entry">
-              <input
-                type="time"
-                value={entry.startTime}
-                onChange={(e) => updateScheduleDetail(index, 'startTime', e.target.value)}
-              />
-              <span> - </span>
-              <input
-                type="time"
-                value={entry.endTime}
-                onChange={(e) => updateScheduleDetail(index, 'endTime', e.target.value)}
-              />
-              <input
-                type="text"
-                value={entry.content}
-                placeholder="일정 내용"
-                onChange={(e) => updateScheduleDetail(index, 'content', e.target.value)}
-                className="content-input"
-              />
-              <button
-                className="entry-remove-btn"
-                onClick={() => removeScheduleDetail(index)}
-              >
-                삭제
-              </button>
-            </div>
-          ))}
+          <label className="KHJ-schedule-label"><span>*</span>상세스케쥴</label>
+          <table className="schedule-table">
+            <thead>
+              <tr>
+                <th>일정 시작</th>
+                <th>일정 종료</th>
+                <th>상태</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {(schedule.scheduleDetail || []).map((entry, index) => (
+                <tr key={index}>
+                  <td>
+                    <input
+                      type="time"
+                      value={entry.startTime}
+                      onChange={(e) => updateScheduleDetail(index, 'startTime', e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="time"
+                      value={entry.endTime}
+                      onChange={(e) => updateScheduleDetail(index, 'endTime', e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={entry.content}
+                      placeholder="일정 내용"
+                      onChange={(e) => updateScheduleDetail(index, 'content', e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <button className="entry-remove-btn" onClick={() => removeScheduleDetail(index)}>삭제</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <div className="add-entry" onClick={addScheduleDetail}>+ 내용 추가하기</div>
         </div>
 

@@ -1,11 +1,10 @@
 // KakaoMap.jsx
 import React, { useEffect, useRef, useState } from "react";
 // import { KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY } from "../../config";
-const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
-
 
 export default function KakaoMap({ latitude, longitude, address }) {
+  const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+  const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
   const mapRef = useRef(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);

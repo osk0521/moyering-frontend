@@ -8,12 +8,12 @@ import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
 import { url, myAxios } from "../../../config";
-const KAKAO_REST_API_KEY = import.meta.env.KAKAO_REST_API_KEY;
+import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress'
+const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
-
 import Header from "../../common/Header";
 import { useNavigate } from "react-router-dom";
 import "./GatheringWrite.css";
@@ -28,7 +28,6 @@ const getTodayString = () => {
 const getMinDeadlineDateTime = () => {
   const now = new Date();
   now.setHours(now.getHours() + 3);
-
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
@@ -85,10 +84,6 @@ export default function GatheringWrite() {
   const token = useAtomValue(tokenAtom);
   const userId = user.id;
   const navigate = useNavigate();
-  //지오코딩용
-  const [coordinates, setCoordinates] = useState({ x: "", y: "" });
-  const [geocodingError, setGeocodingError] = useState("");
-  const [geocodingLoading, setGeocodingLoading] = useState(false);
 
   // 새로 추가된 이미지 업로드 관련 상태들
   const [fileName, setFileName] = useState("");
@@ -102,6 +97,8 @@ export default function GatheringWrite() {
   const [subCategory, setSubCategory] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("initial");
+  const [coordLat,setCoordLat] = useState('');
+  const [coordLng,setCoordLng] = useState('');
 
   // 입력용 formData 상태 (사용자 입력을 받는 용도)
   const [formData, setFormData] = useState({
@@ -121,63 +118,36 @@ export default function GatheringWrite() {
     locName: "",
     tags: [], // 문자열 배열로 변경
     intrOnln: "", // 한 줄 소개
+    latitude:0,
+    longitude:0,
   });
 
   const [tagInput, setTagInput] = useState("");
+  useEffect(()=>{
+    if(!formData.address) return;
+    getLatLngFromAddress(formData.address)
+    .then(coords => {
+      if(coords) {
+        console.log(coords.lat);
+        console.log(coords.lng);
+        setCoordLat(coords.lat);
+        setCoordLng(coords.lng);
 
-  const convertAddressToCoordinates = async (address) => {
-    if (!address || !address.trim()) {
-      setGeocodingError("주소가 입력되지 않았습니다.");
-      return null;
-    }
-    setGeocodingLoading(true);
-    setGeocodingError("");
-
-    try {
-      const response = await fetch(
-        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-          address
-        )}`,
-        {
-          headers: {
-            Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        setFormData(prev=>({
+          ...prev,
+          formData:{
+            ...prev.basicInfo,
+            latitude:coords.lat,
+            longitude:coords.lng
+          }
+        }))
       }
+    })
+    .catch(err=>{
+      console.error("좌표변환 실패",err);
+    })
+  },[formData.address])
 
-      const data = await response.json();
-
-      if (data.documents && data.documents.length > 0) {
-        const result = data.documents[0]; // 첫 번째 결과 사용
-        const coords = {
-          x: result.x, // 경도
-          y: result.y, // 위도
-        };
-        setCoordinates(coords);
-        setGeocodingError("");
-
-        console.log("지오코딩 성공:", {
-          address: result.address_name,
-          coordinates: coords,
-        });
-
-        return coords;
-      } else {
-        setGeocodingError("주소를 찾을 수 없습니다. 주소를 다시 확인해주세요.");
-        return null;
-      }
-    } catch (err) {
-      console.error("지오코딩 오류:", err);
-      return null;
-    } finally {
-      setGeocodingLoading(false);
-    }
-  };
-  // 새로운 파일 업로드 처리 함수 (100MB 제한으로 변경)
   const handleFileUpload = (file) => {
     const maxSize = 100 * 1024 * 1024; // 100MB로 변경
     if (file.size > maxSize) {
@@ -537,16 +507,6 @@ export default function GatheringWrite() {
       return;
     }
 
-    // 지오코딩 실행 (주소를 좌표로 변환)
-    console.log("지오코딩 시작...");
-    const coords = await convertAddressToCoordinates(formData.address);
-    console.log("지오코딩 완료:", coords);
-
-    if (!coords) {
-      alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
-      return;
-    }
-
     // FormData 객체 생성
     const formDataToSend = new FormData();
 
@@ -567,15 +527,11 @@ export default function GatheringWrite() {
     formDataToSend.append("address", formData.address);
     formDataToSend.append("detailAddress", formData.detailAddress || "");
     formDataToSend.append("locName", formData.locName || "");
-
-    // 좌표 데이터 추가 (소수점 7자리로 정확도 유지)
-    formDataToSend.append("latitude", parseFloat(coords.y).toFixed(7));
-    formDataToSend.append("longitude", parseFloat(coords.x).toFixed(7));
+    formDataToSend.append("latitude", formData.latitude);
+    formDataToSend.append("longitude", formData.longitude);
 
     // 인원수 정보
     formDataToSend.append("minAttendees", parseInt(formData.minAttendees) || 2);
-
-    // maxAttendees 처리 (선택적 필드)
     if (
       formData.maxAttendees &&
       formData.maxAttendees.toString().trim() !== ""

@@ -132,8 +132,8 @@ function App() {
         <Route path="/user/mypage/myClassList" element={<MyClassList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
-        <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
-        <Route exact path="/user/mypage/myGatherInquiryList" element={<MyGatherInquiryList />}></Route>
+        <Route exact path="/user/mypage/myGatheringingApplyList" element={<MyGatheringApplyList />}></Route>
+        <Route exact path="/user/mypage/myGatheringInquiryList" element={<MyGatherInquiryList />}></Route>
         <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
 
         {/* 강사 /host/~~~~~ */}

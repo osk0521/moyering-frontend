@@ -28,7 +28,7 @@ const Header = () => {
     setToken(null);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-     window.location.href = '/'; // 로그인 페이지로 이동
+    window.location.href = '/userlogin'; // 로그인 페이지로 이동
   }
 
   useEffect(() => {

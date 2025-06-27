@@ -593,13 +593,10 @@ export default function GatheringWrite() {
     // 모임 내용 및 준비물
     formDataToSend.append("gatheringContent", formData.content);
     formDataToSend.append("preparationItems", formData.preparation || "");
-
     // 한 줄 소개 (있으면 Y, 없으면 N)
     formDataToSend.append("intrOnln", formData.intrOnln || "");
-
-    // 상태 (기본값: 모집중)
     formDataToSend.append("status", "모집중");
-
+    formDataToSend.append("canceled", "false");
     // tags 처리 (JSON 문자열로 변환)
     const tagsToSend =
       formData.tags && formData.tags.length > 0 ? formData.tags : [];

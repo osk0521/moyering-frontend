@@ -34,7 +34,7 @@ export default function ClassRingDetail() {
   const navigate = useNavigate();
 
   const { classId } = useParams();
-  const [token,setToken] = useAtom(tokenAtom)
+  const [token,setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
   const setCalendarList = useSetAtom(calendarListAtom);
   const setClassDetailAtom = useSetAtom(classDetailAtom);
@@ -54,6 +54,8 @@ export default function ClassRingDetail() {
 
   //쿠폰관련
   const [coupons, setCoupons] = useState([]);
+  //유저가 소유한 쿠폰
+  const [myCoupons, setMyCoupons] = useState([]);
   
 
   const recommendedClasses = [
@@ -99,26 +101,42 @@ export default function ClassRingDetail() {
   }, []);
 
   //데이터 fetch용
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = token && await myAxios(token,token).get(`/class/classRingDetail/${classId}`);
-        setCalendarList(res.data.calendarList);
-        setClassDetailAtom(res.data.hostClass);
-        setCurrListAtom(res.data.currList);
-        setHostAtom(res.data.host);
-        setReviewListAtom(res.data.reviews);
-        setCoupons(res.data.coupons);
-        console.log(res);
-      } catch (err) {
-        console.error("클래스 상세 데이터 로딩 실패", err);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res =  await myAxios(token,setToken).get(`/class/classRingDetail/${classId}`);
+  //       setCalendarList(res.data.calendarList);
+  //       setClassDetailAtom(res.data.hostClass);
+  //       setCurrListAtom(res.data.currList);
+  //       setHostAtom(res.data.host);
+  //       setReviewListAtom(res.data.reviews);
+  //       setCoupons(res.data.coupons);
+  //       console.log(res);
+  //     } catch (err) {
+  //       console.error("클래스 상세 데이터 로딩 실패", err);
+  //     }
+  //   };
 
-    if (classId && token) {
-    }
-    fetchData();
-  }, [classId, token]);
+  //   if (classId && token) {
+  //   }
+  //   fetchData();
+  // }, [classId, token]);
+
+    useEffect(() => {
+        myAxios(token,setToken)
+          .get(`/class/classRingDetail/${classId}`)
+          .then((res) => {
+            setCalendarList(res.data.calendarList);
+            setClassDetailAtom(res.data.hostClass);
+            setCurrListAtom(res.data.currList);
+            setHostAtom(res.data.host);
+            setReviewListAtom(res.data.reviews);
+            setCoupons(res.data.coupons);
+            setMyCoupons(res.data.userCoupons);
+            console.log(res.data);
+          })
+          .catch((err) => console.error("클래스 추천 데이터 로딩 실패", err));
+  }, [token]);
 
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
@@ -141,19 +159,24 @@ export default function ClassRingDetail() {
 
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCoupon, setSelectedCoupon] = useState(null);
+    const [downloadedIds, setDownloadedIds] = useState([]);
 
     const handleDownload = async (classCouponId) => {
       try {
         const res = token && await myAxios(token,setToken).post("/user/classCoupons/download", {
-          classCouponId : classCouponId
+          classCouponId,
         });
 
         // 성공 후 쿠폰 리스트 갱신 or UI 업데이트
-        alert("쿠폰이 다운로드되었습니다!");
+        setCoupons(prev =>
+          prev.map(c =>
+            c.classCouponId === classCouponId
+              ? { ...c, usedCnt: c.usedCnt + 1 }
+              : c
+          )
+        );
 
-        // 예: usedCnt 증가 반영을 위해 다시 불러오기
-        const updated = token && await myAxios(token,setToken).get(`/class/classRingDetail/${classId}`);
-        setCoupons(updated.data.coupons);
+        setDownloadedIds(prev => [...prev, classCouponId]);
 
       } catch (err) {
         console.error("쿠폰 다운로드 실패", err);
@@ -187,8 +210,9 @@ export default function ClassRingDetail() {
       <Header />
       <div className={styles.detailWrapper}>
         <main className={styles.mainContent}>
+          {classDetail?.imgName1 && (
           <img src={`${url}/image?filename=${classDetail?.imgName1}`} alt="클래스 이미지" className={styles.mainImage} />
-
+          )}
           {/* 메뉴 */}
           <nav className={styles.tabs}>
             {[
@@ -255,7 +279,9 @@ export default function ClassRingDetail() {
           <section className={styles.section} id="instructor">
             <h2>강사소개</h2>
             <div className={styles.instructorCard}>
+              {host?.profile && (
               <img className={styles.instructorImage} src={`${url}/image?filename=${host?.profile}`} alt="강사 이미지" />
+              )}
               <div className={styles.instructorInfo}>
                 <h3>{host?.name} ⭐ 5(138)</h3>
                 <p>{host?.intro}</p>
@@ -392,7 +418,7 @@ export default function ClassRingDetail() {
                       : "사용 가능한 쿠폰을 선택하세요"}
                 </div>
 
-                {isOpen && coupons.length > 0 && (
+                {/* {isOpen && coupons.length > 0 && (
                   <ul className={styles.dropdownList}>
                     {coupons.map(c => (
                       <li 
@@ -428,7 +454,54 @@ export default function ClassRingDetail() {
                       </li>
                     ))}
                   </ul>
+                )} */}
+
+                {isOpen && coupons.length > 0 && (
+                  <ul className={styles.dropdownList}>
+                    {coupons.map(c => {
+                      const remaining = c.amount - c.usedCnt;
+                      const isDownloaded = myCoupons.some(
+                        mc => mc.classCouponId === c.classCouponId
+                      );
+
+                      return (
+                        <li key={c.classCouponId} className={styles.dropdownItem}>
+                          <span
+                            className={
+                              remaining === 0
+                                ? styles.couponTextDisabled
+                                : styles.couponText
+                            }
+                          >
+                            [{remaining > 0 ? `${remaining}매` : '소진'}] {c.couponName}
+                            {c.discountType === 'RT'
+                              ? ` ${c.discount}%`
+                              : ` ${c.discount.toLocaleString()}원`}
+                          </span>
+
+                          {/* 남은 쿠폰이 있을 때만 버튼 렌더링 */}
+                          {remaining > 0 && (
+                            <button
+                              disabled={isDownloaded}
+                              onClick={e => {
+                                e.stopPropagation();
+                                handleDownload(c.classCouponId);
+                              }}
+                              className={
+                                isDownloaded
+                                  ? styles.downloadBtnDisabled
+                                  : styles.downloadBtn
+                              }
+                            >
+                              {isDownloaded ? '완료' : '다운'}
+                            </button>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
                 )}
+
               </div>
             </div>
             <div className={styles.buttonGroup}>

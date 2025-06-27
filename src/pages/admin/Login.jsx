@@ -1,9 +1,11 @@
-// src/components/Login.jsx
-import axios from 'axios';
+// src/components/Login.jsx import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import React from 'react'; 
+import { myAxios } from '../../config';
+import { tokenAtom, userAtom } from '../../atoms'; 
+import { useSetAtom } from 'jotai';
 
 const Login = () => {
  const navigate = useNavigate();
@@ -13,6 +15,8 @@ const Login = () => {
  });
  const [error, setError] = useState('');
  const [loading, setLoading] = useState(false);
+ const setTokenAtom = useSetAtom(tokenAtom);
+ const setUserAtom = useSetAtom(userAtom);
 
  const handleInputChange = (e) => {
    const { name, value } = e.target;
@@ -22,62 +26,70 @@ const Login = () => {
    }));
  };
 
- const handleSubmit = async (e) => {
+ const handleSubmit = (e) => {
    e.preventDefault();
    setLoading(true);
    setError('');
    
-   try {
-     // 실제 로그인 API 호출
-     console.log('로그인 시도:', formData);
-     
-     // 1. 백엔드가 인식할 수 있도록 Form-Data 형식으로 요청을 보냄
-     const params = new URLSearchParams();
-     params.append('username', formData.username);
-     params.append('password', formData.password);
+  
+  // 실제 로그인 API 호출
+  console.log('로그인 시도:', formData);
 
-     const response = await axios.post('/login', params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      console.log('전체 응답:', response);
-      console.log('응답 헤더:', response.headers);
-      console.log('Authorization 헤더:', response.headers['authorization']);
+  // 1. 백엔드가 인식할 수 있도록 Form-Data 형식으로 요청을 보냄
+  const params = new FormData();
+  params.append('username', formData.username);
+  params.append('password', formData.password);
+
+  myAxios(null,useSetAtom).post('/login', params)
+     .then(res=> {
+      console.log(res)
+      // const user = response.data; 
+      // setUserAtom(user);
+      // if (user.userType === 'ROLE_MG') {
+      //   navigate('/admin/dashboard');
+      // } else {
+      //   navigate('/'); // 일반 사용자는 메인 페이지로
+      // }      
+    })
+    .catch(error=> {
+      console.error(error);
+      setError('로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.');
+    });
+
+    //  
+    // const response = await axios.post('/login', params, {
+    //     headers: {
+    //       'Content-Type': 'application/x-www-form-urlencoded'
+    //     }
+    //   });
+    //   console.log('전체 응답:', response);
+    //   console.log('응답 헤더:', response.headers);
+    //   console.log('Authorization 헤더:', response.headers['authorization']);
      
      // 2. 백엔드 응답(헤더: 토큰, 바디: 사용자정보)에 맞춰 파싱
-     const rawTokenHeader = response.headers['authorization'];
-     if (!rawTokenHeader) {
-        throw new Error("Authorization 헤더가 응답에 없습니다.");
-     }
+    //  const rawTokenHeader = response.headers['authorization'];
+    //  if (!rawTokenHeader) {
+    //     throw new Error("Authorization 헤더가 응답에 없습니다.");
+    //  }
 
-     const tokenInfo = JSON.parse(rawTokenHeader);
-     const accessToken = tokenInfo.access_token;
-     const userType = response.data.userType;
-     console.log('파싱된 accessToken:', accessToken);
+    //  const tokenInfo = JSON.parse(rawTokenHeader);
+    //  const accessToken = tokenInfo.access_token;
+    //  const userType = response.data.userType;
+    //  console.log('파싱된 accessToken:', accessToken);
 
-     // 토큰과 역할 정보 저장
-     localStorage.setItem('token', accessToken);
-     localStorage.setItem('role', userType);
+    //  // 토큰과 역할 정보 저장
+    //  localStorage.setItem('token', accessToken);
+    //  localStorage.setItem('role', userType);
      
-     // axios 헤더에 토큰 자동 설정
-     axios.defaults.headers.common['Authorization'] = accessToken;
+    //  // axios 헤더에 토큰 자동 설정
+    //  axios.defaults.headers.common['Authorization'] = accessToken;
      
-     console.log('로그인 성공, userType:', userType);
+    //  console.log('로그인 성공, userType:', userType);
      
      // 역할별 페이지 이동
-     if (userType === 'ROLE_MG') {
-       navigate('/admin/dashboard');
-     } else {
-       navigate('/'); // 일반 사용자는 메인 페이지로
-     }
      
-   } catch (error) {
-     console.error('로그인 실패:', error);
-     setError('로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.');
-   } finally {
-     setLoading(false);
-   }
+     
+
  };
 
  return (
@@ -99,7 +111,7 @@ const Login = () => {
              type="text"
              id="username"
              name="username"
-             value={formData.username}
+             //value={formData.username}
              onChange={handleInputChange}
              placeholder="관리자 아이디"
              className="input-fieldHY"
@@ -113,7 +125,7 @@ const Login = () => {
              type="password"
              id="password"
              name="password"
-             value={formData.password}
+             //value={formData.password}
              onChange={handleInputChange}
              placeholder="비밀번호"
              className="input-fieldHY"

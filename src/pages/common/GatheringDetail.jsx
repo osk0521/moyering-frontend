@@ -1,4 +1,4 @@
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import React, { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
@@ -20,7 +20,7 @@ import Header from "./Header";
 import aImage from "/detail2.png";
 export default function GatheringDetail() {
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom); 
   const userId = user.id;
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -48,7 +48,7 @@ export default function GatheringDetail() {
   useEffect(() => {
     if (!isLoaded) return; // 로딩 완료 전에는 실행하지 않음
     if (token) {
-      myAxios(token)
+      myAxios(token,setToken)
         .get(`/user/detailGathering?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("추가 데이터 API 응답:", res.data);
@@ -145,7 +145,7 @@ export default function GatheringDetail() {
         gatheringId: parseInt(gatheringId),
         aspiration: aspirationContent.trim(),
       };
-      const response = await myAxios(token).post(
+      const response = await myAxios(token,setToken).post(
         "/user/applyGathering",
         formData
       );
@@ -177,7 +177,7 @@ export default function GatheringDetail() {
       const newLikedState = !isLiked;
       setIsLiked(newLikedState);
 
-      myAxios(token)
+      token && myAxios(token,setToken)
         .post(`/user/toggleGatheringLike?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("API 성공:", res.data);

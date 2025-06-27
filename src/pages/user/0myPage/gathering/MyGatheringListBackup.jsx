@@ -6,14 +6,14 @@ import { CiSearch } from "react-icons/ci";
 import Header from '../../../common/Header';
 import Sidebar from "../common/Sidebar";
 import { useNavigate } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { tokenAtom, userAtom } from "../../../../atoms";
 import { myAxios, url } from "../../../../config";
 
 export default function MyGatheringList() {
   const navigate = useNavigate(); 
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
   const [activeTab, setActiveTab] = useState("전체");
   const [selectedGatheringId, setSelectedGatheringId] = useState();
   const [gatheringList, setGatheringList] = useState([]);
@@ -36,7 +36,7 @@ export default function MyGatheringList() {
   useEffect(() => {
     if (user || token) {
       if(activeTab == "전체") {
-        myAxios(token).post(`/user/myGatheringList`, requestBody)
+        token && myAxios(token,setToken).post(`/user/myGatheringList`, requestBody)
           .then((res) => {
             console.log("API Response:", res);
             setGatheringList(res.data);

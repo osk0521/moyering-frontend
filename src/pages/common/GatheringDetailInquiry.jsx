@@ -26,7 +26,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
   const [totalPages, setTotalPages] = useState(1);
 
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const userId = user.id;
   const navigate = useNavigate();
 
@@ -128,7 +128,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
     };
 
     try {
-      const response = await myAxios(token).post(
+      const response = await myAxios(token,setToken).post(
         `/user/writeGatheringInquiry`,
         formDataToSend
       );

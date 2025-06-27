@@ -12,14 +12,14 @@ import { CiSearch } from "react-icons/ci";
 import Header from "../../../common/Header";
 import Sidebar from "../common/Sidebar";
 import { useNavigate } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { tokenAtom, userAtom } from "../../../../atoms";
 import { myAxios, url } from "../../../../config";
 
 export default function MyGatheringList() {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
   const [activeTab, setActiveTab] = useState("전체");
   const [selectedGatheringId, setSelectedGatheringId] = useState();
   const [gatheringList, setGatheringList] = useState([]);
@@ -72,7 +72,7 @@ export default function MyGatheringList() {
         return;
       }
 
-      const response = await myAxios(token).post(`/user/cancelGathering/${gatheringId}`);
+      const response = await myAxios(token,setToken).post(`/user/cancelGathering/${gatheringId}`);
 
       if (response.status === 200) {
         alert('모임이 성공적으로 취소되었습니다.');
@@ -143,7 +143,7 @@ export default function MyGatheringList() {
 
       console.log("Request Body:", requestBody);
 
-      myAxios(token).post(`/user/myGatheringList`, requestBody)
+      token && myAxios(token,setToken).post(`/user/myGatheringList`, requestBody)
         .then((res) => {
           console.log("API Response:", res);
 
@@ -213,7 +213,7 @@ export default function MyGatheringList() {
 
   useEffect(() => {
     if (selectedGatheringId) {
-      myAxios(token).get(`/getApplyListByGatheringId/${selectedGatheringId}`)
+      token && myAxios(token,setToken).get(`/getApplyListByGatheringId/${selectedGatheringId}`)
         .then((res) => {
           console.log("신청자 목록:", res.data);
           setApplyList(res.data);

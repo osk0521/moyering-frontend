@@ -82,7 +82,7 @@ const validateDateTime = (formData) => {
 
 export default function GatheringWrite() {
   const user = useAtomValue(userAtom);    
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const userId = user.id;
   const navigate = useNavigate();
   //지오코딩용
@@ -611,7 +611,7 @@ export default function GatheringWrite() {
     // axios 요청
     try {
       console.log("모임 등록 요청 시작...");
-      const response = await myAxios(token).post(`/user/writeGathering`, formDataToSend);
+      const response = await myAxios(token,setToken).post(`/user/writeGathering`, formDataToSend);
 
       console.log("모임 등록 성공:", response);
 

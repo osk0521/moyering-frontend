@@ -21,7 +21,7 @@ export default function ClassRingReviewList() {
     const fetchReviews = async () => {
       try {
         const res = await myAxios().get(
-          `/classRingReviewList/${hostId}?page=${currentPage - 1}&size=5`
+          `/class/classRingReviewList/${hostId}?page=${currentPage - 1}&size=5`
         );
         setAllReviewListAtom(res.data.content);
         setTotalPages(res.data.totalPages);

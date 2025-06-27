@@ -13,14 +13,11 @@ export default function useRecommendClasses() {
   const user = useAtomValue(userAtom);    
   const token = useAtomValue(tokenAtom);
 
-  console.log(user.name);
-
-
   useEffect(() => {
     myAxios(token)
       .get(`/main`)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setRecommendClasses(res.data.classes);
         setHotClasses(res.data.hotClasses);
         setGathers(res.data.gathers);

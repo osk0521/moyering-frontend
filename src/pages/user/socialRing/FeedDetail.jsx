@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './FeedDetail.css';
 import moreIcon from './icons/more.png';
 import { useParams } from 'react-router-dom';
-import { myAxios } from '../../../config';
+import { myAxios, url } from '../../../config';
 import ReportModal from './ReportModal';
 import EmojiPicker from 'emoji-picker-react';
 import { useAtomValue } from 'jotai';
@@ -198,7 +198,7 @@ export default function FeedDetail() {
             {images.length > 0 && (
               <>
                 <img
-                  src={images[currentImage]}
+                  src={`${url}${images[currentImage]}`}
                   alt={`feed-${currentImage}`}
                 />
 
@@ -390,7 +390,14 @@ export default function FeedDetail() {
         <div className="KYM-other-section">
           <p className="KYM-other-title">{writerId} 님의 게시글 더 보기</p>
           <div className="KYM-other-grid">
-            {moreImg1List.map((src, i) => <img key={i} src={src} className="KYM-thumb" alt="" />)}
+            {moreImg1List.map((src, i) =>
+              <img
+                key={i}
+                src={`${url}${src}`}
+                className="KYM-thumb"
+                alt=""
+              />
+            )}
           </div>
         </div>
 

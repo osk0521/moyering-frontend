@@ -34,7 +34,7 @@ export default function ClassRingDetailInquiryList({classId}) {
         const fetchInquiry = async () => {
         try {
         const res = await myAxios().get(
-            `/classInquiryList/${classId}?page=${currentPage - 1}&size=5`
+            `/class/classInquiryList/${classId}?page=${currentPage - 1}&size=5`
         );
         setInquiryListAtom(res.data.content);
         setTotalPages(res.data.totalPages);

@@ -5,7 +5,6 @@ import { url } from '../config';
 
 export default function GatheringCard({ gatherInfo, onClick  }) {
     //if (!gatherInfo) return null;
-  console.log(gatherInfo+"ssss");
   return (
     <div className={styles.card} onClick={onClick}>
       <div

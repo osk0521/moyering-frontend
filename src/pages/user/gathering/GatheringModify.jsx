@@ -8,7 +8,9 @@ import { GoPeople } from "react-icons/go";
 import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
-import { url, KAKAO_REST_API_KEY, myAxios } from "../../../config";
+import { url, myAxios } from "../../../config";
+const KAKAO_REST_API_KEY = import.meta.env.KAKAO_REST_API_KEY;
+const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -78,7 +80,7 @@ export default function GatheringModify() {
   const { gatheringId } = useParams();
 
   const user = useAtomValue(userAtom);    
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const userId = user.id;
   // 지오코딩용
   const [coordinates, setCoordinates] = useState({ x: "", y: "" });
@@ -121,7 +123,7 @@ export default function GatheringModify() {
   useEffect(() => {
     if (gatheringId && token) {
       console.log('전달하는 토큰:', token); // 이 값이 실제로 무엇인지
-      myAxios(token).get(`/user/detailForModifyGathering?gatheringId=${gatheringId}`)
+      token && myAxios(token,setToken).get(`/user/detailForModifyGathering?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("API Response:", res.data);
           if (res.data === null) {
@@ -682,7 +684,7 @@ export default function GatheringModify() {
     try {
       console.log("모임 수정 요청 시작...");
 
-      const response = await myAxios(token).post(
+      const response = await myAxios(token,setToken).post(
         `/user/modifyGathering`,
         formDataToSend
       );

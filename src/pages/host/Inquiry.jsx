@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Inquiry.css';
+import { useAtomValue } from 'jotai';
+import { tokenAtom, userAtom } from '../../atoms';
+import { myAxios } from '../../config';
 
 const Inquiry = () => {
   const [searchFilter, setSearchFilter] = useState('클래스명');
@@ -8,28 +11,23 @@ const Inquiry = () => {
   const [endDate, setEndDate] = useState('');
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [showReplyFormIndex, setShowReplyFormIndex] = useState(null);
-  const [replies, setReplies] = useState({});
+  const [iqResContent,setIqResContent] = useState('');
+  const user = useAtomValue(userAtom);
+  const token = useAtomValue(tokenAtom);
+  const [inquiry, setInquiry] = useState([]);
+  const [selectedInquiryId,setSelectedInquiryId] = useState(null);
 
-  const inquiries = [
-    {
-      id: 1,
-      className: '클래스명1',
-      questionTitle: '클래스 뭘 내용?',
-      userName: '김한채',
-      date: '2025.05.05',
-      status: '답변완료',
-      questionContent: '이 클래스는 주 2회 진행되며 실습이 포함됩니다.',
-    },
-    {
-      id: 2,
-      className: '클래스명2',
-      questionTitle: '강사님 이력',
-      userName: '홍길동',
-      date: '2025.05.06',
-      status: '답변중',
-      questionContent: '강사님은 10년 이상의 경력을 가지고 계십니다.',
-    },
-  ];
+  useEffect(() => {
+    myAxios(token).get(`/host/inquiry?hostId=${user.hostId}`)
+      .then(res => {
+        console.log(res.data);
+        setInquiry(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, [token])
+
 
   const handleSearch = () => {
     console.log('검색:', searchFilter, searchQuery);
@@ -41,12 +39,9 @@ const Inquiry = () => {
     setShowReplyFormIndex(null);
   };
 
-  const handleReplyClick = (index) => {
+  const handleReplyClick = (index,inquiryId) => {
     setShowReplyFormIndex(index);
-  };
-
-  const handleReplyChange = (e, index) => {
-    setReplies({ ...replies, [index]: e.target.value });
+    setSelectedInquiryId(inquiryId);
   };
 
   const handleReplySubmit = (index) => {
@@ -62,6 +57,25 @@ const Inquiry = () => {
     setEndDate('');
   };
 
+  const submit = () => {
+    myAxios(token).post("/host/inquiryReply",null,{
+      params:{
+        hostId:user.hostId,
+        iqResContent:iqResContent,
+        inquiryId:selectedInquiryId
+      }
+    })
+    .then(res=>{
+      console.log(res);
+      alert("답변이 등록되었습니다!")
+      setIqResContent('');
+      setShowReplyFormIndex(null);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
   return (
     <>
       <div className="KHJ-inquiry-container">
@@ -75,8 +89,7 @@ const Inquiry = () => {
             className="KHJ-inquiry-select"
           >
             <option value="클래스명">클래스명</option>
-            <option value="강사명">강사명</option>
-            <option value="사용자명">사용자명</option>
+            <option value="학생명">사용자명</option>
           </select>
 
           <input
@@ -110,49 +123,73 @@ const Inquiry = () => {
       </div>
 
       <div className="KHJ-inquiry-result-container">
-        <h4>검색 결과 : {inquiries.length}건</h4>
+        <h4 className="KHJ-inquiry-result">검색 결과 : {inquiry.length}건</h4>
         <table className="KHJ-inquiry-table">
           <thead>
             <tr>
               <th>No</th>
               <th>클래스명</th>
-              <th>문의명</th>
               <th>회원이름</th>
               <th>문의일자</th>
               <th>답변 상태</th>
             </tr>
           </thead>
           <tbody>
-            {inquiries.map((item, index) => (
+            {inquiry.map((item, index) => (
               <React.Fragment key={item.id}>
                 <tr onClick={() => toggleExpand(index)} className="KHJ-inquiry-summary-row">
-                  <td>{index + 1}</td>
+                  <td>{item.inquiryId}</td>
                   <td>{item.className}</td>
-                  <td>{item.questionTitle}</td>
-                  <td>{item.userName}</td>
-                  <td>{item.date}</td>
-                  <td>{item.status}</td>
+                  <td>{item.studentName}</td>
+                  <td>{item.inquiryDate}</td>
+                  {item.state ? <td>답변완료</td> : <td>답변대기</td>}
                 </tr>
-                <tr className="KHJ-inquiry-detail-row">
-                  <td colSpan="6">
-                    <div className={`KHJ-inquiry-dropdown ${expandedIndex === index ? 'open' : ''}`}>
-                      <div className="KHJ-inquiry-content-box">
-                        <p className="KHJ-inquiry-content">{item.questionContent}</p>
-                        <button className="KHJ-reply-button" onClick={() => handleReplyClick(index)}>답변하기</button>
+                {expandedIndex === index && (
+                  <tr className="KHJ-inquiry-detail-row">
+                    <td colSpan="6" className="KHJ-inquiry-td">
+                      <div className={`KHJ-inquiry-dropdown-wrapper ${expandedIndex === index ? 'open' : ''}`}>
+                        <div className="KHJ-inquiry-content-box">
+                          <p className="KHJ-inquiry-content">{item.content}</p>
+                          <button className="KHJ-reply-button" onClick={() => handleReplyClick(index,item.inquiryId)}>답변하기</button>
+                        </div>
+                        <div className={`KHJ-reply-dropdown ${showReplyFormIndex === index ? 'open' : ''}`}>
+                          <form
+                            className="KHJ-reply-form"
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              handleReplySubmit(index);
+                            }}
+                          >
+                            {item.iqResContent ? <textarea 
+                            className='KHJ-reply-textarea'
+                              placeholder={item.iqResContent}
+                              name='iqResContent'
+                              value={iqResContent}
+                              onChange={(e) => setIqResContent(()=>e.target.value)}
+                            />:
+                            <textarea 
+                            className='KHJ-reply-textarea'
+                              placeholder="답변을 입력하세요"
+                              name='iqResContent'
+                              value={iqResContent}
+                              onChange={(e) => setIqResContent(()=>e.target.value)}
+                            />
+                            }
+                            {/* <textarea 
+                            className='KHJ-reply-textarea'
+                              placeholder="답변을 입력하세요"
+                              name='iqResContent'
+                              value={iqResContent}
+                              onChange={(e) => setIqResContent(()=>e.target.value)}
+                            /> */}
+                            {item.state ?<button type="button" onClick={submit}>답변수정</button> : <button type="button" onClick={submit}>답변저장</button>}
+                            
+                          </form>
+                        </div>
                       </div>
-                      <div className={`KHJ-reply-dropdown ${showReplyFormIndex === index ? 'open' : ''}`}>
-                        <form className="KHJ-reply-form" onSubmit={(e) => { e.preventDefault(); handleReplySubmit(index); }}>
-                          <textarea
-                            placeholder="답변을 입력하세요"
-                            value={replies[index] || ''}
-                            onChange={(e) => handleReplyChange(e, index)}
-                          />
-                          <button type="submit">답변 저장</button>
-                        </form>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                )}
               </React.Fragment>
             ))}
           </tbody>

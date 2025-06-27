@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom } from '../../../atoms';
 import { myAxios, url } from '../../../config';
 import axios from 'axios';
@@ -19,7 +19,7 @@ export default function UserFeed() {
   console.log('🐞 useParams →', params);
   const { nickname } = useParams();     
   const navigate = useNavigate();
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
 
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -35,7 +35,7 @@ export default function UserFeed() {
         console.log('▶ fetchUser 호출, nickname=', nickname,' token=', token);
         // 토큰 없으면 인증 헤더 없이 호출
         const api = token
-          ? myAxios(token)
+          ? myAxios(token,setToken)
           : axios.create({ baseURL: url });
 
         const { data: u } = await api
@@ -70,7 +70,7 @@ export default function UserFeed() {
     if (!nickname) return;
     (async () => {
       try {
-        const { data: feeds } = await myAxios(token)
+        const { data: feeds } = await myAxios(token,setToken)
           .get(`${url}/socialing/memberFeed/${nickname}`);
 
         setPosts(

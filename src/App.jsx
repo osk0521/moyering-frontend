@@ -76,20 +76,24 @@ import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
 import Token from './components/Token';
 import{useSetAtom, useAtom} from 'jotai'
 import{fcmTokenAtom, alarmsAtom} from './atoms'
+import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
   const setFcmToken = useSetAtom(fcmTokenAtom);  
   const [alarms, setAlarms] = useAtom(alarmsAtom);
 
-  useEffect(async ()=> {
+  useEffect(()=> {
     registerServiceWorker();
-    await navigator.serviceWorker.ready;
-    firebaseReqPermission(setFcmToken, setAlarm);
+    navigator.serviceWorker.ready.then(()=> {
+      firebaseReqPermission(setFcmToken, setAlarm);
+    })
   },[])
+
   useEffect(() => {
     JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
   }, [alarm]);
+  
   return (
     <Router>
       <Routes>
@@ -97,7 +101,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/classList" element={<ClassList />} />
         <Route path="/gatheringList" element={<GatheringList />} />
-        <Route path="/classRingDetail/:classId" element={<ClassRingDetail />} />
+        <Route path="/class/classRingDetail/:classId" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
         <Route path="/feeds" element={<FeedPage />} />
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
@@ -116,7 +120,7 @@ function App() {
         <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
         
         {/* 로그인한 유저 /user/~~~ */}
-        <Route path="/user/ClassPayment" element={<ClassPayment />} />
+        <Route path="/user/ClassPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route path="/user/logout"/>
@@ -132,7 +136,6 @@ function App() {
         <Route path="/user/mypage/myClassList" element={<MyClassList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
-        <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
         <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
         <Route exact path="/user/mypage/myGatherInquiryList" element={<MyGatherInquiryList />}></Route>
         <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
@@ -153,17 +156,13 @@ function App() {
           <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
-
+          <Route path="/host/classUpdate/:classId" element={<ClassUpdatePage/>}/>
         </Route>
 
         {/* 1차 로그인 화면  */}
         {/* 공통 /~~~으로 시작 */}
-        <Route path="/" element={<Main />} />
-        <Route path="/classList" element={<ClassList />} />
-        <Route path="/classRingDetail" element={<ClassRingDetail />} />
 
         {/* 로그인한 유저 /user/~~~ */}
-        <Route path="/user/ClassPayment" element={<ClassPayment />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />

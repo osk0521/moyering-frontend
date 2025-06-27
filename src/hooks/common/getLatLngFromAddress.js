@@ -10,8 +10,9 @@ async function getLatLngFromAddress(address){
             },
             headers:{
                 Authorization : `KakaoAK ${KAKAO_REST_API_KEY}`,
-            }
-        });
+            },
+            withCredentials: false, 
+        })
         const result = res.data.documents[0];
         if(result){
             const latitude = result.y;

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import './TabTransaction.css';
+import './UpdateTabTransaction.css';
 import React from 'react'; // 이 한 줄만 추가!
 
-const TabTransaction = ({ registerValidator, classData, setClassData }) => {
+const UpdateTabTransaction = ({ registerValidator, classData, setClassData }) => {
   const { transaction } = classData;
   const handleCautionChange = (e) => {
     setClassData((prev) => ({
@@ -43,7 +43,7 @@ const TabTransaction = ({ registerValidator, classData, setClassData }) => {
           <span className="KHJ-required-text-dot">*</span>클래스 하루 금액
         </label>
         <div className="price-wrapper">
-          <input className="KHJ-price-input" placeholder="금액을 입력하세요." name="price" onChange={handlepriceChange} />
+          <input className="KHJ-price-input" placeholder="금액을 입력하세요." name="price" onChange={handlepriceChange} value={transaction.price} />
           <span>원</span>
         </div>
       </div>
@@ -96,4 +96,4 @@ const TabTransaction = ({ registerValidator, classData, setClassData }) => {
   );
 };
 
-export default TabTransaction;
+export default UpdateTabTransaction;

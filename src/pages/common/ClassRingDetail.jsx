@@ -6,14 +6,14 @@ import { BiChevronDown } from "react-icons/bi";
 import styles from "./ClassRingDetail.module.css";
 import Header from "./Header";
 import { useNavigate, useParams } from "react-router";
-import { useSetAtom, useAtomValue } from "jotai";
+import { useSetAtom, useAtomValue, useAtom } from "jotai";
 import {
   calendarListAtom,
   classDetailAtom,
   currListAtom,
   hostAtom,
   reviewListAtom,
-  inquiryListAtom,
+  classLikesAtom,
 } from '../../atom/classAtom';
 import { tokenAtom, userAtom } from "../../atoms";
 import { myAxios } from "../../config";
@@ -21,15 +21,20 @@ import KakaoMap from "./KakaoMap";
 import { url } from '../../config';
 import { FaStar } from "react-icons/fa";
 import ClassRingDetailInquiryList from "./ClassRingDetailInquiryList";
+import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
+import Footer from "../../components/Footer";
+
 
 export default function ClassRingDetail() {
+  useFetchUserClassLikes();
+  const classLikes = useAtomValue(classLikesAtom);
   const [activeTab, setActiveTab] = useState("details");
   const [isExpanded, setIsExpanded] = useState(false);
   const PREVIEW_LENGTH = 300;
   const navigate = useNavigate();
 
   const { classId } = useParams();
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const user = useAtomValue(userAtom);
   const setCalendarList = useSetAtom(calendarListAtom);
   const setClassDetailAtom = useSetAtom(classDetailAtom);
@@ -97,7 +102,7 @@ export default function ClassRingDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await myAxios(token).get(`/class/classRingDetail/${classId}`);
+        const res = token && await myAxios(token,token).get(`/class/classRingDetail/${classId}`);
         setCalendarList(res.data.calendarList);
         setClassDetailAtom(res.data.hostClass);
         setCurrListAtom(res.data.currList);
@@ -118,12 +123,17 @@ export default function ClassRingDetail() {
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
   const selectedCalendar = calendarList.find(c => c.calendarId == selectedCalendarId);
-  useEffect(() => {
-    if (calendarList.length > 0 && !selectedCalendarId) {
-      setSelectedCalendarId(calendarList[0].calendarId);
-    }
-  }, [calendarList, selectedCalendarId]);
+  // useEffect(() => {
+  //   if (calendarList.length > 0 && !selectedCalendarId) {
+  //     setSelectedCalendarId(calendarList[0].calendarId);
+  //   }
+  // }, [calendarList, selectedCalendarId]);
 
+  useEffect(() => {
+  if (calendarList.length > 0) {
+    setSelectedCalendarId(calendarList[0].calendarId);
+  }
+}, [classId, calendarList]);
   //쿠폰 데이터
   // 쿠폰 상태 바뀔 때마다 실행됨
   useEffect(() => {
@@ -134,7 +144,7 @@ export default function ClassRingDetail() {
 
     const handleDownload = async (classCouponId) => {
       try {
-        const res = await myAxios(token).post("/user/classCoupons/download", {
+        const res = token && await myAxios(token,setToken).post("/user/classCoupons/download", {
           classCouponId : classCouponId
         });
 
@@ -142,7 +152,7 @@ export default function ClassRingDetail() {
         alert("쿠폰이 다운로드되었습니다!");
 
         // 예: usedCnt 증가 반영을 위해 다시 불러오기
-        const updated = await myAxios(token).get(`/class/classRingDetail/${classId}`);
+        const updated = token && await myAxios(token,setToken).get(`/class/classRingDetail/${classId}`);
         setCoupons(updated.data.coupons);
 
       } catch (err) {
@@ -153,12 +163,18 @@ export default function ClassRingDetail() {
 
     //찜하기
     const [isLiked, setIsLiked] = useState(false);
+    useEffect(() => {
+      
+      const liked = classLikes.some((like) => like.classId ===  Number(classId));
+      setIsLiked(liked);
+    }, [classLikes, classId]);
+
     const handleHeart = async(classId) => {
       try {
-        const res = await myAxios(token).post("/user/toggle-like", {
+        const res = token && await myAxios(token,setToken).post("/user/toggle-like", {
           classId : classId
         })
-        const updated = await myAxios(token).get(`/class/classRingDetail/${classId}`);
+        const updated = token && await myAxios(token,setToken).get(`/class/classRingDetail/${classId}`);
         setIsLiked(!isLiked);
 
       } catch (err) {
@@ -434,12 +450,13 @@ export default function ClassRingDetail() {
                 </>
               )}
               </button>
-              <button className={styles.applyBtn}>신청하기</button>
+              <button className={styles.applyBtn} onClick={()=> navigate(`/user/ClassPayment/${classId}/${selectedCalendarId}`)}>신청하기</button>
             </div>
             <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>
           </div>
         </aside>
       </div>
+      <Footer/>
     </>
   );
 }

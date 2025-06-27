@@ -5,13 +5,13 @@ import './FeedEdit.css';
 import plusIcon from './icons/plus.svg';
 import { myAxios, url } from '../../../config';
 import { tokenAtom } from '../../../atoms';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 export default function FeedEdit() {
   const { feedId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef();
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [text, setText] = useState('');
@@ -22,10 +22,11 @@ export default function FeedEdit() {
 
   // 초기 데이터 로드
   useEffect(() => {
+    if (!token) return;
     (async () => {
       try {
         console.log(token)
-        const { data } = await myAxios(token).get(`/user/socialing/feed/${feedId}`);
+        const { data } = await myAxios(token,setToken).get(`/socialing/feed?feedId=${feedId}`);
         setPreviewUrl(data.img1 || '');
         setText(data.content);
         setTags([data.tag1, data.tag2, data.tag3, data.tag4, data.tag5].filter(Boolean));
@@ -36,9 +37,9 @@ export default function FeedEdit() {
         setLoading(false);
       }
     })();
-  }, [feedId]);
+  }, [feedId,token]);
 
-  if (loading) return <div>로딩 중...</div>;
+  // if (loading) return <div>로딩 중...</div>;
   if (error) return <div className="error">{error}</div>;
 
   const handleImageChange = e => {
@@ -62,6 +63,7 @@ export default function FeedEdit() {
   const handleRemoveTag = t => setTags(prev => prev.filter(x => x !== t));
 
   const handleSubmit = async () => {
+    console.log('▶ handleSubmit 호출됨');
     const form = new FormData();
     form.append('feed', new Blob([
       JSON.stringify({ content: text, tags })
@@ -69,7 +71,7 @@ export default function FeedEdit() {
     if (imageFile) form.append('images', imageFile);
 
     try {
-      await myAxios(token).put(
+      await myAxios(token,setToken).patch(
         `/user/socialing/feed/${feedId}`,
         form
         // { headers: { 'Content-Type': 'multipart/form-data' } }

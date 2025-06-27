@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './FeedPage.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import plusIcon from './icons/plus.svg';
 import moreIcon from './icons/more.png';
 import badgeIcon from './icons/badge.jpg';
@@ -21,9 +21,12 @@ export default function FeedPage() {
   const user = useAtomValue(userAtom);
   const userId = user?.id;
   const token = useAtomValue(tokenAtom);
+  const { feedId } = useParams();
   console.log('🌟 FeedPage token:', token);
   const filters = ['전체', '좋아요순', '댓글순', '팔로워'];
   const [feeds, setFeeds] = useState([]);
+  const [scrapped, setScrapped] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [activeFilter, setActiveFilter] = useState(filters[0]);
   const [popularFeeds, setPopularFeeds] = useState([]);
   const [popularPage, setPopularPage] = useState(1);
@@ -43,26 +46,29 @@ export default function FeedPage() {
   const getFeedTags = feed => [feed.tag1, feed.tag2, feed.tag3, feed.tag4, feed.tag5].filter(Boolean);
 
   useEffect(() => {
-    console.log("user:",user)
+    console.log("user:", user)
     const sortKey = {
       '전체': 'all',
       '좋아요순': 'likes',
       '댓글순': 'comments',
       '팔로워': 'follow'
     }[activeFilter];
-console.log('userId:', userId);
-    myAxios(token).get(`/socialing/feeds?sort=${sortKey}`
-      // {
-      // headers: {
-      // Authorization :`Bearer ${token}`}}
-      )
+    console.log('userId:', userId);
+    myAxios(token).get(`/socialing/feeds?sort=${sortKey}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
       .then(res => {
-        const mapped = res.data.map(feed => ({
-          ...feed,
-          liked: !!feed.likedByUser // ← likedByUser → liked 매핑
-        }));
-        console.log("여기데이터 확인!!!",res.data)
-        setFeeds(mapped); // 매핑된 결과로 교체
+        // const mapped = res.data.map(feed => ({
+        //   ...feed,
+        //   liked: !!feed.likedByUser // ← likedByUser → liked 매핑
+        // }));
+        console.log("여기데이터 확인!!!", res.data)
+        // setFeeds(mapped); // 매핑된 결과로 교체
+        setFeeds(res.data)
       })
       .catch(err => console.error('피드 불러오기 실패:', err));
 
@@ -70,7 +76,7 @@ console.log('userId:', userId);
     myAxios().get(`/socialing/feeds?sort=likes`)
       .then(res => setPopularFeeds(res.data))
       .catch(err => console.error('인기 피드 불러오기 실패:', err));
-  }, [activeFilter,token]);
+  }, [activeFilter, token]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -80,28 +86,27 @@ console.log('userId:', userId);
   }, [totalPopularPages]);
 
   const toggleLike = async feedId => {
-    // const userId = localStorage.getItem('userId');
     try {
-      // 1) 백엔드에 좋아요/취소 요청
-      await myAxios(token).post(
-        `/user/socialing/likes/${feedId}`,
-        {},
-        {
-          // params: { userId },
-          // headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+      // // 1) 백엔드에 좋아요/취소 요청
+      // await myAxios(token).post(
+      //   `/user/socialing/likes/${feedId}`,
+      //   {},
+      //   {
+      //     // params: { userId },
+      //     // headers: { Authorization: `Bearer ${token}` }
+      //   }
+      // );
+      const res = await myAxios(token).post(`/user/socialing/likes/${feedId}`);
+      const { liked, likesCount } = res.data; // ← 서버에서 토글 후 결과 상태를 내려줌
 
       // 2) 요청 성공 시, 로컬 UI 업데이트 (optimistic)
       setFeeds(prev =>
         prev.map(f =>
-          f.feedId !== feedId
-            ? f
-            : {
-              ...f,
-              liked: !f.liked,
-              likesCount: f.liked ? f.likesCount - 1 : f.likesCount + 1
-            }
+          f.feedId !== feedId ? f : {
+            ...f,
+            liked: !f.liked,
+            likesCount: f.liked ? f.likesCount - 1 : f.likesCount + 1
+          }
         )
       );
     } catch (err) {
@@ -127,6 +132,36 @@ console.log('userId:', userId);
     (popularPage - 1) * POSTS_PER_PAGE,
     popularPage * POSTS_PER_PAGE
   );
+
+  // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
+  useEffect(() => {
+    let mounted = true;
+    myAxios(token).get(`/user/socialing/scrap/${feedId}`)
+      .then(res => {
+        if (mounted) setScrapped(res.data);
+      })
+      .catch(console.error);
+    return () => { mounted = false; };
+  }, [token, feedId]);
+
+  // 2. 스크랩 토글 함수
+  const handleScrapToggle = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      if (scrapped) {
+        await myAxios(token).delete(`/user/socialing/scrap/${feed.feedId}`);
+        setScrapped(false);
+      } else {
+        await myAxios(token).post(`/user/socialing/scrap`, null, { params: { feedId } });
+        setScrapped(true);
+      }
+    } catch (err) {
+      console.error('스크랩 에러', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="KYM-feed-page">
@@ -176,6 +211,15 @@ console.log('userId:', userId);
                         <ul className="KYM-post-menu open">
                           <li onClick={() => setReportTargetId(feed.feedId)}>신고하기</li>
                           <li onClick={() => navigate(`/feed/${feed.feedId}`)}>게시물로 이동</li>
+                          <li
+                            onClick={() => {
+                              handleScrapToggle();
+                              setShowMenu(false);
+                            }}
+                            style={{ opacity: loading ? 0.5 : 1, pointerEvents: loading ? 'none' : 'auto' }}
+                          >
+                            {scrapped ? '스크랩 해제' : '스크랩하기'}
+                          </li>
                         </ul>
                       )}
                     </div>

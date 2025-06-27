@@ -47,6 +47,10 @@ export default function ClassRingDetail() {
   const previewText = description.length > PREVIEW_LENGTH ? description.slice(0, PREVIEW_LENGTH) + "..." : description;
   const shouldShowMore = description.length > PREVIEW_LENGTH;
 
+  //쿠폰관련
+  const [coupons, setCoupons] = useState([]);
+  
+
   const recommendedClasses = [
     {
       id: 1,
@@ -93,12 +97,13 @@ export default function ClassRingDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await myAxios(token).get(`/classRingDetail/${classId}`);
+        const res = await myAxios(token).get(`/class/classRingDetail/${classId}`);
         setCalendarList(res.data.calendarList);
         setClassDetailAtom(res.data.hostClass);
         setCurrListAtom(res.data.currList);
         setHostAtom(res.data.host);
         setReviewListAtom(res.data.reviews);
+        setCoupons(res.data.coupons);
         console.log(res);
       } catch (err) {
         console.error("클래스 상세 데이터 로딩 실패", err);
@@ -108,13 +113,59 @@ export default function ClassRingDetail() {
     if (classId && token) {
     }
     fetchData();
-
   }, [classId, token]);
 
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
   const selectedCalendar = calendarList.find(c => c.calendarId == selectedCalendarId);
+  useEffect(() => {
+    if (calendarList.length > 0 && !selectedCalendarId) {
+      setSelectedCalendarId(calendarList[0].calendarId);
+    }
+  }, [calendarList, selectedCalendarId]);
 
+  //쿠폰 데이터
+  // 쿠폰 상태 바뀔 때마다 실행됨
+  useEffect(() => {
+  }, [coupons]);
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedCoupon, setSelectedCoupon] = useState(null);
+
+    const handleDownload = async (classCouponId) => {
+      try {
+        const res = await myAxios(token).post("/user/classCoupons/download", {
+          classCouponId : classCouponId
+        });
+
+        // 성공 후 쿠폰 리스트 갱신 or UI 업데이트
+        alert("쿠폰이 다운로드되었습니다!");
+
+        // 예: usedCnt 증가 반영을 위해 다시 불러오기
+        const updated = await myAxios(token).get(`/class/classRingDetail/${classId}`);
+        setCoupons(updated.data.coupons);
+
+      } catch (err) {
+        console.error("쿠폰 다운로드 실패", err);
+        alert(err.response?.data?.message || "쿠폰 다운로드 중 오류 발생");
+      }
+    };
+
+    //찜하기
+    const [isLiked, setIsLiked] = useState(false);
+    const handleHeart = async(classId) => {
+      try {
+        const res = await myAxios(token).post("/user/toggle-like", {
+          classId : classId
+        })
+        const updated = await myAxios(token).get(`/class/classRingDetail/${classId}`);
+        setIsLiked(!isLiked);
+
+      } catch (err) {
+        console.error("좋아요 실패", err);
+        alert(err.response?.data?.message || "쿠폰 좋아요 중 오류 발생");
+      }
+    };
   return (
     <>
       <Header />
@@ -310,13 +361,79 @@ export default function ClassRingDetail() {
               <span>{classDetail?.addr} {classDetail?.detailAddr} {classDetail?.locName}</span>
             </div>
             <div className={styles.row}>
-              <select className={styles.couponList}>
-                <option value="">쿠폰 다운받기</option>
-                <option value="1">강사 할인 쿠폰</option>
-              </select>
+              {/* 쿠폰 */}
+              <div className={styles.customDropdown}>
+                <div 
+                  className={styles.dropdownHeader} 
+                  onClick={() => {
+                    if (coupons.length > 0) setIsOpen(!isOpen);
+                  }}
+                >
+                  {coupons.length === 0
+                    ? "사용 가능한 쿠폰이 없습니다"
+                    : selectedCoupon 
+                      ? selectedCoupon.couponName 
+                      : "사용 가능한 쿠폰을 선택하세요"}
+                </div>
+
+                {isOpen && coupons.length > 0 && (
+                  <ul className={styles.dropdownList}>
+                    {coupons.map(c => (
+                      <li 
+                        key={c.classCouponId} 
+                        className={styles.dropdownItem}
+                      >
+                        <span
+                          className={
+                            c.amount - c.usedCnt === 0
+                              ? styles.couponTextDisabled
+                              : styles.couponText
+                          }
+                        >
+                          [{c.amount - c.usedCnt > 0 ? `${c.amount - c.usedCnt}매` : '소진'}] 
+                          {c.couponName} 
+                          {c.discountType === 'RT' 
+                            ? ` ${c.discount}%`
+                            : ` ${c.discount.toLocaleString()}원`} 
+                        </span>
+                        { c.amount - c.usedCnt === 0 ? '' :
+                          <button 
+                          disabled={c.amount - c.usedCnt === 0}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDownload(c.classCouponId);
+                          }}
+                          className={styles.downloadBtn}
+                        >
+                          다운
+                        </button>
+                        }
+                        
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.outlineBtn}><CiHeart /> 찜하기</button>
+              <button className={styles.outlineBtn} 
+              onClick={(e) => {
+                            e.stopPropagation();
+                            handleHeart(classId);
+                          }}
+              >
+                {isLiked ? (
+                <>
+                  <CiHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />{" "}
+                  찜해제
+                </>
+              ) : (
+                <>
+                  <CiHeart className="GatheringDetail_top-icon_osk" />{" "}
+                  찜하기
+                </>
+              )}
+              </button>
               <button className={styles.applyBtn}>신청하기</button>
             </div>
             <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>

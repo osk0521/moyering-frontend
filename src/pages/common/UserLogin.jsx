@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './UserLogin.css';
-import { useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useNavigate, useSearchParams } from 'react-router';
-import { tokenAtom, userAtom } from '../../atoms';
+import { tokenAtom, userAtom, fcmTokenAtom } from '../../atoms';
 import axios from 'axios';
 import { myAxios, url } from './../../config';
 
@@ -12,7 +12,7 @@ const Login = () => {
   const setToken = useSetAtom(tokenAtom)
   const [params] = useSearchParams();
   const navigate = useNavigate();
-
+  const fcmToken = useAtomValue(fcmTokenAtom);
   const edit = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
   }
@@ -21,6 +21,7 @@ const Login = () => {
     let formData = new FormData();
     formData.append("username", login.username);
     formData.append("password", login.password);
+    formData.append("fcmToken", fcmToken);
     myAxios().post("login", formData)
       .then(res => {
         console.log(res);

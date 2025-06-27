@@ -33,15 +33,17 @@ const ClassUpdatePage = () => {
         .get(`/host/updateHostClassDetail?classId=${classId}`)
         .then(res => {
           const host = res.data.hostClass;
-          console.log(res.data);
+          console.log(host);
           const coupons = res.data.couponList;
           const scheduleDetail = res.data.scheduleDetail;
-          
+          const calendar = res.data.calendarList
+
           const initialClassData = {
             basicInfo: {
               category1: host.category1 || '',
               category2: host.category2 || '',
               subCategoryId: host.subCategoryId || '',
+              categoryId:host.categoryId || '',
               name: host.name || '',
               locName: host.locName || '',
               addr: host.addr || '',
@@ -52,15 +54,20 @@ const ClassUpdatePage = () => {
             schedule: {
               recruitMax: host.recruitMax || '',
               recruitMin: host.recruitMin || '',
-              dates: host.startDate ? [host.startDate] : [],
+              dates: calendar || [],
               scheduleDetail: scheduleDetail || [{ content: '', startTime: '', endTime: '' }],
             },
             description: {
-              img1: host.imgName1 || null,
-              img2: host.imgName2 || null,
-              img3: host.imgName3 || null,
-              img4: host.imgName4 || null,
-              img5: host.imgName5 || null,
+              imgName1: host.imgName1 || null,
+              imgName2: host.imgName2 || null,
+              imgName3: host.imgName3 || null,
+              imgName4: host.imgName4 || null,
+              imgName5: host.imgName5 || null,
+              img1:null,
+              img2:null,
+              img3:null,
+              img4:null,
+              img5:null,
               detailDescription: host.detailDescription || '',
             },
             extraInfo: {
@@ -104,14 +111,17 @@ const ClassUpdatePage = () => {
     }
   };
 
-  const submit = () => {
-    const cleanDates = [...new Set(
-      (classData.schedule.dates || []).map(date =>
-        new Date(date).toISOString().slice(0, 10)
-      )
-    )].sort((a, b) => new Date(a) - new Date(b));
 
-    let reqData = {
+
+  const submit = () => {
+    console.log("🧾 최종 제출 직전 classData:", classData);
+    // const cleanDates = [...new Set(
+    //   (classData.schedule.dates || []).map(date =>
+    //     new Date(date).toISOString().slice(0, 10)
+    //   )
+    // )].sort((a, b) => new Date(a) - new Date(b));
+
+    const reqData = {
       ...classData.basicInfo,
       ...classData.classPortfolio,
       ...classData.description,
@@ -120,38 +130,70 @@ const ClassUpdatePage = () => {
       ...classData.transaction
     };
 
-    let formData = new FormData();
-    formData.append("hostId", user.hostId);
-    formData.append("addr", reqData.addr);
-    formData.append("category1", reqData.category1);
-    formData.append("category2", reqData.category2);
-    formData.append("subCategoryId", parseInt(reqData.subCategoryId));
-    formData.append("caution", reqData.caution);
-    formData.append("price", reqData.price);
-    formData.append("dates", cleanDates);
-    formData.append("scheduleDetail", JSON.stringify(reqData.scheduleDetail));
-    formData.append("detailDescription", reqData.detailDescription);
-    if (reqData.img1) formData.append("img1", reqData.img1);
-    if (reqData.img2) formData.append("img2", reqData.img2);
-    if (reqData.img3) formData.append("img3", reqData.img3);
-    if (reqData.img4) formData.append("img4", reqData.img4);
-    if (reqData.img5) formData.append("img5", reqData.img5);
-    formData.append("incluision", reqData.incluision);
-    formData.append("keywords", reqData.keywords);
-    formData.append("coupons", JSON.stringify(reqData.coupons));
-    formData.append("latitude", reqData.latitude);
-    formData.append("locName", reqData.locName);
-    formData.append("longitude", reqData.longitude);
-    formData.append("material", reqData.material);
-    formData.append("name", reqData.name);
-    formData.append("portfolio", reqData.portfolio);
-    formData.append("preparation", reqData.preparation);
-    formData.append("recruitMax", reqData.recruitMax);
-    formData.append("recruitMin", reqData.recruitMin);
+    const formData = new FormData();
 
-    myAxios(token, setToken).post('/host/classRegist/submit', formData)
+    formData.append("hostId", user.hostId);
+
+    // append helper 함수
+    const appendIfExists = (key, value) => {
+      if (
+        value !== null &&
+        value !== undefined &&
+        !(typeof value === 'string' && value.trim() === '')
+      ) {
+        formData.append(key, value);
+      }
+    };
+
+    // 일반 필드 추가
+    appendIfExists("classId",classId);
+    appendIfExists("addr", reqData.addr);
+    appendIfExists("category1", reqData.category1);
+    appendIfExists("category2", reqData.category2);
+    appendIfExists("subCategoryId", reqData.subCategoryId && parseInt(reqData.subCategoryId));
+    appendIfExists("caution", reqData.caution);
+    appendIfExists("price", reqData.price);
+
+    // 날짜
+    // if (cleanDates.length > 0) {
+    //   formData.append("dates", JSON.stringify(cleanDates));
+    // }
+
+    // 스케줄 상세
+    if (reqData.scheduleDetail && reqData.scheduleDetail.length > 0) {
+      formData.append("scheduleDetail", JSON.stringify(reqData.scheduleDetail));
+    }
+
+    // 이미지
+    reqData.img1!=null && formData.append("img1", reqData.img1);
+    reqData.img2!=null && formData.append("img2", reqData.img2);
+    reqData.img3!=null && formData.append("img3", reqData.img3);
+    reqData.img4!=null && formData.append("img4", reqData.img4);
+    reqData.img5!=null && formData.append("img5", reqData.img5);
+
+    // 나머지 문자열 필드
+    appendIfExists("detailDescription", reqData.detailDescription);
+    appendIfExists("incluision", reqData.incluision);
+    appendIfExists("keywords", reqData.keywords);
+    appendIfExists("latitude", reqData.latitude);
+    appendIfExists("locName", reqData.locName);
+    appendIfExists("longitude", reqData.longitude);
+    reqData.material && formData.append("material", reqData.material);
+    appendIfExists("name", reqData.name);
+    appendIfExists("preparation", reqData.preparation);
+    appendIfExists("recruitMax", reqData.recruitMax);
+    appendIfExists("recruitMin", reqData.recruitMin);
+
+    // 쿠폰 (배열 처리)
+    if (reqData.coupons && reqData.coupons.length > 0) {
+      formData.append("coupons", JSON.stringify(reqData.coupons));
+    }
+
+    // 제출
+    myAxios(token, setToken).post('/host/classUpdate/submit', formData)
       .then(res => {
-        navigate("/host/HostclassList");
+        console.log(res.data);
+        navigate(`/host/classDetail/${res.data}`);
       })
       .catch(console.error);
   };

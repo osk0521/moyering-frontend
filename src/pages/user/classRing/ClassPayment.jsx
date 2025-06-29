@@ -6,6 +6,8 @@ import Footer from "../../../pages/common/Footer";
 import { myAxios } from "../../../config";
 import { useSetAtom, useAtomValue, useAtom } from "jotai";
 import { tokenAtom, userAtom } from "../../../atoms";
+import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
+import axios from 'axios';
 
 export default function ClassPayment() {
   const navigate = useNavigate();
@@ -17,42 +19,49 @@ export default function ClassPayment() {
   const [token,setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
 
-
-
+// 결제 정보 조회
   useEffect(() => {
-    const fetchPaymentInfo = async () => {
-      try {
-        const res = await myAxios(token,setToken).get(`/user/payment/${classId}/${selectedCalendarId}`);
-        setPaymentInfo(res.data);
-        console.log("결제 정보:", res.data);
-      } catch (err) {
-        console.error("결제 정보 조회 실패", err);
-      }
-    };
-
     if (classId && selectedCalendarId) {
-      fetchPaymentInfo();
+      myAxios(token, setToken)
+        .get(`/user/payment/${classId}/${selectedCalendarId}`)
+        .then(res => setPaymentInfo(res.data))
+        .catch(err => console.error('결제 정보 조회 실패', err));
     }
-  }, [classId, selectedCalendarId,token]);
+  }, [selectedCalendarId, token]);
 
+  // useEffect(() => {
+  //   const fetchPaymentInfo = async () => {
+  //     try {
+  //       const res = await myAxios(token,setToken).get(`/user/payment/${classId}/${selectedCalendarId}`);
+  //       setPaymentInfo(res.data);
+  //       console.log("결제 정보:", res.data);
+  //     } catch (err) {
+  //       console.error("결제 정보 조회 실패", err);
+  //     }
+  //   };
+
+  //   if (classId && selectedCalendarId) {
+  //     fetchPaymentInfo();
+  //   }
+  // }, [classId, selectedCalendarId,token]);
+
+  //쿠폰 적용
   const selectedCouponObj = paymentInfo?.userCoupons.find(
     (c) => c.ucId == selectedCoupon
   );
-
   const basePrice = paymentInfo?.hostClass?.price || 0;
-
   const discount =
     couponApplied && selectedCouponObj
       ? selectedCouponObj.discountType === "AMT"
         ? selectedCouponObj.discount
         : Math.round((selectedCouponObj.discount / 100) * basePrice)
       : 0;
-
   const finalPrice = basePrice - discount;
 
   const handleApplyCoupon = () => {
     if (selectedCoupon) setCouponApplied(true);
   };
+
   //이용약관 동의
   const [openTerms, setOpenTerms] = useState(false);
   const [openPrivacy, setOpenPrivacy] = useState(false);
@@ -81,6 +90,54 @@ export default function ClassPayment() {
       };
       newAgreements.all = newAgreements.terms && newAgreements.privacy && newAgreements.caution;
       setAgreements(newAgreements);
+    }
+  };
+
+  //토스 결제
+  const [toss, setToss] = useState(null);
+  // TossPayments 인스턴스 로드
+  useEffect(() => {
+    loadTossPayments(import.meta.env.VITE_TOSS_CLIENT_KEY)
+      .then(instance => setToss(instance))
+      .catch(err => console.error('TossPayments 로드 실패', err));
+  }, []);
+
+    // 결제 처리
+  const handlePay = async () => {
+    if (!(agreements.terms && agreements.privacy && agreements.caution)) {
+      alert('모든 필수 약관에 동의해주세요.');
+      return;
+    }
+    if (!user || !token) {
+      if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
+        navigate('/userlogin');
+      }
+      return;
+    }
+    if (!toss) {
+      alert('결제 모듈이 로드되지 않았습니다. 잠시 후 시도해주세요.');
+      return;
+    }
+
+    try {
+      const orderId = `ORD-${user.userId}-${Date.now()}`;
+      const { data } = await axios.post('/api/payments/init', { orderId, amount: finalPrice });
+      const paymentKey = data.paymentKey;
+
+      toss.requestPayment(paymentKey, {
+        onSuccess: async ({ paymentKey: key }) => {
+          await axios.post('/api/payments/approve', { paymentKey: key, orderId });
+          alert('결제 성공!');
+          navigate('/user/payments');
+        },
+        onFail: error => {
+          console.error(error);
+          alert('결제에 실패했습니다.');
+        }
+      });
+    } catch (err) {
+      console.error('결제 초기화 오류', err);
+      alert('결제 초기화 중 오류가 발생했습니다.');
     }
   };
 
@@ -244,6 +301,7 @@ export default function ClassPayment() {
               <strong>₩{finalPrice.toLocaleString()}</strong>
             </div>
             <button className={styles.payButton}
+              onClick={handlePay}
               disabled={!(agreements.terms && agreements.privacy && agreements.caution)}
             >₩{finalPrice.toLocaleString()} 결제하기</button>
             {!(agreements.terms && agreements.privacy && agreements.caution) && (

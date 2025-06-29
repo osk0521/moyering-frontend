@@ -132,7 +132,7 @@ export default function ClassRingDetail() {
             setHostAtom(res.data.host);
             setReviewListAtom(res.data.reviews);
             setCoupons(res.data.coupons);
-            setMyCoupons(res.data.userCoupons);
+            setMyCoupons(res.data.userCoupons || []);
             console.log(res.data);
           })
           .catch((err) => console.error("클래스 추천 데이터 로딩 실패", err));
@@ -162,8 +162,14 @@ export default function ClassRingDetail() {
     const [downloadedIds, setDownloadedIds] = useState([]);
 
     const handleDownload = async (classCouponId) => {
+      if (!user || !token) {
+        if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
+          navigate("/userlogin");
+        }
+        return;
+      }
       try {
-        const res = token && await myAxios(token,setToken).post("/user/classCoupons/download", {
+        token && await myAxios(token,setToken).post("/user/classCoupons/download", {
           classCouponId,
         });
 
@@ -176,6 +182,10 @@ export default function ClassRingDetail() {
           )
         );
 
+        setMyCoupons(prev => [
+          ...prev,
+          { classCouponId },
+        ]);
         setDownloadedIds(prev => [...prev, classCouponId]);
 
       } catch (err) {
@@ -458,7 +468,7 @@ export default function ClassRingDetail() {
 
                 {isOpen && coupons.length > 0 && (
                   <ul className={styles.dropdownList}>
-                    {coupons.map(c => {
+                    {coupons?.map(c => {
                       const remaining = c.amount - c.usedCnt;
                       const isDownloaded = myCoupons.some(
                         mc => mc.classCouponId === c.classCouponId

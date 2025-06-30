@@ -3,16 +3,17 @@ import ClassCard from '../../components/ClassCard';
 import styles from './ClassList.module.css';
 import DatePicker from 'react-datepicker';
 import Header from './Header';
+import { useNavigate } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   classListAtom,
   currentPageAtom,
   totalPagesAtom,
   classFilterAtom,
+  categoryListAtom,
 } from '../../atom/classAtom';
 import {fetchClassListAtom} from '../../hooks/common/fetchClassListAtom';
 import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom';
-import { categoryListAtom } from '../../atom/classAtom';
 
 export default function ClassList() {
     const [selectedDate1, setSelectedDate1] = useState(null);
@@ -20,10 +21,10 @@ export default function ClassList() {
   const [selectedSido, setSelectedSido] = useState("");
   const [selectedCategory1, setSelectedCategory1] = useState('');
   const [selectedCategory2, setSelectedCategory2] = useState('');
-  const [selectedStartTime, setSelectedStartTime] = useState('');
-  const [selectedEndTime, setSelectedEndTime] = useState('');
   const [selectedPriceMin, setSelectedPriceMin] = useState('');
   const [selectedPriceMax, setSelectedPriceMax] = useState('');
+  const [selectedName, setSelectedName] = useState('');
+  const navigate = useNavigate();
 
   const classList = useAtomValue(classListAtom);
   const totalPages = useAtomValue(totalPagesAtom);
@@ -36,12 +37,15 @@ export default function ClassList() {
   const categoryList = useAtomValue(categoryListAtom);
   const fetchCategories = useSetAtom(fetchCategoryListAtom);
 
+  //처음에 클래스 끌고오기
+  const filters = useAtomValue(classFilterAtom);
   console.log(categoryList);
   
   // useEffect로 최초 1회 호출
   useEffect(() => {
     fetchCategories();
-  }, []);
+    fetchClassList();
+  }, [currentPage, filters]);
 
   const firstCategoryList = Array.from(
     new Map(categoryList.map(item => [item.categoryId, item.categoryName])).entries()
@@ -66,10 +70,9 @@ setCurrentPage(1); // 페이지 초기화
     category2: selectedCategory2,
     startDate: selectedDate1,
     endDate: selectedDate2,
-    startTime: selectedStartTime,
-    endTime: selectedEndTime,
     priceMin: selectedPriceMin,
     priceMax: selectedPriceMax,
+    name: selectedName,
   }));
 
   fetchClassList(); // 필터 적용 후 새 목록 요청
@@ -88,6 +91,7 @@ const handleReset = () => {
   setSelectedDate2(null);
   setSelectedPriceMin('');
   setSelectedPriceMax('');
+  setSelectedName('');
   setCurrentPage(1);
   setFilter({
     sido: '',
@@ -96,7 +100,8 @@ const handleReset = () => {
     startDate: null,
     endDate: null,
     priceMin: '',
-    priceMax: ''
+    priceMax: '',
+    name:'',
   });
   fetchClassList();
 };
@@ -115,8 +120,8 @@ const handleReset = () => {
                 <label>지역</label>
                 <select className={styles.datePickerInput} value={selectedSido} onChange={handleSidoChange}>
                   <option value="">전체</option>
-                  <option value="서울특별시">서울특별시</option>
-                  <option value="부산광역시">부산광역시</option>
+                  <option value="서울">서울</option>
+                  <option value="부산">부산</option>
                   <option value="대구광역시">대구광역시</option>
                   <option value="인천광역시">인천광역시</option>
                   <option value="광주광역시">광주광역시</option>
@@ -164,8 +169,16 @@ const handleReset = () => {
                   </select>
                 </div>
               </div>
+              {/* 제목 */}
               <div className={styles.formGroup}>
+                <label>제목</label>
+                <div className={styles.range}>
+                  <input type="text" placeholder="제목" className={styles.datePickerInput}
+                  value={selectedName}
+                  onChange={(e) => setSelectedName(e.target.value)}/>   
+                </div>
               </div>
+              
       
               {/* 날짜 */}
               <div className={styles.formGroup}>
@@ -188,7 +201,6 @@ const handleReset = () => {
                   />
                 </div>
               </div>
-      
               {/* 금액 */}
               <div className={styles.formGroup}>
                 <label>금액</label>
@@ -202,7 +214,7 @@ const handleReset = () => {
                   onChange={(e) => setSelectedPriceMax(e.target.value)}
                   />    
                 </div>
-              </div>
+              </div>      
       
               {/* 하단 버튼 */}
               <div className={styles.formGroup}>
@@ -224,7 +236,7 @@ const handleReset = () => {
             <ClassCard
               key={idx}
               classInfo={classInfo}
-              onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
+              onClick={() => navigate(`/class/classRingDetail/${classInfo.classId}`)}
             />
           )))}
         </div>

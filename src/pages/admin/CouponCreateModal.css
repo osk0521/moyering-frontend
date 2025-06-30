@@ -1,0 +1,443 @@
+/* 모달 오버레이 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+  }
+  
+  /* 모달 컨텐츠 */
+  .modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 95%;
+    max-width: 600px;
+    min-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  
+  /* 모달 헤더 */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 28px 20px 28px;
+    border-bottom: 2px solid #f0f2f5;
+    background: white;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  
+  .close-btn:hover {
+    color: #e74c3c;
+    background-color: #f8f9fa;
+  }
+  
+  /* 모달 바디 */
+  .modal-body {
+    padding: 28px;
+    background: white;
+  }
+  
+  /* 폼 그룹 */
+  .form-group {
+    margin-bottom: 28px;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 16px;
+  }
+  
+  /* 입력 필드 */
+  .form-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    background-color: #fafbfc;
+    letter-spacing: normal;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: #4f75ff;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(79, 117, 255, 0.1);
+  }
+  
+  .form-input::placeholder {
+    color: #95a5a6;
+    font-weight: 400;
+  }
+  
+  /* 버튼이 있는 입력 필드 */
+  .input-with-button {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .input-with-button .form-input {
+    flex: 1;
+  }
+  
+  .generate-btn {
+    background: #4f75ff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .generate-btn:hover {
+    background: #3d5acc;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 117, 255, 0.3);
+  }
+  
+  /* 아이콘이 있는 입력 필드 */
+  .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    background: #22c55e;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+  }
+  
+  .input-with-icon .form-input {
+    padding-left: 20px;
+    padding-right: 45px;
+  }
+  
+  /* 숫자 입력 필드의 기본 화살표(스피너) 숨기기 */
+  .form-input[type="number"]::-webkit-inner-spin-button,
+  .form-input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .form-input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+  
+  .input-suffix {
+    position: absolute;
+    right: 20px;
+    color: #7f8c8d;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  /* 쿠폰 타입 토글 */
+  .coupon-type-toggle {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .toggle-label {
+    background: linear-gradient(135deg, #4f75ff, #667eea);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(79, 117, 255, 0.3);
+  }
+  
+  /* 라디오 그룹 */
+  .radio-group {
+    display: flex;
+    gap: 32px;
+    margin-top: 12px;
+  }
+  
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2c3e50;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  
+  .radio-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .radio-item input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    accent-color: #4f75ff;
+  }
+  
+  /* 날짜 필드 */
+  .date-row {
+    display: flex;
+    gap: 24px;
+    position: relative;
+  }
+  
+  .date-field {
+    flex: 1;
+  }
+  
+  .date-input {
+    width: 100%;
+  }
+  
+  .date-center-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 20px; /* 라벨 높이만큼 조정 */
+  }
+  
+  /* 힌트 텍스트 */
+  .form-hint {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #7f8c8d;
+    font-style: italic;
+  }
+  
+  /* 모달 푸터 */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20=px 28px;
+    border-top: 2px solid #f0f2f5;
+    background-color: #f8f9fa;
+    border-radius: 0 0 16px 16px;
+  }
+  
+  .modal-action-buttons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .cancel-btn,
+  .submit-btn {
+    background: #e9ecef;
+    color: #7f8c8d;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  /* .cancel-btn {
+    background: #e9ecef;
+    color: #7f8c8d;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  } */
+  
+  .cancel-btn:hover {
+    background: #f8f9fa;
+    border-color: #bdc3c7;
+    color: #2c3e50;
+  }
+  
+  .submit-btn {
+    background: linear-gradient(135deg, #4f75ff, #667eea);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(79, 117, 255, 0.3);
+  }
+  
+  .submit-btn:hover {
+    background: linear-gradient(135deg, #3d5acc, #5a67d8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 117, 255, 0.4);
+  }
+  
+  /* 스크롤바 스타일링 */
+  .modal-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+  
+  .modal-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+  
+  .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+  
+  /* 반응형 */
+  @media (max-width: 600px) {
+    .modal-content {
+      width: 95%;
+      margin: 10px;
+      max-height: 95vh;
+      min-width: auto;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .modal-header {
+      padding-top: 20px;
+      padding-bottom: 16px;
+    }
+    
+    .modal-body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    
+    .modal-footer {
+      padding-top: 16px;
+      padding-bottom: 20px;
+      flex-direction: column-reverse;
+    }
+    
+    .radio-group {
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .date-row {
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .date-center-icon {
+      display: none;
+    }
+    
+    .cancel-btn,
+    .submit-btn {
+      width: 100%;
+    }
+    
+    .input-with-button {
+      flex-direction: column;
+    }
+    
+    .generate-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  /* 애니메이션 */
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .modal-content {
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  
+  /* 포커스 상태 개선 */
+  .form-input:focus,
+  .generate-btn:focus,
+  .cancel-btn:focus,
+  .submit-btn:focus {
+    outline: 2px solid #4f75ff;
+    outline-offset: 2px;
+  }
+  
+  /* 라디오 버튼 체크 상태 스타일링 */
+  .radio-item input[type="radio"]:checked + * {
+    color: #4f75ff;
+    font-weight: 600;
+  }

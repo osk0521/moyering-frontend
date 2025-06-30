@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './TabPortfolio.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const TabPortfolio = ({ registerValidator,classData,setClassData }) => {
   const {classPortfolio} = classData;
@@ -9,7 +10,7 @@ const TabPortfolio = ({ registerValidator,classData,setClassData }) => {
       ...prev,
       classPortfolio:{
         ...prev.classPortfolio,
-        portfolio:e.target.value
+        portfolio:e.target.files[0]
       }
     }))
   };
@@ -35,7 +36,7 @@ const TabPortfolio = ({ registerValidator,classData,setClassData }) => {
         </label>
         <div className="KHJ-file-upload-container">
           {classPortfolio.portfolio ? (
-            <span>{classPortfolio.portfolio}</span>
+            <span>{classPortfolio.portfolio.name}</span>
           ) : (
             <span className="KHJ-file-placeholder">포트폴리오 파일을 클릭하여 업로드하세요</span>
           )}

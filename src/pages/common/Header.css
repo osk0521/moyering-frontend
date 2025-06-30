@@ -6,19 +6,17 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   min-width: 1280px;
 }
-
-    /* max-width: 1600px;
-    margin: 0 auto;
-    padding: 2rem;
-    min-width: 1280px; */
 /* 상단 메뉴바 */
 .Header_top-menu-bar_osk {
-  width: 100%;
+  width: 1280px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding: 8px 24px;
   background-color: white;
+  
+    margin: 0 auto;
+    /* padding: 16px 24px; */
 }
 
 .Header_top-menu-items_osk {
@@ -47,8 +45,13 @@
   color: #6b7280;
   cursor: pointer;
   transition: color 0.2s;
+  display: flex;
+  align-items:center;
 }
-
+.Header_top-menu-link_osk img{
+  width: 30px;
+  margin-right:5px;
+}
 .Header_top-menu-link_osk a {
   text-decoration: none;
   color: inherit;
@@ -168,15 +171,15 @@
 .Header_search-button_osk:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
 }
-.Header_heart-button_osk{
-    color: #e61a1a;
+.Header_heart-button_osk .login{
+    color: #e61a1a !important;
 }
-.Header_heart-button_osk:hover{
+/* .Header_heart-button_osk:hover{
     color: #e61a1a!important;
 }
 .Header_heart-button_osk btn.active:hover{
     color: #e61a1a;
-}
+} */
 /* 네비게이션 섹션 */
 .Header_nav-section_osk {
   display: flex;
@@ -196,4 +199,10 @@
 
 .Header_nav-item_osk:hover {
   color: #FFB22C;
+}
+
+.Header_top-menu-logout{
+  background-color: white;
+  border: none;
+  color: #6b7280;
 }

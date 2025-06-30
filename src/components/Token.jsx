@@ -4,10 +4,14 @@ import {tokenAtom, userAtom} from "../atoms";
 import axios from "axios";
 import { url } from "../config";
 import { useNavigate } from "react-router";
+import { useAtomValue } from "jotai/react";
+import { fcmTokenAtom } from "../atoms";
+
 
 export default function Token() {
     let params = new URL(window.location.href).searchParams;
     let token = params.get("token");
+    const fcmToken = useAtomValue(fcmTokenAtom);
 
     const setToken = useSetAtom(tokenAtom);
     setToken(token);
@@ -16,7 +20,9 @@ export default function Token() {
     const navigate = useNavigate();
 
     useEffect(()=> {
-        axios.post(`${url}/user`,null,{
+        let formData = new FormData();
+        formData.append("fcmToken", fcmToken);
+        axios.post(`${url}/user`,formData,{
             headers:{Authorization:token}
         })
         .then(res=> {

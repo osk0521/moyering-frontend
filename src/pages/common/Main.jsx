@@ -3,6 +3,7 @@ import styles from "./Main.module.css";
 import ClassCard from "../../components/ClassCard";
 import { recommendClassAtom,hotClassAtom ,recommendGatheringAtom,mainBannerList } from "../../atom/classAtom";
 import useRecommendClasses from "../../hooks/common/useRecommendClasses";
+import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 import { useAtomValue } from "jotai";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -14,6 +15,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 export default function Main() {
+    useRecommendClasses(); // userId 없으면 null 넘기기
+  useFetchUserClassLikes();
 //슬라이더 
 const settings = {
   dots: true,
@@ -29,17 +32,17 @@ const settings = {
 
 const items = [
   { title: "내 주변 클래스링", desc: "주변에 있는 클래스 찾기", icon: "❤️", link: "/classList" },
-  { title: "오늘 당장 게더링", desc: "주변에 있는 당일모임 찾기", icon: "🕒", link: "/classList" },
+  { title: "오늘 당장 게더링", desc: "주변에 있는 당일모임 찾기", icon: "🕒", link: "/gatheringList" },
   { title: "강사 홍보 게시판", desc: "원하는 강사를 찾아보세요.", icon: "🗂️", link: "/" },
-  { title: "소셜링", desc: "사람들은 어떤 이야기를 나눌까?", icon: "💬", link: "/feed" },
+  { title: "소셜링", desc: "사람들은 어떤 이야기를 나눌까?", icon: "💬", link: "/feeds" },
 ];
-  useRecommendClasses(); // userId 없으면 null 넘기기
+
+
   const classes = useAtomValue(recommendClassAtom);
   const hotClasses = useAtomValue(hotClassAtom);
   const gathers = useAtomValue(recommendGatheringAtom);
+  //const gathers = [];
   const mainBanners = useAtomValue(mainBannerList);
-
-  console.log(mainBanners);
   return (
     <>
       <Header />
@@ -53,7 +56,7 @@ const items = [
               <div key={banner.bannerId}>
                 <img
                   src={`${url}/image?filename=${banner.bannerImg}`}
-                  alt={banner.title}
+                  alt={banner.bannerImg}
                   className={styles.bannerImage}
                 />
               </div>
@@ -98,7 +101,7 @@ const items = [
               <ClassCard
                 key={idx}
                 classInfo={classInfo}
-                onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
+                onClick={() => navigate(`/class/classRingDetail/${classInfo.classId}`)}
               />
             )))}
           </div>
@@ -112,11 +115,11 @@ const items = [
             {gathers.length === 0 ? (
               <p>데이터가 없습니다.</p>
             ) : (
-              gathers.map((classInfo, idx) => (
-              <ClassCard
+              gathers.map((gatherInfo, idx) => (
+              <GatheringCard
                 key={idx}
-                classInfo={classInfo}
-                onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
+                gatherInfo={gatherInfo}
+                onClick={() => navigate(`/gatheringDetail/${gatherInfo.gatheringId}`)}
               />
             )))}
           </div>
@@ -136,7 +139,7 @@ const items = [
               <ClassCard
                 key={idx}
                 classInfo={classInfo}
-                onClick={() => navigate(`/classRingDetail/${classInfo.classId}`)}
+                onClick={() => navigate(`/class/classRingDetail/${classInfo.classId}`)}
               />
             )))}
           </div>

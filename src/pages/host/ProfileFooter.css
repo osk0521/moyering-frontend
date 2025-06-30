@@ -20,11 +20,22 @@
 }
 
 .KHJ-footer__btn {
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 4px;
+  background-color: #00b894;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s;
+}
+
+/* 비활성화 상태 */
+.KHJ-footer__btn:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .KHJ-footer__btn:hover {

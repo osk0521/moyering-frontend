@@ -1,37 +1,69 @@
-import React, { useState, useEffect, memo, useRef } from "react";
+import { useAtomValue } from "jotai";
+import React, { useEffect, useState } from "react";
+import { BiChevronDown, BiChevronRight } from "react-icons/bi";
+import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import { GoPeople } from "react-icons/go";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { useParams } from "react-router-dom";
 import Slider from "react-slick";
-import ReactDOM from "react-dom";
-import { CiHeart } from "react-icons/ci";
-import { BiChevronRight, BiChevronDown } from "react-icons/bi";
-import { url, KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY } from "../../config"
-import KakaoMap from "./KakaoMap";
-import axios from 'axios';
-
-import "slick-carousel/slick/slick.css";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import "slick-carousel/slick/slick-theme.css";
-import Header from "./Header";
-import {Table, Modal, ModalHeader,  ModalBody, ModalFooter, Button,} from "reactstrap";
+import "slick-carousel/slick/slick.css";
+import { tokenAtom, userAtom } from "../../atoms";
+import { myAxios, url } from "../../config";
+import { useNavigate } from "react-router-dom";
+import KakaoMap from "./KakaoMap";
 import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
-// import { FaRegCalendar } from "react-icons/fa";
-import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
-import { GoPeople } from "react-icons/go";
+import Header from "./Header";
 import aImage from "/detail2.png";
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
-import { useNavigate, useParams } from "react-router-dom";
-
-const handleJoinClick = () => {
-  console.log("참가 신청하기 클릭");
-};
-
-const handleWishlistClick = () => {
-  console.log("찜하기 클릭");
-};
-
+import Footer from "../../components/Footer";
 export default function GatheringDetail() {
-  const{gatheringId} = useParams();
-  
+  const user = useAtomValue(userAtom);
+  const token = useAtomValue(tokenAtom);
+  const userId = user.id;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [aspirationContent, setAspirationContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
+
+  useEffect(() => {
+    // 약간의 지연을 두어 스토리지 로딩 완료 대기
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const { gatheringId } = useParams();
+
+  const navigate = useNavigate();
+  const handleModifyButtonClick = () => {
+    navigate(`/user/gatheringModify/${gatheringId}`);
+  };
+
+  useEffect(() => {
+    if (!isLoaded) return; // 로딩 완료 전에는 실행하지 않음
+    if (token) {
+      myAxios(token)
+        .get(`/user/detailGathering?gatheringId=${gatheringId}`)
+        .then((res) => {
+          console.log("추가 데이터 API 응답:", res.data);
+          setIsLiked(res.data.isLiked);
+          setIsApplied(!res.data.canApply);
+        })
+        .catch((err) => {
+          console.log("에러 발생:", err.response?.status, err.response?.data);
+        });
+    } else {
+      console.log("토큰이 없음 " + token + " user " + user);
+    }
+  }, [gatheringId, token, isLoaded]);
   const [gatheringData, setGatheringData] = useState({
     gatheringId: null,
     title: "",
@@ -56,9 +88,11 @@ export default function GatheringDetail() {
     intrOnln: "",
     status: "",
     locName: "",
+    isLiked: "",
+    canApply: "",
   });
 
-  const [hostData, setHostData] = useState({
+  const [organizerData, setorganizerData] = useState({
     nickname: "",
     profileImage: "",
     followers: 0,
@@ -67,229 +101,203 @@ export default function GatheringDetail() {
     tags: [],
   });
 
-  // 
+  //
   const [members, setMembers] = useState([]);
 
-  useEffect(()=> {
-    axios.get(`${url}/detailGathering/?gatheringId=${gatheringId}`)
-        .then(res=> {
-            console.log('API Response:', res.data); 
-            
-            // gathering 데이터 설정
-            const gathering = res.data.gathering;
-            const host = res.data.host;
-            const member = res.data.member || []; // member 배열 추출
-            
-            // tags 필드를 문자열에서 배열로 변환
-            let parsedTags = [];
-            if (gathering.tags && typeof gathering.tags === 'string') {
-                try {
-                    // 문자열 "['독서', '소모임', '홍대']"를 배열로 변환
-                    const validJsonString = gathering.tags.replace(/'/g, '"');
-                    parsedTags = JSON.parse(validJsonString);
-                } catch (error) {
-                    console.error('Tags 파싱 오류:', error);
-                    parsedTags = [];
-                }
-            }
-            
-            setGatheringData({
-                gatheringId: gathering.gatheringId,
-                title: gathering.title,
-                userId: gathering.userId,
-                gatheringContent: gathering.gatheringContent,
-                thumbnailFileName: gathering.thumbnailFileName,
-                meetingDate: gathering.meetingDate,
-                startTime: gathering.startTime,
-                endTime: gathering.endTime,
-                address: gathering.address,
-                detailAddress: gathering.detailAddress,
-                minAttendees: gathering.minAttendees,
-                maxAttendees: gathering.maxAttendees,
-                applyDeadline: gathering.applyDeadline,
-                preparationItems: gathering.preparationItems,
-                tags: parsedTags,
-                createDate: gathering.createDate,
-                category: gathering.categoryName,
-                subCategory: gathering.subCategoryName,
-                latitude: gathering.latitude,
-                longitude: gathering.longitude,
-                intrOnln: gathering.intrOnln,
-                status: gathering.status,
-                locName: gathering.locName,
-            });
+  const handleApplyButtonClick = () => {
+    if (!user || !token) {
+      if (
+        confirm(
+          "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
+        )
+      ) {
+        navigate("/userlogin");
+      } else {
+        return;
+      }
+    } else {
+      if (isApplied) {
+        alert("이미 지원된 게더링입니다.");
+        return;
+      }
+      // 모달 열기
+      setIsApplyModalOpen(true);
+    }
+  };
 
-            setHostData({
-                nickname: host.nickname,
-                profileImage: host.profile,
-                followers: 0, // API에서 제공되지 않는 경우 기본값
-                intro: host.intro,
-                likeCategory: "",
-                tags: [], // 호스트 태그가 없는 경우 빈 배열
-                categorys: [], // 호스트 카테고리를 배열로 저장
-            });
-            setMembers(member.map(m => ({
-                id: m.gatheringApplyId,
-                name: m.name,
-                profileImage: m.profile ? `${url}/uploads/${m.profile}` : null,
-                introduction: m.intro,
-                applyDate: m.applyDate,
-                aspiration: m.aspiration,
-                isApprove: m.isApprove,
-                userId: m.userId
-            })));
+  // 4. 실제 신청 처리 함수 (모달에서 폼 제출시)
+  const handleApplySubmit = async (e) => {
+    e.preventDefault();
 
-            console.log('변환된 tags:', parsedTags);
+    // 입력값 검증
+    if (!aspirationContent.trim()) {
+      alert("호스트에게 남길 말을 입력해주세요.");
+      return;
+    }
+
+    if (aspirationContent.length > 500) {
+      alert("메시지는 500자 이내로 작성해주세요.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const formData = {
+        gatheringId: parseInt(gatheringId),
+        aspiration: aspirationContent.trim(),
+      };
+      const response = await myAxios(token).post(
+        "/user/applyGathering",
+        formData
+      );
+
+      // 성공 처리
+      console.log("API 성공:", response.data);
+      setIsApplied(true);
+      setIsApplyModalOpen(false);
+      setAspirationContent("");
+      alert("모임 신청이 완료되었습니다!");
+    } catch (error) {
+      console.error("신청 처리 중 오류:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  const handleLikeButtonClick = () => {
+    if (!user || !token) {
+      if (
+        confirm(
+          "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
+        )
+      ) {
+        navigate("/userlogin");
+      } else {
+        return;
+      }
+    } else {
+      const newLikedState = !isLiked;
+      setIsLiked(newLikedState);
+
+      myAxios(token)
+        .post(`/user/toggleGatheringLike?gatheringId=${gatheringId}`)
+        .then((res) => {
+          console.log("API 성공:", res.data);
+          // 서버 응답과 다르다면 다시 설정
+          if (Boolean(res.data) !== newLikedState) {
+            setIsLiked(Boolean(res.data));
+          }
         })
-        .catch(err=> {
-            console.log(err)
-        })
+        .catch((err) => {
+          console.log("API 에러:", err);
+          // 에러 시 원래 상태로 복원
+          setIsLiked(!newLikedState);
+          alert("처리 중 오류가 발생했습니다.");
+        });
+    }
+  };
+
+  useEffect(() => {
+    myAxios()
+      .get(`/detailGathering?gatheringId=${gatheringId}`)
+      .then((res) => {
+        console.log("API Response:", res.data);
+
+        // gathering 데이터 설정
+        const gathering = res.data.gathering;
+        const organizer = res.data.organizer;
+        const recommendations = res.data.recommendations || [];
+        const member = res.data.member || []; // member 배열 추출
+        // const totalLikeNum = res.data.totalLikeNum;
+        // tags 필드를 문자열에서 배열로 변환
+        let parsedTags = [];
+        if (gathering.tags && typeof gathering.tags === "string") {
+          try {
+            // 문자열 "['독서', '소모임', '홍대']"를 배열로 변환
+            const validJsonString = gathering.tags.replace(/'/g, '"');
+            parsedTags = JSON.parse(validJsonString);
+          } catch (error) {
+            console.error("Tags 파싱 오류:", error);
+            parsedTags = [];
+          }
+        }
+        setGatheringData({
+          gatheringId: gathering.gatheringId,
+          title: gathering.title,
+          userId: gathering.userId,
+          gatheringContent: gathering.gatheringContent,
+          thumbnailFileName: gathering.thumbnailFileName,
+          meetingDate: gathering.meetingDate,
+          startTime: gathering.startTime,
+          endTime: gathering.endTime,
+          address: gathering.address,
+          detailAddress: gathering.detailAddress,
+          minAttendees: gathering.minAttendees,
+          maxAttendees: gathering.maxAttendees,
+          applyDeadline: gathering.applyDeadline,
+          preparationItems: gathering.preparationItems,
+          tags: parsedTags,
+          createDate: gathering.createDate,
+          category: gathering.categoryName,
+          subCategory: gathering.subCategoryName,
+          latitude: gathering.latitude,
+          longitude: gathering.longitude,
+          intrOnln: gathering.intrOnln,
+          status: gathering.status,
+          locName: gathering.locName,
+        });
+
+        const organizerCategories = organizer
+          ? [
+              organizer.category1,
+              organizer.category2,
+              organizer.category3,
+              organizer.category4,
+              organizer.category5,
+            ].filter((category) => category && category.trim() !== "")
+          : [];
+
+        setorganizerData({
+          nickname: organizer.nickName,
+          profileImage: organizer.profile,
+          followers: organizer.followers || 0, // followers가 객체가 아닌 숫자값으로 설정
+          intro: organizer.intro || "",
+          tags: organizerCategories,
+        });
+
+        setMembers(
+          member.map((m) => ({
+            id: m.gatheringApplyId,
+            name: m.name,
+            profileImage: m.profile, 
+            introduction: m.intro,
+            applyDate: m.applyDate,
+            aspiration: m.aspiration,
+            isApprove: m.isApprove,
+            userId: m.userId,
+          }))
+        );
+
+        setRecommendations(
+          recommendations.map((r) => ({
+          gatheringId: r.gatheringId,
+          category: `${r.categoryName} > ${r.subCategoryName}`,
+          title : r.title,
+          meetingDate : r.meetingDate,
+          thumbnailFileName:r.thumbnailFileName,
+          locName:r.locName
+          }))
+        );
+
+        console.log("변환된 tags:", parsedTags);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [gatheringId]);
 
   const [activeTab, setActiveTab] = useState("details");
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  // 질문하기 모달 상태
-  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
-  const [questionTitle, setQuestionTitle] = useState("");
-  const [questionContent, setQuestionContent] = useState("");
-
-  // 페이지네이션 상태
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(3);
-  const [questions, setQuestions] = useState([]);
-
-  const handleExpandClick = () => {
-    setIsExpanded(true);
-  };
-
-  // 질문하기 모달 관련 함수들
-  const toggleQuestionModal = () => {
-    setIsQuestionModalOpen(!isQuestionModalOpen);
-    // 모달 닫을 때 입력값 초기화
-    if (isQuestionModalOpen) {
-      setQuestionTitle("");
-      setQuestionContent("");
-    }
-  };
-
-  const handleQuestionSubmit = () => {
-    if (!questionTitle.trim()) {
-      alert("질문 제목을 입력해주세요.");
-      return;
-    }
-    if (!questionContent.trim()) {
-      alert("질문 내용을 입력해주세요.");
-      return;
-    }
-
-    console.log("질문 제출:", {
-      title: questionTitle,
-      content: questionContent,
-    });
-
-    // 여기서 백엔드로 질문 데이터를 전송하는 로직 추가
-    // submitQuestion(questionTitle, questionContent);
-
-    // 성공 시 모달 닫기
-    toggleQuestionModal();
-  };
-
-  // 페이지 변경 핸들러
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-  
-  const exampleQuestionsData = {
-    questions: [
-      {
-        id: 1,
-        status: "답변대기",
-        content: "준비물 필수인가요?",
-        author: "id18****",
-        date: "2025-03-29",
-        answer: null,
-      },
-      {
-        id: 2,
-        status: "답변완료",
-        content: "처의 집문이옵니다.",
-        author: "id335****",
-        date: "2025-03-29",
-        answer: null,
-      },
-      {
-        id: 3,
-        status: "답변완료",
-        content: "또 다른 질문이용",
-        author: "id877****",
-        date: "2025-02-21",
-        answer: null,
-      },
-      {
-        id: 4,
-        status: "답변완료",
-        content: "수업에 상황 늦을 것같은데 초반을 놓치면 따라가기 힘들까요?",
-        author: "id877****",
-        date: "2025-02-21",
-        answer: {
-          author: "호스트명",
-          date: "2025-02-21",
-          content: [
-            "안녕하세요. 고객님 처의 1대1로 수강생분들의 속도에 맞춰서 수업을 진행합니다.",
-            "또한, 시간 강의자료를 업로드해드리오니 크게 문제는 없을 것으로 예상됩니다.",
-            "다만, 많이 늦을실 경우에 한정된 시간 내에 완성이 어려우실 수 있습니다.",
-          ],
-        },
-      },
-      {
-        id: 5,
-        status: "답변완료",
-        content: "어기도 있어요 질문",
-        author: "id18id18id18id18id18id18",
-        date: "2025-02-21",
-        answer: null,
-      },
-      {
-        id: 6,
-        status: "답변완료",
-        content: "나두 질문이요",
-        author: "id335****",
-        date: "2025-01-01",
-        answer: null,
-      },
-    ],
-    totalPages: 3,
-    currentPage: 1,
-  };
-
-  const recommendations = [
-    {
-      id: 1,
-      category: "취미 > 수집",
-      title: "레트로 테마",
-      date: "2024년 6월 1일 (토)",
-      participants: "3/6명",
-      image: "./a.png",
-    },
-    {
-      id: 2,
-      category: "취미 > 수집",
-      title: "레트로 테마",
-      date: "2024년 6월 1일 (토)",
-      participants: "3/6명",
-      image: "./a.png",
-    },
-    {
-      id: 3,
-      category: "취미 > 수집",
-      title: "레트로 테마",
-      date: "2024년 6월 1일 (토)",
-      participants: "3/6명",
-      image: "./a.png",
-    },
-  ];
 
   const totalMembers = members.length;
   const CustomPrevArrow = ({ style, onClick, show }) => {
@@ -321,7 +329,7 @@ export default function GatheringDetail() {
 
   // HTML 태그를 제거하고 순수 텍스트만 추출하는 함수
   const stripHtmlTags = (html) => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
   };
 
@@ -331,12 +339,12 @@ export default function GatheringDetail() {
     if (textContent.length <= maxLength) {
       return html;
     }
-    
+
     // 텍스트가 길면 간단하게 처리
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const doc = new DOMParser().parseFromString(html, "text/html");
     const textNodes = doc.body.textContent || "";
     const truncatedText = textNodes.substring(0, maxLength) + "...";
-    
+
     // 기본적인 HTML 구조 유지하면서 텍스트만 자르기
     return `<p>${truncatedText}</p>`;
   };
@@ -346,22 +354,17 @@ export default function GatheringDetail() {
 
   // 전체 상세 설명 텍스트 (gatheringContent 사용)
   const fullDescription = gatheringData.gatheringContent || "";
-  
+
   // HTML 태그를 제거한 순수 텍스트로 길이 판단
   const plainTextContent = stripHtmlTags(fullDescription);
-  
+
   // 더보기 버튼을 보여줄지 결정 (순수 텍스트 기준)
   const shouldShowMoreButton = plainTextContent.length > PREVIEW_LENGTH;
-  
+
   // 미리보기용 HTML 콘텐츠
-  const previewHtmlContent = shouldShowMoreButton 
+  const previewHtmlContent = shouldShowMoreButton
     ? truncateHtmlContent(fullDescription, PREVIEW_LENGTH)
     : fullDescription;
-
-  const questionsPerPage = 5;
-  const startIndex = (currentPage - 1) * questionsPerPage;
-  const endIndex = startIndex + questionsPerPage;
-  const currentQuestions = questions.slice(startIndex, endIndex);
 
   // 날짜 포맷팅 함수
   const formatDate = (dateString) => {
@@ -370,18 +373,43 @@ export default function GatheringDetail() {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    const weekDay = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+    const weekDay = ["일", "월", "화", "수", "목", "금", "토"][date.getDay()];
     return `${year}년 ${month}월 ${day}일 (${weekDay})`;
   };
-
   // 시간 포맷팅 함수
   const formatTime = (timeString) => {
     if (!timeString) return "";
-    const [hours, minutes] = timeString.split(':');
+    const [hours, minutes] = timeString.split(":");
     const hour = parseInt(hours);
-    const ampm = hour >= 12 ? '오후' : '오전';
+    const ampm = hour >= 12 ? "오후" : "오전";
     const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
     return `${ampm} ${displayHour}:${minutes}`;
+  };
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return "";
+
+    try {
+      const date = new Date(dateTimeString);
+
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+
+      // 날짜 부분만 추출 (YYYY-MM-DD 형식)
+      const dateOnly = date.toISOString().split("T")[0];
+
+      // 시간 부분만 추출 (HH:mm 형식)
+      const timeOnly = date.toTimeString().slice(0, 5);
+
+      // 기존 함수들 활용
+      const formattedDate = formatDate(dateOnly);
+      const formattedTime = formatTime(timeOnly);
+
+      return `${formattedDate} ${formattedTime}`;
+    } catch (error) {
+      console.error("날짜 변환 오류:", error);
+      return "";
+    }
   };
   // 탭 클릭 시 해당 섹션으로 스크롤 이동
   const handleTabClick = (tabName) => {
@@ -398,13 +426,22 @@ export default function GatheringDetail() {
     }
     setActiveTab(tabName);
   };
-
+  const toggleApplyModal = () => {
+    setIsApplyModalOpen(!isApplyModalOpen);
+    // 모달 닫을 때 입력값 초기화
+    if (isApplyModalOpen) {
+      setAspirationContent("");
+    }
+  };
+  const handleExpandClick = () => {
+    setIsExpanded(true);
+  };
   // 스크롤 위치에 따라 활성 탭 변경
   useEffect(() => {
     const handleScroll = () => {
       const sections = [
         "details",
-        "host",
+        "organizer",
         "questions",
         "members",
         "recommendations",
@@ -423,10 +460,6 @@ export default function GatheringDetail() {
         }
       }
     };
-
-    setQuestions(exampleQuestionsData.questions);
-    setTotalPages(exampleQuestionsData.totalPages);
-    setCurrentPage(exampleQuestionsData.currentPage);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -442,7 +475,7 @@ export default function GatheringDetail() {
             {/* 이미지 섹션 */}
             <div className="GatheringDetail_image-section_osk">
               <img
-                src={gatheringData.thumbnailFileName ? `${url}/image?filename=${gatheringData.thumbnailFileName}` : aImage}
+                src={`${url}/image?filename=${gatheringData.thumbnailFileName}`}
                 alt="모임 이미지"
                 className="GatheringDetail_main-image_osk"
               />
@@ -461,9 +494,9 @@ export default function GatheringDetail() {
                 </button>
                 <button
                   className={`GatheringDetail_tab_osk ${
-                    activeTab === "host" ? "GatheringDetail_active_osk" : ""
+                    activeTab === "organizer" ? "GatheringDetail_active_osk" : ""
                   }`}
-                  onClick={() => handleTabClick("host")}
+                  onClick={() => handleTabClick("organizer")}
                 >
                   모임장
                 </button>
@@ -475,7 +508,7 @@ export default function GatheringDetail() {
                   }`}
                   onClick={() => handleTabClick("questions")}
                 >
-                  질문
+                  문의
                 </button>
                 <button
                   className={`GatheringDetail_tab_osk ${
@@ -511,11 +544,11 @@ export default function GatheringDetail() {
                 <p className="mb-4 text-gray-700 leading-relaxed">
                   {gatheringData.intrOnln}
                 </p>
-                
+
                 {/* Toast UI Editor로 작성된 내용을 HTML로 렌더링 */}
                 {!isExpanded && shouldShowMoreButton && (
                   <>
-                    <div 
+                    <div
                       className="mb-4 text-gray-700 leading-relaxed"
                       dangerouslySetInnerHTML={{ __html: previewHtmlContent }}
                     />
@@ -529,32 +562,12 @@ export default function GatheringDetail() {
                 )}
 
                 {(isExpanded || !shouldShowMoreButton) && (
-                  <div 
+                  <div
                     className="text-gray-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: gatheringData.gatheringContent }}
+                    dangerouslySetInnerHTML={{
+                      __html: gatheringData.gatheringContent,
+                    }}
                   />
-                )}
-
-                {/* 준비물 */}
-                {gatheringData.preparationItems && (
-                  <>
-                    <h3
-                      className="GatheringDetail_section-title_osk"
-                      style={{ marginTop: "32px" }}
-                    >
-                      준비물
-                    </h3>
-                    <ul className="GatheringDetail_info-list_osk">
-                      <li className="GatheringDetail_info-item_osk">
-                        <span className="GatheringDetail_info-label_osk">
-                          준비물
-                        </span>
-                        <span className="GatheringDetail_info-value_osk">
-                          {gatheringData.preparationItems}
-                        </span>
-                      </li>
-                    </ul>
-                  </>
                 )}
 
                 {/* 위치 */}
@@ -578,170 +591,88 @@ export default function GatheringDetail() {
                 <p className="GatheringDetail_description_osk">
                   {gatheringData.address} {gatheringData.detailAddress}
                 </p>
+                {/* 태그 표시 */}
+                {gatheringData.tags && gatheringData.tags.length > 0 && (
+                  <div className="GatheringDetail_tags_osk">
+                    {gatheringData.tags.map((tag, index) => (
+                      <span key={index} className="GatheringDetail_tag_osk">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {/* 준비물 */}
+                {gatheringData.preparationItems && (
+                  <>
+                    <h3
+                      className="GatheringDetail_section-title_osk"
+                      style={{ marginTop: "32px" }}
+                    >
+                      준비물
+                    </h3>
+                    <ul className="GatheringDetail_info-list_osk">
+                      <li className="GatheringDetail_info-item_osk">
+                        <span className="GatheringDetail_info-label_osk">
+                          준비물
+                        </span>
+                        <span className="GatheringDetail_info-value_osk">
+                          {gatheringData.preparationItems}
+                        </span>
+                      </li>
+                    </ul>
+                  </>
+                )}
               </div>
 
               {/* 모임장 섹션 */}
               <div
-                id="GatheringDetail_host_osk"
+                id="GatheringDetail_organizer_osk"
                 className="GatheringDetail_detail-section_osk"
               >
                 <h3 className="GatheringDetail_section-title_osk">
                   같이 할 모임장을 소개해요
                 </h3>
-                <div className="GatheringDetail_host-info_osk">
-                  <div className="GatheringDetail_host-avatar_osk">
+                <div className="GatheringDetail_organizer-info_osk">
+                  <div className="GatheringDetail_organizer-avatar_osk">
                     <img
-                      src={hostData.profileImage ? `${url}/image?filename=${hostData.profileImage}` : aImage}
-                      alt={hostData.nickname}
-                      className="GatheringDetail_host-profile-image_osk"
+                      src={`${url}/image?filename=${organizerData.profileImage}`}
+                      alt={organizerData.nickname}
+                      className="GatheringDetail_organizer-profile-image_osk"
                     />
                   </div>
-                  <div className="GatheringDetail_host-details_osk">
-                    <h4>{hostData.name}</h4>
-                    <div className="GatheringDetail_host-stats_osk">
-                      팔로워 {hostData.followers}명
+                  <div className="GatheringDetail_organizer-details_osk">
+                    <h4>{organizerData.nickname}</h4>
+                    <div className="GatheringDetail_organizer-stats_osk">
+                      팔로워 {organizerData.followers}명
                     </div>
-                    <div className="GatheringDetail_host-description_osk">
-                      {hostData.intro}
+                    <div className="GatheringDetail_organizer-description_osk">
+                      {organizerData.intro}
                     </div>
-                    {hostData.tags && hostData.tags.length > 0 && (
-                      <div className="GatheringDetail_host-tags_osk">
-                        {hostData.tags.slice(0, 5).map((tag, index) => (
+                    {organizerData.tags && organizerData.tags.length > 0 && (
+                      <div className="GatheringDetail_organizer-tags_osk">
+                        {organizerData.tags.slice(0, 5).map((tag, index) => (
                           <span
                             key={index}
-                            className="GatheringDetail_host-tag_osk"
+                            className="GatheringDetail_organizer-tag_osk"
                           >
                             {tag}
                           </span>
                         ))}
-                        {hostData.tags.length > 5 && (
-                          <span className="GatheringDetail_host-tag_osk">
-                            +{hostData.tags.length - 5}
-                          </span>
-                        )}
                       </div>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* 질문 섹션 */}
+              {/* 문의 섹션 */}
               <div
                 id="GatheringDetail_questions_osk"
                 className="GatheringDetail_detail-section_osk"
               >
-                <h3 className="GatheringDetail_section-title_osk">질문</h3>
-    {/* <GatheringDetailInquiry gatheringId={gatheringId} /> */}
-                <div className="GatheringDetail_questions-board_osk">
-                  <div className="GatheringDetail_questions-table_osk">
-                    {/* Header */}
-                    <div className="GatheringDetail_questions-header_osk">
-                      <div className="GatheringDetail_questions-grid-header_osk">
-                        <div>답변상태</div>
-                        <div>작성자</div>
-                        <div>작성일</div>
-                      </div>
-                    </div>
-
-                    {/* 질문이 없는 경우 */}
-                    {currentQuestions.length === 0 ? (
-                      <div className="GatheringDetail_no-questions_osk">
-                        <p>아직 등록된 질문이 없습니다.</p>
-                      </div>
-                    ) : (
-                      /* Dynamic Question Rows */
-                      currentQuestions.map((question, index) => (
-                        <React.Fragment key={question.id}>
-                          <div
-                            className={`GatheringDetail_questions-row_osk ${
-                              index % 2 === 1
-                                ? "GatheringDetail_alternate_osk"
-                                : ""
-                            }`}
-                          >
-                            <div className="GatheringDetail_questions-grid_osk">
-                              <div className="GatheringDetail_status_osk">
-                                <span
-                                  className={`GatheringDetail_status-badge_osk ${
-                                    question.status === "답변완료"
-                                      ? "GatheringDetail_status-completed_osk"
-                                      : "GatheringDetail_status-pending_osk"
-                                  }`}
-                                >
-                                  {question.status}
-                                </span>
-                              </div>
-                              <div className="GatheringDetail_title_osk">
-                                {question.content}
-                              </div>
-                              <div className="GatheringDetail_author_osk">
-                                {question.author}
-                              </div>
-                              <div className="GatheringDetail_date_osk">
-                                {question.date}
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Answer section */}
-                          {question.answer && (
-                            <div className="GatheringDetail_answer-section_osk">
-                              <div className="GatheringDetail_answer-header_osk">
-                                <span className="GatheringDetail_answer-badge_osk">
-                                  답변
-                                </span>
-                                <span className="GatheringDetail_answer-author_osk">
-                                  {question.answer.author}
-                                </span>
-                                <span className="GatheringDetail_answer-date_osk">
-                                  {question.answer.date}
-                                </span>
-                              </div>
-                              <div className="GatheringDetail_answer-content_osk">
-                                {question.answer.content.map(
-                                  (paragraph, idx) => (
-                                    <p key={idx}>{paragraph}</p>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </React.Fragment>
-                      ))
-                    )}
-                  </div>
-
-                  {/* Question Button */}
-                  <button
-                    className="GatheringDetail_question-button_osk"
-                    onClick={toggleQuestionModal}
-                  >
-                    질문하기
-                  </button>
-
-                  {/* Pagination - 질문이 있을 때만 표시 */}
-                  {questions.length > 0 && (
-                    <div className="GatheringDetail_questions-pagination_osk">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (pageNum) => (
-                          <button
-                            key={pageNum}
-                            className={`GatheringDetail_pagination-btn_osk ${
-                              currentPage === pageNum
-                                ? "GatheringDetail_active_osk"
-                                : ""
-                            }`}
-                            onClick={() => handlePageChange(pageNum)}
-                          >
-                            {pageNum}
-                          </button>
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
+                <h3 className="GatheringDetail_section-title_osk">문의</h3>
+                <GatheringDetailInquiry gatheringId={gatheringId} />
               </div>
-              
+
               {/* 멤버 섹션 */}
               <div
                 id="GatheringDetail_members_osk"
@@ -776,8 +707,8 @@ export default function GatheringDetail() {
                         >
                           <div className="GatheringDetail_member-card_osk">
                             <div className="GatheringDetail_member-avatar_osk">
-                              <img 
-                                src={`${url}/image?filename=${member.profileImage || aImage}`}
+                              <img
+                                src={`${url}/image?filename=${member.profileImage}`}
                                 alt={`${member.name} 프로필`}
                                 className="GatheringDetail_member-profile-image_osk"
                               />
@@ -805,26 +736,26 @@ export default function GatheringDetail() {
                 )}
               </div>
 
-              {/* 추천 섹션 */}
               <div
                 id="GatheringDetail_recommendations_osk"
                 className="GatheringDetail_section-header_osk"
               >
                 <h3 className="GatheringDetail_section-title_osk">
-                  함께하면 좋을 모임을 찾아드려요
+                  함께하면 좋을 모임을 찾아드려요 
+                  {recommendations.length > 2 && (<span onClick={() => navigate('/a')}> 더보기</span>)}
                 </h3>
               </div>
               <div className="GatheringDetail_recommendations_osk">
                 {recommendations.map((recommendation) => (
                   <div
-                    key={recommendation.id}
+                    key={recommendation.gatheringId}
                     className="GatheringDetail_recommendation-card_osk"
                   >
-                    <img
-                      src={aImage}
-                      alt="추천 모임"
+                    <img 
+                      src={`${url}/image?filename=${recommendation.thumbnailFileName}`}
+                      alt={recommendation.title}
                       className="GatheringDetail_card-image_osk"
-                    />
+                    /> 
                     <div className="GatheringDetail_card-content_osk">
                       <div className="GatheringDetail_card-category_osk">
                         {recommendation.category}
@@ -833,9 +764,7 @@ export default function GatheringDetail() {
                         {recommendation.title}
                       </div>
                       <div className="GatheringDetail_card-info_osk">
-                        📅 {recommendation.date}
-                        <br />
-                        👥 {recommendation.participants}
+                        <CiCalendar /> {recommendation.meetingDate}
                       </div>
                     </div>
                   </div>
@@ -872,7 +801,8 @@ export default function GatheringDetail() {
                   <CiClock1 />
                 </span>
                 <span>
-                  {formatTime(gatheringData.startTime)} - {formatTime(gatheringData.endTime)}
+                  {formatTime(gatheringData.startTime)} -{" "}
+                  {formatTime(gatheringData.endTime)}
                 </span>
               </div>
 
@@ -881,9 +811,7 @@ export default function GatheringDetail() {
                   <GoPeople />
                 </span>
                 <span>
-                  {members.length}명 참가 중 (최소{" "}
-                  {gatheringData.minAttendees}명, 최대{" "}
-                  {gatheringData.maxAttendees}명)
+                  {members.length}명 참가 중 (최소 {gatheringData.minAttendees} 명, 최대 {gatheringData.maxAttendees}명)
                 </span>
               </div>
 
@@ -891,119 +819,165 @@ export default function GatheringDetail() {
                 <span className="GatheringDetail_info-icon_osk">
                   <CiLocationOn />
                 </span>
-                <span>{gatheringData.address} {gatheringData.detailAddress}</span>
+                <span>
+                  {gatheringData.address} {gatheringData.detailAddress}
+                </span>
               </div>
 
-              {/* 태그 표시 */}
+              <div className="GatheringDetail_button-group_osk">
+                <button
+                  className="GatheringDetail_btn_osk GatheringDetail_btn-outline_osk"
+                  onClick={handleLikeButtonClick}
+                >
+                  {isLiked ? (
+                    <>
+                      <FaHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />{" "}
+                      찜해제
+                    </>
+                  ) : (
+                    <>
+                      <CiHeart className="GatheringDetail_top-icon_osk" />{" "}
+                      찜하기
+                    </>
+                  )}
+                </button>
+
+                {/* userId와 gatheringData.userId가 일치하는지 확인하여 버튼 변경 */}
+                {userId === gatheringData.userId ? (
+                  <button
+                    className="GatheringDetail_btn_osk GatheringDetail_btn-modify_osk"
+                    id="GatheringDetail_modify_osk"
+                    onClick={handleModifyButtonClick}
+                  >
+                    수정하기
+                  </button>
+                ) : (
+                  <button
+                    className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
+                    id="GatheringDetail_apply_osk"
+                    onClick={handleApplyButtonClick}
+                  >
+                    신청하기
+                  </button>
+                )}
+              </div>
+              <div className="GatheringDetail_notice-text_osk">
+                신청 마감: {formatDateTime(gatheringData.applyDeadline)}까지
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+      {isApplyModalOpen && (
+        <Modal
+          isOpen={isApplyModalOpen}
+          toggle={toggleApplyModal}
+          className="GatheringDetail_apply-modal_osk"
+          size="lg"
+          centered
+        >
+          <form onSubmit={handleApplySubmit}>
+            {" "}
+            <ModalHeader
+              toggle={toggleApplyModal}
+              className="GatheringDetail_modal-header_osk"
+            >
+              <span className="GatheringDetail_modal-title_osk">
+                {gatheringData.title}
+              </span>
+            </ModalHeader>
+            <ModalBody className="GatheringDetail_modal-body_osk">
+              <div className="GatheringDetail_gathering-info_osk">
+                <img
+                  src={`${url}/image?filename=${gatheringData.thumbnailFileName}`}
+                  alt="모임 이미지"
+                  className="GatheringDetail_gathering-image_osk"
+                />
+                <div className="GatheringDetail_gathering-details_osk">
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <span>
+                      제목: {gatheringData.title} <br />
+                    </span>
+                  </div>
+
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <span>
+                      소개: {gatheringData.introOnline} <br />
+                    </span>
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
+                    <span>
+                      모임일: {formatDate(gatheringData.meetingDate)}{" "}
+                      {formatTime(gatheringData.startTime)} ~{" "}
+                      {formatTime(gatheringData.endTime)}
+                    </span>
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
+                    <CiLocationOn className="GatheringDetail_gathering-info-icon_osk" />
+                    <span>
+                      장소: {gatheringData.address}{" "}
+                      {gatheringData.detailAddress}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {gatheringData.tags && gatheringData.tags.length > 0 && (
-                <div className="GatheringDetail_tags_osk">
+                <div className="GatheringDetail_modal-tags_osk">
                   {gatheringData.tags.map((tag, index) => (
-                    <span key={index} className="GatheringDetail_tag_osk">
+                    <span key={index} className="GatheringDetail_modal-tag_osk">
                       #{tag}
                     </span>
                   ))}
                 </div>
               )}
 
-              <div className="GatheringDetail_button-group_osk">
-                <button
-                  className="GatheringDetail_btn_osk GatheringDetail_btn-outline_osk"
-                  onClick={handleWishlistClick}
+              <div className="GatheringDetail_input-section_osk">
+                <label
+                  htmlFor="aspiration-textarea"
+                  className="GatheringDetail_input-label_osk"
                 >
-                  <CiHeart className="GatheringDetail_top-icon_osk" /> 찜하기
-                </button>
-                <button
-                  className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
-                  id="GatheringDetail_apply_osk"
-                  onClick={handleJoinClick}
-                >
-                  신청하기
-                </button>
+                  호스트에게 남기고 싶은 말{" "}
+                  <span style={{ color: "red" }}>*</span>
+                </label>
+                <textarea
+                  id="aspiration-textarea"
+                  value={aspirationContent}
+                  onChange={(e) => setAspirationContent(e.target.value)}
+                  placeholder="호스트에게 남기고 싶은 말을 적어주세요"
+                  rows={6}
+                  className="GatheringDetail_textarea-field_osk"
+                  maxLength={500}
+                  required
+                  disabled={isSubmitting}
+                />
+                <small className="GatheringDetail_char-count_osk">
+                  {aspirationContent.length}/500자
+                </small>
               </div>
-              <div className="GatheringDetail_notice-text_osk">
-                신청 마감: {formatDate(gatheringData.applyDeadline)}까지
-              </div>
-            </div>
-          </aside>
-        </div>
-
-        {/* 질문하기 모달 */}
-        <Modal
-          isOpen={isQuestionModalOpen}
-          toggle={toggleQuestionModal}
-          className="GatheringDetail_question-modal_osk"
-          size="lg"
-          centered
-        >
-          <ModalHeader
-            toggle={toggleQuestionModal}
-            className="GatheringDetail_modal-header_osk"
-          >
-            <span className="GatheringDetail_modal-title_osk">
-              {gatheringData.title}
-            </span>
-          </ModalHeader>
-          <ModalBody className="GatheringDetail_modal-body_osk">
-            <div className="GatheringDetail_gathering-info_osk">
-              <img src={gatheringData.thumbnailFileName? `${url}/image?filename=${gatheringData.thumbnailFileName}`:`/detail1.png`}
-                alt="모임 이미지"
-                className="GatheringDetail_gathering-image_osk"
-              />
-              <div className="GatheringDetail_gathering-details_osk">
-                <div className="GatheringDetail_gathering-info-item_osk">
-                  <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
-                  <span>모임일: {formatDate(gatheringData.meetingDate)} {formatTime(gatheringData.startTime)}</span>
-                </div>
-                <div className="GatheringDetail_gathering-info-item_osk">
-                  <GoPeople className="GatheringDetail_gathering-info-icon_osk" />
-                  <span>인원: {members.length}/{gatheringData.maxAttendees}명 (최소 {gatheringData.minAttendees}명)</span>
-                </div>
-                <div className="GatheringDetail_gathering-info-item_osk">
-                  <CiLocationOn className="GatheringDetail_gathering-info-icon_osk" />
-                  <span>장소: {gatheringData.address} {gatheringData.detailAddress}</span>
-                </div>
-              </div>
-            </div>
-
-            {gatheringData.tags && gatheringData.tags.length > 0 && (
-              <div className="GatheringDetail_modal-tags_osk">
-                {gatheringData.tags.map((tag, index) => (
-                  <span key={index} className="GatheringDetail_modal-tag_osk">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <div className="GatheringDetail_input-section_osk">
-              <label className="GatheringDetail_input-label_osk">
-                상세 내용
-              </label>
-              <textarea
-                value={questionContent}
-                onChange={(e) => setQuestionContent(e.target.value)}
-                placeholder="질문사항에 대해 자세히 알려주세요"
-                rows={6}
-                className="GatheringDetail_textarea-field_osk"
-              />
-            </div>
-          </ModalBody>
-          <ModalFooter className="GatheringDetail_modal-footer_osk">
-            <button
-              className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-cancel_osk"
-              onClick={toggleQuestionModal}
-            >
-              취소
-            </button>
-            <button
-              className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-submit_osk"
-              onClick={handleQuestionSubmit}
-            >
-              질문하기
-            </button>
-          </ModalFooter>
+            </ModalBody>
+            <ModalFooter className="GatheringDetail_modal-footer_osk">
+              <button
+                type="button"
+                className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-cancel_osk"
+                onClick={toggleApplyModal}
+                disabled={isSubmitting}
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-submit_osk"
+                disabled={isSubmitting || !aspirationContent.trim()}
+              >
+                {isSubmitting ? "신청 중..." : "신청하기"}
+              </button>
+            </ModalFooter>
+          </form>
         </Modal>
-      </div>
+      )}
+    <Footer/>
     </div>
   );
 }

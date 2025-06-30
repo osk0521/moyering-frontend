@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Layout from "./Layout";
+
 import './CategoryManagement.css';
+
 
 const CategoryManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');

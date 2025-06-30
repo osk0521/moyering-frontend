@@ -1,0 +1,116 @@
+import React, { useState,useEffect  } from "react";
+import styles from "./ClassRingReviewList.module.css";
+import { FaStar } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
+import { myAxios } from "../../config";
+import { useNavigate,useParams } from "react-router";
+import { url } from '../../config';
+import { useSetAtom, useAtomValue } from "jotai";
+import {
+  allReviewListAtom,
+} from '../../atom/classAtom';
+export default function ClassRingReviewList() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const { hostId } = useParams(); 
+  const navigate = useNavigate();
+  const setAllReviewListAtom= useSetAtom(allReviewListAtom);
+  const reviews = useAtomValue(allReviewListAtom);
+  
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await myAxios().get(
+          `/class/classRingReviewList/${hostId}?page=${currentPage - 1}&size=5`
+        );
+        setAllReviewListAtom(res.data.content);
+        setTotalPages(res.data.totalPages);
+      } catch (err) {
+        console.error("리뷰 불러오기 실패", err);
+      }
+    };
+
+    fetchReviews();
+  }, [currentPage]);
+  return (
+    <div className={styles.container}>
+      <div style={{display:'flex'}}>
+      <button onClick={() => navigate(-1)} className={styles.backBtn}>
+        <FaArrowLeft style={{ marginRight: "6px" }} />
+      </button>
+      <h2 className={styles.pageTitle}>강사 평점 및 후기</h2>
+      </div>
+      <div className={styles.summaryBox}>
+        <div>
+          <img src={`${url}/image?filename=${reviews[0]?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+          <strong>{reviews[0]?.hostName}</strong>
+          <div className={styles.starsRow}><FaStar color="#FFD700" /><span>5</span></div>
+        </div>
+        <div>
+          <span>진행한 클래스</span>
+          <div>138건</div>
+        </div>
+      </div>
+
+      <div className={styles.reviewList}>
+        {reviews.map((r) => (
+          <div key={r.reviewId} className={styles.reviewCard}>
+            <div className={styles.reviewHeader}>
+              <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+              <strong>{r.studentName}</strong>
+              <span className={styles.rating}>
+                {[...Array(r.star)].map((_, i) => (
+                  <FaStar key={i} color="#FFD700" />
+                ))}
+              </span>
+              <span className={styles.date}>{r.reviewDate}</span>
+            </div>
+            <div className={styles.reviewContent}>{r.content}</div>
+            {r.revRegCotnent && (
+              <div className={styles.reviewReply}>
+                <div className={styles.replyHeader}>
+                  <div>
+                  <img src={`${url}/image?filename=${reviews[0]?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+                  <strong>{r.hostName}</strong>
+                  </div>
+                  <span>{r.responseDate}</span>
+                </div>
+                <div>{r.revRegCotnent}</div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.pagination}>
+        <button
+          className={styles.pageBtn}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            className={`${styles.pageBtn} ${currentPage === i + 1 ? styles.pageBtnActive : ""}`}
+            onClick={() => setCurrentPage(i + 1)}
+            disabled={currentPage === i + 1}
+          >
+            {i + 1}
+          </button>
+        ))}
+
+        <button
+          className={styles.pageBtn}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </button>
+      </div>
+
+      </div>
+  );
+} 

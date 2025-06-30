@@ -1,6 +1,6 @@
 import React from 'react';
 import './Sidebar.css';
-import badgeIcon from './icons/badge.jpg';
+// import badgeIcon from './icons/badge.jpg';
 // import avatarImg from '../icons/avatar.jpg'; // 기본 아바타 이미지
 
 // 더미 유저 데이터
@@ -31,7 +31,7 @@ export default function Sidebar({ user = dummyUser }) {
                     <div className="KYM-member-text">
                         <div className="KYM-member-name-line">
                             <strong className="KYM-member-name">{user.username}</strong>
-                            <img className="KYM-member-badge" src={badgeIcon} alt="배지" />
+                            {/* <img className="KYM-member-badge" src={badgeIcon} alt="배지" /> */}
                         </div>
                         <div className="KYM-member-stats">
                             <span>게시물 {user.stats.posts}</span>
@@ -57,9 +57,9 @@ export default function Sidebar({ user = dummyUser }) {
                         <li><a href="#">질문내역</a></li>
 
                         <li><strong>게더링</strong></li>
-                        <li><a href="#">지원한 게더링</a></li>
-                        <li><a href="#">내가 개설한 게더링</a></li>
-                        <li><a href="#">게더링 문의</a></li>
+                        <li><a href="/user/mypage/myGatheringApplyList">지원한 게더링</a></li>
+                        <li><a href="/user/mypage/myGatheringList">내가 개설한 게더링</a></li>
+                        <li><a href="/user/mypage/myGatherInquiryList">게더링 문의</a></li>
 
                         <li><strong>소셜링</strong></li>
                         <li><a href="#">작성한 피드</a></li>

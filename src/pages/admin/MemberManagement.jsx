@@ -1,286 +1,143 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { url } from "/src/config"; 
+import axios from "axios";
 import Layout from "./Layout";
+import { useNavigate } from 'react-router-dom';
 import './MemberManagement.css';
-import MemberDetailModal from './MemberDetailModal'; // 회원 상세 모달 컴포넌트 
+import MemberDetailModal from './MemberDetailModal';
 
 const MemberManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // 검색어
   const [memberType, setMemberType] = useState('전체'); // 일반/강사 필터
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  // 회원아이디 선택하면 모달 열기 
-  const [selectedMember, setSelectedMember] = useState(null); // 회원 선택
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열기 
+  // 회원 선택 및 모달 상태
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 회원 더미 데이터
-  const memberData = [
-    {
-      no: 1, // 일련번호 
-      type: '일반', // 회원 구분
-      username: 'example1', // 아이디 
-      name: '회원1', // 회원명
-      email: 'example.com', // 이메일
-      phone: '010-1111-1234', // 연락처
-      joinDate: '2023-02-10', // 가입일
-      use_yn: 'Y', // 이용 여부 (탈퇴나 계정정지 하면 모달에서 N로 변경)
-    },
-    {
-      no: 2,
-      type: '강사',
-      username: 'teacher1',
-      name: '강사1',
-      email: 'teacher1@example.com',
-      phone: '010-2222-2345',
-      joinDate: '2023-03-15',
-      use_yn: 'Y',
-    },
-    {
-      no: 3,
-      type: '일반',
-      username: 'user2',
-      name: '회원2',
-      email: 'user2@example.com',
-      phone: '010-3333-3456',
-      joinDate: '2023-04-20',
-      use_yn: 'N',
-    },
-    {
-      no: 4,
-      type: '강사',
-      username: 'teacher2',
-      name: '강사2',
-      email: 'teacher2@example.com',
-      phone: '010-4444-4567',
-      joinDate: '2023-05-05',
-      use_yn: 'Y',
-    },
-    {
-      no: 5,
-      type: '일반',
-      username: 'user3',
-      name: '회원3',
-      email: 'user3@example.com',
-      phone: '010-5555-5678',
-      joinDate: '2023-06-10',
-      use_yn: 'Y',
-    },
-    {
-      no: 6,
-      type: '강사',
-      username: 'teacher3',
-      name: '강사3',
-      email: 'teacher3@example.com',
-      phone: '010-6666-6789',
-      joinDate: '2023-07-01',
-      use_yn: 'N',
-    },
-    {
-      no: 7,
-      type: '일반',
-      username: 'user4',
-      name: '회원4',
-      email: 'user4@example.com',
-      phone: '010-7777-7890',
-      joinDate: '2023-08-18',
-      use_yn: 'Y',
-    },
-    {
-      no: 8,
-      type: '강사',
-      username: 'teacher4',
-      name: '강사4',
-      email: 'teacher4@example.com',
-      phone: '010-8888-8901',
-      joinDate: '2023-09-25',
-      use_yn: 'Y',
-    },
-    {
-      no: 9,
-      type: '일반',
-      username: 'user5',
-      name: '회원5',
-      email: 'user5@example.com',
-      phone: '010-9999-9012',
-      joinDate: '2023-10-30',
-      use_yn: 'N',
-    },
-    {
-      no: 10,
-      type: '강사',
-      username: 'teacher5',
-      name: '강사5',
-      email: 'teacher5@example.com',
-      phone: '010-0000-0123',
-      joinDate: '2023-11-11',
-      use_yn: 'Y',
-    },
-    {
-      no: 11,
-      type: '일반',
-      username: 'user6',
-      name: '회원6',
-      email: 'user6@example.com',
-      phone: '010-1111-2345',
-      joinDate: '2023-12-05',
-      use_yn: 'Y',
-     },
-     {
-      no: 12,
-      type: '강사',
-      username: 'teacher6',
-      name: '강사6',
-      email: 'teacher6@example.com',
-      phone: '010-2222-3456',
-      joinDate: '2023-12-20',
-      use_yn: 'Y',
-     },
-     {
-      no: 13,
-      type: '일반',
-      username: 'user7',
-      name: '회원7',
-      email: 'user7@example.com',
-      phone: '010-3333-4567',
-      joinDate: '2024-01-08',
-      use_yn: 'N',
-     },
-     {
-      no: 14,
-      type: '강사',
-      username: 'teacher7',
-      name: '강사7',
-      email: 'teacher7@example.com',
-      phone: '010-4444-5678',
-      joinDate: '2024-01-22',
-      use_yn: 'Y',
-     },
-     {
-      no: 15,
-      type: '일반',
-      username: 'user8',
-      name: '회원8',
-      email: 'user8@example.com',
-      phone: '010-5555-6789',
-      joinDate: '2024-02-14',
-      use_yn: 'Y',
-     },
-     {
-      no: 16,
-      type: '강사',
-      username: 'teacher8',
-      name: '강사8',
-      email: 'teacher8@example.com',
-      phone: '010-6666-7890',
-      joinDate: '2024-03-03',
-      use_yn: 'N',
-     },
-     {
-      no: 17,
-      type: '일반',
-      username: 'user9',
-      name: '회원9',
-      email: 'user9@example.com',
-      phone: '010-7777-8901',
-      joinDate: '2024-03-19',
-      use_yn: 'Y',
-     },
-     {
-      no: 18,
-      type: '강사',
-      username: 'teacher9',
-      name: '강사9',
-      email: 'teacher9@example.com',
-      phone: '010-8888-9012',
-      joinDate: '2024-04-07',
-      use_yn: 'Y',
-     },
-     {
-      no: 19,
-      type: '일반',
-      username: 'user10',
-      name: '회원10',
-      email: 'user10@example.com',
-      phone: '010-9999-0123',
-      joinDate: '2024-04-25',
-      use_yn: 'N',
-     },
-     {
-      no: 20,
-      type: '강사',
-      username: 'teacher10',
-      name: '강사10',
-      email: 'teacher10@example.com',
-      phone: '010-0000-1234',
-      joinDate: '2024-05-12',
-      use_yn: 'Y',
-     },
-     {
-      no: 21,
-      type: '일반',
-      username: 'user11',
-      name: '회원11',
-      email: 'user11@example.com',
-      phone: '010-1234-5678',
-      joinDate: '2024-05-28',
-      use_yn: 'Y',
-     },
-     {
-      no: 22,
-      type: '강사',
-      username: 'teacher11',
-      name: '강사11',
-      email: 'teacher11@example.com',
-      phone: '010-2345-6789',
-      joinDate: '2024-06-14',
-      use_yn: 'N',
-     },
-     {
-      no: 23,
-      type: '일반',
-      username: 'user12',
-      name: '회원12',
-      email: 'user12@example.com',
-      phone: '010-3456-7890',
-      joinDate: '2024-07-02',
-      use_yn: 'Y',
-     },
-     {
-      no: 24,
-      type: '강사',
-      username: 'teacher12',
-      name: '강사12',
-      email: 'teacher12@example.com',
-      phone: '010-4567-8901',
-      joinDate: '2024-07-18',
-      use_yn: 'Y',
-     },
-     {
-      no: 25,
-      type: '일반',
-      username: 'user13',
-      name: '회원13',
-      email: 'user13@example.com',
-      phone: '010-5678-9012',
-      joinDate: '2024-08-05',
-      use_yn: 'N',
-     }
-  ];
+  // 백엔드 연동 데이터
+  const [memberData, setMemberData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // 검색어 입력받아서 상태에 저장 
+  // 페이징 관련 상태
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [pageSize] = useState(10);
+
+  // 디바운스를 위한 타이머
+  const [searchTimer, setSearchTimer] = useState(null);
+
+  // 컴포넌트 마운트 시 회원 목록 조회
+  useEffect(() => {
+    fetchMembers();
+  }, [currentPage]);
+
+  // 검색어 변경 시 디바운스 적용
+  useEffect(() => {
+    if (searchTimer) {
+      clearTimeout(searchTimer);
+    }
+    
+    const timer = setTimeout(() => {
+      setCurrentPage(0); // 검색 시 첫 페이지로 이동
+      fetchMembers();
+    }, 500); // 500ms 지연
+
+    setSearchTimer(timer);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [searchTerm]);
+
+  // 필터 변경 시 회원 목록 다시 조회
+  useEffect(() => {
+    setCurrentPage(0);
+    fetchMembers();
+  }, [memberType, startDate, endDate]);
+
+  // 회원 목록 조회 API 호출
+  const fetchMembers = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const params = {
+        page: currentPage,
+        size: pageSize,
+        sort: 'regDate,desc'
+      };
+
+      // 검색어가 있으면 keyword 파라미터 추가
+      if (searchTerm.trim()) {
+        params.keyword = searchTerm.trim();
+      }
+
+      // 회원 유형 필터링 (백엔드에서 처리)
+      if (memberType !== '전체') {
+        // DTO의 userTypeCode를 사용해서 필터링
+        const typeCode = memberType === '일반' ? 'ROLE_MB' : memberType === '강사' ? 'ROLE_HT' : null;
+        if (typeCode) {
+          params.userType = typeCode;
+        }
+      }
+
+      // 날짜 필터링 (백엔드에서 처리)
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = endDate;
+      }
+
+      const response = await axios.get(`${url}/api/member`, { params });
+      
+      if (response.data) {
+        const { content, totalPages, totalElements, number } = response.data;
+        setMemberData(content || []);
+        setTotalPages(totalPages || 0);
+        setTotalElements(totalElements || 0);
+        setCurrentPage(number || 0);
+      }
+    } catch (err) {
+      console.error('회원 목록 조회 실패:', err);
+      setError('회원 목록을 불러오는데 실패했습니다.');
+      setMemberData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 검색어 입력 핸들러
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // 회원 유형 체크 (전체, 일반, 강사)
+  // 회원 유형 필터 변경
   const handleMemberTypeChange = (type) => {
     setMemberType(type);
   };
 
-  // 회원 아이디 클릭 시 모달 열기
-  const handleMemberClick = (member) => {
-    setSelectedMember(member);
-    setIsModalOpen(true);
+  // 회원 아이디 클릭 시 상세 모달 열기
+  const handleMemberClick = async (member) => {
+    try {
+      setLoading(true);
+      // DTO의 userId 사용
+      const response = await axios.get(`${url}/api/member/${member.userId}`);
+      
+      if (response.data) {
+        setSelectedMember(response.data);
+        setIsModalOpen(true);
+      }
+    } catch (err) {
+      console.error('회원 상세 정보 조회 실패:', err);
+      setError('회원 상세 정보를 불러오는데 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 모달 닫기
@@ -289,111 +146,142 @@ const MemberManagement = () => {
     setSelectedMember(null);
   };
 
-  // 회원 필터 (검색어 + 회원유형 + 가입기간)
-  const filteredClasses = memberData.filter((member) => {
-    // 대소문자 구분 없이 검색어와 일치하는지 확인
-    const matchesSearch =
-      member.username.toLowerCase().includes(searchTerm.toLowerCase()) || // 아이디 
-      member.name.toLowerCase().includes(searchTerm.toLowerCase()) || // 이름 
-      member.email.toLowerCase().includes(searchTerm.toLowerCase()) || // 이메일
-      member.phone.toLowerCase().includes(searchTerm.toLowerCase()); // 연락처
+  // 회원 상태 변경 (모달에서 호출될 수 있도록 prop으로 전달)
+  const handleUpdateMemberStatus = async (userId, status) => {
+    try {
+      await axios.patch(`${url}/api/member/${userId}/status`, null, {
+        params: { status }
+      });
+      
+      // 상태 변경 후 목록 다시 조회
+      fetchMembers();
+      alert('회원 상태가 성공적으로 변경되었습니다.');
+    } catch (err) {
+      console.error('회원 상태 변경 실패:', err);
+      alert('회원 상태 변경에 실패했습니다.');
+    }
+  };
 
-    // 회원 유형 매칭 (전체, 일반, 강사)
-    const matchesType = memberType === '전체' || member.type === memberType;
+  // 페이지 변경
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
-    const join = new Date(member.joinDate); // 가입일 
-    const start = startDate ? new Date(startDate) : null; // 시작일 (없으면 NULL)
-    const end = endDate ? new Date(endDate) : null; // 종료일 (없으면 NULL)
+  // 날짜 초기화
+  const handleDateReset = () => {
+    setStartDate('');
+    setEndDate('');
+  };
 
-    const matchesDate =
-      (!start || join >= start) &&  // 시작일 없거나, 가입일이 시작일 이후
-      (!end || join <= end);  // 종료일 없거나, 가입일이 종료일 이전
-
-    // 3개 조건 모두 true인 회원만 filterMembers 포함 
-    return matchesSearch && matchesType && matchesDate;
-  });
+  // 날짜 포맷팅 함수 (Date 객체를 YYYY-MM-DD 형식으로 변환)
+  const formatDate = (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().split('T')[0];
+  };
 
   return (
     <Layout>
+      {/* 페이지 제목 */}
+      <div className="page-titleHY">
+        <h1>회원 관리</h1>
+      </div>
 
-        {/* 페이지 제목 */}
-        <div className="page-titleHY">
-          <h1>회원 관리</h1>
+      {/* 검색 및 필터 영역 */}
+      <div className="search-sectionHY">
+        {/* 검색 박스 */}
+        <div className="search-boxHY">
+          <span className="search-iconHY">🔍</span>
+          <input
+            type="text"
+            placeholder="회원 아이디, 이메일 검색"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="search-inputHY"
+          />
         </div>
+        
+        {/* 가입기간 필터 */}
+        <label className="date-labelHY">가입기간</label>
+        <input
+          type="date"
+          className="date-inputHY"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <span className="date-separatorHY">~</span>
+        <input
+          type="date"
+          className="date-inputHY"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
 
-        {/* 검색 및 필터 영역 */}
+      </div>
+      
+      <br/>
+      
+      {/* 회원 유형 필터 */}
+      <div className="filter-sectionHY">
+        <div></div>
+        {['전체', '일반', '강사'].map(type => (
+          <button 
+            key={type}
+            className={`filter-btnHY ${memberType === type ? 'active' : ''}`}
+            onClick={() => handleMemberTypeChange(type)}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
 
-          <div className="search-sectionHY">
-            {/* 검색 박스 */}
-            <div className="search-boxHY">
-              <span className="search-iconHY">🔍</span>
-              <input
-                type="text"
-                placeholder="회원 아이디, 이메일 검색"
-                value={searchTerm}
-                onChange={handleSearch}
-                className="search-inputHY"
-              />
-            </div>
-            
-            {/* 가입기간 필터 */}
-            <label className="date-labelHY">가입기간</label>
-            <input
-              type="date"
-              className="date-inputHY"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <span className="date-separatorHY">~</span>
-            <input
-              type="date"
-              className="date-inputHY"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
-            <br/>
-          {/* 회원 유형 필터 */}
-          <div className="filter-sectionHY">
-            <div></div>
-            {['전체', '일반', '강사'].map(type => (
-              <button 
-                key={type}
-                className={`filter-btnHY ${memberType === type ? 'active' : ''}`}
-                onClick={() => handleMemberTypeChange(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-
-        {/* 필터된 결과 수 */}
-        <div className="result-countHY">
-          총 <strong>{filteredClasses.length}</strong>건
+      {/* 에러 메시지 */}
+      {error && (
+        <div className="error-messageHY">
+          {error}
         </div>
+      )}
 
-        {/* 회원 테이블 */}
-        <div className="table-containerHY">
-          <table className="tableHY">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>회원 구분</th>
-                <th>아이디</th>
-                <th>회원명</th>
-                <th>이메일</th>
-                <th>연락처</th>
-                <th>가입일</th>
-                <th>사용여부</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredClasses.map(member => (
-                <tr key={member.no}>
-                  <td>{member.no}</td>
+      {/* 로딩 상태 */}
+      {loading && (
+        <div className="loading-messageHY">
+          데이터를 불러오는 중...
+        </div>
+      )}
+
+      {/* 필터된 결과 수 */}
+      <div className="result-countHY">
+        총 <strong>{memberData.length}</strong>건
+        {totalElements > 0 && (
+          <span> (전체 {totalElements}건 중)</span>
+        )}
+      </div>
+
+      {/* 회원 테이블 */}
+      <div className="table-containerHY">
+        <table className="tableHY">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>회원 구분</th>
+              <th>아이디</th>
+              <th>회원명</th>
+              <th>이메일</th>
+              <th>연락처</th>
+              <th>가입일</th>
+              <th>사용여부</th>
+            </tr>
+          </thead>
+          <tbody>
+            {memberData.length > 0 ? (
+              memberData.map((member, index) => (
+                <tr key={member.userId}>
+                  <td>{(currentPage * pageSize) + index + 1}</td>
                   <td>
-                    <span className={`member-typeHY ${member.type === '강사' ? 'instructor' : 'general'}`}>
-                      {member.type}
+                    <span className={`member-typeHY ${member.userType === '강사' ? 'instructor' : 'general'}`}>
+                      {member.userType}
                     </span>
                   </td>
                   {/* 회원아이디 클릭하면 회원상세보기 모달창으로 이동 */}
@@ -401,33 +289,83 @@ const MemberManagement = () => {
                     <span 
                       className="username-linkHY"
                       onClick={() => handleMemberClick(member)}
+                      style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
                     >
                       {member.username}
                     </span>
                   </td>
                   <td>{member.name}</td>
                   <td>{member.email}</td>
-                  <td>{member.phone}</td>
-                  <td>{member.joinDate}</td>
-                  <td>{member.use_yn}</td>
+                  <td>{member.tel}</td>
+                  <td>{formatDate(member.regDate)}</td>
+                  <td>
+                    <span className={`status-${member.useYn === 'Y' ? 'active' : 'inactive'}`}>
+                      {member.useYn === 'Y' ? '사용' : '미사용'}
+                    </span>
+                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" className="no-dataHY">
+                  {loading ? '데이터를 불러오는 중...' : '검색 결과가 없습니다.'}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
-        {/* 회원 상세 모달 */}
-        {isModalOpen && selectedMember && (
-          <div className="modal-overlayHY">
-            <div className="modal-contentHY">
-              <MemberDetailModal 
-                member={selectedMember}
-                onClose={handleCloseModal}
-              />
-            </div>
+      {/* 페이징 */}
+      {totalPages > 1 && (
+        <div className="paginationHY">
+          <button 
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 0}
+            className="page-btnHY"
+          >
+            이전
+          </button>
+          
+          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+            const startPage = Math.max(0, currentPage - 2);
+            const pageNumber = startPage + i;
+            
+            if (pageNumber >= totalPages) return null;
+            
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`page-btnHY ${currentPage === pageNumber ? 'active' : ''}`}
+              >
+                {pageNumber + 1}
+              </button>
+            );
+          })}
+          
+          <button 
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages - 1}
+            className="page-btnHY"
+          >
+            다음
+          </button>
+        </div>
+      )}
+
+      {/* 회원 상세 모달 */}
+      {isModalOpen && selectedMember && (
+        <div className="modal-overlayHY">
+          <div className="modal-contentHY">
+            <MemberDetailModal 
+              member={selectedMember}
+              onClose={handleCloseModal}
+              onUpdateStatus={handleUpdateMemberStatus}
+            />
           </div>
-        )}
-    
+        </div>
+      )}
     </Layout>
   );
 };

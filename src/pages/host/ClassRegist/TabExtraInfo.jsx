@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './TabExtraInfo.css';
+import React from 'react'; // 이 한 줄만 추가!
 
 const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   const { extraInfo } = classData;
@@ -12,7 +13,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
         ...prev,
         extraInfo: {
           ...prev.extraInfo,
-          material: uploadedFile.name,
+          material: uploadedFile,
         }
       }));
     }
@@ -47,7 +48,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
 
   // 검증 함수
   const validate = () => {
-    const hasMaterial = extraInfo.material && extraInfo.material.trim();
+    const hasMaterial = extraInfo.material != null;
     const hasIncluision = extraInfo.incluision?.split(',').filter(Boolean).length > 0;
     const hasPreparation = extraInfo.preparation?.split(',').filter(Boolean).length > 0;
     const hasKeywords = extraInfo.keywords?.split(',').filter(Boolean).length > 0;
@@ -103,7 +104,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
         <label className="KHJ-file-label"><span className="KHJ-required-text-dot">*</span>클래스 강의자료</label>
         <div className="KHJ-file-upload-container">
           {extraInfo.material ? (
-            <span>{extraInfo.material}</span>
+            <span>{extraInfo.material.name}</span>
           ) : (
             <span className="KHJ-file-placeholder">강의 자료를 클릭하여 업로드하세요</span>
           )}

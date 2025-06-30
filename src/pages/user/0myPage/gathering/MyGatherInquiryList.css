@@ -1,0 +1,360 @@
+.MyGatherPage_container {
+  display: flex;
+  font-family: "Pretendard", sans-serif;
+  background-color: #fafafa;
+  min-height: 100vh;
+  max-width: 1920px;
+  margin: 31px 100px 00px 100px;
+}
+
+.MyGatherInquiryList_inquiry-section_osk {
+  flex: 1;
+  padding: 32px;
+  background-color: #fff;
+  margin: 16px 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.MyGatherInquiryList_inquiry-header_osk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.MyGatherInquiryList_inquiry-title_osk {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.MyGatherInquiryList_date-filter_osk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.MyGatherInquiryList_date-label_osk {
+  font-size: 15px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.MyGatherInquiryList_date-picker-container_osk {
+  position: relative;
+  display: inline-block;
+}
+
+.MyGatherInquiryList_date-picker_osk {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 140px;
+  padding-right: 30px;
+}
+
+.MyGatherInquiryList_clear-button_osk {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.MyGatherInquiryList_clear-button_osk:hover {
+  color: #333;
+}
+
+.MyGatherInquiryList_status-select_osk {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  width: fit-content;
+}
+
+.MyGatherInquiryList_inquiry-tabs_osk {
+  display: flex;
+  gap: 0;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #eee;
+}
+
+.MyGatherInquiryList_inquiry-tabs_osk button {
+  padding: 16px 32px;
+  border: none;
+  background-color: transparent;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.MyGatherInquiryList_inquiry-tabs_osk button.MyGatherInquiryList_active_osk {
+  color: #ff6b35;
+  border-bottom: 2px solid #ff6b35;
+  font-weight: 600;
+}
+
+.MyGatherInquiryList_inquiry-list_osk {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.MyGatherInquiryList_inquiry-box_osk {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+}
+
+.MyGatherInquiryList_accordion-header_osk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.MyGatherInquiryList_inquiry-info_osk {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin-left:30px;
+}
+
+.MyGatherInquiryList_user-info_osk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.MyGatherInquiryList_user-avatar_osk {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ff6b35;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.MyGatherInquiryList_username_osk {
+  font-weight: 500;
+  color: #333;
+}
+
+.MyGatherInquiryList_status_osk {
+  padding: 5px 11px;
+  border-radius: 12px;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.MyGatherInquiryList_inquirer-name_osk {
+  font-weight: 400;
+  margin-left: 5px;
+  color: #777;
+}
+
+.MyGatherInquiryList_inquiry-details_osk {
+  flex: 1;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.MyGatherInquiryList_inquiry-title-item_osk {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.MyGatherInquiryList_inquiry-dates_osk {
+  display: inline-flex;
+  gap: 5px;
+  font-size: 14px;
+  color: #666;
+  flex-wrap: wrap;
+  align-content: center;
+  flex-direction: column;
+}
+
+.MyGatherInquiryList_accordion-toggle_osk {
+  color: #999;
+  font-size: 19px;
+}
+
+.MyGatherInquiryList_accordion-body_osk {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 15px;
+  padding-left: 30px;
+}
+
+.MyGatherInquiryList_question_osk {
+  font-weight: 500;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  color: #333;
+  min-height: 100px;
+  font-size: 20px;
+}
+
+.MyGatherInquiryList_answer_osk {
+  margin-top: 16px;
+  background-color: #f9f9f9;
+  padding: 11px;
+  border-radius: 6px;
+}
+
+.MyGatherInquiryList_answer-header_osk {
+  margin-bottom: 8px;
+}
+
+.MyGatherInquiryList_answer-date_osk {
+  font-size: 13px;
+  color: #666;
+  margin-left: 8px;
+}
+
+.MyGatherInquiryList_answer-content_osk {
+  margin: 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+.MyGatherInquiryList_answer-form_osk {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  display: inline-flex;
+}
+
+.MyGatherInquiryList_answer-textarea_osk {
+  width: 100%;
+  min-height: 120px;
+  resize: none;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: "Pretendard", sans-serif;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.MyGatherInquiryList_answer-textarea_osk:focus {
+  outline: none;
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+}
+
+.MyGatherInquiryList_answer-textarea_osk::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.MyGatherInquiryList_submit-btn-container_osk {
+  display: flex;
+  /* justify-content: flex-end; */
+  align-items: flex-end;
+  margin-top: 12px;
+}
+
+.MyGatherInquiryList_submit-btn_osk {
+  background-color: #ff6b35;
+  margin: 0 10px;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 6px;
+  min-width: 70px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: "Pretendard", sans-serif;
+}
+
+.MyGatherInquiryList_submit-btn_osk:hover {
+  background-color: #e55a2b;
+}
+
+.MyGatherInquiryList_submit-btn_osk:active {
+  background-color: #d14d24;
+}
+
+.MyGatherInquiryList_pagination_osk {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid #eee;
+}
+
+.MyGatherInquiryList_pagination-btn_osk {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.MyGatherInquiryList_pagination-btn_osk:hover {
+  background-color: #f8f9fa;
+}
+
+.MyGatherInquiryList_pagination-btn_osk.MyGatherInquiryList_pagination-active_osk {
+  background-color: #ff6b35;
+  color: white;
+  border-color: #ff6b35;
+}
+
+/* React DatePicker 커스텀 스타일 */
+/* .react-datepicker-wrapper {
+  width: auto;
+} */
+
+.MyGatherInquiryList_date-picker_osk {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 200px !important;
+  padding-right: 30px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}

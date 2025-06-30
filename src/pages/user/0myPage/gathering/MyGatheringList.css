@@ -500,71 +500,10 @@
   color: white;
 }
 
-/* 반응형 */
-@media (max-width: 1200px) {
-  .MyGatheringList_gathering-main_osk {
-    margin-left: 280px;
-    padding: 20px 30px;
-  }
+.MyGatheringList_info_applicant-profile_osk{
+  width: 64px;
+  border-radius: 50%;
 }
-
-@media (max-width: 992px) {
-  .MyGatheringList_sidebar_osk {
-    transform: translateX(-100%);
-    transition: transform 0.3s;
-  }
-  
-  .MyGatheringList_gathering-main_osk {
-    margin-left: 0;
-    padding: 20px;
-  }
-  
-  .MyGatheringList_gathering-header_osk {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  
-  .MyGatheringList_search-container_osk {
-    width: 100%;
-    max-width: 400px;
-  }
-}
-
-@media (max-width: 768px) {
-  .MyGatheringList_gathering-list-item_osk {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .MyGatheringList_gathering-image_osk {
-    width: 100%;
-    height: 200px;
-  }
-  
-  .MyGatheringList_gathering-header_osk {
-    justify-content: center;
-  }
-  
-  .MyGatheringList_gathering-info_osk {
-    align-items: center;
-  }
-  
-  .MyGatheringList_info-row_osk {
-    justify-content: center;
-  }
-
-  .MyGatheringList_card-summary_osk {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .MyGatheringList_thumbnail_osk {
-    width: 100%;
-    height: 120px;
-  }
-}
-
 /* 추가 스타일링 */
 .MyGatheringList_gathering-list-item_osk {
   position: relative;

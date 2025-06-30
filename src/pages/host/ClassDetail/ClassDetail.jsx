@@ -5,8 +5,14 @@ import DetailTabDescription from './DetailTabDescription';
 import DetailTabExtraInfo from './DetailTabExtraInfo';
 import DetailTabStudent from './DetailTabStudent';
 import DetailFooter from './DetailFooter';
+import React from 'react'; // 이 한 줄만 추가!
 // import './ClassDetail.module.css' → 제거
 import './ClassDetail.css'; // 일반 CSS로 import
+import { myAxios } from '../../../config';
+import { useParams } from 'react-router';
+import { useAtomValue } from 'jotai';
+import { tokenAtom, userAtom } from '../../../atoms';
+
 
 const tabs = [
   '기본정보',
@@ -19,20 +25,31 @@ const tabs = [
 const ClassDetail = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [classData, setClassData] = useState(null);
+  const [scheduleDetails,setScheduleDetails] = useState([]);
+  const { classId, calendarId } = useParams();
+  
+  const token = useAtomValue(tokenAtom)
   const validators = useRef([]);
+  const user = useAtomValue(userAtom);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const mock = {
-        title: "예시 클래스",
-        status: "진행중",
-        id: 1234,
-        reviewStatus: "검토완료",
-      };
-      setClassData(mock);
-    };
-    fetchData();
-  }, []);
+    myAxios(token).get(`/host/hostClassDetail`, {
+      params: {
+        hostId: user.hostId,
+        classId: classId,
+        calendarId: calendarId
+      }
+    })
+      .then(res => {
+        setClassData(res.data.hostClass);
+        setScheduleDetails(res.data.scheduleDetail);
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.error('클래스 상세 정보 로딩 실패:', err);
+        console.log("token:" + token)
+      });
+  }, [classId, calendarId, token]);
 
   const registerValidator = (index, validateFn) => {
     validators.current[index] = validateFn;
@@ -48,13 +65,13 @@ const ClassDetail = () => {
   };
 
   const renderTabContent = () => {
-    const props = { registerValidator, classData, isEditMode: true };
+    const props = { registerValidator, classData,scheduleDetails, isEditMode: true };
     switch (activeTab) {
-      case 0: return <DetailTabBasicInfo />;
-      case 1: return <DetailTabSchedule />;
-      case 2: return <DetailTabDescription />;
-      case 3: return <DetailTabExtraInfo />;
-      case 4: return <DetailTabStudent />;
+      case 0: return <DetailTabBasicInfo {...props} />;
+      case 1: return <DetailTabSchedule {...props}/>;
+      case 2: return <DetailTabDescription {...props} />;
+      case 3: return <DetailTabExtraInfo {...props} />;
+      case 4: return <DetailTabStudent {...props} />;
       default: return null;
     }
   };

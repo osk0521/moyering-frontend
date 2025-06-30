@@ -80,3 +80,31 @@
   color: red;
   margin-top: 12px;
 }
+
+.KHJ-settlement__image-preview-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 300px;
+}
+
+.KHJ-settlement__image-preview {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.KHJ-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 20px;
+}

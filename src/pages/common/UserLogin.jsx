@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './UserLogin.css';
-import { useSetAtom } from 'jotai';
-import { useNavigate } from 'react-router';
-import { tokenAtom, userAtom } from '../../atoms';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useNavigate, useSearchParams } from 'react-router';
+import { tokenAtom, userAtom, fcmTokenAtom } from '../../atoms';
 import axios from 'axios';
-import { url } from './../../config';
+import { myAxios, url } from './../../config';
 
 const Login = () => {
   const [login, setLogin] = useState({ username: '', password: '' })
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom)
+  const [params] = useSearchParams();
   const navigate = useNavigate();
-
+  const fcmToken = useAtomValue(fcmTokenAtom);
   const edit = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
   }
@@ -20,12 +21,11 @@ const Login = () => {
     let formData = new FormData();
     formData.append("username", login.username);
     formData.append("password", login.password);
-    axios.post(`${url}/login`, formData)
+    formData.append("fcmToken", fcmToken);
+    myAxios().post("login", formData)
       .then(res => {
         console.log(res);
         setToken(res.headers.authorization);
-        console.log(setToken)
-        console.log("받은 토큰:"+res.headers.authorization);
         const user = res.data;
         setUser({ ...user });
         navigate("/")
@@ -36,9 +36,7 @@ const Login = () => {
     // 실제 로그인 처리 로직은 여기에 추가
   };
 
-  const handleKakaoLogin = () => {
-    alert('카카오 로그인 연동 예정');
-  };
+  
 
   return (
     <div className="KHJ-login-container">
@@ -64,10 +62,10 @@ const Login = () => {
           />
           <button type="submit" className="KHJ-login-btn">로그인</button>
         </form>
-        <button className="KHJ-kakao-btn" onClick={handleKakaoLogin}>
+        <a href={`${url}/oauth2/authorization/kakao`} className="KHJ-kakao-btn" >
           <img src="/kakao.png" alt="카카오" className="KHJ-kakao-icon" />
           카카오로 시작하기
-        </button>
+        </a>
       </div>
     </div>
   );

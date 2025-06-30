@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import './DetailTabSchedule.css';
-
+import React from 'react'; // 이 한 줄만 추가!
 const DetailTabSchedule = () => {
   const [startDate, setStartDate] = useState('2025-05-12');
   const [endDate, setEndDate] = useState('2026-06-12');

@@ -8,6 +8,10 @@ import TabPortfolio from './TabPortfolio';
 import TabSchedule from './TabSchedule';
 import TabTransaction from './TabTransaction';
 import axios from 'axios';
+import { myAxios } from '../../../config';
+import { tokenAtom, userAtom } from '../../../atoms';
+import { useAtomValue } from 'jotai';
+import React from 'react'; // 이 한 줄만 추가!
 
 const tabs = [
   '기본정보',
@@ -19,40 +23,49 @@ const tabs = [
 ];
 
 const ClassRegisterPage = () => {
+  const user = useAtomValue(userAtom);
+  console.log(user);
   const [classData, setClassData] = useState({
     basicInfo: {
+      // hostId:user.hostId,
       category1: '',
       category2: '',
       name: '',
       locName: '',
       addr: '',
+      detailAddr: '',
       longitude: '',
       latitude: ''
     },
     schedule: {
-      recruitMax:'',
-      recruitMin:'',
-      dates:[],
+      recruitMax: '',
+      recruitMin: '',
+      dates: [],
+      scheduleDetail: [{
+        content: '',
+        startTime: '',
+        endTime: '',
+      }]
     },
     description: {
-      img1:'',
-      img2:'',
-      img3:'',
-      img4:'',
-      img5:'',
-      detailDescription:''
+      img1: null,
+      img2: null,
+      img3: null,
+      img4: null,
+      img5: null,
+      detailDescription: ''
     },
     extraInfo: {
-      material:'',
-      incluision:'',
-      preparation:'',
-      keywords:''
+      material: '',
+      incluision: '',
+      preparation: '',
+      keywords: ''
     },
     transaction: {
-      caution:''
+      caution: ''
     },
     classPortfolio: {
-      portfolio:''
+      portfolio: null
     }
   })
   const [activeTab, setActiveTab] = useState(0);
@@ -77,25 +90,82 @@ const ClassRegisterPage = () => {
     setActiveTab(nextTabIndex);
   };
 
-  const saveCurrentTab = async () => {
-    const validator = validators.current[activeTab];
-    if (validator) {
-      const isValid = await validator();
-      if (!isValid) return false;
+  // const saveCurrentTab = async () => {
+  //   const validator = validators.current[activeTab];
+  //   if (validator) {
+  //     const isValid = await validator();
+  //     if (!isValid) return false;
+  //   }
+
+  //   await axios.post(`/host/classRegist/${activeTab}`, classData);//작성 내용만 저장
+  // }
+
+  // const submitAllData = async () => {
+  //   for(const validator of validators.current){
+  //     if(validator && !(await validator())){
+  //       alert("입력되지 않은 항목이 있습니다!")
+  //       return;
+  //     }
+  //   }
+
+  //   await axios.post('/host/classRegist/submit',classData);//검수요청
+  // }
+  const token = useAtomValue(tokenAtom);
+  console.log(token)
+  const submit = () => {
+
+    let reqData = {
+      ...classData.basicInfo,
+      ...classData.classPortfolio,
+      ...classData.description,
+      ...classData.extraInfo,
+      ...classData.schedule,
+      ...classData.transaction
+    };
+
+    let formData = new FormData();
+    formData.append("hostId", user.hostId)
+    formData.append("addr", reqData.addr)
+    formData.append("category1", reqData.category1)
+    formData.append("category2", reqData.category2)
+    formData.append("caution", reqData.caution)
+    formData.append("dates", reqData.dates)
+    formData.append("scheduleDetail", JSON.stringify(reqData.scheduleDetail))
+    formData.append("detailDescription", reqData.detailDescription)
+    if (reqData.img1) formData.append("img1", reqData.img1);
+    if (reqData.img2) formData.append("img2", reqData.img2);
+    if (reqData.img3) formData.append("img3", reqData.img3);
+    if (reqData.img4) formData.append("img4", reqData.img4);
+    if (reqData.img5) formData.append("img5", reqData.img5);
+    formData.append("incluision", reqData.incluision)
+    formData.append("keywords", reqData.keywords)
+    formData.append("latitude", reqData.latitude)
+    formData.append("locName", reqData.locName)
+    formData.append("longitude", reqData.longitude)
+    formData.append("material", reqData.material)
+    formData.append("name", reqData.name)
+    formData.append("portfolio", reqData.portfolio)
+    formData.append("preparation", reqData.preparation)
+    formData.append("recruitMax", reqData.recruitMax)
+    formData.append("recruitMin", reqData.recruitMin)
+
+    // FormData 내용 확인
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
     }
 
-    await axios.post(`/host/classRegist/${activeTab}`, classData);//작성 내용만 저장
-  }
-
-  const submitAllData = async () => {
-    for(const validator of validators.current){
-      if(validator && !(await validator())){
-        alert("입력되지 않은 항목이 있습니다!")
-        return;
-      }
-    }
-
-    await axios.post('/host/classRegist/submit',classData);//검수요청
+    console.log(reqData);
+    myAxios(token).post('/host/classRegist/submit', formData)
+      .then(res => {
+        console.log(res);
+        console.log(formData);
+        let classId = res.data;
+      })
+      .catch(err => {
+        console.log(formData);
+        console.log(token);
+        console.log(err);
+      })
   }
 
   const renderTabContent = () => {
@@ -138,7 +208,7 @@ const ClassRegisterPage = () => {
       </div>
 
       <div className="KHJ-tab-content">{renderTabContent()}</div>
-      <TabFooter activeTab={activeTab} onSave={saveCurrentTab} onSubmit={submitAllData} />
+      <TabFooter activeTab={activeTab} onSubmit={submit} />
     </div>
   );
 };

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styles from './MySchedule.module.css';
+import Header from "../../../common/Header";
+import Footer from "../../../../components/Footer";
+import Sidebar from './Sidebar';
 
 export default function MySchedule() {
   const today = new Date();
@@ -72,10 +75,9 @@ export default function MySchedule() {
 
   return (
     <main className={styles.page}>
+      <Header />
       <aside className={styles.sidebarArea}>
-        <div className={styles.sidebar}>
-          {/* 예: <img className={styles.userImg} /> 등 */}
-        </div>
+        <Sidebar />
       </aside>
 
       <section className={styles.calendarArea}>
@@ -126,6 +128,7 @@ export default function MySchedule() {
           </div>
         </div>
       </section>
+      <Footer/>
     </main>
   );
 }

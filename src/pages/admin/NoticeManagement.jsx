@@ -234,8 +234,7 @@ export default function NoticeList() {
     return [...pinnedItems, ...unpinnedItems];
   }, [noticeList, sortConfig]);
 
-  // 🔍 디버깅용 코드로 교체해서 테스트
-
+ 
 const hideNotice = async (noticeId) => {
   console.log('=== 숨기기 시작 ===');
   console.log('요청 noticeId:', noticeId);

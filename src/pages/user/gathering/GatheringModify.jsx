@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import { userAtom, tokenAtom } from "../../../atoms";
 import { Button } from "reactstrap";
 import { CiSearch, CiLocationOn, CiHashtag } from "react-icons/ci";
 import { FiUpload } from "react-icons/fi";
@@ -6,10 +8,12 @@ import { GoPeople } from "react-icons/go";
 import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
-import axios from "axios";
-import { url, KAKAO_REST_API_KEY } from "../../../config";
+import { url, myAxios } from "../../../config";
+const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
+import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress';
 import "@toast-ui/editor/dist/toastui-editor.css";
 import Header from "../../common/Header";
 import { useNavigate, useParams } from "react-router-dom";
@@ -39,20 +43,46 @@ const getMaxDeadlineDateTime = (meetingDate) => {
 
 // datetime-local 형식으로 변환하는 함수
 const formatDateTimeLocal = (dateTimeString) => {
-  if (dateTimeString.includes('T') && dateTimeString.includes('+')) {
-    // ISO 8601 UTC 형식인 경우
-    const date = new Date(dateTimeString);
+  if (!dateTimeString) return "";
+  
+  try {
+    let date;
+    
+    if (dateTimeString.includes("T") && dateTimeString.includes("+")) {
+      // ISO 8601 UTC 형식인 경우 (예: "2025-06-24T05:38:00.000+00:00")
+      date = new Date(dateTimeString);
+    } else if (dateTimeString.includes("T")) {
+      // 이미 ISO 형식인 경우
+      date = new Date(dateTimeString);
+    } else {
+      // "YYYY-MM-DD HH:mm:ss" 형식인 경우
+      date = new Date(dateTimeString.replace(" ", "T"));
+    }
+    
+    // 한국 시간으로 변환 (UTC+9)
     const koreanTime = new Date(date.getTime() + (9 * 60 * 60 * 1000));
-    // datetime-local 형식으로 변환
-  } else {
-    // 기존 "YYYY-MM-DD HH:mm:ss" 형식 처리
+    
+    // datetime-local 형식으로 변환 (YYYY-MM-DDTHH:mm)
+    const year = koreanTime.getFullYear();
+    const month = String(koreanTime.getMonth() + 1).padStart(2, "0");
+    const day = String(koreanTime.getDate()).padStart(2, "0");
+    const hours = String(koreanTime.getHours()).padStart(2, "0");
+    const minutes = String(koreanTime.getMinutes()).padStart(2, "0");
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  } catch (error) {
+    console.error("날짜 변환 오류:", error);
+    return "";
   }
 };
 
 export default function GatheringModify() {
   const navigate = useNavigate();
   const { gatheringId } = useParams();
-  
+
+  const user = useAtomValue(userAtom);    
+  const token = useAtomValue(tokenAtom);
+  const userId = user.id;
   // 지오코딩용
   const [coordinates, setCoordinates] = useState({ x: "", y: "" });
   const [geocodingError, setGeocodingError] = useState("");
@@ -91,17 +121,52 @@ export default function GatheringModify() {
     tags: [],
     intrOnln: "",
   });
-
-  // 기존 모임 데이터 가져오기
   useEffect(() => {
-    if (gatheringId) {
-      axios
-        .get(`${url}/detailForModifyGathering/?gatheringId=${gatheringId}`)
+    if (!formData.address) return;
+
+    console.log("지오코딩 시작 - 주소:", formData.address);
+    
+    getLatLngFromAddress(formData.address)
+      .then(coords => {
+        if (coords) {
+          console.log("지오코딩 성공:");
+          console.log("위도:", coords.lat);
+          console.log("경도:", coords.lng);
+          
+          setCoordLat(coords.lat);
+          setCoordLng(coords.lng);
+
+          setFormData(prev => ({
+            ...prev,
+            latitude: coords.lat,
+            longitude: coords.lng
+          }));
+        }
+      })
+      .catch(err => {
+        console.error("좌표변환 실패:", err);
+        setCoordLat('');
+        setCoordLng('');
+        setFormData(prev => ({
+          ...prev,
+          latitude: 0,
+          longitude: 0
+        }));
+      });
+  }, [formData.address]);
+  useEffect(() => {
+    if (gatheringId && token) {
+      console.log('전달하는 토큰:', token); // 이 값이 실제로 무엇인지
+      myAxios(token).get(`/user/detailForModifyGathering?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("API Response:", res.data);
-          
+          if (res.data === null) {
+            alert("해당 게더링의 작성자만 수정 할 수 있습니다.");
+            history.back();
+            return;
+          }
           const gathering = res.data;
-          
+          console.log(gathering);
           // tags 필드 파싱
           let parsedTags = [];
           if (gathering.tags && typeof gathering.tags === "string") {
@@ -113,8 +178,6 @@ export default function GatheringModify() {
               parsedTags = [];
             }
           }
-
-          // formData 구조에 맞게 데이터 설정
           setFormData({
             title: gathering.title || "",
             startTime: gathering.startTime || "",
@@ -132,15 +195,20 @@ export default function GatheringModify() {
             locName: gathering.locName || "",
             tags: parsedTags,
             intrOnln: gathering.intrOnln || "",
+            latitude: gathering.latitude || 0,   
+            longitude: gathering.longitude || 0,
           });
+
+
 
           // 기존 썸네일 이미지 설정
           if (gathering.thumbnailFileName) {
-            setPreviewUrl(`${url}/image?filename=${gathering.thumbnailFileName}`);
+            setPreviewUrl(
+              `${url}/image?filename=${gathering.thumbnailFileName}`
+            );
             setFileName(gathering.thumbnailFileName);
             setUploadStatus("success");
           }
-
           // 좌표 설정
           setCoordinates({
             x: gathering.longitude || "",
@@ -150,61 +218,16 @@ export default function GatheringModify() {
           setIsDataLoaded(true);
         })
         .catch((err) => {
-          console.log("데이터 로딩 오류:", err);
+          if (err.response) {
+            console.log("데이터 로딩 오류:", err);
+            if (err.response.status === 404) {
+                alert("존재하지 않는 게더링입니다.");
+            }
+          }
         });
     }
-  }, [gatheringId]);
+  }, [gatheringId, token]);
   const [tagInput, setTagInput] = useState("");
-
-  // 지오코딩 함수
-  const convertAddressToCoordinates = async (address) => {
-    if (!address || !address.trim()) {
-      setGeocodingError("주소가 입력되지 않았습니다.");
-      return null;
-    }
-    setGeocodingLoading(true);
-    setGeocodingError("");
-
-    try {
-      const response = await fetch(
-        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-          address
-        )}`,
-        {
-          headers: {
-            Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.documents && data.documents.length > 0) {
-        const result = data.documents[0];
-        const coords = {
-          x: result.x,
-          y: result.y,
-        };
-        setCoordinates(coords);
-        setGeocodingError("");
-        return coords;
-      } else {
-        setGeocodingError("주소를 찾을 수 없습니다. 주소를 다시 확인해주세요.");
-        return null;
-      }
-    } catch (err) {
-      console.error("지오코딩 오류:", err);
-      setGeocodingError("좌표 변환 중 오류가 발생했습니다.");
-      return null;
-    } finally {
-      setGeocodingLoading(false);
-    }
-  };
 
   // 파일 업로드 처리
   const handleFileUpload = (file) => {
@@ -265,7 +288,8 @@ export default function GatheringModify() {
   const getUploadZoneClass = () => {
     let baseClass = "GatheringWrite_upload-zone_osk";
     if (isDragOver) baseClass += " GatheringWrite_upload-zone-dragover_osk";
-    if (uploadStatus === "success") baseClass += " GatheringWrite_upload-zone-success_osk";
+    if (uploadStatus === "success")
+      baseClass += " GatheringWrite_upload-zone-success_osk";
     return baseClass;
   };
 
@@ -333,7 +357,10 @@ export default function GatheringModify() {
           ...prev,
           minAttendees: "최소 인원은 2명 이상이어야 합니다",
         }));
-      } else if (formData.maxAttendees && numValue > parseInt(formData.maxAttendees)) {
+      } else if (
+        formData.maxAttendees &&
+        numValue > parseInt(formData.maxAttendees)
+      ) {
         setErrors((prev) => ({
           ...prev,
           minAttendees: "최소 인원은 최대 인원보다 클 수 없습니다",
@@ -376,7 +403,8 @@ export default function GatheringModify() {
         extraAddress += data.bname;
       }
       if (data.buildingName !== "") {
-        extraAddress += extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
@@ -390,6 +418,7 @@ export default function GatheringModify() {
       locName = addressParts[0];
     }
 
+    setCoordinates({ x: "", y: "" });
     setFormData((prev) => ({
       ...prev,
       address: fullAddress,
@@ -405,8 +434,8 @@ export default function GatheringModify() {
 
   // 1차 카테고리 데이터 가져오기
   useEffect(() => {
-    axios
-      .get(`${url}/category`)
+    myAxios()
+      .get(`/category`)
       .then((res) => {
         const categoryArray = res.data.category;
         setCategory(categoryArray);
@@ -418,8 +447,8 @@ export default function GatheringModify() {
   // 2차 카테고리 데이터 가져오기
   useEffect(() => {
     if (formData.category && formData.category !== "") {
-      axios
-        .get(`${url}/subCategory/${formData.category}`)
+      myAxios()
+        .get(`/subCategory/${formData.category}`)
         .then((res) => {
           const categoryArray = res.data.subCategory.map((item) => ({
             subCategoryId: item.subCategoryId,
@@ -476,10 +505,11 @@ export default function GatheringModify() {
           events: {
             change: () => {
               try {
+                // 에디터 입력 중에는 trim하지 않고 원본 내용 그대로 저장
                 const content = editorInstance.getMarkdown();
                 setFormData((prev) => ({
                   ...prev,
-                  content: content,
+                  content: content, // trim() 제거됨
                 }));
               } catch (err) {
                 console.error("에디터 내용 변경 처리 오류:", err);
@@ -522,7 +552,7 @@ export default function GatheringModify() {
     if (editor && isDataLoaded && formData.content) {
       try {
         // 에디터가 준비되었는지 확인
-        if (typeof editor.setMarkdown === 'function') {
+        if (typeof editor.setMarkdown === "function") {
           editor.setMarkdown(formData.content);
         }
       } catch (error) {
@@ -557,14 +587,27 @@ export default function GatheringModify() {
     }
 
     // 지오코딩 실행 (주소가 변경된 경우에만)
-    let coords = coordinates;
-    if (!coords.x || !coords.y) {
-      coords = await convertAddressToCoordinates(formData.address);
-      if (!coords) {
-        alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
-        return;
-      }
+   let coords = coordinates;
+  
+  // 1) formData에 이미 좌표가 있으면 사용 (실시간 지오코딩 결과)
+  if (formData.latitude && formData.longitude && 
+      formData.latitude !== 0 && formData.longitude !== 0) {
+    coords = {
+      x: formData.longitude,
+      y: formData.latitude
+    };
+    console.log("formData에서 좌표 사용:", coords);
+  }
+  // 2) coordinates 상태에 좌표가 있으면 사용 (기존 방식)
+  else if (coordinates.x && coordinates.y) {
+    coords = coordinates;
+    console.log("coordinates 상태에서 좌표 사용:", coords);
+  }
+  else {
+      alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
+      return;
     }
+
 
     // FormData 객체 생성
     const formDataToSend = new FormData();
@@ -601,7 +644,10 @@ export default function GatheringModify() {
     // 인원수 정보
     formDataToSend.append("minAttendees", parseInt(formData.minAttendees) || 2);
 
-    if (formData.maxAttendees && formData.maxAttendees.toString().trim() !== "") {
+    if (
+      formData.maxAttendees &&
+      formData.maxAttendees.toString().trim() !== ""
+    ) {
       const maxPeople = parseInt(formData.maxAttendees);
       if (!isNaN(maxPeople) && maxPeople > 0) {
         formDataToSend.append("maxAttendees", maxPeople);
@@ -610,18 +656,22 @@ export default function GatheringModify() {
 
     // 신청 마감일
     if (formData.deadlineDateTime) {
-      formDataToSend.append("applyDeadline", formData.deadlineDateTime.replace("T", " ") + ":00");
+      formDataToSend.append(
+        "applyDeadline",
+        formData.deadlineDateTime.replace("T", " ") + ":00"
+      );
     }
 
     // 모임 내용 및 준비물
-    formDataToSend.append("gatheringContent", formData.content);
+    formDataToSend.append("gatheringContent", formData.content.trim());
     formDataToSend.append("preparationItems", formData.preparation || "");
 
     // 한 줄 소개
     formDataToSend.append("intrOnln", formData.intrOnln || "");
 
     // 태그 처리
-    const tagsToSend = formData.tags && formData.tags.length > 0 ? formData.tags : [];
+    const tagsToSend =
+      formData.tags && formData.tags.length > 0 ? formData.tags : [];
     formDataToSend.append("tags", JSON.stringify(tagsToSend));
 
     // FormData 내용 확인
@@ -631,61 +681,17 @@ export default function GatheringModify() {
     }
 
     // axios 요청
-    try {
-      console.log("모임 수정 요청 시작...");
+  try {
+    console.log("모임 수정 요청 시작...");
+    const response = await myAxios(token).post(`/user/modifyGathering`, formDataToSend);
+    console.log("모임 수정 성공:", response);
+    alert("모임이 성공적으로 수정되었습니다!");
+    navigate(`/gatheringDetail/${gatheringId}`);
+  } catch (err) {
+    console.error("모임 수정 실패:", err);
+  }
+};
 
-      const response = await axios.post(
-        `${url}/user/modifyGathering`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            // 토큰이 있다면 Authorization 헤더 추가
-            //...(token && { Authorization: `Bearer ${token}` }),
-          },
-          timeout: 30000,
-        }
-      );
-
-      console.log("모임 수정 성공:", response);
-      alert("모임이 성공적으로 수정되었습니다!");
-      navigate(`/gatheringDetail/${gatheringId}`);
-    } catch (err) {
-      console.error("모임 수정 실패:", err);
-
-      if (err.response) {
-        console.error("응답 상태:", err.response.status);
-        console.error("응답 데이터:", err.response.data);
-
-        switch (err.response.status) {
-          case 400:
-            alert("입력한 정보에 오류가 있습니다. 다시 확인해주세요.");
-            break;
-          case 401:
-            alert("로그인이 필요합니다.");
-            navigate("/login");
-            break;
-          case 404:
-            alert("수정할 모임을 찾을 수 없습니다.");
-            break;
-          case 413:
-            alert("파일 크기가 너무 큽니다. 더 작은 파일을 선택해주세요.");
-            break;
-          case 500:
-            alert("서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-            break;
-          default:
-            alert("모임 수정 중 오류가 발생했습니다.");
-        }
-      } else if (err.request) {
-        console.error("요청이 전송되었지만 응답이 없음:", err.request);
-        alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
-      } else {
-        console.error("요청 설정 오류:", err.message);
-        alert("요청 처리 중 오류가 발생했습니다.");
-      }
-    }
-  };
 
   return (
     <div>
@@ -706,7 +712,7 @@ export default function GatheringModify() {
                   기본 정보
                 </span>
               </div>
-              
+
               <div className="GatheringWrite_form-group_osk">
                 <label className="GatheringWrite_field-label_osk">
                   <span className="GatheringWrite_section-icon_osk">

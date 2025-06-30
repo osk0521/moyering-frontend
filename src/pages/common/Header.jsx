@@ -30,6 +30,7 @@ export default function Header({alarms}) {
     setToken(null);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/userlogin");// 로그인 페이지로 이동
   }
 

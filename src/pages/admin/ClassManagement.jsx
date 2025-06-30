@@ -3,7 +3,7 @@ import Layout from "./Layout";
 import './ClassManagement.css';
 import ClassDetailModal from './ClassDetailModal';
 import { myAxios } from '../../config';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom } from '../../atoms';
 
 const statusOptions = [
@@ -16,7 +16,7 @@ const statusOptions = [
 ];
 
 const ClassManagement = () => {
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   // 검색/필터 상태
   const [searchTerm, setSearchTerm] = useState('');
   const [firstCategory, setFirstCategory] = useState('');
@@ -39,7 +39,7 @@ const ClassManagement = () => {
 
   // 카테고리 데이터 fetch
   useEffect(() => {
-    myAxios(token)
+    token && myAxios(token,setToken)
       .get('/categories/suball')
       .then(res => {
         setCategoryList(res.data || []);
@@ -71,7 +71,7 @@ const ClassManagement = () => {
       toDate: endDate || undefined,
       statusFilter: statusFilter || undefined,
     };
-    myAxios(token)
+    token && myAxios(token,setToken)
       .get('/api/class', { params })
       .then(res => {
         setClassList(res.data.content || []);

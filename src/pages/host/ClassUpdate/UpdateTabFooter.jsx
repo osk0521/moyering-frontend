@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import './TabFooter.css';
+import './UpdateTabFooter.css';
 import React from 'react'; // 이 한 줄만 추가!
 
-const TabFooter = ({ activeTab,onSubmit,handleReset }) => {
+const UpdateTabFooter = ({ activeTab,onSubmit,handleReset }) => {
   const [isPreview, setIsPreview] = useState(false);
 
   // 각 탭에 따라 다른 버튼 표시
@@ -34,4 +34,4 @@ const TabFooter = ({ activeTab,onSubmit,handleReset }) => {
   return <div className="KHJ-footer">{renderFooterButtons()}</div>;
 };
 
-export default TabFooter;
+export default UpdateTabFooter;

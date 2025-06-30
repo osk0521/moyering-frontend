@@ -7,7 +7,7 @@ import {
     classDetailAtom,
     calendarListAtom,
 } from '../../atom/classAtom';
-import { useSetAtom, useAtomValue } from "jotai";
+import { useSetAtom, useAtomValue, useAtom } from "jotai";
 import "./GatheringDetail.css";
 import { userAtom, tokenAtom } from "../../atoms";
 import {
@@ -26,7 +26,7 @@ export default function ClassRingDetailInquiryList({classId}) {
     const setInquiryListAtom = useSetAtom(inquiryListAtom);
     const inquiryList = useAtomValue(inquiryListAtom);
     const user = useAtomValue(userAtom);
-    const token = useAtomValue(tokenAtom);
+    const [token,setToken] = useAtom(tokenAtom)
     const classDetail = useAtomValue(classDetailAtom);
     const calendarList = useAtomValue(calendarListAtom);
     
@@ -84,7 +84,7 @@ export default function ClassRingDetailInquiryList({classId}) {
 
     try {
         console.log(token);
-        const response = await myAxios(token).post(
+        const response = await myAxios(token,setToken).post(
         `/user/writeClassInquiry`,
         formDataToSend
         );

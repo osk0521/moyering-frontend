@@ -22,10 +22,10 @@ const Login = () => {
     formData.append("username", login.username);
     formData.append("password", login.password);
     formData.append("fcmToken", fcmToken);
-    myAxios().post("login", formData)
+    myAxios(null,setToken).post("login", formData)
       .then(res => {
-        console.log(res);
-        setToken(res.headers.authorization);
+        // console.log(res);
+        // setToken(res.headers.authorization);
         const user = res.data;
         setUser({ ...user });
         navigate("/")

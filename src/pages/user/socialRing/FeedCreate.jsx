@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react';
 import './FeedCreate.css';
 import plusIcon from './icons/plus.svg';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
 import { useNavigate } from 'react-router-dom';
 import { myAxios, url } from '../../../config';
 
 export default function FeedCreate() {
     const user = useAtomValue(userAtom);
-    const token = useAtomValue(tokenAtom);
+    const [token,setToken] = useAtom(tokenAtom);
     const navigate = useNavigate();
 
     // 상태 관리
@@ -93,7 +93,7 @@ export default function FeedCreate() {
             imageFiles.forEach(file => {
                 formData.append('images', file);
             });
-            const res = await myAxios(token).post(
+            const res = await myAxios(token,setToken).post(
                 `${url}/user/socialing/feed`,
                 formData
             );

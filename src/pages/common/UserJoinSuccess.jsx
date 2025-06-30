@@ -21,8 +21,8 @@ const UserJoinSuccess = () => {
         </div>
 
         <div className="success-buttons">
-          <button className="success-btn" onClick={()=>handleNavigation('')}>클래스링 즐기러 가기</button>
-          <button className="success-btn" onClick={()=>handleNavigation('')}>게더링 즐기러 가기</button>
+          <button className="success-btn" onClick={()=>handleNavigation('/host/intro')}>클래스링 즐기러 가기</button>
+          <button className="success-btn" onClick={()=>handleNavigation('/gatheringList')}>게더링 즐기러 가기</button>
         </div>
       </div>
     </div>

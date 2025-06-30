@@ -1,12 +1,12 @@
 // TabExtraInfo.jsx
 import { useEffect, useState } from 'react';
-import './TabExtraInfo.css';
+import './UpdateTabExtraInfo.css';
 import React from 'react';
 import { myAxios } from '../../../config';
 import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom } from '../../../atoms';
 
-const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
+const UpdateTabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   const { extraInfo } = classData;
   const [token,setToken] = useAtom(tokenAtom);
   const [couponList, setCouponList] = useState([]);
@@ -14,7 +14,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   const [selectedCoupons, setSelectedCoupons] = useState([]);
 
   useEffect(() => {
-    token && myAxios(token,setToken).get("/host/couponList")
+    myAxios(token,setToken).get("/host/couponList")
       .then(res => setCouponList(res.data))
       .catch(err => console.log("쿠폰 불러오기 실패", err));
   }, [token]);
@@ -151,7 +151,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
         <label className="KHJ-file-label"><span className="KHJ-required-text-dot">*</span>클래스 강의자료</label>
         <div className="KHJ-file-upload-container">
           {extraInfo.material ? (
-            <span>{extraInfo.material.name}</span>
+            <span>{extraInfo.material}</span>
           ) : (
             <span className="KHJ-file-placeholder">강의 자료를 클릭하여 업로드하세요</span>
           )}
@@ -256,4 +256,4 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   );
 };
 
-export default TabExtraInfo;
+export default UpdateTabExtraInfo;

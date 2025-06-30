@@ -5,13 +5,13 @@ import { useParams } from 'react-router-dom';
 import { myAxios, url } from '../../../config';
 import ReportModal from './ReportModal';
 import EmojiPicker from 'emoji-picker-react';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
 import Header from '../../common/Header';
 
 export default function FeedDetail() {
   // Jotai atom에서 토큰 읽어오기
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const isLoggedIn = Boolean(token);
 
   const [commentText, setCommentText] = useState('');
@@ -107,7 +107,7 @@ export default function FeedDetail() {
   const postComment = async () => {
     if (!commentText.trim()) return;
     try {
-      const api = myAxios(token);
+      const api = myAxios(token,setToken);
       const res = await api.post(`/user/socialing/feed/comment`, {
         feedId: feedId,
         content: commentText,

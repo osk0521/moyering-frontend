@@ -1,55 +1,36 @@
-import { useState } from "react";
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import { useAtomValue } from "jotai";
+import { userAtom } from "../../../atoms";
 import './DetailTabSchedule.css';
-import React from 'react'; // 이 한 줄만 추가!
-const DetailTabSchedule = () => {
-  const [startDate, setStartDate] = useState('2025-05-12');
-  const [endDate, setEndDate] = useState('2026-06-12');
-  const [events, setEvents] = useState([
-    { title: '1회차', start: '2025-05-27' },
-    { title: '2회차', start: '2025-06-03' },
-    { title: '3회차', start: '2025-06-10' },
-  ]);
+const DetailTabSchedule = ({couponList}) => {
+
 
   return (
     <div className="KHJ-schedule-tab-container">
-      <section className="KHJ-date-range">
-        <h3>클래스 일정</h3>
-
-        <div className="KHJ-dr-labels">
-          <div className="KHJ-dr-item-start">클래스 시작일</div>
-          <div className="KHJ-dr-item-end">클래스 종료일</div>
+       <div className="KHJ-coupon-table-container">
+          <h4>📋 적용된 쿠폰 목록</h4>
+          <table className="KHJ-coupon-table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>쿠폰 이름</th>
+                <th>할인</th>
+                <th>기간</th>
+                <th>매수</th>
+              </tr>
+            </thead>
+            <tbody>
+              {couponList.map((c, i) => (
+                <tr key={i}>
+                  <td>{c.classCouponId}</td>
+                  <td>{c.couponName || '(미지정)'}</td>
+                  <td>{c.discount}{c.discountType === 'RT' ? '%' : '원'}</td>
+                  <td>{c.validFrom} ~ {c.validUntil}</td>
+                  <td>{c.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-
-        <div className="KHJ-dr-inputs">
-          <input
-            type="date"
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
-          />
-          <span className="KHJ-dr-sep">~</span>
-          <input
-            type="date"
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
-          />
-        </div>
-      </section>
-
-      <section className="KHJ-calendar-section">
-        <h3>일정 설정</h3>
-        <div className="KHJ-calendar-box">
-          <FullCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            locale="ko"
-            events={events}
-            height="auto"
-          />
-        </div>
-      </section>
     </div>
   );
 };

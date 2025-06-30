@@ -1,8 +1,10 @@
 .KYM-followlist-container {
     max-width: 1000px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    margin: 96px 0 0 240px !important;  
     padding: 20px;
     font-family: Arial, sans-serif;
+
 }
 
 /* 헤더 */
@@ -130,4 +132,11 @@
 .KYM-followlist-container .KYM-followlist-pager img {
     width: 16px;
     height: 16px;
+}
+
+.KYM-followlist-container .KYM-no-followers {
+    padding: 40px 0;
+    text-align: center;
+    color: #888;
+    font-size: 1.1rem;
 }

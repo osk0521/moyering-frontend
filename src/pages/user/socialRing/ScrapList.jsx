@@ -5,59 +5,14 @@ import heartOutline from './icons/heart-outline.png';
 import heartFilled from './icons/heart-filled.png';
 import commentIcon from './icons/comment.svg';
 
-const dummyScraps = [
-  {
-    id: 1,
-    author: '닉네임3🐴',
-    date: '2025.05.29',
-    imageUrl: 'https://placehorse.example/horse1.jpg',
-    content: '뭘 보냥?',
-    hashtags: ['#방탄'],
-    likeCount: 0,
-    commentCount: 0,
-    liked: false
-  },
-  {
-    id: 2,
-    author: '닉네임3🐴',
-    date: '2025.05.29',
-    imageUrl: 'https://placehorse.example/horse2.jpg',
-    content: 'ㅎㅇㅎㅇㅎㅇㅎㅇㅎㅇ',
-    hashtags: ['#방탄','#노을'],
-    likeCount: 0,
-    commentCount: 0,
-    liked: false
-  },
-  {
-    id: 3,
-    author: '닉네임1🐴',
-    date: '2025.05.29',
-    imageUrl: 'https://placehorse.example/horse3.jpg',
-    content: '엥?',
-    hashtags: ['#방탄'],
-    likeCount: 0,
-    commentCount: 0,
-    liked: false
-  },
-  {
-    id: 4,
-    author: '닉네임2🐴',
-    date: '2025.05.29',
-    imageUrl: 'https://placehorse.example/horse4.jpg',
-    content: '힐링해요',
-    hashtags: ['#방탄','#노을'],
-    likeCount: 0,
-    commentCount: 0,
-    liked: false
-  }
-];
+
 
 export default function ScrapList() {
   const [scraps, setScraps] = useState([]);
 
   useEffect(() => {
     // 실제 API 연동 전에는 더미 데이터로 세팅
-    setScraps(dummyScraps);
+    setScraps();
   }, []);
 
   const toggleLike = id => {

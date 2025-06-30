@@ -136,7 +136,7 @@ export default function FeedPage() {
   // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
   useEffect(() => {
     let mounted = true;
-    myAxios(token).get(`/user/socialing/scrap/${feedId}`)
+    myAxios(token).get(`/user/socialing/scrap/${feeds.feedId}`)
       .then(res => {
         if (mounted) setScrapped(res.data);
       })
@@ -150,7 +150,7 @@ export default function FeedPage() {
     setLoading(true);
     try {
       if (scrapped) {
-        await myAxios(token).delete(`/user/socialing/scrap/${feed.feedId}`);
+        await myAxios(token).delete(`/user/socialing/scrap/${feeds.feedId}`);
         setScrapped(false);
       } else {
         await myAxios(token).post(`/user/socialing/scrap`, null, { params: { feedId } });

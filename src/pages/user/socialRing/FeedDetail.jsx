@@ -218,7 +218,7 @@ export default function FeedDetail() {
               <img className="KYM-detail-avatar" src={writerProfile} alt="" />
               <span className="KYM-detail-nickname">{writerId}</span>
               {writerBadge && <span className="KYM-detail-badge">🏅</span>}
-              {!mine
+              {!mine 
                 ? <FollowButton
                   targetUserId={feed.writerUserId}             // 숫자 ID를 전달
                   className="KYM-follow-btn"                // 필요 시 CSS 클래스

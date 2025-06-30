@@ -12,7 +12,7 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import Header from '../../common/Header';
 import FeedCreate from '../socialRing/FeedCreate';
 import { tokenAtom, userAtom } from '../../../atoms';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { myAxios, url } from '../../../config';
 
 const POSTS_PER_PAGE = 3;
@@ -20,7 +20,7 @@ const POSTS_PER_PAGE = 3;
 export default function FeedPage() {
   const user = useAtomValue(userAtom);
   const userId = user?.id;
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   console.log('🌟 FeedPage token:', token);
   const filters = ['전체', '좋아요순', '댓글순', '팔로워'];
   const [feeds, setFeeds] = useState([]);
@@ -51,7 +51,7 @@ export default function FeedPage() {
       '팔로워': 'follow'
     }[activeFilter];
 console.log('userId:', userId);
-    myAxios(token).get(`/socialing/feeds?sort=${sortKey}`
+    token && myAxios(token,setToken).get(`/socialing/feeds?sort=${sortKey}`
       // {
       // headers: {
       // Authorization :`Bearer ${token}`}}
@@ -83,7 +83,7 @@ console.log('userId:', userId);
     // const userId = localStorage.getItem('userId');
     try {
       // 1) 백엔드에 좋아요/취소 요청
-      await myAxios(token).post(
+      await myAxios(token,setToken).post(
         `/user/socialing/likes/${feedId}`,
         {},
         {

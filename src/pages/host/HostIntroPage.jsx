@@ -16,7 +16,7 @@ const HostIntroPage = () => {
   }
 
   const validUser = () => {
-    if(user!=null){
+    if(user.hostId!=null||user.hostId==''){
       handleNavigation('/host/hostMyPage/')
     }else{
       handleNavigation('/host/regist')

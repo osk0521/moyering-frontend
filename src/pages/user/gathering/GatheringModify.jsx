@@ -81,7 +81,7 @@ export default function GatheringModify() {
   const { gatheringId } = useParams();
 
   const user = useAtomValue(userAtom);    
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const userId = user.id;
   // 지오코딩용
   const [coordinates, setCoordinates] = useState({ x: "", y: "" });
@@ -160,7 +160,7 @@ export default function GatheringModify() {
   useEffect(() => {
     if (gatheringId && token) {
       console.log('전달하는 토큰:', token); // 이 값이 실제로 무엇인지
-      myAxios(token).get(`/user/detailForModifyGathering?gatheringId=${gatheringId}`)
+      token && myAxios(token,setToken).get(`/user/detailForModifyGathering?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("API Response:", res.data);
           if (res.data === null) {
@@ -695,6 +695,18 @@ export default function GatheringModify() {
   }
 };
 
+      const response = await myAxios(token,setToken).post(
+        `/user/modifyGathering`,
+        formDataToSend
+      );
+
+      console.log("모임 수정 성공:", response);
+      alert("모임이 성공적으로 수정되었습니다!");
+      navigate(`/gatheringDetail/${gatheringId}`);
+    } catch (err) {
+      console.error("모임 수정 실패:", err);
+    }
+  };
 
   return (
     <div>

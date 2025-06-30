@@ -6,13 +6,13 @@ import Sidebar from "../common/Sidebar";
 import Header from "../../../common/Header";
 import Footer from "../../../../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { tokenAtom, userAtom } from "../../../../atoms";
 import { myAxios, url } from "../../../../config";
 export default function GatherInquiry() {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom); 
+  const [token,setToken] = useAtom(tokenAtom);
   const [organized, setOrganized] = useState([]);
   const [participated, setParticipated] = useState([]);
   const [activeTab, setActiveTab] = useState("participated");
@@ -26,7 +26,7 @@ export default function GatherInquiry() {
     if (user || token) {
       //console.log("전달하는 토큰:", token); // 이 값이 실제로 무엇인지
       if(activeTab == "organized") {
-        myAxios(token).get(`/user/getGatheringInquiriesByOrganizerUserId`)
+        token && myAxios(token,setToken).get(`/user/getGatheringInquiriesByOrganizerUserId`)
         .then((res) => {
           console.log("API Response:", res);
           
@@ -37,7 +37,7 @@ export default function GatherInquiry() {
           }
         });
       } else {
-        myAxios(token).get(`/user/getGatheringInquiriesByUserId`)
+        token && myAxios(token,setToken).get(`/user/getGatheringInquiriesByUserId`)
         .then((res) => {
           console.log("API Response:", res.data);
         })

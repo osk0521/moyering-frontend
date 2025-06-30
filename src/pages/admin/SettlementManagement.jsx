@@ -10,6 +10,8 @@ const SettlementManagement = () => {
   // ===== 상태 관리 =====
   // 검색 상태
   const [searchTerm, setSearchTerm] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // 더미 데이터
   const [allSettlements] = useState([
@@ -88,6 +90,25 @@ const SettlementManagement = () => {
     return amount.toLocaleString('ko-KR');
   };
 
+  // 날짜 비교 함수
+  const isDateInRange = (targetDate, startDate, endDate) => {
+    if (!startDate && !endDate) return true; // 날짜 필터가 없으면 모두 포함
+    
+    const target = new Date(targetDate);
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
+    
+    if (start && end) {
+      return target >= start && target <= end;
+    } else if (start) {
+      return target >= start;
+    } else if (end) {
+      return target <= end;
+    }
+    
+    return true;
+  };
+
   // ===== 이벤트 핸들러들 =====
   // 검색어 변경
   const handleSearchChange = (e) => {
@@ -100,19 +121,31 @@ const SettlementManagement = () => {
     // 실제 구현에서는 정산 로직 추가
   };
 
-  // 필터링된 정산 목록 (사용자 정보가 있으면 해당 사용자만, 없으면 검색어로 필터링)
+  // 필터 초기화
+  const handleResetFilters = () => {
+    setSearchTerm('');
+    setStartDate('');
+    setEndDate('');
+  };
+
+  // 필터링된 정산 목록 (검색어 + 날짜 범위)
   const filteredSettlements = allSettlements.filter(settlement => {
-    // 사용자 정보가 있으면 해당 사용자의 데이터만 필터링
+    // 1. 사용자 정보 필터링
     if (userInfo && userInfo.username) {
-      return settlement.settlementId === userInfo.username;
+      if (settlement.settlementId !== userInfo.username) {
+        return false;
+      }
     }
     
-    // 사용자 정보가 없으면 검색어로 필터링
-    const matchesSearch = 
+    // 2. 검색어 필터링
+    const matchesSearch = !searchTerm || 
       settlement.settlementId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       settlement.className.toLowerCase().includes(searchTerm.toLowerCase());
-
-    return matchesSearch;
+    
+    // 3. 날짜 범위 필터링 (정산 요청일 기준)
+    const matchesDateRange = isDateInRange(settlement.settlementRequestDate, startDate, endDate);
+    
+    return matchesSearch && matchesDateRange;
   });
 
   // ===== 렌더링 =====
@@ -142,12 +175,49 @@ const SettlementManagement = () => {
               className="search-inputHY"
             />
           </div>
+          
+          <div className="date-filter-groupHY">
+            <label className="date-labelHY">정산 요청 기간</label>
+            <input
+              type="date"
+              className="date-inputHY"
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value)}
+              placeholder="시작일"
+            />
+            <span className="date-separatorHY">~</span>
+            <input
+              type="date"
+              className="date-inputHY"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              placeholder="종료일"
+            />
+            
+            {/* 필터 초기화 버튼 */}
+            {(searchTerm || startDate || endDate) && (
+              <button 
+                className="reset-filterHY"
+                onClick={handleResetFilters}
+                type="button"
+              >
+                필터 초기화
+              </button>
+            )}
+          </div>
         </div>
-
   
         {/* 결과 수 표시 */}
+        <div className="result-countHY">
           총 <strong>{filteredSettlements.length}</strong>건
-    
+          {(startDate || endDate) && (
+            <span className="filter-infoHY">
+              {startDate && endDate ? ` (${startDate} ~ ${endDate})` :
+               startDate ? ` (${startDate} 이후)` :
+               ` (${endDate} 이전)`}
+            </span>
+          )}
+        </div>
 
         {/* 정산 테이블 */}
         <div className="table-containerHY">
@@ -173,10 +243,10 @@ const SettlementManagement = () => {
                     <td className="settlement-idHY">{settlement.settlementId}</td>
                     <td className="class-nameHY">{settlement.className}</td>
                     <td>{settlement.settlementRequestDate}</td>
-                    <td className="amountHY">{formatAmount(settlement.settlementRequestAmount)}</td>
+                    <td className="amountHY">{formatAmount(settlement.settlementRequestAmount)}원</td>
                     <td>{settlement.classDate}</td>
-                    <td className="amountHY">{formatAmount(settlement.classAmount)}</td>
-                    <td className="participantsHY">{settlement.participants}</td>
+                    <td className="amountHY">{formatAmount(settlement.classAmount)}원</td>
+                    <td className="participantsHY">{settlement.participants}명</td>
                     <td>
                       <button 
                         className="btn-settlementHY"
@@ -190,7 +260,8 @@ const SettlementManagement = () => {
               ) : (
                 <tr>
                   <td colSpan="9" style={{ textAlign: 'center', padding: '20px' }}>
-                    {userInfo ? `${userInfo.username}님의 정산 내역이 없습니다.` : '정산 내역이 없습니다.'}
+                    {userInfo ? `${userInfo.username}님의 정산 내역이 없습니다.` : 
+                     (startDate || endDate) ? '해당 기간에 정산 내역이 없습니다.' : '정산 내역이 없습니다.'}
                   </td>
                 </tr>
               )}

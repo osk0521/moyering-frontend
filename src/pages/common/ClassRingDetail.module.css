@@ -536,3 +536,15 @@
   color: #aaa;
   text-decoration: line-through;
 }
+
+.downloadBtnDisabled {
+  padding: 4px 10px;
+  font-size: 12px;
+  background-color: #ccc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 50px;
+}

@@ -244,7 +244,7 @@ export default function ClassRingDetail() {
                 <KakaoMap
                   latitude={classDetail.latitude}
                   longitude={classDetail.longitude}
-                  address={`${classDetail.addr} ${classDetail.detailAddr}`}
+                  address={`${classDetail.addr} ${classDetail.detailAddr ?? ""}`}
                 />
               ) : (
                 <div>지도를 로드할 데이터를 불러오는 중입니다...</div>

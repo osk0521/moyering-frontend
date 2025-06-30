@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY } from "../../config";
 const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
+const KAKAO_JS_API_KEY = import.meta.env.VITE_KAKAO_JS_API_KEY;
 
 
 export default function KakaoMap({ latitude, longitude, address }) {
@@ -12,10 +12,19 @@ export default function KakaoMap({ latitude, longitude, address }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-  console.log("latitude:", latitude, typeof latitude);
-  console.log("longitude:", longitude, typeof longitude);
-    if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
-      setErrorMessage("위도와 경도 정보가 없습니다.");
+  // console.log("latitude:", latitude, typeof latitude);
+  // console.log("longitude:", longitude, typeof longitude);
+  //   if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
+  //     setErrorMessage("위도와 경도 정보가 없습니다.");
+  //     setHasError(true);
+  //     return;
+  //   }
+
+   const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+
+    if (isNaN(lat) || isNaN(lng)) {
+      setErrorMessage("유효한 위도와 경도 값을 입력하세요.");
       setHasError(true);
       return;
     }
@@ -44,7 +53,7 @@ export default function KakaoMap({ latitude, longitude, address }) {
     }
 
     const script = document.createElement("script");
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JavaScript_API_KEY}&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JS_API_KEY}&autoload=false`;
     script.async = true;
     script.onload = () => {
       window.kakao.maps.load(() => initializeMap());

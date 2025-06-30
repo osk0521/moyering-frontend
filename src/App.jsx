@@ -42,7 +42,8 @@ import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
-import FollowList from './pages/user/socialRing/Followlist.jsx';
+import Follower from './pages/user/socialRing/Follower.jsx';
+import Following from './pages/user/socialRing/Following.jsx';
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
@@ -110,9 +111,9 @@ function App() {
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
 
         
-        <Route path="/myFeed" element={<MyFeed />} />
+        
         <Route path="/scrapList" element={<ScrapList />} />
-        <Route path="/followList" element={<FollowList />} />
+        
         <Route path="/join" element={<UserJoin />} />
         <Route path="/joinCategory" element={<UserJoinCategory />} />
         <Route path="/joinSuccess" element={<UserJoinSuccess />} />
@@ -139,6 +140,9 @@ function App() {
         <Route exact path="/user/mypage/myGatheringingApplyList" element={<MyGatheringApplyList />}></Route>
         <Route exact path="/user/mypage/myGatheringInquiryList" element={<MyGatherInquiryList />}></Route>
         <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
+        <Route path="/user/mypage/follower" element={<Follower />} />
+        <Route path="/user/mypage/following" element={<Following />} />
+        <Route path="/user/mypage/myFeed" element={<MyFeed />} />
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />

@@ -1,43 +1,43 @@
-.KYM-followlist-container {
+.KYM-following-container {
     max-width: 1000px;
     /* margin: 0 auto; */
-    margin: 96px 0 0 240px !important;  
+    margin: 30px auto;   
     padding: 20px;
     font-family: Arial, sans-serif;
 
 }
 
 /* 헤더 */
-.KYM-followlist-container .KYM-followlist-header {
+.KYM-following-container .KYM-following-header {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 16px;
 }
 
 /* 검색 & 카운트 영역 */
-.KYM-followlist-container .KYM-followlist-controls {
+.KYM-following-container .KYM-following-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
 }
 
-.KYM-followlist-container .KYM-followlist-count {
+.KYM-following-container .KYM-following-count {
     font-size: 1rem;
 }
 
-.KYM-followlist-container .KYM-followlist-search {
+.KYM-following-container .KYM-following-search {
     position: relative;
 }
 
-.KYM-followlist-container .KYM-followlist-search input {
+.KYM-following-container .KYM-following-search input {
     padding: 6px 36px 6px 12px;
     border: 1px solid #FFB22C;
     border-radius: 4px;
     font-size: 0.9rem;
 }
 
-.KYM-followlist-container .KYM-followlist-search img {
+.KYM-following-container .KYM-following-search img {
     position: absolute;
     right: 8px;
     top: 50%;
@@ -48,13 +48,13 @@
 }
 
 /* 리스트 */
-.KYM-followlist-container .KYM-followlist-list {
+.KYM-following-container .KYM-following-ing {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.KYM-followlist-container .KYM-followlist-item {
+.KYM-following-container .KYM-following-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -66,26 +66,26 @@
 }
 
 /* 유저 정보 */
-.KYM-followlist-container .KYM-followlist-user {
+.KYM-following-container .KYM-following-user {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.KYM-followlist-container .KYM-followlist-avatar {
+.KYM-following-container .KYM-following-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.KYM-followlist-container .KYM-followlist-nickname {
+.KYM-following-container .KYM-following-nickname {
     font-size: 1rem;
     font-weight: bold;
 }
 
 /* 버튼 */
-.KYM-followlist-container .KYM-followlist-button {
+.KYM-following-container .KYM-following-button {
     background: none;
     border: none;
     color: #333;
@@ -96,13 +96,13 @@
     cursor: pointer;
 }
 
-.KYM-followlist-container .KYM-followlist-button:focus {
+.KYM-following-container .KYM-following-button:focus {
     outline: 2px solid #FFB22C;
     outline-offset: 2px;
 }
 
 /* 페이저 */
-.KYM-followlist-container .KYM-followlist-pager {
+.KYM-following-container .KYM-following-pager {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -110,7 +110,7 @@
     margin-top: 16px;
 }
 
-.KYM-followlist-container .KYM-followlist-pager button {
+.KYM-following-container .KYM-following-pager button {
     background: none;
     border: none;
     font-size: 1rem;
@@ -118,23 +118,23 @@
     cursor: pointer;
 }
 
-.KYM-followlist-container .KYM-followlist-pager button.active {
+.KYM-following-container .KYM-following-pager button.active {
     background: #FFB22C;
     color: #fff;
     border-radius: 50%;
 }
 
-.KYM-followlist-container .KYM-followlist-pager button:disabled {
+.KYM-following-container .KYM-following-pager button:disabled {
     opacity: 0.4;
     cursor: default;
 }
 
-.KYM-followlist-container .KYM-followlist-pager img {
+.KYM-following-container .KYM-following-pager img {
     width: 16px;
     height: 16px;
 }
 
-.KYM-followlist-container .KYM-no-followers {
+.KYM-following-container .KYM-no-followers {
     padding: 40px 0;
     text-align: center;
     color: #888;

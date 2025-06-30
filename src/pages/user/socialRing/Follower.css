@@ -1,0 +1,142 @@
+.KYM-follower-container {
+    max-width: 1000px;
+    /* margin: 0 auto; */
+    margin: 30px auto;   
+    padding: 20px;
+    font-family: Arial, sans-serif;
+
+}
+
+/* 헤더 */
+.KYM-follower-container .KYM-follower-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+/* 검색 & 카운트 영역 */
+.KYM-follower-container .KYM-follower-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.KYM-follower-container .KYM-follower-count {
+    font-size: 1rem;
+}
+
+.KYM-follower-container .KYM-follower-search {
+    position: relative;
+}
+
+.KYM-follower-container .KYM-follower-search input {
+    padding: 6px 36px 6px 12px;
+    border: 1px solid #FFB22C;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.KYM-follower-container .KYM-follower-search img {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+}
+
+/* 리스트 */
+.KYM-follower-container .KYM-follower-er {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.KYM-follower-container .KYM-follower-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff3db;
+    border: 1px solid #FFD47C;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+}
+
+/* 유저 정보 */
+.KYM-follower-container .KYM-follower-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.KYM-follower-container .KYM-follower-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.KYM-follower-container .KYM-follower-nickname {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* 버튼 */
+.KYM-follower-container .KYM-follower-button {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.KYM-follower-container .KYM-follower-button:focus {
+    outline: 2px solid #FFB22C;
+    outline-offset: 2px;
+}
+
+/* 페이저 */
+.KYM-follower-container .KYM-follower-pager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+}
+
+.KYM-follower-container .KYM-follower-pager button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.KYM-follower-container .KYM-follower-pager button.active {
+    background: #FFB22C;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.KYM-follower-container .KYM-follower-pager button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.KYM-follower-container .KYM-follower-pager img {
+    width: 16px;
+    height: 16px;
+}
+
+.KYM-follower-container .KYM-no-followers {
+    padding: 40px 0;
+    text-align: center;
+    color: #888;
+    font-size: 1.1rem;
+}

@@ -12,7 +12,7 @@ import FollowButton from './FollowButton';
 
 export default function FeedDetail() {
   // Jotai atom에서 토큰 읽어오기
-  const [token,setToken] = useAtom(tokenAtom)
+  const [token, setToken] = useAtom(tokenAtom)
   const isLoggedIn = Boolean(token);
 
   const [commentText, setCommentText] = useState('');
@@ -52,7 +52,7 @@ export default function FeedDetail() {
         console.log(err)
       })
   }, [token])
-  
+
   if (error) return <div className="KYM-detail-container">{error}</div>;
   if (!feed) return <div className="KYM-detail-container">피드가 없습니다.</div>;
 
@@ -82,7 +82,7 @@ export default function FeedDetail() {
     if (!commentText.trim()) return;
     try {
 
-      const api = myAxios(token,setToken);
+      const api = myAxios(token, setToken);
       const res = await api.post(`/user/socialing/feed/comment`, {
 
         feedId: feedId,
@@ -94,7 +94,7 @@ export default function FeedDetail() {
       // 2) comment 배열에 바로 추가
       setComment(prev => [...prev, newComment]);
       // 등록 후 새로고침 대신 comments만 갱신
-      const { data } = await myAxios(token).get(`/socialing/feed?feedId=${feedId}`);
+      const { data } = await myAxios().get(`/socialing/feed?feedId=${feedId}`);
       setFeed(data);
       setCommentText('');
     } catch (e) {
@@ -102,16 +102,12 @@ export default function FeedDetail() {
       alert('댓글 등록에 실패했습니다.');
     }
   };
-  
+
   const replysubmit = async () => {
-    // 1️⃣ 호출 직후 rawToken 찍기
-    console.log("▶ rawToken in replysubmit:", rawToken);
 
     try {
-      // 2️⃣ axios 인스턴스 생성 시 항상 rawToken 넘기기
-      // const api = myAxios(rawToken);
 
-      // 3️⃣ 올바른 엔드포인트, 올바른 Body
+      //  올바른 엔드포인트, 올바른 Body
       const payload = {
         content: replyText,        // 답글 내용
         parentId: replyingTo      // 최상위라면 null
@@ -121,7 +117,7 @@ export default function FeedDetail() {
       console.log("▶ 요청 보낼 payload:", payload);
 
       // 4️⃣ 실제 POST 요청
-      const res = await myAxios(rawToken).post(
+      const res = await myAxios(token, setToken).post(
         "/user/socialing/feed/comment", feed.feedId,
         payload
       );
@@ -141,7 +137,7 @@ export default function FeedDetail() {
   // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
   useEffect(() => {
     let mounted = true;
-    myAxios(token).get(`user/socialing/scrap/${feedId}`)
+    myAxios(token,setToken).get(`user/socialing/scrap/${feedId}`)
       .then(res => {
         if (mounted) setScrapped(res.data);
       })
@@ -150,15 +146,15 @@ export default function FeedDetail() {
   }, [token, feedId]);
 
   // 2. 스크랩 토글 함수
-  const handleScrapToggle =  () => {
+  const handleScrapToggle = () => {
     if (loading) return;
     setLoading(true);
     try {
       if (scrapped) {
-         myAxios(token).delete(`/user/socialing/scrap/${feedId}`);
+        myAxios(token, setToken).delete(`/user/socialing/scrap/${feedId}`);
         setScrapped(false);
       } else {
-         myAxios(token).post(`/user/socialing/scrap`, null, { params: { feedId } });
+        myAxios(token, setToken).post(`/user/socialing/scrap`, null, { params: { feedId } });
         setScrapped(true);
       }
     } catch (err) {
@@ -178,7 +174,7 @@ export default function FeedDetail() {
             {images.length > 0 && (
               <>
                 <img
-                  src={`${url}${images[currentImage]}`}
+                  src={`${url}/iupload/${images[currentImage]}`}
                   alt={`feed-${currentImage}`}
                 />
 
@@ -220,7 +216,7 @@ export default function FeedDetail() {
               <img className="KYM-detail-avatar" src={writerProfile} alt="" />
               <span className="KYM-detail-nickname">{writerId}</span>
               {writerBadge && <span className="KYM-detail-badge">🏅</span>}
-              {!mine 
+              {!mine
                 ? <FollowButton
                   targetUserId={feed.writerUserId}             // 숫자 ID를 전달
                   className="KYM-follow-btn"                // 필요 시 CSS 클래스
@@ -383,7 +379,7 @@ export default function FeedDetail() {
             {moreImg1List.map((src, i) =>
               <img
                 key={i}
-                src={`${url}${src}`}
+                src={`${url}/iupload/${src}`}
                 className="KYM-thumb"
                 alt=""
               />

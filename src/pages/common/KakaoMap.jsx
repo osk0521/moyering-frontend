@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 export default function KakaoMap({ latitude, longitude, address }) {
   const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-  const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
+  const KAKAO_JS_API_KEY = import.meta.env.VITE_KAKAO_JS_API_KEY;
   const mapRef = useRef(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -43,7 +43,7 @@ export default function KakaoMap({ latitude, longitude, address }) {
     }
 
     const script = document.createElement("script");
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JavaScript_API_KEY}&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JS_API_KEY}&autoload=false`;
     script.async = true;
     script.onload = () => {
       window.kakao.maps.load(() => initializeMap());

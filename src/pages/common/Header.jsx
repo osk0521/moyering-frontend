@@ -11,8 +11,10 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { tokenAtom, userAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
 
-const Header = () => {
+export default function Header({alarms}) {
   const user = useAtomValue(userAtom);
+  const navigate = useNavigate();
+  const location = useLocation();
   const token = useAtomValue(tokenAtom);
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
@@ -28,7 +30,7 @@ const Header = () => {
     setToken(null);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-    window.location.href = '/userlogin'; // 로그인 페이지로 이동
+    navigate("/userlogin");// 로그인 페이지로 이동
   }
 
   useEffect(() => {
@@ -41,8 +43,6 @@ const Header = () => {
       });
     } 
   }, [user]);
-  const navigate = useNavigate();
-  const location = useLocation();
   return (
     <div className="Header_header-container_osk">
       <div className="Header_top-menu-bar_osk">
@@ -96,6 +96,7 @@ const Header = () => {
               </Button>
               <Button className="Header_icon-button_osk">
                 <FaRegBell className="Header_top-icon_osk" />
+              {/* &nbsp;&nbsp;&nbsp;<span>{alarms.length !== 0 && alarms.length}</span> */}
               </Button>
               <Button className="Header_icon-button_osk">
                   <LuMessageCircleMore className="Header_top-icon_osk" />
@@ -156,6 +157,4 @@ const Header = () => {
       </div>
     </div>
   );
-};
-
-export default Header;
+}

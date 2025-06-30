@@ -101,6 +101,9 @@ export default function GatheringModify() {
   const [thumbnail, setThumbnail] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("initial");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [coordLat,setCoordLat] = useState('');
+    const [coordLng,setCoordLng] = useState('');
+  
 
   // 폼 데이터 상태
   const [formData, setFormData] = useState({

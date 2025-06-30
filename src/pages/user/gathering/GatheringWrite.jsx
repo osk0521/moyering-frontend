@@ -1,22 +1,22 @@
-// import React, { useState, useEffect, useRef } from "react";
-// import { useAtom, useAtomValue } from "jotai";
-// import { userAtom, tokenAtom } from "../../../atoms";
-// import { CiSearch, CiLocationOn, CiHashtag } from "react-icons/ci";
-// import { FiUpload } from "react-icons/fi";
-// import { GoPeople } from "react-icons/go";
-// import { SlPicture } from "react-icons/sl";
-// import { HiOutlineInformationCircle } from "react-icons/hi";
-// import { Editor } from "@toast-ui/editor";
-// import { url, myAxios } from "../../../config";
-// import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress'
-// const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-// // const KAKAO_JavaScript_API_KEY = import.meta.env.VITE_KAKAO_JavaScript_API_KEY;
-// import DaumPostcode from "react-daum-postcode";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "@toast-ui/editor/dist/toastui-editor.css";
-// import Header from "../../common/Header";
-// import { useNavigate } from "react-router-dom";
-// import "./GatheringWrite.css";
+
+import React, { useState, useEffect, useRef } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import { userAtom, tokenAtom } from "../../../atoms";
+import { CiSearch, CiLocationOn, CiHashtag } from "react-icons/ci";
+import { FiUpload } from "react-icons/fi";
+import { GoPeople } from "react-icons/go";
+import { SlPicture } from "react-icons/sl";
+import { HiOutlineInformationCircle } from "react-icons/hi";
+import { Editor } from "@toast-ui/editor";
+import { url, myAxios } from "../../../config";
+import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress'
+const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+import DaumPostcode from "react-daum-postcode";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import Header from "../../common/Header";
+import { useNavigate } from "react-router-dom";
+import "./GatheringWrite.css";
 
 // // 오늘 날짜를 YYYY-MM-DD 형식으로 반환
 // const getTodayString = () => {
@@ -136,11 +136,10 @@ export default function GatheringWrite() {
 //         console.log("위도:", coords.lat);
 //         console.log("경도:", coords.lng);
         
+
 //         // 로컬 상태 업데이트 (화면 표시용)
 //         setCoordLat(coords.lat);
 //         setCoordLng(coords.lng);
-
-//         // ✅ formData 구조를 올바르게 수정
 //         setFormData(prev => ({
 //           ...prev,
 //           latitude: coords.lat,   // formData.latitude에 직접 저장

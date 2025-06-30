@@ -60,7 +60,47 @@
   border-color: #ff6b6b;
   box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
 }
+.MyGatheringList_btn-add_osk {
+    right: 145px;
+    top: 270px;
+    position: absolute;
+    text-decoration:none;
+    background-color: #ffc107;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 17px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+.MyGatheringList_btn-add_osk > a {
+    color: white;
+    text-decoration:none;
+}
+.MyGatheringList_empty-state_osk {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 40px 20px;
+}
 
+.MyGatheringList_empty-content_osk {
+  text-align: center;
+  color: #666;
+}
+
+.MyGatheringList_empty-content_osk h4 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.MyGatheringList_empty-content_osk p {
+  font-size: 1rem;
+  margin: 0;
+  color: #888;
+}
 .MyGatheringList_search-icon_osk {
   position: absolute;
   right: 15px;

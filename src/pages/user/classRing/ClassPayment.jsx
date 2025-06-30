@@ -6,7 +6,7 @@ import Footer from "../../../pages/common/Footer";
 import { myAxios } from "../../../config";
 import { useSetAtom, useAtomValue, useAtom } from "jotai";
 import { tokenAtom, userAtom } from "../../../atoms";
-import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
+import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import axios from 'axios';
 
 export default function ClassPayment() {
@@ -95,11 +95,22 @@ export default function ClassPayment() {
 
   //토스 결제
   const [toss, setToss] = useState(null);
+  const [paymentInstance, setPaymentInstance] = useState(null);
+
+
+  console.log("✅ Toss Client Key:", import.meta.env.VITE_TOSS_CLIENT_KEY);
   // TossPayments 인스턴스 로드
   useEffect(() => {
-    loadTossPayments(import.meta.env.VITE_TOSS_CLIENT_KEY)
-      .then(instance => setToss(instance))
-      .catch(err => console.error('TossPayments 로드 실패', err));
+    const loadToss = async () => {
+      try {
+        const instance = await loadTossPayments(import.meta.env.VITE_TOSS_CLIENT_KEY);
+        const payment = instance.payment({ customerKey: user?.userId?.toString() || ANONYMOUS });
+        setPaymentInstance(payment);
+      } catch (err) {
+        console.error("TossPayments 로드 실패", err);
+      }
+    };
+    loadToss();
   }, []);
 
     // 결제 처리
@@ -114,32 +125,40 @@ export default function ClassPayment() {
       }
       return;
     }
-    if (!toss) {
-      alert('결제 모듈이 로드되지 않았습니다. 잠시 후 시도해주세요.');
+    if (!paymentInstance) {
+      alert('결제 모듈이 준비되지 않았습니다.');
       return;
     }
 
     try {
-      const orderId = `ORD-${user.userId}-${Date.now()}`;
-      const { data } = await axios.post('/api/payments/init', { orderId, amount: finalPrice });
-      const paymentKey = data.paymentKey;
+      const orderNo = `ORD-${user.userId}-${Date.now()}`;
+      token && await myAxios(token,setToken).post('/user/payment/approve', {
+        orderNo,
+        amount: finalPrice,
+        paymentType: '카드', 
+        calendarId :selectedCalendarId,
+        userCouponId: selectedCouponObj?.ucId 
+      });
 
-      toss.requestPayment(paymentKey, {
-        onSuccess: async ({ paymentKey: key }) => {
-          await axios.post('/api/payments/approve', { paymentKey: key, orderId });
-          alert('결제 성공!');
-          navigate('/user/payments');
+      await paymentInstance.requestPayment({
+        method: "CARD",
+        amount: {
+          value: finalPrice,
+          currency: "KRW",
         },
-        onFail: error => {
-          console.error(error);
-          alert('결제에 실패했습니다.');
-        }
+        orderId: orderNo,
+        orderName: "클래스 결제",
+        successUrl: `${window.location.origin}/payment/success?orderNo=${orderNo}`,
+        failUrl: `${window.location.origin}/payment/fail`,
+        customerEmail: user.email,
+        customerName: user.name,
+        customerMobilePhone: user.phone || "01000000000", 
       });
     } catch (err) {
       console.error('결제 초기화 오류', err);
       alert('결제 초기화 중 오류가 발생했습니다.');
     }
-  };
+  }
 
   return (
     <>

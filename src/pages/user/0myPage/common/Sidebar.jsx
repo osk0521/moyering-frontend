@@ -57,9 +57,9 @@ export default function Sidebar({ user = dummyUser }) {
                         <li><a href="#">질문내역</a></li>
 
                         <li><strong>게더링</strong></li>
-                        <li><a href="/user/mypage/myGatheringApplyList">지원한 게더링</a></li>
+                        <li><a href="/user/mypage/myGatheringingApplyList">지원한 게더링</a></li>
                         <li><a href="/user/mypage/myGatheringList">내가 개설한 게더링</a></li>
-                        <li><a href="/user/mypage/myGatherInquiryList">게더링 문의</a></li>
+                        <li><a href="/user/mypage/myGatheringInquiryList">게더링 문의</a></li>
 
                         <li><strong>소셜링</strong></li>
                         <li><a href="#">작성한 피드</a></li>

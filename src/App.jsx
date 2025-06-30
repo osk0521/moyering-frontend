@@ -172,12 +172,6 @@ function App() {
         <Route path="/user/mypage/myClassList" element={<MyClassList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
 
-        {/* 강사 /host/~~~~~ */}
-
-
-
-
-
         {/* 관리자(/admin) */}
         <Route path="/admin" element={<Login />} />                         {/* 1차 로그인 화면  */}
         <Route path="/admin/verify" element={<TwoFactorAuth />} />          {/* 2차 로그인 화면 (인증번호 입력) */}

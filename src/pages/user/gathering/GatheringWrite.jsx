@@ -508,7 +508,7 @@ useEffect(() => {
     return;
   }
 
-  // ✅ 좌표 검증 추가
+  //  좌표 검증 추가
   if (!formData.latitude || !formData.longitude || 
       formData.latitude === 0 || formData.longitude === 0) {
     alert("주소의 좌표 변환에 실패했습니다. 주소를 다시 선택해주세요.");
@@ -543,7 +543,7 @@ useEffect(() => {
   formDataToSend.append("detailAddress", formData.detailAddress || "");
   formDataToSend.append("locName", formData.locName || "");
   
-  // ✅ 좌표 정보 - formData에서 직접 가져옴
+  //  좌표 정보 - formData에서 직접 가져옴
   formDataToSend.append("latitude", formData.latitude);
   formDataToSend.append("longitude", formData.longitude);
 
@@ -572,13 +572,13 @@ useEffect(() => {
   const tagsToSend = formData.tags && formData.tags.length > 0 ? formData.tags : [];
   formDataToSend.append("tags", JSON.stringify(tagsToSend));
 
-  // ✅ FormData 내용 확인 (디버깅용)
+  //  FormData 내용 확인 (디버깅용)
   console.log("=== FormData 내용 ===");
   for (let [key, value] of formDataToSend.entries()) {
     console.log(`${key}:`, value);
   }
   
-  // ✅ 좌표값 특별 확인
+  //  좌표값 특별 확인
   console.log("최종 좌표값:");
   console.log("latitude:", formData.latitude);
   console.log("longitude:", formData.longitude);
@@ -598,132 +598,38 @@ useEffect(() => {
       console.error("gatheringId를 받지 못했습니다:", response.data);
       alert("모임 등록은 완료되었지만 페이지 이동에 문제가 있습니다.");
     }
-
-    // 지오코딩 실행 (주소를 좌표로 변환)
-    console.log("지오코딩 시작...");
-    const coords = await convertAddressToCoordinates(formData.address);
-    console.log("지오코딩 완료:", coords);
-
-    if (!coords) {
-      alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
-      return;
-    }
-
-    // FormData 객체 생성
-    const formDataToSend = new FormData();
-
-    // 파일 추가 (thumbnail) - 필수 파라미터
-    formDataToSend.append("thumbnail", thumbnail);
-
-    formDataToSend.append("userId", user?.id); 
-    formDataToSend.append("title", formData.title);
-    formDataToSend.append("meetingDate", formData.meetingDate);
-    formDataToSend.append("startTime", formData.startTime);
-    formDataToSend.append("endTime", formData.endTime);
-
-    // 카테고리 정보
-    formDataToSend.append("categoryId", parseInt(formData.category));
-    formDataToSend.append("subCategoryId", parseInt(formData.subCategory));
-
-    // 주소 정보
-    formDataToSend.append("address", formData.address);
-    formDataToSend.append("detailAddress", formData.detailAddress || "");
-    formDataToSend.append("locName", formData.locName || "");
-
-    // 좌표 데이터 추가 (소수점 7자리로 정확도 유지)
-    formDataToSend.append("latitude", parseFloat(coords.y).toFixed(7));
-    formDataToSend.append("longitude", parseFloat(coords.x).toFixed(7));
-
-    // 인원수 정보
-    formDataToSend.append("minAttendees", parseInt(formData.minAttendees) || 2);
-
-    // maxAttendees 처리 (선택적 필드)
-    if (
-      formData.maxAttendees &&
-      formData.maxAttendees.toString().trim() !== ""
-    ) {
-      const maxPeople = parseInt(formData.maxAttendees);
-      if (!isNaN(maxPeople) && maxPeople > 0) {
-        formDataToSend.append("maxAttendees", maxPeople);
-      }
-    }
-    formDataToSend.append(
-      "applyDeadline",
-      formData.deadlineDateTime.replace("T", " ") + ":00"
-    );
-
-    // 모임 내용 및 준비물
-    formDataToSend.append("gatheringContent", formData.content);
-    formDataToSend.append("preparationItems", formData.preparation || "");
-    // 한 줄 소개 (있으면 Y, 없으면 N)
-    formDataToSend.append("intrOnln", formData.intrOnln || "");
-    formDataToSend.append("status", "모집중");
-    formDataToSend.append("canceled", "false");
-    // tags 처리 (JSON 문자열로 변환)
-    const tagsToSend =
-      formData.tags && formData.tags.length > 0 ? formData.tags : [];
-    formDataToSend.append("tags", JSON.stringify(tagsToSend));
-
-    // FormData 내용 확인 (디버깅용)
-    console.log("=== FormData 내용 ===");
-    for (let [key, value] of formDataToSend.entries()) {
-      console.log(`${key}:`, value);
-    }
-
-    // axios 요청
-    try {
-      console.log("모임 등록 요청 시작...");
-      const response = await myAxios(token,setToken).post(`/user/writeGathering`, formDataToSend);
-
-      console.log("모임 등록 성공:", response);
-
-      const gatheringId = response.data;
-
-      if (gatheringId) {
-        console.log("새로 생성된 모임 ID:", gatheringId);
-        alert("모임이 성공적으로 등록되었습니다!");
-        navigate(`/gatheringDetail/${gatheringId}`);
-      } else {
-        console.error("gatheringId를 받지 못했습니다:", response.data);
-        alert("모임 등록은 완료되었지만 페이지 이동에 문제가 있습니다.");
-      }
-    } catch (err) {
-      console.error("모임 등록 실패:", err);
-
-      if (err.response) {
-        console.error("응답 상태:", err.response.status);
-        console.error("응답 데이터:", err.response.data);
-
-        // 상태 코드별 에러 메시지
-        switch (err.response.status) {
-          case 400:
-            alert("입력한 정보에 오류가 있습니다. 다시 확인해주세요.");
-            break;
-          case 401:
-            alert("로그인이 필요합니다.");
-            navigate("/userlogin");
-            break;
-          case 413:
-            alert("파일 크기가 너무 큽니다. 더 작은 파일을 선택해주세요.");
-            break;
-          case 500:
-            alert("서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-            break;
-          default:
-            alert("모임 등록 중 오류가 발생했습니다.");
-        }
-      } else if (err.request) {
-        console.error("요청이 전송되었지만 응답이 없음:", err.request);
-        alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
-      } else {
-        console.error("요청 설정 오류:", err.message);
-        alert("요청 처리 중 오류가 발생했습니다.");
-      }
-    }
-  };
   } catch (err) {
     console.error("모임 등록 실패:", err);
-    // 에러 처리 코드는 기존과 동일...
+
+    if (err.response) {
+      console.error("응답 상태:", err.response.status);
+      console.error("응답 데이터:", err.response.data);
+
+      // 상태 코드별 에러 메시지
+      switch (err.response.status) {
+        case 400:
+          alert("입력한 정보에 오류가 있습니다. 다시 확인해주세요.");
+          break;
+        case 401:
+          alert("로그인이 필요합니다.");
+          navigate("/userlogin");
+          break;
+        case 413:
+          alert("파일 크기가 너무 큽니다. 더 작은 파일을 선택해주세요.");
+          break;
+        case 500:
+          alert("서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+          break;
+        default:
+          alert("모임 등록 중 오류가 발생했습니다.");
+      }
+    } else if (err.request) {
+      console.error("요청이 전송되었지만 응답이 없음:", err.request);
+      alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
+    } else {
+      console.error("요청 설정 오류:", err.message);
+      alert("요청 처리 중 오류가 발생했습니다.");
+    }
   }
 };
 

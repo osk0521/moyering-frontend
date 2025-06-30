@@ -91,7 +91,11 @@
 .GatheringDetail_nav-item_osk:hover {
   color: #333;
 }
-
+.GatheringDetail_members-slider-container_osk .slick-slide { 
+  width: fit-content;
+  max-width: 210px !important;
+  margin: 5px 10px !important;
+}
 /* 메인 컨테이너 */
 .GatheringDetail_main-container_osk {
   max-width: 1300px;
@@ -693,6 +697,9 @@ button.GatheringDetail_more_osk {
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
+  min-height: 241px;
+  display: inline-flex;
+  flex-direction:column;
 }
 
 .GatheringDetail_recommendation-card_osk:hover {

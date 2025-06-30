@@ -9,10 +9,11 @@ import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
 import { url, myAxios } from "../../../config";
-const KAKAO_REST_API_KEY = import.meta.env.KAKAO_REST_API_KEY;
+const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
+import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress';
 import "@toast-ui/editor/dist/toastui-editor.css";
 import Header from "../../common/Header";
 import { useNavigate, useParams } from "react-router-dom";
@@ -121,6 +122,39 @@ export default function GatheringModify() {
     intrOnln: "",
   });
   useEffect(() => {
+    if (!formData.address) return;
+
+    console.log("지오코딩 시작 - 주소:", formData.address);
+    
+    getLatLngFromAddress(formData.address)
+      .then(coords => {
+        if (coords) {
+          console.log("지오코딩 성공:");
+          console.log("위도:", coords.lat);
+          console.log("경도:", coords.lng);
+          
+          setCoordLat(coords.lat);
+          setCoordLng(coords.lng);
+
+          setFormData(prev => ({
+            ...prev,
+            latitude: coords.lat,
+            longitude: coords.lng
+          }));
+        }
+      })
+      .catch(err => {
+        console.error("좌표변환 실패:", err);
+        setCoordLat('');
+        setCoordLng('');
+        setFormData(prev => ({
+          ...prev,
+          latitude: 0,
+          longitude: 0
+        }));
+      });
+  }, [formData.address]);
+  useEffect(() => {
     if (gatheringId && token) {
       console.log('전달하는 토큰:', token); // 이 값이 실제로 무엇인지
       token && myAxios(token,setToken).get(`/user/detailForModifyGathering?gatheringId=${gatheringId}`)
@@ -161,7 +195,11 @@ export default function GatheringModify() {
             locName: gathering.locName || "",
             tags: parsedTags,
             intrOnln: gathering.intrOnln || "",
+            latitude: gathering.latitude || 0,   
+            longitude: gathering.longitude || 0,
           });
+
+
 
           // 기존 썸네일 이미지 설정
           if (gathering.thumbnailFileName) {
@@ -171,7 +209,6 @@ export default function GatheringModify() {
             setFileName(gathering.thumbnailFileName);
             setUploadStatus("success");
           }
-
           // 좌표 설정
           setCoordinates({
             x: gathering.longitude || "",
@@ -191,56 +228,6 @@ export default function GatheringModify() {
     }
   }, [gatheringId, token]);
   const [tagInput, setTagInput] = useState("");
-
-  // 지오코딩 함수
-  const convertAddressToCoordinates = async (address) => {
-    if (!address || !address.trim()) {
-      setGeocodingError("주소가 입력되지 않았습니다.");
-      return null;
-    }
-    setGeocodingLoading(true);
-    setGeocodingError("");
-
-    try {
-      const response = await fetch(
-        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-          address
-        )}`,
-        {
-          headers: {
-            Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.documents && data.documents.length > 0) {
-        const result = data.documents[0];
-        const coords = {
-          x: result.x,
-          y: result.y,
-        };
-        setCoordinates(coords);
-        setGeocodingError("");
-        return coords;
-      } else {
-        setGeocodingError("주소를 찾을 수 없습니다. 주소를 다시 확인해주세요.");
-        return null;
-      }
-    } catch (err) {
-      console.error("지오코딩 오류:", err);
-      setGeocodingError("좌표 변환 중 오류가 발생했습니다.");
-      return null;
-    } finally {
-      setGeocodingLoading(false);
-    }
-  };
 
   // 파일 업로드 처리
   const handleFileUpload = (file) => {
@@ -600,14 +587,27 @@ export default function GatheringModify() {
     }
 
     // 지오코딩 실행 (주소가 변경된 경우에만)
-    let coords = coordinates;
-    if (!coords.x || !coords.y) {
-      coords = await convertAddressToCoordinates(formData.address);
-      if (!coords) {
-        alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
-        return;
-      }
+   let coords = coordinates;
+  
+  // 1) formData에 이미 좌표가 있으면 사용 (실시간 지오코딩 결과)
+  if (formData.latitude && formData.longitude && 
+      formData.latitude !== 0 && formData.longitude !== 0) {
+    coords = {
+      x: formData.longitude,
+      y: formData.latitude
+    };
+    console.log("formData에서 좌표 사용:", coords);
+  }
+  // 2) coordinates 상태에 좌표가 있으면 사용 (기존 방식)
+  else if (coordinates.x && coordinates.y) {
+    coords = coordinates;
+    console.log("coordinates 상태에서 좌표 사용:", coords);
+  }
+  else {
+      alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
+      return;
     }
+
 
     // FormData 객체 생성
     const formDataToSend = new FormData();
@@ -681,8 +681,16 @@ export default function GatheringModify() {
     }
 
     // axios 요청
-    try {
-      console.log("모임 수정 요청 시작...");
+  try {
+    console.log("모임 수정 요청 시작...");
+    const response = await myAxios(token).post(`/user/modifyGathering`, formDataToSend);
+    console.log("모임 수정 성공:", response);
+    alert("모임이 성공적으로 수정되었습니다!");
+    navigate(`/gatheringDetail/${gatheringId}`);
+  } catch (err) {
+    console.error("모임 수정 실패:", err);
+  }
+};
 
       const response = await myAxios(token,setToken).post(
         `/user/modifyGathering`,

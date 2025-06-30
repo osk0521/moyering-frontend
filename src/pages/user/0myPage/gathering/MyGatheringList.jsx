@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyGatheringList.css";
 import { CiSearch } from "react-icons/ci";
 import Header from "../../../common/Header";
+import Footer from "../../../../components/Footer";
 import Sidebar from "../common/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue } from "jotai";
@@ -24,12 +25,16 @@ export default function MyGatheringList() {
   const [selectedGatheringId, setSelectedGatheringId] = useState();
   const [gatheringList, setGatheringList] = useState([]);
   const [applyList, setApplyList] = useState([]);
+  const [allCnt, setAllCnt] = useState(0);
+  const [scheduledCnt, setScheduledCnt] = useState(0);
+  const [inProgressCnt, setInProgressCnt] = useState(0);
+  const [canceledCnt, setCanceledCnt] = useState(0);
   const [activeAccordion, setActiveAccordion] = useState("");
+
   const categorizeApplicants = (applyList) => {
     const pending = [];
     const accepted = [];
     const rejected = [];
-
     applyList.forEach(applicant => {
       const applicantData = {
         nickName: applicant.nickName,
@@ -146,7 +151,10 @@ export default function MyGatheringList() {
       token && myAxios(token,setToken).post(`/user/myGatheringList`, requestBody)
         .then((res) => {
           console.log("API Response:", res);
-
+          setAllCnt = res.data.allCnt;
+          setScheduledCnt = res.data.scheduledCnt;
+          setInProgressCnt = res.data.inProgressCnt;
+          setCanceledCnt = res.data.canceledCnt;
           // 페이지 정보 설정
           let resPageInfo = res.data.pageInfo;
           setPageInfo(resPageInfo);
@@ -471,6 +479,7 @@ export default function MyGatheringList() {
           )}
         </section>
       </div>
+      <Footer/>
     </div>
   );
 }

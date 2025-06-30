@@ -4,7 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyGatheringApplyList.css";
 import { CiSearch, CiLocationOn, CiCalendar } from "react-icons/ci";
 import { GoPeople } from "react-icons/go";
+import Sidebar from "../common/Sidebar";
 import Header from '../../../common/Header';
+import Footer from "../../../../components/Footer";
 
 const isGatheringInFuture = (gatheringDate, gatheringTime) => {
   try {
@@ -170,6 +172,7 @@ export default function MyGatheringApplyList() {
     <div>
       <Header />
       <div className="MyGatheringApplyList_mypage-wrapper_osk">
+        <Sidebar />
         <main className="MyGatheringApplyList_gathering-main_osk">
           <div className="MyGatheringApplyList_gathering-header_osk">
             <h3>지원한 게더링 목록</h3>
@@ -277,6 +280,7 @@ export default function MyGatheringApplyList() {
           )}
         </main>
       </div>
+      <Footer/>
     </div>
   );
 }

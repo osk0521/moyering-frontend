@@ -3,6 +3,7 @@
   padding: 2rem;
   gap: 2rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .sidebarArea {

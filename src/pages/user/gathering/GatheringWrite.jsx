@@ -10,7 +10,6 @@ import { Editor } from "@toast-ui/editor";
 import { url, myAxios } from "../../../config";
 import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress'
 const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-// const KAKAO_JavaScript_API_KEY = import.meta.env.VITE_KAKAO_JavaScript_API_KEY;
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -139,8 +138,6 @@ useEffect(() => {
         // 로컬 상태 업데이트 (화면 표시용)
         setCoordLat(coords.lat);
         setCoordLng(coords.lng);
-
-        // ✅ formData 구조를 올바르게 수정
         setFormData(prev => ({
           ...prev,
           latitude: coords.lat,   // formData.latitude에 직접 저장

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import Header from "../../../pages/common/Header";
 import Footer from "../../../pages/common/Footer";
 import { myAxios } from "../../../config";
-import { useSetAtom, useAtomValue } from "jotai";
+import { useSetAtom, useAtomValue, useAtom } from "jotai";
 import { tokenAtom, userAtom } from "../../../atoms";
 
 export default function ClassPayment() {
@@ -14,7 +14,7 @@ export default function ClassPayment() {
   const [couponApplied, setCouponApplied] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState(null);
 
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
 
 
@@ -22,7 +22,7 @@ export default function ClassPayment() {
   useEffect(() => {
     const fetchPaymentInfo = async () => {
       try {
-        const res = await myAxios(token).get(`/user/payment/${classId}/${selectedCalendarId}`);
+        const res = await myAxios(token,setToken).get(`/user/payment/${classId}/${selectedCalendarId}`);
         setPaymentInfo(res.data);
         console.log("결제 정보:", res.data);
       } catch (err) {

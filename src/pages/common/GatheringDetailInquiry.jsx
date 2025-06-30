@@ -26,7 +26,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
   const [totalPages, setTotalPages] = useState(1);
 
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const userId = user.id;
   const navigate = useNavigate();
 
@@ -58,6 +58,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
           gatheringId: gatheringId,
           title: res.data.gatheringTitle,
           thumbnailFileName: res.data.gatheringThumbnailFileName,
+          organizer:res.data.organizer,
           meetingDate: res.data.gatheringMeetingDate,
           startTime: res.data.gatheringStartTime,
           endTime: res.data.gatheringEndTime,
@@ -128,7 +129,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
     };
 
     try {
-      const response = await myAxios(token).post(
+      const response = await myAxios(token,setToken).post(
         `/user/writeGatheringInquiry`,
         formDataToSend
       );
@@ -297,12 +298,14 @@ export default function GatheringDetailInquiry({ gatheringId }) {
       </div>
 
       {/* Question Button */}
-      <button
-        className="GatheringDetail_question-button_osk"
-        onClick={toggleQuestionModal}
-      >
-        문의하기
-      </button>
+      {gatheringData.organizer && userId && gatheringData.organizer !== userId && (
+        <button
+          className="GatheringDetail_question-button_osk"
+          onClick={toggleQuestionModal}
+        >
+          문의하기
+        </button>
+      )}
 
       {/* Pagination - 질문이 있을 때만 표시 */}
       {qnaData.length > 0 && (

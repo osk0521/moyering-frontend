@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import './TabSchedule.css';
+import './UpdateTabSchedule.css';
 import 'react-multi-date-picker/styles/colors/teal.css';
 import { Calendar } from 'react-multi-date-picker';
 import React from 'react';
 
-const TabSchedule = ({ classData, setClassData }) => {
+const UpdateTabSchedule = ({ classData, setClassData }) => {
   const { schedule } = classData;
 
   // 최초 마운트 시 스케줄 디테일 1개 기본값 세팅
@@ -172,7 +172,6 @@ const TabSchedule = ({ classData, setClassData }) => {
             </tbody>
           </table>
           <div className="add-entry" onClick={addScheduleDetail}>+ 내용 추가하기</div>
-
         </div>
 
         <div className="KHJ-inline-form-row">
@@ -219,4 +218,4 @@ const TabSchedule = ({ classData, setClassData }) => {
   );
 };
 
-export default TabSchedule;
+export default UpdateTabSchedule;

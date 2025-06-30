@@ -23,7 +23,6 @@ import StudentSearch from './pages/host/StudentSearch';
 import './App.css';
 import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
-// import Sidebar from './pages/user/socialRing/Sidebar';
 import UserFeed from './pages/user/socialRing/UserFeed';
 
 // 관리자 페이지
@@ -73,23 +72,28 @@ import MyGatherInquiryList from "./pages/user/0myPage/gathering/MyGatherInquiryL
 import GatheringChat from './pages/user/gathering/GatheringChat';
 import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
+
 import Token from './components/Token';
 import{useSetAtom, useAtom} from 'jotai'
 import{fcmTokenAtom, alarmsAtom} from './atoms'
+import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
   const setFcmToken = useSetAtom(fcmTokenAtom);  
   const [alarms, setAlarms] = useAtom(alarmsAtom);
 
-  useEffect(async ()=> {
+  useEffect(()=> {
     registerServiceWorker();
-    await navigator.serviceWorker.ready;
-    firebaseReqPermission(setFcmToken, setAlarm);
+    navigator.serviceWorker.ready.then(()=> {
+      firebaseReqPermission(setFcmToken, setAlarm);
+    })
   },[])
+
   useEffect(() => {
     JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
   }, [alarm]);
+  
   return (
     <Router>
       <Routes>
@@ -132,8 +136,8 @@ function App() {
         <Route path="/user/mypage/myClassList" element={<MyClassList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
-        <Route exact path="/user/mypage/myGatheringApplyList" element={<MyGatheringApplyList />}></Route>
-        <Route exact path="/user/mypage/myGatherInquiryList" element={<MyGatherInquiryList />}></Route>
+        <Route exact path="/user/mypage/myGatheringingApplyList" element={<MyGatheringApplyList />}></Route>
+        <Route exact path="/user/mypage/myGatheringInquiryList" element={<MyGatherInquiryList />}></Route>
         <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
 
         {/* 강사 /host/~~~~~ */}
@@ -152,7 +156,7 @@ function App() {
           <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
-
+          <Route path="/host/classUpdate/:classId" element={<ClassUpdatePage/>}/>
         </Route>
 
         {/* 1차 로그인 화면  */}

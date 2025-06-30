@@ -9,31 +9,33 @@ import React from 'react'; // 이 한 줄만 추가!
 // import './ClassDetail.module.css' → 제거
 import './ClassDetail.css'; // 일반 CSS로 import
 import { myAxios } from '../../../config';
-import { useParams } from 'react-router';
-import { useAtomValue } from 'jotai';
+import { useNavigate, useParams } from 'react-router';
+import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
-
 
 const tabs = [
   '기본정보',
-  '클래스 일정',
   '클래스 설명',
   '클래스 부가정보',
+  '쿠폰',
   '수강생 정보',
+
 ];
 
 const ClassDetail = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [classData, setClassData] = useState(null);
   const [scheduleDetails,setScheduleDetails] = useState([]);
+  const [couponList,setCouponList] = useState([]);
   const { classId, calendarId } = useParams();
+  const navigate = useNavigate();
   
-  const token = useAtomValue(tokenAtom)
+  const [token,setToken] = useAtom(tokenAtom);
   const validators = useRef([]);
   const user = useAtomValue(userAtom);
 
   useEffect(() => {
-    myAxios(token).get(`/host/hostClassDetail`, {
+    token && myAxios(token,setToken).get(`/host/hostClassDetail`, {
       params: {
         hostId: user.hostId,
         classId: classId,
@@ -43,6 +45,7 @@ const ClassDetail = () => {
       .then(res => {
         setClassData(res.data.hostClass);
         setScheduleDetails(res.data.scheduleDetail);
+        setCouponList(res.data.couponList);
         console.log(res.data);
       })
       .catch(err => {
@@ -50,6 +53,10 @@ const ClassDetail = () => {
         console.log("token:" + token)
       });
   }, [classId, calendarId, token]);
+
+  const update = () => {
+    navigate(`/host/classUpdate/${classId}`)
+  }
 
   const registerValidator = (index, validateFn) => {
     validators.current[index] = validateFn;
@@ -65,12 +72,12 @@ const ClassDetail = () => {
   };
 
   const renderTabContent = () => {
-    const props = { registerValidator, classData,scheduleDetails, isEditMode: true };
+    const props = { registerValidator, classData,scheduleDetails,couponList, isEditMode: true };
     switch (activeTab) {
       case 0: return <DetailTabBasicInfo {...props} />;
-      case 1: return <DetailTabSchedule {...props}/>;
-      case 2: return <DetailTabDescription {...props} />;
-      case 3: return <DetailTabExtraInfo {...props} />;
+      case 1: return <DetailTabDescription {...props} />;
+      case 2: return <DetailTabExtraInfo {...props} />;
+      case 3: return <DetailTabSchedule {...props}/>;
       case 4: return <DetailTabStudent {...props} />;
       default: return null;
     }
@@ -85,11 +92,11 @@ const ClassDetail = () => {
             <div className="KHJ-info-grid">
               <div>
                 <div className="KHJ-label">클래스</div>
-                <div>{classData.title}</div>
+                <div>{classData.name}</div>
               </div>
               <div>
                 <div className="KHJ-label">ID</div>
-                <div>{classData.id}</div>
+                <div>{classData.classId}</div>
               </div>
               <div>
                 <div className="KHJ-label">상태</div>
@@ -97,7 +104,7 @@ const ClassDetail = () => {
               </div>
               <div>
                 <div className="KHJ-label">검수상태</div>
-                <div className="KHJ-status KHJ-current">{classData.reviewStatus}</div>
+                <div className="KHJ-status KHJ-current">{classData.status}</div>
               </div>
             </div>
           </div>
@@ -117,7 +124,7 @@ const ClassDetail = () => {
           <div className="KHJ-tab-content">{renderTabContent()}</div>
         </>
       )}
-      <DetailFooter />
+      <DetailFooter onUpdate={update} />
     </div>
   );
 };

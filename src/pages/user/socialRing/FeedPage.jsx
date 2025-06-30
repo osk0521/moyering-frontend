@@ -12,7 +12,7 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import Header from '../../common/Header';
 import FeedCreate from '../socialRing/FeedCreate';
 import { tokenAtom, userAtom } from '../../../atoms';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { myAxios, url } from '../../../config';
 
 const POSTS_PER_PAGE = 3;
@@ -20,8 +20,10 @@ const POSTS_PER_PAGE = 3;
 export default function FeedPage() {
   const user = useAtomValue(userAtom);
   const userId = user?.id;
-  const token = useAtomValue(tokenAtom);
+
+
   const { feedId } = useParams();
+  const [token,setToken] = useAtom(tokenAtom)
   console.log('🌟 FeedPage token:', token);
   const filters = ['전체', '좋아요순', '댓글순', '팔로워'];
   const [feeds, setFeeds] = useState([]);
@@ -53,14 +55,13 @@ export default function FeedPage() {
       '댓글순': 'comments',
       '팔로워': 'follow'
     }[activeFilter];
-    console.log('userId:', userId);
-    myAxios(token).get(`/socialing/feeds?sort=${sortKey}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+
+console.log('userId:', userId);
+    token && myAxios(token,setToken).get(`/socialing/feeds?sort=${sortKey}`
+      // {
+      // headers: {
+      // Authorization :`Bearer ${token}`}}
+      )
       .then(res => {
         // const mapped = res.data.map(feed => ({
         //   ...feed,
@@ -87,17 +88,16 @@ export default function FeedPage() {
 
   const toggleLike = async feedId => {
     try {
-      // // 1) 백엔드에 좋아요/취소 요청
-      // await myAxios(token).post(
-      //   `/user/socialing/likes/${feedId}`,
-      //   {},
-      //   {
-      //     // params: { userId },
-      //     // headers: { Authorization: `Bearer ${token}` }
-      //   }
-      // );
-      const res = await myAxios(token).post(`/user/socialing/likes/${feedId}`);
-      const { liked, likesCount } = res.data; // ← 서버에서 토글 후 결과 상태를 내려줌
+
+      // 1) 백엔드에 좋아요/취소 요청
+      await myAxios(token,setToken).post(
+        `/user/socialing/likes/${feedId}`,
+        {},
+        {
+          // params: { userId },
+          // headers: { Authorization: `Bearer ${token}` }
+        }
+      );
 
       // 2) 요청 성공 시, 로컬 UI 업데이트 (optimistic)
       setFeeds(prev =>

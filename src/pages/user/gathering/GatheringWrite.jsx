@@ -8,12 +8,11 @@ import { SlPicture } from "react-icons/sl";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { Editor } from "@toast-ui/editor";
 import { url, myAxios } from "../../../config";
-const KAKAO_REST_API_KEY = import.meta.env.KAKAO_REST_API_KEY;
-const KAKAO_JavaScript_API_KEY = import.meta.env.KAKAO_JavaScript_API_KEY;
+import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress'
+const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
-
 import Header from "../../common/Header";
 import { useNavigate } from "react-router-dom";
 import "./GatheringWrite.css";
@@ -28,7 +27,6 @@ const getTodayString = () => {
 const getMinDeadlineDateTime = () => {
   const now = new Date();
   now.setHours(now.getHours() + 3);
-
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
@@ -82,13 +80,9 @@ const validateDateTime = (formData) => {
 
 export default function GatheringWrite() {
   const user = useAtomValue(userAtom);    
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom)
   const userId = user.id;
   const navigate = useNavigate();
-  //지오코딩용
-  const [coordinates, setCoordinates] = useState({ x: "", y: "" });
-  const [geocodingError, setGeocodingError] = useState("");
-  const [geocodingLoading, setGeocodingLoading] = useState(false);
 
   // 새로 추가된 이미지 업로드 관련 상태들
   const [fileName, setFileName] = useState("");
@@ -102,6 +96,8 @@ export default function GatheringWrite() {
   const [subCategory, setSubCategory] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("initial");
+  const [coordLat,setCoordLat] = useState('');
+  const [coordLng,setCoordLng] = useState('');
 
   // 입력용 formData 상태 (사용자 입력을 받는 용도)
   const [formData, setFormData] = useState({
@@ -121,63 +117,47 @@ export default function GatheringWrite() {
     locName: "",
     tags: [], // 문자열 배열로 변경
     intrOnln: "", // 한 줄 소개
+    latitude:0,
+    longitude:0,
   });
 
   const [tagInput, setTagInput] = useState("");
 
-  const convertAddressToCoordinates = async (address) => {
-    if (!address || !address.trim()) {
-      setGeocodingError("주소가 입력되지 않았습니다.");
-      return null;
-    }
-    setGeocodingLoading(true);
-    setGeocodingError("");
+useEffect(() => {
+  // 주소가 없으면 실행하지 않음
+  if (!formData.address) return;
 
-    try {
-      const response = await fetch(
-        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-          address
-        )}`,
-        {
-          headers: {
-            Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+  console.log("지오코딩 시작 - 주소:", formData.address);
+  getLatLngFromAddress(formData.address)
+    .then(coords => {
+      if (coords) {
+        console.log("지오코딩 성공:");
+        console.log("위도:", coords.lat);
+        console.log("경도:", coords.lng);
+        
+        // 로컬 상태 업데이트 (화면 표시용)
+        setCoordLat(coords.lat);
+        setCoordLng(coords.lng);
+        setFormData(prev => ({
+          ...prev,
+          latitude: coords.lat,   // formData.latitude에 직접 저장
+          longitude: coords.lng   // formData.longitude에 직접 저장
+        }));
       }
+    })
+    .catch(err => {
+      console.error("좌표변환 실패:", err);
+      // 에러 발생시 좌표 초기화
+      setCoordLat('');
+      setCoordLng('');
+      setFormData(prev => ({
+        ...prev,
+        latitude: 0,
+        longitude: 0
+      }));
+    });
+}, [formData.address]);
 
-      const data = await response.json();
-
-      if (data.documents && data.documents.length > 0) {
-        const result = data.documents[0]; // 첫 번째 결과 사용
-        const coords = {
-          x: result.x, // 경도
-          y: result.y, // 위도
-        };
-        setCoordinates(coords);
-        setGeocodingError("");
-
-        console.log("지오코딩 성공:", {
-          address: result.address_name,
-          coordinates: coords,
-        });
-
-        return coords;
-      } else {
-        setGeocodingError("주소를 찾을 수 없습니다. 주소를 다시 확인해주세요.");
-        return null;
-      }
-    } catch (err) {
-      console.error("지오코딩 오류:", err);
-      return null;
-    } finally {
-      setGeocodingLoading(false);
-    }
-  };
-  // 새로운 파일 업로드 처리 함수 (100MB 제한으로 변경)
   const handleFileUpload = (file) => {
     const maxSize = 100 * 1024 * 1024; // 100MB로 변경
     if (file.size > maxSize) {
@@ -410,7 +390,7 @@ export default function GatheringWrite() {
         setCategory(categoryArray);
       })
       .catch((err) => {
-        console.log("API 오류:", err);
+        console.log("1차 카테고리 못 불러옴:", err);
       });
   }, []);
 
@@ -509,32 +489,114 @@ export default function GatheringWrite() {
       }
     };
   }, []);
-  const submit = async (e) => {
-    e.preventDefault();
-    // 필수 필드 검증
-    if (
-      !formData.title ||
-      !formData.meetingDate ||
-      !formData.startTime ||
-      !formData.endTime ||
-      !formData.category ||
-      !formData.subCategory ||
-      !formData.address ||
-      !formData.content ||
-      !thumbnail
-    ) {
-      alert("필수 항목을 모두 입력해주세요.");
-      return;
+ const submit = async (e) => {
+  e.preventDefault();
+  
+  // 필수 필드 검증
+  if (
+    !formData.title ||
+    !formData.meetingDate ||
+    !formData.startTime ||
+    !formData.endTime ||
+    !formData.category ||
+    !formData.subCategory ||
+    !formData.address ||
+    !formData.content ||
+    !thumbnail
+  ) {
+    alert("필수 항목을 모두 입력해주세요.");
+    return;
+  }
+
+  // ✅ 좌표 검증 추가
+  if (!formData.latitude || !formData.longitude || 
+      formData.latitude === 0 || formData.longitude === 0) {
+    alert("주소의 좌표 변환에 실패했습니다. 주소를 다시 선택해주세요.");
+    return;
+  }
+
+  // 유효성 검증
+  const validationErrors = validateDateTime(formData);
+  if (Object.keys(validationErrors).length > 0) {
+    const firstError = Object.values(validationErrors)[0];
+    alert(firstError);
+    return;
+  }
+
+  // FormData 객체 생성
+  const formDataToSend = new FormData();
+
+  // 파일 추가
+  formDataToSend.append("thumbnail", thumbnail);
+  formDataToSend.append("userId", user?.id); 
+  formDataToSend.append("title", formData.title);
+  formDataToSend.append("meetingDate", formData.meetingDate);
+  formDataToSend.append("startTime", formData.startTime);
+  formDataToSend.append("endTime", formData.endTime);
+
+  // 카테고리 정보
+  formDataToSend.append("categoryId", parseInt(formData.category));
+  formDataToSend.append("subCategoryId", parseInt(formData.subCategory));
+
+  // 주소 정보
+  formDataToSend.append("address", formData.address);
+  formDataToSend.append("detailAddress", formData.detailAddress || "");
+  formDataToSend.append("locName", formData.locName || "");
+  
+  // ✅ 좌표 정보 - formData에서 직접 가져옴
+  formDataToSend.append("latitude", formData.latitude);
+  formDataToSend.append("longitude", formData.longitude);
+
+  // 인원수 정보
+  formDataToSend.append("minAttendees", parseInt(formData.minAttendees) || 2);
+  if (formData.maxAttendees && formData.maxAttendees.toString().trim() !== "") {
+    const maxPeople = parseInt(formData.maxAttendees);
+    if (!isNaN(maxPeople) && maxPeople > 0) {
+      formDataToSend.append("maxAttendees", maxPeople);
     }
+  }
+  
+  formDataToSend.append(
+    "applyDeadline",
+    formData.deadlineDateTime.replace("T", " ") + ":00"
+  );
 
-    // 유효성 검증
-    const validationErrors = validateDateTime(formData);
+  // 모임 내용 및 준비물
+  formDataToSend.append("gatheringContent", formData.content);
+  formDataToSend.append("preparationItems", formData.preparation || "");
+  formDataToSend.append("intrOnln", formData.intrOnln || "");
+  formDataToSend.append("status", "모집중");
+  formDataToSend.append("canceled", "false");
+  
+  // tags 처리
+  const tagsToSend = formData.tags && formData.tags.length > 0 ? formData.tags : [];
+  formDataToSend.append("tags", JSON.stringify(tagsToSend));
 
-    if (Object.keys(validationErrors).length > 0) {
-      // 첫 번째 에러 메시지 표시
-      const firstError = Object.values(validationErrors)[0];
-      alert(firstError);
-      return;
+  // ✅ FormData 내용 확인 (디버깅용)
+  console.log("=== FormData 내용 ===");
+  for (let [key, value] of formDataToSend.entries()) {
+    console.log(`${key}:`, value);
+  }
+  
+  // ✅ 좌표값 특별 확인
+  console.log("최종 좌표값:");
+  console.log("latitude:", formData.latitude);
+  console.log("longitude:", formData.longitude);
+
+  // axios 요청
+  try {
+    console.log("모임 등록 요청 시작...");
+    const response = await myAxios(token).post(`/user/writeGathering`, formDataToSend);
+    console.log("모임 등록 성공:", response);
+
+    const gatheringId = response.data;
+    if (gatheringId) {
+      console.log("새로 생성된 모임 ID:", gatheringId);
+      alert("모임이 성공적으로 등록되었습니다!");
+      navigate(`/gatheringDetail/${gatheringId}`);
+    } else {
+      console.error("gatheringId를 받지 못했습니다:", response.data);
+      alert("모임 등록은 완료되었지만 페이지 이동에 문제가 있습니다.");
     }
 
     // 지오코딩 실행 (주소를 좌표로 변환)
@@ -611,7 +673,7 @@ export default function GatheringWrite() {
     // axios 요청
     try {
       console.log("모임 등록 요청 시작...");
-      const response = await myAxios(token).post(`/user/writeGathering`, formDataToSend);
+      const response = await myAxios(token,setToken).post(`/user/writeGathering`, formDataToSend);
 
       console.log("모임 등록 성공:", response);
 
@@ -659,6 +721,11 @@ export default function GatheringWrite() {
       }
     }
   };
+  } catch (err) {
+    console.error("모임 등록 실패:", err);
+    // 에러 처리 코드는 기존과 동일...
+  }
+};
 
   return (
     <div>

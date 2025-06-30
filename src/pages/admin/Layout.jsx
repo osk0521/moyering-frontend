@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Layout.css';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
 
 // React Icons 추가
@@ -22,8 +22,6 @@ import {
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
 
@@ -58,7 +56,7 @@ const Layout = ({ children }) => {
       {/* 사이드바 */}
       <aside className="sidebarHY">
         <div className="sidebar-headerHY">
-      
+   
         </div>
         <nav className="sidebar-navHY">
           <ul className="menu-listHY">

@@ -77,10 +77,11 @@ const Inquiry = () => {
   };
 
   const submit = () => {
-    myAxios(token).post("/host/inquiryReply", null, {
+    token&& myAxios(token,setToken).post("/host/inquiryReply", null, {
       params: {
         hostId: user.hostId,
         iqResContent: iqResContent,
+        inquiryId: selectedInquiryId
       }
     })
       .then(res => {

@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ClassReview.css';
+import { myAxios } from './../../config';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '../../atoms';
 
 
 const ClassReview = () => {
@@ -10,27 +13,36 @@ const ClassReview = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [replyOpenIndex, setReplyOpenIndex] = useState(null);
   const [replies, setReplies] = useState({});
+  const [token, setToken] = useState([]);
+  const user = useAtomValue(userAtom);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [reviews, setReviews] = useState([]);
 
-  const reviews = [
-    {
-      id: 1,
-      className: '클래스관련',
-      reviewTitle: '클래스 뭔 내용?',
-      userName: '김한채',
-      date: '2025.05.05',
-      status: '답변완료',
-      content: '리뷰내용입니다. 수업이 정말 알차고 재미있었습니다!',
-    },
-    {
-      id: 2,
-      className: '강사관련',
-      reviewTitle: '강사님 이력',
-      userName: '홍길동',
-      date: '2025.05.05',
-      status: '답변중',
-      content: '강사님 이력이 정말 대단하시네요!',
-    },
-  ];
+
+  useEffect(() => {
+    token && myAxios(token, setToken).get(`/host/studentReview`, {
+      params: {
+        hostId: user.hostId,
+        searchFilter: searchFilter,
+        searchQuery: searchQuery,
+        startDate: startDate,
+        endDate: endDate,
+        page: currentPage - 1, // 페이지네이션 (0-based index)
+        size: 10 // 페이지 크기 (10개씩)
+
+      }
+    })
+      .then(res => {
+        console.log(res);
+        setReviews(res.data.content);
+        setTotalPages(res.data.totalPages);
+      })
+      .catch(err => {
+        console.log(err);
+        console.log(user.hostId);
+      })
+  }, [token, user.hostId, searchFilter, searchQuery, startDate, endDate, currentPage])
 
   const handleSearch = () => {
     console.log('검색:', searchFilter, searchQuery);
@@ -63,7 +75,7 @@ const ClassReview = () => {
   };
 
   return (
-  <div className="KHJ-review-class-container">
+    <div className="KHJ-review-class-container">
       <div className="KHJ-review-class-search-area">
         <h3 className="KHJ-review-class-title">리뷰조회</h3>
 
@@ -143,6 +155,31 @@ const ClassReview = () => {
             ))}
           </tbody>
         </table>
+        <div >
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            &lt;
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              disabled={currentPage === i + 1}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
     </div>
   );

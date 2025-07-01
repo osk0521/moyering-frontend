@@ -76,7 +76,8 @@ export default function Header({alarms}) {
                 <a href="/user/mypage/mySchedule">마이페이지</a>
               </span>
               <span className="Header_top-menu-link_osk">
-                <a href="/">호스트페이지</a>
+                {user.userType==="ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : ''}
+                
               </span>
               <span className="Header_top-menu-link_osk">
                 <button className="Header_top-menu-logout"onClick={logout}>로그아웃</button>
@@ -144,7 +145,8 @@ export default function Header({alarms}) {
           <div className="Header_nav-section_osk">
             <span
               className="Header_nav-item_osk"
-              onClick={() => navigate("/host/intro")}
+              onClick={() => 
+              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/host/intro")}}
             >
               클래스잉
             </span>

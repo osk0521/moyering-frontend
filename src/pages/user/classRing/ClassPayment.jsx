@@ -152,7 +152,7 @@ export default function ClassPayment() {
         amount: { value: finalPrice, currency: "KRW" },
         orderId: orderNo,
         orderName: paymentInfo?.hostClass?.name || "클래스 결제",
-        successUrl: `${window.location.origin}/user/payment-success?orderId=${orderNo}&amount=${finalPrice}`,
+        successUrl: `${window.location.origin}/user/payment-success?orderId=${orderNo}&amount=${finalPrice}&calendarId=${selectedCalendarId}&userCouponId=${selectedCouponObj?.ucId || ''}`,
         failUrl: `${window.location.origin}/payment/fail`,
         customerEmail: user.email,
         customerName: user.name,
@@ -163,34 +163,6 @@ export default function ClassPayment() {
       alert("결제 요청 중 문제가 발생했습니다.");
     }
   };
-
-  // 결제 처리 2. 결제 성공 시 Toss paymentKey 검증 및 approve 처리
-  // useEffect(() => {
-  //   const paymentKey = params.get("paymentKey");
-  //   const orderId = params.get("orderId");
-  //   const amount = params.get("amount");
-
-  //   if (paymentKey && orderId && amount) {
-  //     const approve = async () => {
-  //       try {
-  //         token && await myAxios(token, setToken).post("/user/payment/approve", {
-  //           paymentKey,
-  //           orderNo: orderId,
-  //           amount,
-  //           paymentType: "카드",
-  //           calendarId: selectedCalendarId,
-  //           userCouponId: selectedCouponObj?.ucId || null,
-  //         });
-  //         alert("✅ 결제가 완료되었습니다.");
-  //         navigate("/");
-  //       } catch (err) {
-  //         console.error("❌ 결제 승인 실패", err);
-  //         alert("결제 승인 처리 중 문제가 발생했습니다.");
-  //       }
-  //     };
-  //     approve();
-  //   }
-  // }, [params]);
 
   return (
     <>

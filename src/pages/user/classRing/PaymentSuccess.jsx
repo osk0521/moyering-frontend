@@ -11,6 +11,9 @@ export default function PaymentSuccess() {
     const [token, setToken] = useAtom(tokenAtom);
     const user = useAtomValue(userAtom);
     const tokenFromLocal = useAtomValue(tokenAtom2); // ✅ localStorage 기반
+    const calendarId = params.get('calendarId');
+    const userCouponId = params.get('userCouponId');
+
 
     useEffect(() => {
         if (!token) {
@@ -29,14 +32,14 @@ export default function PaymentSuccess() {
     if (paymentKey && orderId && amount) {
         const approve = async () => {
         try {
-            console.log("✅ token", token);
             token && await myAxios(token, setToken).post('/user/payment/approve', {
             paymentKey,
             orderNo: orderId,
             amount,
-            paymentType: '카드'
+            paymentType: '카드',
+            calendarId: parseInt(calendarId),
+            userCouponId: userCouponId ? parseInt(userCouponId) : null
             });
-            alert('✅ 결제가 완료되었습니다.');
             navigate('/classList');
         } catch (err) {
             console.error('❌ 결제 승인 실패', err);

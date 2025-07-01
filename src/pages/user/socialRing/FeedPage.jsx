@@ -63,10 +63,10 @@ console.log('userId:', userId);
       // Authorization :`Bearer ${token}`}}
       )
       .then(res => {
-        // const mapped = res.data.map(feed => ({
-        //   ...feed,
-        //   liked: !!feed.likedByUser // ← likedByUser → liked 매핑
-        // }));
+        const mapped = res.data.map(feed => ({
+          ...feed,
+          liked: !!feed.likedByUser // ← likedByUser → liked 매핑
+        }));
         console.log("여기데이터 확인!!!", res.data)
         // setFeeds(mapped); // 매핑된 결과로 교체
         setFeeds(res.data)
@@ -135,6 +135,7 @@ console.log('userId:', userId);
 
   // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
   useEffect(() => {
+    if (!token) return;
     let mounted = true;
     myAxios(token).get(`/user/socialing/scrap/${feeds.feedId}`)
       .then(res => {

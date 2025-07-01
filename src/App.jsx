@@ -24,6 +24,7 @@ import './App.css';
 import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
 import UserFeed from './pages/user/socialRing/UserFeed';
+import Test2 from './pages/user/socialRing/Test2.jsx';
 
 // 관리자 페이지
 import BannerCreateModal from "./pages/admin/BannerCreateModal";
@@ -109,7 +110,7 @@ function App() {
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
-
+<Route path="/test2" element={<Test2 />} />
         
         
         <Route path="/scrapList" element={<ScrapList />} />
@@ -143,6 +144,8 @@ function App() {
         <Route path="/user/mypage/follower" element={<Follower />} />
         <Route path="/user/mypage/following" element={<Following />} />
         <Route path="/user/mypage/myFeed" element={<MyFeed />} />
+        
+
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />

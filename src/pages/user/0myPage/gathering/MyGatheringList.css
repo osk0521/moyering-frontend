@@ -61,9 +61,9 @@
   box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
 }
 .MyGatheringList_btn-add_osk {
-    right: 145px;
-    top: 270px;
-    position: absolute;
+    right: -230px;
+    top: -16px;
+    position: relative;
     text-decoration:none;
     background-color: #ffc107;
     border: none;
@@ -340,7 +340,7 @@
   font-weight: 500;
 }
 
-.MyGatheringList_badge_osk.MyGatheringList_orange_osk {
+.MyGatheringList_badge_osk.MyGatheringList_red_osk {
   background: #ff6b6b;
   color: white;
 }

@@ -76,7 +76,7 @@ export default function Header() {
 
     useEffect(() => {
       console.log(user);
-      if (user) {
+      if (user&&token) {
         myAxios(token,setToken).post('/user/alarms')
           .then(response=> {
             console.log(response.data)

@@ -46,6 +46,8 @@ const Inquiry = () => {
 
   token && myAxios(token,setToken).post("/host/inquiry/search", params)
     .then(res => {
+      console.log("검색")
+      console.log(res.data.content);
       setInquiry(res.data.content);
     })
     .catch(err => console.error(err));

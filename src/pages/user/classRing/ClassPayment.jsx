@@ -22,7 +22,7 @@ export default function ClassPayment() {
 // 결제 정보 조회
   useEffect(() => {
     if (classId && selectedCalendarId) {
-      myAxios(token, setToken)
+      token && myAxios(token, setToken)
         .get(`/user/payment/${classId}/${selectedCalendarId}`)
         .then(res => setPaymentInfo(res.data))
         .catch(err => console.error('결제 정보 조회 실패', err));

@@ -66,7 +66,7 @@ const UpdateTabDescription = ({ classData, setClassData }) => {
                             />
                             <label htmlFor={`KHJ-image-input-${index}`} className="KHJ-image-box-label">
                                 {image ? (
-                                    <img src={`${url}/image?filename=${image}`} alt={`이미지 ${index + 1}`} className="KHJ-image-box-img" />
+                                    <img src={image.startsWith('blob:')? image : `${url}/image?filename=${image}`} alt={`이미지 ${index + 1}`} className="KHJ-image-box-img" />
                                 ) : (
                                     <div className="KHJ-plus-icon">+</div>
                                 )}

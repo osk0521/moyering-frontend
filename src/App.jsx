@@ -158,7 +158,7 @@ function App() {
           <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
-          <Route path="/host/classUpdate/:classId" element={<ClassUpdatePage/>}/>
+          <Route path="/host/classUpdate/:classId/:calendarId" element={<ClassUpdatePage/>}/>
         </Route>
 
         {/* 1차 로그인 화면  */}

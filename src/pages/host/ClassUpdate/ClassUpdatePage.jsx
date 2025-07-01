@@ -24,8 +24,9 @@ const ClassUpdatePage = () => {
   const user = useAtomValue(userAtom);
   const navigate = useNavigate();
   const [token, setToken] = useAtom(tokenAtom);
-  const { classId } = useParams();
+  const { classId,calendarId } = useParams();
   const [classData, setClassData] = useState(null);
+  
 
   useEffect(() => {
     if (token && classId) {
@@ -193,7 +194,7 @@ const ClassUpdatePage = () => {
     myAxios(token, setToken).post('/host/classUpdate/submit', formData)
       .then(res => {
         console.log(res.data);
-        navigate(`/host/classDetail/${res.data}`);
+        navigate(`/host/detail/${classId}/${calendarId}`);
       })
       .catch(console.error);
   };

@@ -683,7 +683,7 @@ export default function GatheringModify() {
       console.log(`${key}:`, value);
     }
 
-    // axios 요청
+  // axios 요청
   try {
     console.log("모임 수정 요청 시작...");
     const response = await myAxios(token).post(`/user/modifyGathering`, formDataToSend);
@@ -694,7 +694,6 @@ export default function GatheringModify() {
     console.error("모임 수정 실패:", err);
   }
 };
-
   //     const response = await myAxios(token,setToken).post(
   //       `/user/modifyGathering`,
   //       formDataToSend
@@ -707,7 +706,6 @@ export default function GatheringModify() {
   //     console.error("모임 수정 실패:", err);
   //   }
   // };
-
   return (
     <div>
       <Header />

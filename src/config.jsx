@@ -21,15 +21,15 @@ export const myAxios = (token,setToken) => {
       }
       ,
       (error)=>{
-          if (error.response && error.response.status) {
-            switch (error.response.status) {
-               case 401:
-               case 403:
-                  window.location.href = `${reactUrl}/userLogin`; break;
-               default:
-                  return Promise.reject(error);
-            }
-         }
+         //  if (error.response && error.response.status) {
+         //    switch (error.response.status) {
+         //       case 401:
+         //       case 403:
+         //          window.location.href = `${reactUrl}/userLogin`; break;
+         //       default:
+         //          return Promise.reject(error);
+         //    }
+         // }
          return Promise.reject(error);
       }
    );

@@ -516,6 +516,12 @@ export default function GatheringWrite() {
 //     alert("주소의 좌표 변환에 실패했습니다. 주소를 다시 선택해주세요.");
 //     return;
 //   }
+  //  좌표 검증 추가
+  // if (!formData.latitude || !formData.longitude || 
+  //     formData.latitude === 0 || formData.longitude === 0) {
+  //   alert("주소의 좌표 변환에 실패했습니다. 주소를 다시 선택해주세요.");
+  //   return;
+  // }
 
 //   // 유효성 검증
 //   const validationErrors = validateDateTime(formData);
@@ -548,6 +554,9 @@ export default function GatheringWrite() {
 //   // ✅ 좌표 정보 - formData에서 직접 가져옴
 //   formDataToSend.append("latitude", formData.latitude);
 //   formDataToSend.append("longitude", formData.longitude);
+  //  좌표 정보 - formData에서 직접 가져옴
+  // formDataToSend.append("latitude", formData.latitude);
+  // formDataToSend.append("longitude", formData.longitude);
 
 //   // 인원수 정보
 //   formDataToSend.append("minAttendees", parseInt(formData.minAttendees) || 2);
@@ -584,6 +593,16 @@ export default function GatheringWrite() {
 //   console.log("최종 좌표값:");
 //   console.log("latitude:", formData.latitude);
 //   console.log("longitude:", formData.longitude);
+  //  FormData 내용 확인 (디버깅용)
+  // console.log("=== FormData 내용 ===");
+  // for (let [key, value] of formDataToSend.entries()) {
+  //   console.log(`${key}:`, value);
+  // }
+  
+  // //  좌표값 특별 확인
+  // console.log("최종 좌표값:");
+  // console.log("latitude:", formData.latitude);
+  // console.log("longitude:", formData.longitude);
 
 //   // axios 요청
 //   try {
@@ -726,6 +745,49 @@ export default function GatheringWrite() {
 //   } catch (err) {
 //     console.error("모임 등록 실패:", err);
 //     // 에러 처리 코드는 기존과 동일...
+//   }
+// };
+//     const gatheringId = response.data;
+//     if (gatheringId) {
+//       console.log("새로 생성된 모임 ID:", gatheringId);
+//       alert("모임이 성공적으로 등록되었습니다!");
+//       navigate(`/gatheringDetail/${gatheringId}`);
+//     } else {
+//       console.error("gatheringId를 받지 못했습니다:", response.data);
+//       alert("모임 등록은 완료되었지만 페이지 이동에 문제가 있습니다.");
+//     }
+//   } catch (err) {
+//     console.error("모임 등록 실패:", err);
+
+//     if (err.response) {
+//       console.error("응답 상태:", err.response.status);
+//       console.error("응답 데이터:", err.response.data);
+
+//       // 상태 코드별 에러 메시지
+//       switch (err.response.status) {
+//         case 400:
+//           alert("입력한 정보에 오류가 있습니다. 다시 확인해주세요.");
+//           break;
+//         case 401:
+//           alert("로그인이 필요합니다.");
+//           navigate("/userlogin");
+//           break;
+//         case 413:
+//           alert("파일 크기가 너무 큽니다. 더 작은 파일을 선택해주세요.");
+//           break;
+//         case 500:
+//           alert("서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+//           break;
+//         default:
+//           alert("모임 등록 중 오류가 발생했습니다.");
+//       }
+//     } else if (err.request) {
+//       console.error("요청이 전송되었지만 응답이 없음:", err.request);
+//       alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
+//     } else {
+//       console.error("요청 설정 오류:", err.message);
+//       alert("요청 처리 중 오류가 발생했습니다.");
+//     }
 //   }
 // };
 

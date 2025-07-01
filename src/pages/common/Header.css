@@ -206,3 +206,361 @@
   border: none;
   color: #6b7280;
 }
+
+
+/* 알림 컨테이너 */
+.Header_notification-container_osk {
+  position: relative;
+  display: inline-block;
+}
+
+/* 알림 버튼 */
+.Header_notification-button_osk {
+  position: relative !important;
+  background: none !important;
+  border: none !important;
+  padding: 8px !important;
+  cursor: pointer;
+  border-radius: 50% !important;
+  transition: background-color 0.2s;
+}
+
+.Header_notification-button_osk:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 알림 뱃지 (읽지 않은 알림 개수) */
+.Header_notification-badge_osk {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: #ff4757;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1.2;
+  z-index: 1;
+}
+
+/* 활성화된 알림 아이콘 (새 알림이 있을 때) */
+.Header_notification-active_osk {
+  color: #ff4757 !important;
+  animation: bellShake 0.5s ease-in-out;
+}
+
+/* 알림 드롭다운 */
+.Header_notification-dropdown_osk {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 350px;
+  max-height: 400px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  margin-top: 8px;
+  animation: slideDown 0.2s ease-out;
+}
+/* 알림 헤더 */
+.Header_notification-header_osk {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
+}
+
+.Header_notification-header_osk h6 {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+/* 모두 읽음 버튼 */
+.Header_mark-all-read_osk {
+  background: none;
+  border: none;
+  color: #ff4757;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.Header_mark-all-read_osk:hover {
+  background-color: #e3f2fd;
+}
+
+/* 알림 목록 */
+.Header_notification-list_osk {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* 알림이 없을 때 */
+.Header_no-notifications_osk {
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.Header_no-notifications_osk p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* 알림 항목 */
+.Header_notification-item_osk {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: background-color 0.2s;
+}
+
+.Header_notification-item_osk:hover {
+  background-color: #f8f9fa;
+}
+
+.Header_notification-item_osk:last-child {
+  border-bottom: none;
+}
+
+/* 알림 내용 */
+.Header_notification-content_osk {
+  flex: 1;
+}
+
+.Header_notification-title_osk {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.Header_notification-body_osk {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.Header_notification-sender_osk {
+  font-size: 11px;
+  color: #999;
+}
+
+/* .Header_notification-confirm_osk {
+  background-color: #ff4757;
+  margin-top: 4px;
+  flex-shrink: 0;
+} */
+
+/* 알림 푸터 */
+.Header_notification-footer_osk {
+  padding: 10px 15px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+}
+
+.Header_notification-dropdown-container_osk .dropdown-toggle::after {
+  display: none; /* Bootstrap 기본 화살표 숨기기 */
+}
+
+/* 알림 버튼 */
+.Header_notification-button_osk {
+  background: none !important;
+  border: none !important;
+  position: relative;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.Header_notification-button_osk:hover {
+  background-color: rgba(0, 123, 255, 0.1) !important;
+}
+
+.Header_notification-button_osk:focus {
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+  outline: none;
+}
+
+/* 알림 배지 */
+.Header_notification-badge_osk {
+  position: absolute !important;
+  top: -2px;
+  right: -2px;
+  font-size: 0.7rem;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* 드롭다운 메뉴 */
+.Header_notification-dropdown-menu_osk {
+  min-width: 350px !important;
+  max-width: 400px !important;
+  max-height: 500px !important;
+  overflow-y: auto !important;
+  border: none !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  margin-top: 8px !important;
+}
+
+/* 알림 헤더 */
+.Header_notification-header_osk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 12px 20px;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+}
+
+.Header_notification-title_osk {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #212529;
+}
+
+.Header_mark-all-read-btn_osk {
+  padding: 0 !important;
+  color: #ff4757 !important;
+  text-decoration: none !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+}
+
+.Header_mark-all-read-btn_osk:hover {
+  color: #ff4757 !important;
+  text-decoration: underline !important;
+}
+
+/* 빈 상태 */
+.Header_no-notifications_osk {
+  text-align: center !important;
+  padding: 40px 20px !important;
+  border: none !important;
+  background: none !important;
+  cursor: default !important;
+}
+
+.Header_empty-state_osk {
+  color: #6c757d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.Header_empty-icon_osk {
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+/* 알림 아이템 */
+.Header_notification-item_osk {
+  border: none !important;
+  padding: 0 !important;
+  background: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease;
+}
+
+.Header_notification-item_osk:active {
+  background-color: #e9ecef !important;
+}
+
+/* 알림 콘텐츠 */
+.Header_notification-content_osk {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 20px;
+  position: relative;
+}
+
+.Header_notification-main_osk {
+  flex-grow: 1;
+  padding-right: 12px;
+}
+
+.Header_notification-item-title_osk {
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.Header_notification-body_osk {
+  color: #6c757d;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.Header_notification-meta_osk {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.Header_notification-sender_osk {
+  color: #6c757d;
+  font-size: 0.75rem;
+}
+
+.Header_notification-time_osk {
+  color: #adb5bd;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+/* 전체 보기 버튼 컨테이너 */
+.Header_view-all-container_osk {
+  text-align: center !important;
+  padding: 16px 20px !important;
+  border: none !important;
+  background-color: #f8f9fa !important;
+  border-radius: 0 0 12px 12px;
+  cursor: pointer !important;
+}
+
+.Header_view-all-btn_osk {
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}

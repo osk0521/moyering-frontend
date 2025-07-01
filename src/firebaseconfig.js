@@ -41,8 +41,9 @@ export function firebaseReqPermission(setFcmToken, setAlarm) {
     console.log(payload)
     console.log("📨 알람 데이터:", payload);
     console.log("📨 제목:", payload.data.title);
-    console.log("📨 내용:", payload.data.body);
-    console.log("📨 번호:", payload.data.num);
-    setAlarm({num:+payload.data.num, title:payload.data.title, body:payload.data.body})
+    console.log("📨 내용:", payload.data.content);
+    console.log("📨 번호:", payload.data.alarmId);
+    console.log("📨 보낸이:", payload.data.sender);
+    setAlarm({alarmId:+payload.data.alarmId, title:payload.data.title, content:payload.data.content,senderNickname:payload.data.sender})
   });  
 }

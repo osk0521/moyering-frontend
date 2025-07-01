@@ -157,7 +157,7 @@ export default function MyGatheringList() {
             }
             setPageNums([...pages]);
 
-            // 데이터 변환 수정
+            // 데이터 변환 
             const transformedData = res.data.list.map((item) => ({
               gatheringId: item.gatheringId,
               thumbnail: `${url}/image?filename=${item.thumbnailFileName}`,
@@ -286,7 +286,7 @@ export default function MyGatheringList() {
               </a>
             </button>
           </div>
-          {allCnt === 0 ? (
+          {allCnt <= 0 ? (
             <div className="MyGatheringList_empty-state_osk">
               <div className="MyGatheringList_empty-content_osk">
                 <h4>조회된 목록이 없습니다</h4>

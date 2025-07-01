@@ -436,6 +436,31 @@ export default function GatheringDetail() {
   const handleExpandClick = () => {
     setIsExpanded(true);
   };
+  const isApplyDeadlinePassed = () => {
+  if (!gatheringData.applyDeadline) return false;
+  const now = new Date();
+  const deadline = new Date(gatheringData.applyDeadline);
+  return now > deadline;
+};
+
+const isMeetingDatePassed = () => {
+  if (!gatheringData.meetingDate) return false;
+  const now = new Date();
+  const meetingDate = new Date(gatheringData.meetingDate);
+  return now > meetingDate;
+};
+
+const isMaxAttendeesReached = () => {
+  return members.length >= gatheringData.maxAttendees;
+};
+
+const canApplyToGathering = () => {
+  return !isApplyDeadlinePassed() && !isMaxAttendeesReached() && !isMeetingDatePassed();
+};
+
+const canModifyGathering = () => {
+  return !isMeetingDatePassed();
+};
   // 스크롤 위치에 따라 활성 탭 변경
   useEffect(() => {
     const handleScroll = () => {
@@ -844,20 +869,43 @@ export default function GatheringDetail() {
 
                 {/* userId와 gatheringData.userId가 일치하는지 확인하여 버튼 변경 */}
                 {userId === gatheringData.userId ? (
-                  <button
-                    className="GatheringDetail_btn_osk GatheringDetail_btn-modify_osk"
-                    id="GatheringDetail_modify_osk"
-                    onClick={handleModifyButtonClick}
-                  >
-                    수정하기
-                  </button>
+                  // 모임장인 경우 - 수정하기 버튼
+                  canModifyGathering() && (
+                    <button
+                      className="GatheringDetail_btn_osk GatheringDetail_btn-modify_osk"
+                      id="GatheringDetail_modify_osk"
+                      onClick={handleModifyButtonClick}
+                    >
+                      수정하기
+                    </button>
+                  )
                 ) : (
-                  <button
-                    className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
-                    id="GatheringDetail_apply_osk"
-                    onClick={handleApplyButtonClick}
-                  >
-                    신청하기
+                  // 일반 사용자인 경우 - 신청하기 버튼
+                  canApplyToGathering() && (
+                    <button
+                      className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
+                      id="GatheringDetail_apply_osk"
+                      onClick={handleApplyButtonClick}
+                    >
+                      신청하기
+                    </button>
+                  )
+                )}
+                {userId !== gatheringData.userId && !canApplyToGathering() && (
+                  <button className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk">
+                    {isMeetingDatePassed() 
+                      ? "이미 종료된 모임입니다." 
+                      : isApplyDeadlinePassed() 
+                      ? "신청 기간이 마감되었습니다." 
+                      : isMaxAttendeesReached() 
+                      ? "정원이 모두 찼습니다." 
+                      : "현재 신청할 수 없습니다."}
+                  </button>
+                )}
+
+                {userId === gatheringData.userId && !canModifyGathering() && (
+                  <button className="GatheringDetail_status-message_osk">
+                    모임 날짜가 지나 수정할 수 없습니다.
                   </button>
                 )}
               </div>

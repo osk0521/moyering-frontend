@@ -17,7 +17,7 @@ const isGatheringDisabled = (item) => {
   if (item.canceled === true) {
     return true;
   }
-  
+
   // 모임 날짜와 시간이 현재보다 과거인 경우
   try {
     const meetingDateTime = new Date(`${item.meetingDate} ${item.startTime}`);
@@ -56,7 +56,7 @@ export default function MyGatheringApplyList() {
   // 참여 취소 처리 함수
   const handleCancelApply = async (gathering) => {
     try {
-    const isConfirmed = window.confirm(`'${gathering.title}' 게더링 참여를 정말 취소하시겠습니까?`);
+      const isConfirmed = window.confirm(`'${gathering.title}' 게더링 참여를 정말 취소하시겠습니까?`);
       if (!isConfirmed) {
         return;
       }
@@ -81,40 +81,43 @@ export default function MyGatheringApplyList() {
   const handleDetailGathering = (gatheringId) => {
     navigate(`/gatheringDetail/${gatheringId}`);
   };
-
+  const tabs = [
+    { display: "전체", value: "전체" },
+    { display: "수락됨", value: "수락됨" },
+    { display: "대기중", value: "대기중" },
+    { display: "거절됨/게더링 취소됨", value: "거절됨" }
+  ];
   const handleSearch = () => {
     setSearch((prev) => ({ ...prev, searchWord: searchWord, page: 1 }));
   };
 
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    if (tab === "수락됨") {
-      status = "수락됨";
-    } else if (tab === "대기중") {
-      status = "대기중";
-    } else if (tab === "거절됨") {
-      status = "거절됨";
-    }
-    setSearch((prev) => ({ ...prev, status: tab, page: 1 }));
+  const handleTabChange = (tabValue) => {
+    // activeTab은 표시용 텍스트로 설정
+    const selectedTab = tabs.find(tab => tab.value === tabValue);
+    setActiveTab(selectedTab.display);
+
+    // API 요청에는 value 값을 사용
+    setSearch((prev) => ({ ...prev, status: tabValue, page: 1 }));
   };
-  
+
+
   // 상태별 카운트
-  const getStatusCount = (status) => {
-    if (status === "전체") return allCnt;
-    if (status === "대기중") return undefinedCnt;
-    if (status === "수락됨") return inProgressCnt;
-    if (status === "거절됨") return canceledCnt;
+  const getStatusCount = (tabValue) => {
+    if (tabValue === "전체") return allCnt;
+    if (tabValue === "대기중") return undefinedCnt;
+    if (tabValue === "수락됨") return inProgressCnt;
+    if (tabValue === "거절됨") return canceledCnt;
   };
 
   // 승인 상태를 한글로 변환하는 함수
   const getApprovalStatus = (isApprove, canceled) => {
     if (canceled) return "취소됨";
+    if (isApprove === false) return "거절됨";
     if (isApprove === null) return "대기중";
     if (isApprove === true) return "수락됨";
-    if (isApprove === false) return "거절됨";
     return "대기중";
   };
-  
+
   useEffect(() => {
     if (user || token) {
       let requestBody = {
@@ -130,17 +133,17 @@ export default function MyGatheringApplyList() {
       if (search.status !== "전체") {
         requestBody.status = search.status;
       }
-      console.log("requestBody : " ,requestBody);
+      console.log("requestBody : ", requestBody);
       token && myAxios(token, setToken).post(`/user/myApplyList`, requestBody)
         .then((res) => {
           console.log("API Response:", res.data);
           setAllCnt(res.data.allCnt);
-          
+
           if (res.data.allCnt > 0) {
             setUndefinedCnt(res.data.undefinedCnt); // 대기중
             setInProgressCnt(res.data.inProgressCnt); // 수락됨 (진행중)
             setCanceledCnt(res.data.canceledCnt); // 거절됨/취소됨
-            
+
             // 페이지 정보 설정
             let resPageInfo = res.data.pageInfo;
             setPageInfo(resPageInfo);
@@ -187,7 +190,7 @@ export default function MyGatheringApplyList() {
               hostNickName: item.nickName,
               hostProfile: item.profile,
             }));
-            
+
             console.log("Transformed Data:", transformedData);
             setApplyList(transformedData);
           } else {
@@ -235,19 +238,19 @@ export default function MyGatheringApplyList() {
               <CiSearch className="MyGatheringApplyList_search-icon_osk" />
             </div>
           </div>
-          
+
           <div className="MyGatheringApplyList_tabs_osk">
-            {["전체", "수락됨", "대기중", "거절됨"].map((tab) => (
+            {tabs.map((tab) => (
               <button
-                key={tab}
-                className={`MyGatheringApplyList_tab_osk ${activeTab === tab ? "MyGatheringApplyList_active_osk" : ""}`}
-                onClick={() => handleTabChange(tab)}
+                key={tab.value}
+                className={`MyGatheringApplyList_tab_osk ${activeTab === tab.display ? "MyGatheringApplyList_active_osk" : ""}`}
+                onClick={() => handleTabChange(tab.value)}
               >
-                {tab} ({getStatusCount(tab)})
+                {tab.display} ({getStatusCount(tab.value)})
               </button>
             ))}
           </div>
-          
+
           <div className="MyGatheringApplyList_gathering-list_osk">
             {allCnt <= 0 ? (
               <div className="MyGatheringList_empty-state_osk">
@@ -260,8 +263,8 @@ export default function MyGatheringApplyList() {
               applyList.map((gathering) => (
                 <div key={gathering.gatheringApplyId} className="MyGatheringApplyList_gathering-list-item_osk">
                   <div className="MyGatheringApplyList_gathering-image_osk">
-                    <img 
-                      src={gathering.image} 
+                    <img
+                      src={gathering.image}
                       alt={gathering.title}
                       onClick={() => handleDetailGathering(gathering.gatheringId)}
                       onError={(e) => {
@@ -272,18 +275,17 @@ export default function MyGatheringApplyList() {
                   <div className="MyGatheringApplyList_gathering-content_osk">
                     <div className="MyGatheringApplyList_gathering-card_osk MyGatheringApplyList_gathering-header_osk">
                       <span
-                        className={`MyGatheringApplyList_status-badge_osk ${
-                          {
+                        className={`MyGatheringApplyList_status-badge_osk ${{
                             "수락됨": "MyGatheringApplyList_accepted_osk",
-                            "대기중": "MyGatheringApplyList_pending_osk", 
+                            "대기중": "MyGatheringApplyList_pending_osk",
                             "거절됨": "MyGatheringApplyList_rejected_osk",
                             "취소됨": "MyGatheringApplyList_rejected_osk"
                           }[gathering.status] || ""
-                        }`}
+                          }`}
                       >
                         {gathering.status}
                       </span>
-                      <h4 
+                      <h4
                         className="MyGatheringApplyList_gathering-title_osk"
                         onClick={() => handleDetailGathering(gathering.gatheringId)}
                         style={{ cursor: 'pointer' }}
@@ -294,7 +296,7 @@ export default function MyGatheringApplyList() {
                     <p className="MyGatheringApplyList_gathering-description_osk">
                       {gathering.description}
                     </p>
-                    
+
                     <div className="MyGatheringApplyList_gathering-info_osk">
                       <div className="MyGatheringApplyList_info-row_osk">
                         <span className="MyGatheringApplyList_info-label_osk">
@@ -339,7 +341,7 @@ export default function MyGatheringApplyList() {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="MyGatheringApplyList_gathering-tags_osk">
                       {gathering.tags.map((tag, index) => (
                         <span key={index} className="MyGatheringApplyList_tag_osk">
@@ -348,18 +350,18 @@ export default function MyGatheringApplyList() {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div className="MyGatheringApplyList_gathering-actions_osk">
-                      {(gathering.status === "수락됨" || gathering.status === "대기중") && 
-                        !isGatheringDisabled(gathering) && (
-                        <button 
+                    {(gathering.status === "수락됨" || gathering.status === "대기중") &&
+                      !isGatheringDisabled(gathering) && (
+                        <button
                           className="MyGatheringApplyList_apply-complete-btn_osk"
                           onClick={() => handleCancelApply(gathering)}
                         >
                           참여 취소
                         </button>
                       )}
-                    </div>
+                  </div>
                 </div>
               ))
             )}
@@ -373,7 +375,7 @@ export default function MyGatheringApplyList() {
                     setSearch((prev) => ({ ...prev, page: pageInfo.curPage - 1 }))
                   }
                 >
-                  이전
+              〈
                 </button>
               )}
               {pageNums.map((pageNum) => (
@@ -397,14 +399,14 @@ export default function MyGatheringApplyList() {
                     setSearch((prev) => ({ ...prev, page: pageInfo.curPage + 1 }))
                   }
                 >
-                  다음
+                  〉
                 </button>
               )}
             </div>
           )}
         </section>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

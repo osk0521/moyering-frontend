@@ -305,12 +305,15 @@
   transform: translateY(-1px);
 }
 
-/* JSX에서 새로 추가된 클래스들 */
 .MyGatheringList_card-summary_osk {
-  display: flex;
+  /* display: flex;
   gap: 20px;
   align-items: flex-start;
-  width: 100%;
+  width: 100%; */
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: flex-end;
 }
 
 .MyGatheringList_thumbnail_osk {
@@ -386,10 +389,16 @@
 }
 
 .MyGatheringList_actions_osk {
-  display: flex;
+  /* display: flex;
   gap: 8px;
   margin-top: 12px;
-  flex-direction: column;
+  flex-direction: column; */
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    justify-content: flex-end;
+    flex-direction: row;
+    align-items: flex-end;
 }
 .MyGatheringList_actions_osk > a{
   text-decoration: none;
@@ -445,7 +454,7 @@
 .MyGatheringList_applicant_osk {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
   padding: 12px;
   background: white;
   border-radius: 8px;
@@ -539,9 +548,9 @@
 }
 
 .MyGatheringList_pagination_osk button.MyGatheringList_active_osk {
-  background: #ff6b6b;
-  border-color: #ff6b6b;
-  color: white;
+  color: #ffc107;
+  font-weight: 600;
+  background-color: white;
 }
 
 .MyGatheringList_info_applicant-profile_osk{

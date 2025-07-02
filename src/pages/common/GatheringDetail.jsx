@@ -894,7 +894,7 @@ const canModifyGathering = () => {
                   )
                 )}
                 {userId !== gatheringData.userId && !canApplyToGathering() && (
-                  <button className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk">
+                  <button className=" GatheringDetail_disabled_btn_osk GatheringDetail_btn_osk GatheringDetail_btn-apply_osk">
                     {isMeetingDatePassed() 
                       ? "이미 종료된 모임입니다." 
                       : isApplyDeadlinePassed() 

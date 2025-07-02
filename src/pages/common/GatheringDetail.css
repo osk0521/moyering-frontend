@@ -836,30 +836,14 @@ button.GatheringDetail_more_osk {
   border: 1px solid #ddd;
   color: #666;
 }
+.GatheringDetail_disabled_btn_osk{
+
+}
 
 .GatheringDetail_btn-outline_osk:hover {
   background: #f8f9fa;
   border-color: #ccc;
 }
-
-.GatheringDetail_btn-primary_osk {
-  background: #ff6b6b;
-  color: white;
-}
-
-.GatheringDetail_btn-primary_osk:hover {
-  background: #ff5252;
-}
-
-.GatheringDetail_btn-apply_osk {
-  background: #ff6b6b;
-  color: white;
-}
-
-.GatheringDetail_btn-apply_osk:hover {
-  background: #ff5252;
-}
-
 .GatheringDetail_notice-text_osk {
   font-size: 12px;
   color: #ff5722;

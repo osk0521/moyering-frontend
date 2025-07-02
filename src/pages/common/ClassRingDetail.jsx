@@ -278,7 +278,7 @@ export default function ClassRingDetail() {
                 <KakaoMap
                   latitude={classDetail.latitude}
                   longitude={classDetail.longitude}
-                  address={`${classDetail.addr} ${classDetail.detailAddr}`}
+                  address={`${classDetail.addr} ${classDetail.detailAddr ?? ""}`}
                 />
               ) : (
                 <div>지도를 로드할 데이터를 불러오는 중입니다...</div>
@@ -533,7 +533,7 @@ export default function ClassRingDetail() {
                 </>
               )}
               </button>
-              <button className={styles.applyBtn} onClick={()=> navigate(`/user/ClassPayment/${classId}/${selectedCalendarId}`)}>신청하기</button>
+              <button className={styles.applyBtn} onClick={()=> navigate(`/user/classPayment/${classId}/${selectedCalendarId}`)}>신청하기</button>
             </div>
             <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>
           </div>

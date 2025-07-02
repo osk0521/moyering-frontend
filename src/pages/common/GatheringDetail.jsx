@@ -81,6 +81,7 @@ export default function GatheringDetail() {
     preparationItems: "",
     tags: [],
     createDate: "",
+    acceptedCount: 0,
     category: "",
     subCategory: "",
     latitude: 0,
@@ -245,6 +246,7 @@ export default function GatheringDetail() {
           intrOnln: gathering.intrOnln,
           status: gathering.status,
           locName: gathering.locName,
+          acceptedCount:gathering.acceptedCount
         });
 
         const organizerCategories = organizer
@@ -836,7 +838,7 @@ const canModifyGathering = () => {
                   <GoPeople />
                 </span>
                 <span>
-                  {members.length}명 참가 중 (최소 {gatheringData.minAttendees} 명, 최대 {gatheringData.maxAttendees}명)
+                  {gatheringData.acceptedCount}명 참가 중 (최소 {gatheringData.minAttendees} 명, 최대 {gatheringData.maxAttendees}명)
                 </span>
               </div>
 

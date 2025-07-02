@@ -1,6 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import styles from './ClassPayment.module.css';
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams,useSearchParams } from "react-router";
 import Header from "../../../pages/common/Header";
 import Footer from "../../../pages/common/Footer";
 import { myAxios } from "../../../config";
@@ -12,6 +12,8 @@ import axios from 'axios';
 export default function ClassPayment() {
   const navigate = useNavigate();
   const { classId,selectedCalendarId } = useParams();
+  const [params] = useSearchParams();
+
   const [selectedCoupon, setSelectedCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState(null);
@@ -22,7 +24,7 @@ export default function ClassPayment() {
 // 결제 정보 조회
   useEffect(() => {
     if (classId && selectedCalendarId) {
-      myAxios(token, setToken)
+      token && myAxios(token, setToken)
         .get(`/user/payment/${classId}/${selectedCalendarId}`)
         .then(res => setPaymentInfo(res.data))
         .catch(err => console.error('결제 정보 조회 실패', err));
@@ -104,61 +106,63 @@ export default function ClassPayment() {
     const loadToss = async () => {
       try {
         const instance = await loadTossPayments(import.meta.env.VITE_TOSS_CLIENT_KEY);
-        const payment = instance.payment({ customerKey: user?.userId?.toString() || ANONYMOUS });
+        const customerKey = user?.id ? `USER_${user.id}` : ANONYMOUS;
+        const payment = instance.payment({ customerKey });
         setPaymentInstance(payment);
       } catch (err) {
         console.error("TossPayments 로드 실패", err);
       }
     };
-    loadToss();
-  }, []);
+    if (user?.id) loadToss();
+  }, [user]);
 
-    // 결제 처리
+  // 결제 처리 1.결제 요청
   const handlePay = async () => {
     if (!(agreements.terms && agreements.privacy && agreements.caution)) {
       alert('모든 필수 약관에 동의해주세요.');
       return;
     }
     if (!user || !token) {
-      if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
+      if (confirm('로그인이 필요합니다. 로그인하시겠습니까?')) {
         navigate('/userlogin');
       }
       return;
     }
     if (!paymentInstance) {
-      alert('결제 모듈이 준비되지 않았습니다.');
+      alert('결제 모듈이 아직 준비되지 않았습니다.');
       return;
     }
 
+    const orderNo = `ORD-${user?.id}-${Date.now()}`;
+    const userCouponId = selectedCouponObj?.ucId || '';
+
     try {
-      const orderNo = `ORD-${user.userId}-${Date.now()}`;
-      token && await myAxios(token,setToken).post('/user/payment/approve', {
+      // ✅ 서버에 결제정보 저장 (권장)
+      token && await myAxios(token, setToken).post("/user/payment/init", {
         orderNo,
+        calendarId: selectedCalendarId,
+        userCouponId,
         amount: finalPrice,
-        paymentType: '카드', 
-        calendarId :selectedCalendarId,
-        userCouponId: selectedCouponObj?.ucId 
+        paymentType: "카드",
       });
 
-      await paymentInstance.requestPayment({
+      // ✅ Toss 결제창 실행
+      token && await paymentInstance.requestPayment({
         method: "CARD",
-        amount: {
-          value: finalPrice,
-          currency: "KRW",
-        },
+        amount: { value: finalPrice, currency: "KRW" },
         orderId: orderNo,
-        orderName: "클래스 결제",
-        successUrl: `${window.location.origin}/payment/success?orderNo=${orderNo}`,
+        orderName: paymentInfo?.hostClass?.name || "클래스 결제",
+        successUrl: `${window.location.origin}/user/payment-success?orderId=${orderNo}&amount=${finalPrice}&calendarId=${selectedCalendarId}&userCouponId=${selectedCouponObj?.ucId || ''}`,
         failUrl: `${window.location.origin}/payment/fail`,
         customerEmail: user.email,
         customerName: user.name,
-        customerMobilePhone: user.phone || "01000000000", 
+        customerMobilePhone: user.phone || "01000000000",
       });
     } catch (err) {
-      console.error('결제 초기화 오류', err);
-      alert('결제 초기화 중 오류가 발생했습니다.');
+      console.error("결제 요청 오류", err);
+      alert("결제 요청 중 문제가 발생했습니다.");
     }
-  }
+  };
 
   return (
     <>

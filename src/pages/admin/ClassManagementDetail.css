@@ -1,74 +1,28 @@
-/* src/components/modals/ClassDetailModal.css */
+/* ClassManagementDetail.css */
 
-.modal-overlayHY {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 40px 20px;    
-}
-
-.modal-contentHY {
-  background: white;
-  border-radius: 12px;
-  /* max-width: 1400px; */
-  width: 100%;
-  max-height: 85vh;        
-  overflow-y: auto;
-  animation: modalSlideIn 0.3s ease-out;
-  margin: auto;           
-}
-
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.modal-headerHY {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.modal-headerHY h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.modal-closeHY {
+.back-buttonHY {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  color: #3b82f6;
   cursor: pointer;
-  padding: 4px;
-  color: #6b7280;
+  font-size: 1rem;
+  padding: 8px 0;
+  margin-right: 16px;
   transition: color 0.2s;
 }
 
-.modal-closeHY:hover {
-  color: #ef4444;
+.back-buttonHY:hover {
+  color: #2563eb;
 }
 
-.modal-bodyHY {
+.detail-containerHY {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 24px;
+  margin-bottom: 24px;
 }
 
-/* 클래스 정보 섹션 */
 .class-info-sectionHY {
   margin-bottom: 32px;
 }
@@ -102,7 +56,6 @@
   font-weight: 600;
 }
 
-/* 클래스 설명 섹션 */
 .class-description-sectionHY {
   margin-bottom: 32px;
 }
@@ -125,13 +78,13 @@
   margin: 0 0 12px 0;
   line-height: 1.6;
   color: #374151;
+  white-space: pre-wrap;
 }
 
 .description-contentHY p:last-child {
   margin-bottom: 0;
 }
 
-/* 수강생 목록 섹션 */
 .student-list-sectionHY h3 {
   margin: 0 0 16px 0;
   font-size: 1.25rem;
@@ -143,6 +96,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 32px;
 }
 
 .student-tableHY {
@@ -180,6 +134,14 @@
   color: #6b7280;
   font-style: italic;
   padding: 32px !important;
+}
+
+.action-buttonsHY {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
 }
 
 /* 상태 배지 */
@@ -222,16 +184,7 @@
   color: #dc2626;
 }
 
-/* 모달 푸터 */
-.modal-footerHY {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 20px 24px;
-  border-top: 1px solid #e5e7eb;
-  background-color: #f9fafb;
-}
-
+/* 버튼 스타일 */
 .btn-secondaryHY {
   padding: 8px 16px;
   border: 1px solid #d1d5db;
@@ -280,44 +233,11 @@
   background-color: #dc2626;
 }
 
-/* 클래스명 버튼 스타일 */
-.class-name-buttonHY {
-  background: none;
-  border: none;
-  color: #3b82f6;
-  cursor: pointer;
-  text-decoration: underline;
-  font-size: inherit;
-  padding: 0;
-  text-align: left;
-  transition: color 0.2s;
-}
-
-.class-name-buttonHY:hover {
-  color: #2563eb;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .modal-contentHY {
-    margin: 20px;
-    max-height: calc(100vh - 40px);
-  }
-  
-  .info-gridHY {
-    grid-template-columns: 1fr;
-  }
-  
-  .modal-footerHY {
-    flex-direction: column;
-  }
-  
-  .student-tableHY {
-    font-size: 0.75rem;
-  }
-  
-  .student-tableHY th,
-  .student-tableHY td {
-    padding: 8px;
-  }
-}
+/* 거절 모달 */
+.modal-overlayHY {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0

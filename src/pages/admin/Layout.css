@@ -1,128 +1,125 @@
-.managementHY {
-  padding: 50px;
-  font-family: 'Pretendard', sans-serif;
-  color: #333;
-  background-color: #fff;
-}
-
+/* 전체 레이아웃 - 완전히 새로운 접근 */
 .admin-layoutHY {
-  display: flex;
+  display: block !important; /* flex 대신 block 사용 */
   height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 0;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #ffffff !important;
+  position: relative;
 }
 
-/* 헤더  */
+/* 전체 body 강제 설정 */
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 헤더 */
 .headerHY {
-  background: 
-#FEF3E2;
-  border-bottom: 1px solid 
-#E2E8F0;
-  padding: 12px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
+  background: #FEF3E2 !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  padding: 0 24px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  position: fixed !important;
   top: 0;
-  z-index: 1000;
-  height: 60px;
-  width: 100%;
+  left: 0;
+  right: 0;
+  height: 70px;
+  z-index: 1500;
 }
 
-.header-leftHY .header-logoHY {
+/* 헤더 로고 왼쪽 정렬 */
+.header-leftHY {
   display: flex;
   align-items: center;
-  gap: 8px;
+  height: 100%;
+}
+
+.header-logoHY {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
 }
 
 .header-logo-iconHY {
-  width: 150px;   
-  height: 60px;
-}
-.header-logo-textHY {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2D3748;
+  width: 120px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  background: none;
+  border: none;
 }
 
+/* 헤더 오른쪽 */
 .header-rightHY {
   display: flex;
   align-items: center;
   gap: 16px;
+  background: none;
 }
 
 .admin-nameHY {
-  font-size: 14px;
-  color: #666666;
+  font-size: 12px;
+  color: #6b7280;
   font-weight: 500;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
 }
 
 .logout-btnHY {
-  background-color: #FF6B35;
-  color: white;
-  border: none;
+  background-color: #FFB22C !important;
+  color: white !important;
+  border: none !important;
   padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .logout-btnHY:hover {
-  background-color: #E85D2B;
+  background-color: #dc2626 !important;
 }
 
-
-/* 사이드바 */
+/* 사이드바 - 절대 위치로 확실하게 */
 .sidebarHY {
-  width: 180px;
-  background-color: #2D3748;
-  color: white;
+  width: 180px !important;
+  position: fixed !important;
+  top: 70px !important;
+  left: 0 !important;
+  height: calc(100vh - 70px) !important;
+  background-color: #ffffff !important;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  height: 100vh;
-  left: 0;
-  top: 0;
-  z-index: 400;
+  z-index: 1000 !important;
 }
 
-/* 사이드바 헤더 개선 */
+/* 사이드바 헤더 - 완전히 숨김 */
 .sidebar-headerHY {
-  padding: 30px 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: #F8F9FA;
+  display: none;
 }
-
-.sidebarHY .logoHY {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.sidebarHY .logo-iconHY {
-  font-size: 20px;
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #FF6B35, #FF8A65);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-
 
 /* 사이드바 네비게이션 */
 .sidebar-navHY {
   flex: 1;
-  padding: 16px 12px;
-  background-color: white;
+  padding: 20px 0 0 0;
+  background-color: #ffffff;
+  overflow-y: auto;
 }
 
 .menu-listHY {
@@ -138,237 +135,130 @@
   margin: 0;
 }
 
+/* 사이드바 메뉴 */
 .menu-linkHY {
   display: flex;
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 12px 16px;
-  background: none;
-  border: none;
-  color: #6B7280;
-  font-size: 15px;
-  font-weight: 700;
+  padding: 14px 16px;
+  background: none !important;
+  border: none !important;
+  color: #6b7280 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
-  border-radius: 8px;
+  border-radius: 0 !important;
   margin-bottom: 2px;
-}
-
-.menu-linkHY:hover {
-  background-color: #F3F4F6;
-  color: #374151;
-  transform: translateX(2px);
+  text-decoration: none !important;
 }
 
 .menu-linkHY.active {
-  background-color: #FFB22C;
-  color: white;
-
+  background-color: #3b82f6 !important;
+  color: white !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .menu-iconHY {
   font-size: 20px;
-  width: 25px;
-  text-align: center;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280 !important;
 }
 
 .menu-labelHY {
   flex: 1;
+  font-weight: 500;
+  color: #6b7280 !important;
 }
 
+.menu-linkHY:hover .menu-iconHY,
+.menu-linkHY:hover .menu-labelHY {
+  color: #374151 !important;
+}
 
+.menu-linkHY.active .menu-iconHY,
+.menu-linkHY.active .menu-labelHY {
+  color: white !important;
+}
 
-/* 메인 컨텐츠 영역 */
+/* 메인 컨텐츠 - 절대 위치로 확실하게 */
 .main-contentHY {
-  margin-top: 30px;
-  margin-left : 150px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #FFFFFF;
-  overflow-x: auto;
+  position: absolute !important;
+  top: 70px !important;
+  left: 180px !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: #ffffff !important;
+  padding: 0 !important;
+  overflow-y: auto !important;
 }
 
 /* 페이지 컨텐츠 */
 .page-contentHY {
-  flex: 1;
-  padding: 50px;
-    width: 100%;  
-  overflow-y: auto;
-  background-color: #FFFFFF;
+  flex: 1 !important;
+  padding: 20px !important;
+  background: #ffffff !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
-
 
 /* 페이지 제목 */
 .page-titleHY {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .page-titleHY h1 {
-  font-size: 20px;
+  font-size: 23px !important;
   font-weight: 700;
-  color: #333;
-  margin: 0 0 4px 0;
+  color: #1f2937 !important;
+  margin: 0 !important;
 }
 
-/* 검색 및 필터 영역 */
-.controls-sectionHY {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.search-sectionHY {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.search-boxHY {
-  position: relative;
-  outline: none;
-  width: 250px;
-  font-size: 14px;
-}
-
-.search-iconHY {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
-}
-
-.search-inputHY {
-  border: none;
-  outline: none;
-  width: 250px;
-  font-size: 14px;
-}
-
-.status-filter-sectionHY {
-  margin-left: 0;
-}
-
-.date-filter-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.date-labelHY {
-  font-size: 14px;
-  font-weight: 600;
-  color: #4A5568;
-  white-space: nowrap;
-}
-
-.category-selectHY {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-left: 0;
-}
-
-.filter-sectionHY {
-  display: flex;
-  gap: 5px;
-}
-
-.filter-btnHY {
-  padding: 7px 17px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.filter-btnHY:hover {
-  background-color: #f2f2f2;
-}
-
-.filter-btnHY.active {
-  background-color: #2d6dcc;
-  color: #fff;
-  border-color: #2d6dcc;
-}
-
-/* 테이블 영역  */
+/* 공통 테이블 스타일 */
 .table-containerHY {
-  width: 100%;
-  overflow-x: auto;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  overflow: hidden !important;
+  margin-bottom: 20px !important;
 }
 
 .tableHY {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 14px !important;
+  background: white !important;
 }
 
-.tableHY thead {
-  background-color: #f7f8fa;
-  border-top: 2px solid #333;
+.tableHY thead th {
+  background-color: #f8f9fa !important;
+  color: #333 !important;
+  font-weight: 600 !important;
+  padding: 12px 16px !important;
+  text-align: left !important;
+  border-bottom: 1px solid #e9ecef !important;
+  font-size: 13px !important;
 }
 
-.tableHY th,
-.tableHY td {
-  padding: 14px 12px;
-  text-align: center;
-  border-bottom: 1px solid #eee;
-  white-space: nowrap;
+.tableHY tbody td {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #f1f3f4 !important;
+  color: #333 !important;
+  vertical-align: middle !important;
+  background: white !important;
 }
 
-.tableHY th {
-  font-weight: 600;
-  color: #555;
+.tableHY tbody tr:hover {
+  background-color: #f8f9fa !important;
 }
 
-.tableHY td {
-  color: #333;
+.tableHY tbody tr:last-child td {
+  border-bottom: none !important;
 }
-
-/* 오른쪽 정렬  */
-.right-alignHY {
-  margin-left: 0;
-}
-
-/* 날짜 입력 */
-.date-inputHY {
-  appearance: none; /* 기본 스타일 제거 */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  background-color: #fff;
-  border: 1px solid #CBD5E0;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #111827;
-  outline: none;
-  width: 160px;
-
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.date-inputHY:focus {
-  border-color: #3b82f6; /* 파란색 */
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); /* 부드러운 외곽선 */
-  outline: none;
-}
-
-.date-inputHY::-webkit-calendar-picker-indicator {
-  filter: invert(40%);
-  cursor: pointer;
-}
-
-.date-separatorHY {
-  color: #A0AEC0;
-}
-
-
-

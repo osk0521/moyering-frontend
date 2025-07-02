@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import './UpdateTabBasicInfo.css';
 import React from 'react';
@@ -21,7 +21,6 @@ const UpdateTabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const [coordLng, setCoordLng] = useState('');
   const [token, setToken] = useAtom(tokenAtom);
 
-
   const { basicInfo } = classData;
 
   useEffect(() => {
@@ -37,6 +36,9 @@ const UpdateTabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   }, [token]);
 
 
+  useEffect(()=> {
+    setCategory1(basicInfo.categoryId);
+  },[categories]);
 
   const handlePrimaryChange = (e) => {
     const selectedCategory1 = e.target.value;
@@ -147,8 +149,7 @@ const UpdateTabBasicInfo = ({ registerValidator, classData, setClassData }) => {
           <div className="KHJ-category-row">
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">1차카테고리</label>
-              <select value={category1 || ''} onChange={handlePrimaryChange}>
-                <option value={basicInfo.category1} disabled hidden>1차 카테고리 선택</option>
+              <select value={basicInfo.categoryId} onChange={handlePrimaryChange} id="primaryCategory">
                 {categories.map(category => (
                   <option key={category.categoryId} value={category.categoryId}>
                     {category.categoryName}
@@ -158,8 +159,8 @@ const UpdateTabBasicInfo = ({ registerValidator, classData, setClassData }) => {
             </div>
             <div className="KHJ-form-group">
               <label className="KHJ-sub-label">2차카테고리</label>
-              <select value={basicInfo.category2 || ''} onChange={handleSecondaryChange}>
-                <option value={basicInfo.category2} disabled hidden>2차 카테고리 선택</option>
+              <select value={basicInfo.subCategoryId || ''} onChange={handleSecondaryChange}>
+                <option value="none">2차 카테고리 선택</option>
                 {secondaryOptions.map(subCategory => (
                   <option key={subCategory.subCategoryId} value={subCategory.subCategoryId}>
                     {subCategory.subCategoryName}

@@ -28,7 +28,8 @@ export default function Header() {
     setToken(null);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-    navigate("/userlogin");
+    localStorage.removeItem("token");
+    navigate("/userlogin");// 로그인 페이지로 이동
   }, [setUser, setToken, navigate]);
 
   const toggleNotificationDropdown = useCallback(async () => {
@@ -76,7 +77,7 @@ export default function Header() {
 
     useEffect(() => {
       console.log(user);
-      if (user) {
+      if (user&&token) {
         myAxios(token,setToken).post('/user/alarms')
           .then(response=> {
             console.log(response.data)
@@ -203,7 +204,7 @@ export default function Header() {
                 <a href="/user/mypage/mySchedule">마이페이지</a>
               </span>
               <span className="Header_top-menu-link_osk">
-                <a href="/host/intro">호스트페이지</a>
+                {user.userType==="ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : ''}
               </span>
               <span className="Header_top-menu-link_osk">
                 <button className="Header_top-menu-logout" onClick={logout}>로그아웃</button>
@@ -270,7 +271,8 @@ export default function Header() {
           <div className="Header_nav-section_osk">
             <span
               className="Header_nav-item_osk"
-              onClick={() => navigate("/classList")}
+              onClick={() => 
+              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/host/intro")}}
             >
               클래스잉
             </span>

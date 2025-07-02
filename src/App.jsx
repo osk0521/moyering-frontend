@@ -31,6 +31,7 @@ import BannerCreateModal from "./pages/admin/BannerCreateModal";
 import BannerManagement from "./pages/admin/BannerManagement";
 // import CategoryManagement from "./pages/admin/CategoryManagement";
 import ClassManagement from "./pages/admin/ClassManagement";
+import ClassManagementDetail from "./pages/admin/ClassManagementDetail";
 import Dashboard from "./pages/admin/Dashboard";
 import Login from "./pages/admin/Login";
 import MemberManagement from "./pages/admin/MemberManagement";
@@ -38,8 +39,17 @@ import NoticeCreate from "./pages/admin/NoticeCreate";
 import NoticeEdit from "./pages/admin/NoticeEdit"
 import CouponManagement from './pages/admin/CouponManagement.jsx';
 import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
-
+import UnsettlementManagement from './pages/admin/UnsettlementManagement.jsx';  
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
+import NoticeManagement from "./pages/admin/NoticeManagement";
+import PaymentManagement from "./pages/admin/PaymentManagement";
+import ReportManagement from "./pages/admin/ReportManagement";
+import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
+
+
+
+
+
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
@@ -123,14 +133,14 @@ function App() {
         <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
         
         {/* 로그인한 유저 /user/~~~ */}
-        <Route path="/user/ClassPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />
+        <Route path="/user/classPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
-        <Route path="/user/success" element={<PaymentSuccess />} />
+        <Route path="/user/payment-success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
@@ -165,7 +175,7 @@ function App() {
           <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
-          <Route path="/host/classUpdate/:classId" element={<ClassUpdatePage/>}/>
+          <Route path="/host/classUpdate/:classId/:calendarId" element={<ClassUpdatePage/>}/>
         </Route>
 
         {/* 1차 로그인 화면  */}
@@ -187,6 +197,7 @@ function App() {
         <Route path="/admin/dashboard" element={<Dashboard />} />        {/* 대시보드 페이지 */}
         <Route path="/admin/member" element={<MemberManagement />} />   {/* 회원 관리 페이지 */}
         <Route path="/admin/class" element={<ClassManagement />} />   {/* 클래스 관리 페이지 */}
+        <Route path="/admin/class/detail" element={<ClassManagementDetail />} />   {/* 클래스 관리 상세 페이지 */}
         <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
         <Route path="/admin/notice/edit/:noticeId" element={<NoticeEdit />} />     {/* 공지사항 수정 페이지  */}
@@ -196,7 +207,7 @@ function App() {
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
-        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산관리 페이지  */}
+        <Route path="/admin/unsettlement" element={<UnsettlementManagement />} />          {/* 미정산 관리 페이지  */}
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
       </Routes>
     </Router>

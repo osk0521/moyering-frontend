@@ -39,12 +39,13 @@ import NoticeCreate from "./pages/admin/NoticeCreate";
 import NoticeEdit from "./pages/admin/NoticeEdit"
 import CouponManagement from './pages/admin/CouponManagement.jsx';
 import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
-import UnsettlementManagement from './pages/admin/UnsettlementManagement.jsx';  
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
+// import SettlementManagement from "./pages/admin/SettlementManagement";
+import UnsettlementManagement from "./pages/admin/UnsettlementManagement";
 
 
 
@@ -55,17 +56,13 @@ import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import Follower from './pages/user/socialRing/Follower.jsx';
 import Following from './pages/user/socialRing/Following.jsx';
-import NoticeManagement from "./pages/admin/NoticeManagement";
-import PaymentManagement from "./pages/admin/PaymentManagement";
-import ReportManagement from "./pages/admin/ReportManagement";
-import SettlementManagement from "./pages/admin/SettlementManagement";
-import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
+
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
 
 import Main from "./pages/common/Main.jsx";
 import ClassInquiry from "./pages/user/0myPage/classRing/ClassInquiry.jsx";
-import MyClassList from "./pages/user/0myPage/classRing/MyClassList.jsx";
+import MyClassRegistList from "./pages/user/0myPage/classRing/MyClassRegistList.jsx";
 import ReviewList from "./pages/user/0myPage/classRing/ReviewList.jsx";
 import MyCouponList from "./pages/user/0myPage/common/MyCouponList.jsx";
 import MySchedule from "./pages/user/0myPage/common/MySchedule.jsx";
@@ -147,7 +144,7 @@ function App() {
         <Route path="/user/mypage/reviewList" element={<ReviewList />} />
         <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
-        <Route path="/user/mypage/myClassList" element={<MyClassList />} />
+        <Route path="/user/mypage/myClassRegistList" element={<MyClassRegistList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
         <Route exact path="/user/mypage/myGatheringingApplyList" element={<MyGatheringApplyList />}></Route>
@@ -188,7 +185,7 @@ function App() {
         <Route path="/user/mypage/reviewList" element={<ReviewList />} />
         <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
-        <Route path="/user/mypage/myClassList" element={<MyClassList />} />
+        <Route path="/user/mypage/myClassRegistList" element={<MyClassRegistList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
 
         {/* 관리자(/admin) */}

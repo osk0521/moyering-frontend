@@ -2,6 +2,7 @@ import React from 'react';
 import './Sidebar.css';
 // import badgeIcon from './icons/badge.jpg';
 // import avatarImg from '../icons/avatar.jpg'; // 기본 아바타 이미지
+import { useNavigate } from "react-router";
 
 // 더미 유저 데이터
 const dummyUser = {
@@ -17,6 +18,8 @@ const dummyUser = {
 // user prop 예시:
 // { username: 'USER', avatarUrl: '...', stats: { posts:0, followers:0, following:0 } }
 export default function Sidebar({ user = dummyUser }) {
+    const navigate = useNavigate();
+    
     return (
         <aside className="KYM-sidebar">
             {/* 회원정보 섹션 */}
@@ -41,7 +44,7 @@ export default function Sidebar({ user = dummyUser }) {
                     </div>
                 </div>
                 <div className="KYM-member-actions">
-                    <button className="KYM-btn KYM-primary">마이페이지</button>
+                    <button className="KYM-btn KYM-primary" onClick={()=> navigate(`/user/mypage/mySchedule`)}>모여링 일정</button>
                     <button className="KYM-btn">로그아웃</button>
                 </div>
             </section>

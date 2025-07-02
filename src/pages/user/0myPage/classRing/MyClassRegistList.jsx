@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './MyClassList.module.css';
+import styles from './MyClassRegistList.module.css';
 import { CiCalendar, CiLocationOn } from 'react-icons/ci';
 import { GoPeople } from 'react-icons/go';
 

@@ -55,7 +55,7 @@ export default function Sidebar({ user = dummyUser }) {
                 <nav>
                     <ul>
                         <li><strong>클래스링</strong></li>
-                        <li><a href="#">수강 클래스링</a></li>
+                        <li><a href="/user/mypage/MyClassRegistList">수강 클래스링</a></li>
                         <li><a href="#">클래스 후기</a></li>
                         <li><a href="#">질문내역</a></li>
 

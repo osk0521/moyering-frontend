@@ -79,6 +79,7 @@ import Token from './components/Token';
 import{useSetAtom, useAtom} from 'jotai'
 import{fcmTokenAtom, alarmsAtom} from './atoms'
 import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
+import PaymentSuccess from './pages/user/classRing/PaymentSuccess.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -129,6 +130,7 @@ function App() {
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
+        <Route path="/user/success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
@@ -178,12 +180,6 @@ function App() {
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
         <Route path="/user/mypage/myClassList" element={<MyClassList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
-
-        {/* 강사 /host/~~~~~ */}
-
-
-
-
 
         {/* 관리자(/admin) */}
         <Route path="/admin" element={<Login />} />                         {/* 1차 로그인 화면  */}

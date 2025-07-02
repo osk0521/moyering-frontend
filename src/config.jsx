@@ -19,19 +19,19 @@ export const myAxios = (token,setToken) => {
          }
          return response;
       }
-      // ,
-      // (error)=>{
-      //     if (error.response && error.response.status) {
-      //       switch (error.response.status) {
-      //          case 401:
-      //          case 403:
-      //             window.location.href = `${reactUrl}/userLogin`; break;
-      //          default:
-      //             return Promise.reject(error);
-      //       }
-      //    }
-      //    return Promise.reject(error);
-      // }
+      ,
+      (error)=>{
+         //  if (error.response && error.response.status) {
+         //    switch (error.response.status) {
+         //       case 401:
+         //       case 403:
+         //          window.location.href = `${reactUrl}/userLogin`; break;
+         //       default:
+         //          return Promise.reject(error);
+         //    }
+         // }
+         return Promise.reject(error);
+      }
    );
 
    token && instance.interceptors.request.use((config) => {

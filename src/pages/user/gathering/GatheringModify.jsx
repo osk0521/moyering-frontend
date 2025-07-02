@@ -677,65 +677,52 @@ export default function GatheringModify() {
 //       formData.tags && formData.tags.length > 0 ? formData.tags : [];
 //     formDataToSend.append("tags", JSON.stringify(tagsToSend));
 
-//     // FormData 내용 확인
-//     console.log("=== FormData 내용 ===");
-//     for (let [key, value] of formDataToSend.entries()) {
-//       console.log(`${key}:`, value);
-//     }
+    // FormData 내용 확인
+    console.log("=== FormData 내용 ===");
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(`${key}:`, value);
+    }
 
-//     // axios 요청
-//   try {
-//     console.log("모임 수정 요청 시작...");
-//     const response = await myAxios(token).post(`/user/modifyGathering`, formDataToSend);
-//     console.log("모임 수정 성공:", response);
-//     alert("모임이 성공적으로 수정되었습니다!");
-//     navigate(`/gatheringDetail/${gatheringId}`);
-//   } catch (err) {
-//     console.error("모임 수정 실패:", err);
-//   }
-// };
+  // axios 요청
+  try {
+    console.log("모임 수정 요청 시작...");
+    const response = await myAxios(token).post(`/user/modifyGathering`, formDataToSend);
+    console.log("모임 수정 성공:", response);
+    alert("모임이 성공적으로 수정되었습니다!");
+    navigate(`/gatheringDetail/${gatheringId}`);
+  } catch (err) {
+    console.error("모임 수정 실패:", err);
+  }
+};
 
-//       const response = await myAxios(token,setToken).post(
-//         `/user/modifyGathering`,
-//         formDataToSend
-//       );
+  return (
+    <div>
+      <Header />
+      <form
+        className="GatheringWrite_gathering-write-container_osk"
+        onSubmit={submit}
+      >
+        <div className="GatheringWrite_content-wrapper_osk">
+          <div>
+            {/* 기본 정보 */}
+            <div className="GatheringWrite_section_osk">
+              <div className="GatheringWrite_section-header_osk">
+                <span className="GatheringWrite_section-icon_osk">
+                  <HiOutlineInformationCircle />
+                </span>
+                <span className="GatheringWrite_section-title_osk">
+                  기본 정보
+                </span>
+              </div>
 
-//       console.log("모임 수정 성공:", response);
-//       alert("모임이 성공적으로 수정되었습니다!");
-//       navigate(`/gatheringDetail/${gatheringId}`);
-//     } catch (err) {
-//       console.error("모임 수정 실패:", err);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <Header />
-//       <form
-//         className="GatheringWrite_gathering-write-container_osk"
-//         onSubmit={submit}
-//       >
-//         <div className="GatheringWrite_content-wrapper_osk">
-//           <div>
-//             {/* 기본 정보 */}
-//             <div className="GatheringWrite_section_osk">
-//               <div className="GatheringWrite_section-header_osk">
-//                 <span className="GatheringWrite_section-icon_osk">
-//                   <HiOutlineInformationCircle />
-//                 </span>
-//                 <span className="GatheringWrite_section-title_osk">
-//                   기본 정보
-//                 </span>
-//               </div>
-
-//               <div className="GatheringWrite_form-group_osk">
-//                 <label className="GatheringWrite_field-label_osk">
-//                   <span className="GatheringWrite_section-icon_osk">
-//                     <SlPicture />
-//                   </span>
-//                   대표 이미지{" "}
-//                   <span className="GatheringWrite_required_osk">*</span>
-//                 </label>
+              <div className="GatheringWrite_form-group_osk">
+                <label className="GatheringWrite_field-label_osk">
+                  <span className="GatheringWrite_section-icon_osk">
+                    <SlPicture />
+                  </span>
+                  대표 이미지{" "}
+                  <span className="GatheringWrite_required_osk">*</span>
+                </label>
 
 //                 <div
 //                   className={getUploadZoneClass()}

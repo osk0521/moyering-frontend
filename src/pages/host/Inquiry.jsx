@@ -13,13 +13,14 @@ const Inquiry = () => {
   const [showReplyFormIndex, setShowReplyFormIndex] = useState(null);
   const [iqResContent, setIqResContent] = useState('');
   const user = useAtomValue(userAtom);
-  const [token,setToken] = useAtom(tokenAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const [inquiry, setInquiry] = useState([]);
   const [selectedInquiryId, setSelectedInquiryId] = useState(null);
-  const [replyStatus,setReplyStatus] = useState('');
+  const [replyStatus, setReplyStatus] = useState('');
+  const [pageInfo,setPageInfo] = useState([]);
 
   useEffect(() => {
-    token && myAxios(token,setToken).get(`/host/inquiry?hostId=${user.hostId}`)
+    token && myAxios(token, setToken).get(`/host/inquiry?hostId=${user.hostId}`)
       .then(res => {
         console.log(res.data);
         setInquiry(res.data);
@@ -32,26 +33,27 @@ const Inquiry = () => {
 
   const handleSearch = () => {
     const params = {
-    hostId: user.hostId,
-    searchFilter,
-    searchQuery,
-    startDate,
-    endDate,
-    replyStatus, // 추가된 필드
-    page: 0,
-    size: 10,
+      hostId: user.hostId,
+      searchFilter,
+      searchQuery,
+      startDate,
+      endDate,
+      replyStatus, // 추가된 필드
+      page: 0,
+      size: 10,
+    };
+
+    console.log("✅ 전송 데이터 확인:", JSON.stringify(params, null, 2));
+
+    token && myAxios(token, setToken).post("/host/inquiry/search", params)
+      .then(res => {
+        console.log("검색")
+        console.log(res.data.content);
+        setInquiry(res.data.content);
+        setPageInfo(res.data.pageInfo);
+      })
+      .catch(err => console.error(err));
   };
-
-  console.log("✅ 전송 데이터 확인:", JSON.stringify(params, null, 2));
-
-  token && myAxios(token,setToken).post("/host/inquiry/search", params)
-    .then(res => {
-      console.log("검색")
-      console.log(res.data.content);
-      setInquiry(res.data.content);
-    })
-    .catch(err => console.error(err));
-};
 
   const toggleExpand = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -77,7 +79,7 @@ const Inquiry = () => {
   };
 
   const submit = () => {
-    token&& myAxios(token,setToken).post("/host/inquiryReply", null, {
+    token && myAxios(token, setToken).post("/host/inquiryReply", null, {
       params: {
         hostId: user.hostId,
         iqResContent: iqResContent,
@@ -89,6 +91,12 @@ const Inquiry = () => {
         alert("답변이 등록되었습니다!")
         setIqResContent('');
         setShowReplyFormIndex(null);
+        setExpandedIndex('');
+
+        return token && myAxios(token, setToken).get(`/host/inquiry?hostId=${user.hostId}`)
+      })
+      .then(res => {
+        setInquiry(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -246,6 +254,54 @@ const Inquiry = () => {
             ))}
           </tbody>
         </table>
+        {pageInfo.allPage > 1 && (
+          <div className="KHJ-pagination">
+            {(() => {
+              const totalPage = pageInfo.allPage;
+              const currentPage = pageInfo.curPage;
+              const maxButtons = 5;
+
+              let start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+              let end = start + maxButtons - 1;
+
+              if (end > totalPage) {
+                end = totalPage;
+                start = Math.max(1, end - maxButtons + 1);
+              }
+
+              const pages = [];
+
+              if (currentPage > 1) {
+                pages.push(
+                  <button key="prev" onClick={() => fetchClassList(currentPage - 1)} className="KHJ-page-button">
+                    ◀ 이전
+                  </button>
+                );
+              }
+
+              for (let i = start; i <= end; i++) {
+                pages.push(
+                  <button
+                    key={i}
+                    onClick={() => fetchClassList(i)}
+                    className={`KHJ-page-button ${i === currentPage ? 'active' : ''}`}
+                  >
+                    {i}
+                  </button>
+                );
+              }
+
+              if (currentPage < totalPage) {
+                pages.push(
+                  <button key="next" onClick={() => fetchClassList(currentPage + 1)} className="KHJ-page-button">
+                    다음 ▶
+                  </button>
+                );
+              }
+              return pages;
+            })()}
+          </div>
+        )}
       </div>
     </>
   );

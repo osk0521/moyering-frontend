@@ -1,50 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './StudentSearch.css';
+import { myAxios } from './../../config';
+import { useAtom, useAtomValue } from 'jotai';
+import { tokenAtom, userAtom } from './../../atoms';
 
 const StudentSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: '홍구',
-      phone: '010-1234-5678',
-      email: '홍구@example.com',
-      classStatus: '수강 중',
-      totalStudents: 12,
-      currentStudents: 8,
-      classTime: '금, 14:00-16:00',
-      classes: [
-        {
-          className: '운동 클래스 1',
-          classTime: '금, 14:00-16:00',
-          status: '수강 중',
-        },
-        {
-          className: '운동 클래스 2',
-          classTime: '일, 10:00-12:00',
-          status: '수강 대기',
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: '영구',
-      phone: '010-8765-4321',
-      email: '영구@example.com',
-      classStatus: '수강 대기',
-      totalStudents: 12,
-      currentStudents: 2,
-      classTime: '토, 10:00-12:00',
-      classes: [
-        {
-          className: '운동 클래스 3',
-          classTime: '토, 10:00-12:00',
-          status: '수강 대기',
-        },
-      ],
-    },
-  ]);
+  const [token,setToken] = useAtom(tokenAtom);
+  const user = useAtomValue(userAtom);
+
+  const [students, setStudents] = useState([]);
+   
   const [selectedStudent, setSelectedStudent] = useState(null);
+
+  useEffect(()=>{
+    token&&myAxios(token,setToken).get("/host/studentList",{
+      params:{
+        hostId : user.hostId,
+      }
+    })
+    .then(res=>{
+      console.log(res.data)
+      setStudents(res.data);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  },[token])
 
   const handleSearch = () => {
     console.log('검색어:', searchQuery);
@@ -80,15 +62,15 @@ const StudentSearch = () => {
 
       <div className="KHJ-class-result-container">
         <div className="KHJ-class-results">
-          <h4>검색 결과 : {students.length}건</h4>
+          <h4>검색 결과 : {(Array.isArray(students) ? students.length : 0)}건</h4>
           {students.map((student) => (
             <div key={student.id} className="KHJ-student-item">
               <div className="KHJ-student-info" onClick={() => handleStudentClick(student)}>
                 <div className="KHJ-student-details">
                   <span className="KHJ-student-name">{student.name}</span>
-                  <span>전화번호: {student.phone}</span>
+                  <span>전화번호: {student.tel}</span>
                   <span>이메일: {student.email}</span>
-                  <span>내 강의 수: {student.classes.length}</span>
+                  <span>내 강의 수: 1</span>
                 </div>
               </div>
               {selectedStudent === student.id && (

@@ -1,7 +1,6 @@
 // KakaoMap.jsx
 import React, { useEffect, useRef, useState } from "react";
 // import { KAKAO_REST_API_KEY, KAKAO_JavaScript_API_KEY } from "../../config";
-
 export default function KakaoMap({ latitude, longitude, address }) {
   const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
   const KAKAO_JS_API_KEY = import.meta.env.VITE_KAKAO_JS_API_KEY;
@@ -11,10 +10,19 @@ export default function KakaoMap({ latitude, longitude, address }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-  console.log("latitude:", latitude, typeof latitude);
-  console.log("longitude:", longitude, typeof longitude);
-    if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
-      setErrorMessage("위도와 경도 정보가 없습니다.");
+  // console.log("latitude:", latitude, typeof latitude);
+  // console.log("longitude:", longitude, typeof longitude);
+  //   if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
+  //     setErrorMessage("위도와 경도 정보가 없습니다.");
+  //     setHasError(true);
+  //     return;
+  //   }
+
+   const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+
+    if (isNaN(lat) || isNaN(lng)) {
+      setErrorMessage("유효한 위도와 경도 값을 입력하세요.");
       setHasError(true);
       return;
     }

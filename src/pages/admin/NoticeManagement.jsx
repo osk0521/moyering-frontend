@@ -386,13 +386,8 @@ const showNotice = async (noticeId) => {
       </div>
       </div>
       
-
-      <br />
-
       {/* 검색 결과 수 */}
-      <span className="result-countHY">
         총 <strong>{pageInfo.totalElements}</strong>건
-      </span>
 
       {/* 공지사항 테이블 */}
       <div className="table-containerHY">

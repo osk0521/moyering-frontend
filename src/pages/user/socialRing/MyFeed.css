@@ -1,28 +1,26 @@
-/* src/components/MyFeed/MyFeed.css */
-
 /* ─── 최상위 부모 클래스 ─── */
-.myfeed-container {
+.KYM-myfeed-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
 /* 제목 */
-.myfeed-container .myfeed-title {
+.KYM-myfeed-container .KYM-myfeed-title {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 20px;
 }
 
 /* 2열 그리드 */
-.myfeed-container .myfeed-grid {
+.KYM-myfeed-container .KYM-myfeed-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 
 /* 카드 */
-.myfeed-container .myfeed-card {
+.KYM-myfeed-container .KYM-myfeed-card {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -32,66 +30,114 @@
 }
 
 /* 헤더 */
-.myfeed-container .myfeed-header {
+.KYM-myfeed-container .KYM-myfeed-header {
   padding: 12px;
   display: flex;
   align-items: center;
 }
 
-.myfeed-container .myfeed-user-info {
+.KYM-myfeed-container .KYM-myfeed-user-info {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.myfeed-container .myfeed-avatar {
+.KYM-myfeed-container .KYM-myfeed-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   background: #ddd;
 }
 
-.myfeed-container .myfeed-nickname {
+.KYM-myfeed-container .KYM-myfeed-nickname {
   font-weight: bold;
   font-size: 0.95rem;
 }
 
-.myfeed-container .myfeed-badge {
+.KYM-myfeed-container .KYM-myfeed-badge {
   width: 20px;
   height: 20px;
 }
 
-.myfeed-container .myfeed-date {
+.KYM-myfeed-container .KYM-myfeed-date {
   font-size: 0.8rem;
   color: #888;
 }
 
 /* 이미지 */
-.myfeed-container .myfeed-image {
+.KYM-myfeed-container .KYM-myfeed-image-wrapper {
+  height: 300px;
+  position: relative;
   width: 100%;
-  height: auto;
+  overflow: hidden;
+  text-align: center;
+  aspect-ratio: 4/3;
+}
+
+.KYM-myfeed-container .KYM-myfeed-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 10px;
+}
+
+/* 슬라이드 좌우 네비게이션 버튼 */
+.KYM-myfeed-container .KYM-image-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 2;
+  padding: 5px 10px;
+}
+
+.KYM-myfeed-container .KYM-image-nav.left {
+  left: 10px;
+}
+
+.KYM-myfeed-container .KYM-image-nav.right {
+  right: 10px;
+}
+
+/* 이미지 하단 점(dot) 표시 */
+.KYM-myfeed-container .KYM-image-dots {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.KYM-myfeed-container .KYM-dot {
+  color: lightgray;
+  font-size: 10px;
+}
+
+.KYM-myfeed-container .KYM-dot.active {
+  color: black;
 }
 
 /* 본문 */
-.myfeed-container .myfeed-content {
+.KYM-myfeed-container .KYM-myfeed-content {
   padding: 12px;
   flex: 1;
 }
 
-.myfeed-container .myfeed-content p {
+.KYM-myfeed-container .KYM-myfeed-content p {
   margin: 0 0 10px;
   font-size: 0.9rem;
   color: #333;
 }
 
-.myfeed-container .myfeed-hashtags {
+.KYM-myfeed-container .KYM-myfeed-hashtags {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.myfeed-container .myfeed-hashtag {
+.KYM-myfeed-container .KYM-myfeed-hashtag {
   background: #fff7e6;
   border: 1px solid #ffd47c;
   border-radius: 16px;
@@ -101,7 +147,7 @@
 }
 
 /* 푸터 */
-.myfeed-container .myfeed-footer {
+.KYM-myfeed-container .KYM-myfeed-footer {
   display: flex;
   align-items: center;
   padding: 12px;
@@ -110,7 +156,7 @@
 }
 
 /* 좋아요 버튼 */
-.myfeed-container .myfeed-like-btn {
+.KYM-myfeed-container .KYM-myfeed-like-btn {
   background: transparent;
   border: none;
   display: inline-flex;
@@ -119,27 +165,51 @@
   cursor: pointer;
 }
 
-.myfeed-container .myfeed-like-btn.active .myfeed-icon {
-  /* 활성화 시 색상 변경? 필요시 추가 */
+.KYM-myfeed-container .KYM-myfeed-like-btn.active .KYM-myfeed-icon {
+  /* 활성화 시 색상 변경 필요 시 */
 }
 
 /* 아이콘 */
-.myfeed-container .myfeed-icon {
+.KYM-myfeed-container .KYM-myfeed-icon {
   width: 16px;
   height: 16px;
 }
 
-/* 댓글 수 */
-.myfeed-container .myfeed-comment-count {
-  font-size: 0.85rem;
-  color: #666;
+/* 댓글 버튼 */
+.KYM-myfeed-container .KYM-comment-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
-/* MyFeed.css 에 추가 */
-.myfeed-container button:focus {
+
+.KYM-myfeed-container .KYM-comment-button:hover {
+  color: #000;
+}
+
+.KYM-myfeed-container .KYM-comment-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(97, 97, 97, 0.6);
+}
+
+/* 버튼 기본 hover & active */
+.KYM-myfeed-container button:not(.KYM-myfeed-like-btn):not(.KYM-comment-button):hover,
+.KYM-myfeed-container button:not(.KYM-myfeed-like-btn):not(.KYM-comment-button).active {
+  background: #FFB22C;
+  color: #fff;
+}
+
+/* 포커스 */
+.KYM-myfeed-container button:focus {
   outline: none;
 }
-.myfeed-container button:focus-visible {
-  /* 탭키로 포커스될 때만 보이는 링 */
+
+.KYM-myfeed-container button:focus-visible {
   outline: 2px solid #FFB22C;
   outline-offset: 2px;
 }

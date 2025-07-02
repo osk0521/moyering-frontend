@@ -27,7 +27,13 @@ const Login = () => {
         // console.log(res);
         // setToken(res.headers.authorization);
         const user = res.data;
+                console.log(user);
         setUser({ ...user });
+        //토스 결제를 위한 추가
+        const tokenValue = res.headers.authorization;
+        if (tokenValue) {
+          localStorage.setItem("token", tokenValue); 
+        }
         navigate("/")
       })
       .catch(err => {

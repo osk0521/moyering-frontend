@@ -8,10 +8,11 @@ import EmojiPicker from 'emoji-picker-react';
 import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
 import Header from '../../common/Header';
+import FollowButton from './FollowButton';
 
 export default function FeedDetail() {
   // Jotai atom에서 토큰 읽어오기
-  const [token,setToken] = useAtom(tokenAtom)
+  const [token, setToken] = useAtom(tokenAtom)
   const isLoggedIn = Boolean(token);
 
   const [commentText, setCommentText] = useState('');
@@ -19,9 +20,10 @@ export default function FeedDetail() {
 
   const { feedId } = useParams();
   // const [feed, setFeed] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [scrapped, setScrapped] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [replyingTo, setReplyingTo] = useState(null);
   const [showReplies, setShowReplies] = useState({});
@@ -32,53 +34,25 @@ export default function FeedDetail() {
 
   const [feed, setFeed] = useState([]);
   const [comment, setComment] = useState([]);
-  // const rawToken = typeof token === 'string'
-  // ? token
-  // : token.access_token.replace(/^Bearer\s+/, '');
+
   useEffect(() => {
     console.log(token)
     myAxios().get(`/socialing/feed?feedId=${feedId}`)
       .then(res => {
+        console.log('▶ feed detail:', res.data);
         console.log(res)
         setFeed(res.data)
         console.log("댓글")
         console.log(res.data.comments)
         setComment(res.data.comments)
         console.log(token)
+        console.log('▶ writerUserId:', feed.writerUserId);
       })
       .catch(err => {
         console.log(err)
       })
   }, [token])
-  // useEffect(() => {
-  //   const fetchFeed = async () => {
-  //     try {
-  //       console.log(user.username)
-  //       const api = myAxios(token);
-  //       const { data } = await api.get(`/socialing/feed/${feedId}`);
-  //       setFeed(data);
-  //       console.log(data)
-  //     } catch (err) {
-  //       console.error(err);
-  //       setError('피드 정보를 불러오지 못했습니다.');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchFeed();
-  // }, [feedId]);
 
-  // useEffect(() => {
-  //   const handler = e => {
-  //     if (menuRef.current && !menuRef.current.contains(e.target)) {
-  //       setShowMenu(false);
-  //     }
-  //   };
-  //   document.addEventListener('mousedown', handler);
-  //   return () => document.removeEventListener('mousedown', handler);
-  // }, []);
-
-  // if (loading) return <div className="KYM-detail-container">로딩 중…</div>;
   if (error) return <div className="KYM-detail-container">{error}</div>;
   if (!feed) return <div className="KYM-detail-container">피드가 없습니다.</div>;
 
@@ -107,8 +81,10 @@ export default function FeedDetail() {
   const postComment = async () => {
     if (!commentText.trim()) return;
     try {
-      const api = myAxios(token,setToken);
+
+      const api = myAxios(token, setToken);
       const res = await api.post(`/user/socialing/feed/comment`, {
+
         feedId: feedId,
         content: commentText,
         parentId: null   // 최상위 댓글
@@ -118,7 +94,7 @@ export default function FeedDetail() {
       // 2) comment 배열에 바로 추가
       setComment(prev => [...prev, newComment]);
       // 등록 후 새로고침 대신 comments만 갱신
-      const { data } = await api.get(`/socialing/feed?feedId=${feedId}`);
+      const { data } = await myAxios().get(`/socialing/feed?feedId=${feedId}`);
       setFeed(data);
       setCommentText('');
     } catch (e) {
@@ -126,44 +102,12 @@ export default function FeedDetail() {
       alert('댓글 등록에 실패했습니다.');
     }
   };
-  // const postReply = async (parentId) => {
-  //   if (!replyText.trim()) return;
-  //   try {
-  //     const api = myAxios(token);
-  //     await api.post(`/user/socialing/feed/${feedId}/comment`, {
-  //       content: replyText,
-  //       parentId: parentId
-  //     });
-  //     const { data } = await api.get(`/socialing/feed/${feedId}`);
-  //     setFeed(data);
-  //     setReplyingTo(null);
-  //     setReplyText('');
-  //   } catch (e) {
-  //     console.error(e);
-  //     alert('답글 등록에 실패했습니다.');
-  //   }
-  // };
-  // const replysubmit = async()=>{
-  //   console.log("▶ rawToken in replysubmit:", rawToken);
-  //   myAxios(rawToken).post("/user/socialing/feed/comment",feed.feedId)
-  //   .then(res=>{
 
-  //     console.log(res)
-
-  //   }).catch(err=>{
-  //     console.log(feed.feedId)
-  //     console.log(err)
-  //   })
-  // }
   const replysubmit = async () => {
-    // 1️⃣ 호출 직후 rawToken 찍기
-    console.log("▶ rawToken in replysubmit:", rawToken);
 
     try {
-      // 2️⃣ axios 인스턴스 생성 시 항상 rawToken 넘기기
-      const api = myAxios(rawToken);
 
-      // 3️⃣ 올바른 엔드포인트, 올바른 Body
+      //  올바른 엔드포인트, 올바른 Body
       const payload = {
         content: replyText,        // 답글 내용
         parentId: replyingTo      // 최상위라면 null
@@ -173,7 +117,7 @@ export default function FeedDetail() {
       console.log("▶ 요청 보낼 payload:", payload);
 
       // 4️⃣ 실제 POST 요청
-      const res = await api.post(
+      const res = await myAxios(token, setToken).post(
         "/user/socialing/feed/comment", feed.feedId,
         payload
       );
@@ -189,6 +133,38 @@ export default function FeedDetail() {
     setCommentText(text => text + emojiData.emoji);
     setShowEmojiPicker(false);
   };
+
+  // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
+  useEffect(() => {
+    let mounted = true;
+    myAxios(token,setToken).get(`user/socialing/scrap/${feedId}`)
+      .then(res => {
+        if (mounted) setScrapped(res.data);
+      })
+      .catch(console.error);
+    return () => { mounted = false; };
+  }, [token, feedId]);
+
+  // 2. 스크랩 토글 함수
+  const handleScrapToggle = () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      if (scrapped) {
+        myAxios(token, setToken).delete(`/user/socialing/scrap/${feedId}`);
+        setScrapped(false);
+      } else {
+        myAxios(token, setToken).post(`/user/socialing/scrap`, null, { params: { feedId } });
+        setScrapped(true);
+      }
+    } catch (err) {
+      console.error('스크랩 에러', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <>
       <Header />
@@ -198,7 +174,7 @@ export default function FeedDetail() {
             {images.length > 0 && (
               <>
                 <img
-                  src={`${url}${images[currentImage]}`}
+                  src={`${url}/iupload/${images[currentImage]}`}
                   alt={`feed-${currentImage}`}
                 />
 
@@ -241,7 +217,11 @@ export default function FeedDetail() {
               <span className="KYM-detail-nickname">{writerId}</span>
               {writerBadge && <span className="KYM-detail-badge">🏅</span>}
               {!mine
-                ? <button className="KYM-follow-btn">팔로우</button>
+                ? <FollowButton
+                  targetUserId={feed.writerUserId}             // 숫자 ID를 전달
+                  className="KYM-follow-btn"                // 필요 시 CSS 클래스
+                  style={{ marginLeft: '8px' }}             // 인라인 스타일도 가능
+                />
                 : <button className="KYM-edit-btn">수정</button>}
               <div className="KYM-more-wrapper" ref={menuRef}>
                 <img className="KYM-detail-more" src={moreIcon} onClick={toggleMenu} alt="more" />
@@ -251,6 +231,12 @@ export default function FeedDetail() {
                     <li onClick={() => navigator.clipboard.writeText(window.location.href)}>링크복사</li>
                     <li>공유하기</li>
                     <li>DM 보내기</li>
+                    <li onClick={() => {
+                      handleScrapToggle();
+                      setShowMenu(false);
+                    }}
+                      style={{ opacity: loading ? 0.5 : 1, pointerEvents: loading ? 'none' : 'auto' }}
+                    >{scrapped ? '스크랩 해제' : '스크랩하기'}</li>
                   </ul>
                 )}
               </div>
@@ -393,7 +379,7 @@ export default function FeedDetail() {
             {moreImg1List.map((src, i) =>
               <img
                 key={i}
-                src={`${url}${src}`}
+                src={`${url}/iupload/${src}`}
                 className="KYM-thumb"
                 alt=""
               />

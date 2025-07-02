@@ -1,10 +1,12 @@
 .MyGatherPage_container {
   display: flex;
   font-family: "Pretendard", sans-serif;
-  background-color: #fafafa;
+  background-color: #fff;
   min-height: 100vh;
-  max-width: 1920px;
-  margin: 31px 100px 00px 100px;
+  /* max-width: 1920px; */
+  width: 1280px;
+  /* margin: 31px 100px 00px 100px; */
+  margin: 0 auto;
 }
 
 .MyGatherInquiryList_inquiry-section_osk {

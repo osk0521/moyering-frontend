@@ -28,7 +28,8 @@ export default function Header() {
     setToken(null);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-    navigate("/userlogin");
+    localStorage.removeItem("token");
+    navigate("/userlogin");// 로그인 페이지로 이동
   }, [setUser, setToken, navigate]);
 
   const toggleNotificationDropdown = useCallback(async () => {
@@ -76,7 +77,7 @@ export default function Header() {
 
     useEffect(() => {
       console.log(user);
-      if (user) {
+      if (user&&token) {
         myAxios(token,setToken).post('/user/alarms')
           .then(response=> {
             console.log(response.data)

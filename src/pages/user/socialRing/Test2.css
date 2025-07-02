@@ -1,0 +1,34 @@
+.feed-container { display: flex; gap: 20px; }
+.feed-left { flex: 3; }
+.feed-right { flex: 1; }
+
+.feed-sort-buttons button.active { font-weight: bold; color: #ff5500; }
+
+.feed-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.feed-card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
+.feed-header { display: flex; align-items: center; gap: 8px; }
+.profile-img { width: 36px; height: 36px; border-radius: 50%; }
+.feed-img { width: 100%; border-radius: 8px; margin-top: 8px; }
+.feed-actions { display: flex; gap: 8px; margin-top: 8px; cursor: pointer; }
+
+.heart {
+  transition: transform 0.2s;
+}
+/* .heart.active { color: red !important; } */
+.heart img:hover {
+  transform: scale(1.2);
+}
+
+.popular-box { border: 1px solid #eee; padding: 12px; border-radius: 8px; }
+.popular-pagination { margin-top: 8px; display: flex; gap: 4px; justify-content: center; }
+.thumb-img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; }
+
+.menu-modal {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center;
+}
+.menu-content {
+  background: #fff; padding: 20px; border-radius: 8px;
+  display: flex; flex-direction: column; gap: 10px;
+}

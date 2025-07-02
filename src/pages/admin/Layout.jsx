@@ -1,30 +1,42 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Layout.css';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
+
+// React Icons 추가
+import { 
+  MdDashboard, 
+  MdPeople, 
+  MdSchool, 
+  MdPayment, 
+  MdAccountBalance, 
+  MdLocalOffer, 
+  MdEmojiEvents, 
+  MdImage, 
+  MdBarChart, 
+  MdReport, 
+  MdAnnouncement 
+} from 'react-icons/md';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
 
   const menuItems = [
-    { id: 'dashboard', label: '대시보드', icon: '📊', path: '/admin/dashboard' },
-    { id: 'member', label: '회원관리', icon: '👥', path: '/admin/member' },
-    { id: 'class', label: '클래스 관리', icon: '📚', path: '/admin/class' },
-    { id: 'payment', label: '결제 관리', icon: '💳', path: '/admin/payment' },
-    { id: 'settlement', label: '정산 관리', icon: '💳', path: '/admin/settlement' },
-    { id: 'coupon', label: '쿠폰 관리', icon: '💳', path: '/admin/coupon' },
-    // { id: 'category', label: '카테고리 관리', icon: '💳', path: '/admin/category' },
-    { id: 'badge', label: '배지 관리', icon: '🏅', path: '/admin/badge' },
-    { id: 'banner', label: '배너 관리', icon: '🖼️', path: '/admin/banner' },
-    { id: 'statistics', label: '통계 리포트', icon: '📈', path: '/admin/statistics' },
-    { id: 'report', label: '신고 관리', icon: '🚨', path: '/admin/report' },
-    { id: 'notice', label: '공지사항 관리', icon: '📢', path: '/admin/notice' },
+    { id: 'dashboard', label: '대시보드', icon: <MdDashboard />, path: '/admin/dashboard' },
+    { id: 'member', label: '회원관리', icon: <MdPeople />, path: '/admin/member' },
+    { id: 'class', label: '클래스 관리', icon: <MdSchool />, path: '/admin/class' },
+    { id: 'payment', label: '결제 관리', icon: <MdPayment />, path: '/admin/payment' },
+    { id: 'settlement', label: '미정산 관리', icon: <MdAccountBalance />, path: '/admin/unsettlement' },
+    { id: 'coupon', label: '쿠폰 관리', icon: <MdLocalOffer />, path: '/admin/coupon' },
+    { id: 'badge', label: '배지 관리', icon: <MdEmojiEvents />, path: '/admin/badge' },
+    { id: 'banner', label: '배너 관리', icon: <MdImage />, path: '/admin/banner' },
+    { id: 'statistics', label: '통계 리포트', icon: <MdBarChart />, path: '/admin/statistics' },
+    { id: 'report', label: '신고 관리', icon: <MdReport />, path: '/admin/report' },
+    { id: 'notice', label: '공지사항 관리', icon: <MdAnnouncement />, path: '/admin/notice' },
   ];
 
   const handleMenuClick = (path) => {
@@ -36,7 +48,7 @@ const Layout = ({ children }) => {
     setToken(null);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-    window.location.href = '/admin'; // 로그인 페이지로 이동
+    window.location.href = '/admin';
   };
 
   return (
@@ -44,7 +56,7 @@ const Layout = ({ children }) => {
       {/* 사이드바 */}
       <aside className="sidebarHY">
         <div className="sidebar-headerHY">
-          {/* 로고나 제목 추가 가능 */}
+   
         </div>
         <nav className="sidebar-navHY">
           <ul className="menu-listHY">
@@ -67,7 +79,14 @@ const Layout = ({ children }) => {
       <header className="headerHY">
         <div className="header-leftHY">
           <div className="header-logoHY">
-            <img src="/logo_managerHeader.png" alt="모여링 로고" className="header-logo-iconHY" />
+            <img 
+              src="/logo_managerHeader.png" 
+              alt="모여링 로고" 
+              className="header-logo-iconHY"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
           </div>
         </div>
         <div className="header-rightHY">
@@ -83,7 +102,6 @@ const Layout = ({ children }) => {
         <main className="page-contentHY">{children}</main>
       </div>
     </div>
-
   );
 };
 

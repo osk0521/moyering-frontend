@@ -1,6 +1,120 @@
-/* src/components/pages/SettlementManagement.css */
 
+/* 1. 탭 네비게이션 스타일 (새로 추가) */
+.tab-navigationHY {
+  display: flex;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+}
 
+.tab-buttonHY {
+  flex: 1;
+  padding: 12px 24px;
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.tab-buttonHY:hover {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.tab-buttonHY.active {
+  background-color: #3b82f6;
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.tab-buttonHY:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* 2. 상태 배지 스타일 (새로 추가) */
+.status-badgeHY {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.status-pendingHY {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+.status-completedHY {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.status-failedHY {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+/* 3. 액션 버튼 그룹 스타일 (새로 추가) */
+.action-buttonsHY {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-approveHY {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-approveHY:hover {
+  background-color: #059669;
+}
+
+.btn-rejectHY {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-rejectHY:hover {
+  background-color: #dc2626;
+}
+
+.action-disabledHY {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  padding: 6px 12px;
+}
 
 /* 4. 안내 문구 */
 .info-messageHY {
@@ -121,6 +235,17 @@
   .class-nameHY {
     max-width: 120px;
   }
+  
+  .action-buttonsHY {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .btn-approveHY,
+  .btn-rejectHY {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -130,6 +255,15 @@
   
   .page-headerHY h1 {
     font-size: 20px;
+  }
+  
+  .tab-navigationHY {
+    margin-bottom: 16px;
+  }
+  
+  .tab-buttonHY {
+    padding: 10px 16px;
+    font-size: 13px;
   }
   
   .search-boxHY {
@@ -146,11 +280,13 @@
   }
   
   .settlement-tableHY {
-    min-width: 800px;
+    min-width: 900px;
   }
   
-  .btn-settlementHY {
-    padding: 4px 12px;
+  .btn-settlementHY,
+  .btn-approveHY,
+  .btn-rejectHY {
+    padding: 4px 8px;
     font-size: 11px;
   }
 }
@@ -162,7 +298,9 @@
 
 /* 11. 포커스 스타일 */
 .search-inputHY:focus,
-.btn-settlementHY:focus {
+.btn-settlementHY:focus,
+.btn-approveHY:focus,
+.btn-rejectHY:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
@@ -240,7 +378,9 @@
   transition: all 0.2s ease;
 }
 
-.btn-settlementHY {
+.btn-settlementHY,
+.btn-approveHY,
+.btn-rejectHY {
   transition: all 0.2s ease;
 }
 
@@ -260,6 +400,7 @@
     padding: 0;
   }
   
+  .tab-navigationHY,
   .search-sectionHY {
     display: none;
   }
@@ -277,69 +418,19 @@
     border: 1px solid #000;
   }
   
-  .btn-settlementHY {
+  .btn-settlementHY,
+  .btn-approveHY,
+  .btn-rejectHY {
     background-color: transparent !important;
     color: #000 !important;
     border: 1px solid #000 !important;
   }
 }
 
-/* 18. 상태별 스타일 확장 (향후 사용) */
-.status-pendingHY {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-
-.status-completedHY {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-
-.status-failedHY {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-/* 19. 툴팁 스타일 (향후 사용) */
+/* 18. 툴팁 스타일 (향후 사용) */
 .tooltipHY {
   position: relative;
   display: inline-block;
 }
 
 .tooltipHY:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #374151;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 1000;
-  margin-bottom: 5px;
-}
-
-.tooltipHY:hover::before {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: #374151;
-  z-index: 1000;
-}
-
-/* 20. 강조 효과 */
-.highlightHY {
-  background-color: #fef3c7 !important;
-  animation: highlight-fade 3s ease-out;
-}
-
-@keyframes highlight-fade {
-  0% { background-color: #fef3c7; }
-  100% { background-color: transparent; }
-}

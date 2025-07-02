@@ -101,7 +101,7 @@ export default function FeedEdit() {
       <div className="KYM-FeedEdit-main">
         <div className="KYM-FeedEdit-image-box" onClick={() => fileInputRef.current.click()}>
           {previewUrl
-            ? <img src={previewUrl} alt="미리보기" />
+            ? <img src={`${url}/iupload/previewUrl`} alt="미리보기" />
             : <span className="KYM-FeedEdit-placeholder">사진 선택</span>
           }
           <input

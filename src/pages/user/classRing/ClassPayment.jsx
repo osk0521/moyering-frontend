@@ -1,15 +1,19 @@
 import React, { useState, useEffect  } from 'react';
 import styles from './ClassPayment.module.css';
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams,useSearchParams } from "react-router";
 import Header from "../../../pages/common/Header";
 import Footer from "../../../pages/common/Footer";
 import { myAxios } from "../../../config";
 import { useSetAtom, useAtomValue, useAtom } from "jotai";
 import { tokenAtom, userAtom } from "../../../atoms";
+import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
+import axios from 'axios';
 
 export default function ClassPayment() {
   const navigate = useNavigate();
   const { classId,selectedCalendarId } = useParams();
+  const [params] = useSearchParams();
+
   const [selectedCoupon, setSelectedCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState(null);
@@ -17,42 +21,49 @@ export default function ClassPayment() {
   const [token,setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
 
-
-
+// 결제 정보 조회
   useEffect(() => {
-    const fetchPaymentInfo = async () => {
-      try {
-        const res = await myAxios(token,setToken).get(`/user/payment/${classId}/${selectedCalendarId}`);
-        setPaymentInfo(res.data);
-        console.log("결제 정보:", res.data);
-      } catch (err) {
-        console.error("결제 정보 조회 실패", err);
-      }
-    };
-
     if (classId && selectedCalendarId) {
-      fetchPaymentInfo();
+      token && myAxios(token, setToken)
+        .get(`/user/payment/${classId}/${selectedCalendarId}`)
+        .then(res => setPaymentInfo(res.data))
+        .catch(err => console.error('결제 정보 조회 실패', err));
     }
-  }, [classId, selectedCalendarId,token]);
+  }, [selectedCalendarId, token]);
 
+  // useEffect(() => {
+  //   const fetchPaymentInfo = async () => {
+  //     try {
+  //       const res = await myAxios(token,setToken).get(`/user/payment/${classId}/${selectedCalendarId}`);
+  //       setPaymentInfo(res.data);
+  //       console.log("결제 정보:", res.data);
+  //     } catch (err) {
+  //       console.error("결제 정보 조회 실패", err);
+  //     }
+  //   };
+
+  //   if (classId && selectedCalendarId) {
+  //     fetchPaymentInfo();
+  //   }
+  // }, [classId, selectedCalendarId,token]);
+
+  //쿠폰 적용
   const selectedCouponObj = paymentInfo?.userCoupons.find(
     (c) => c.ucId == selectedCoupon
   );
-
   const basePrice = paymentInfo?.hostClass?.price || 0;
-
   const discount =
     couponApplied && selectedCouponObj
       ? selectedCouponObj.discountType === "AMT"
         ? selectedCouponObj.discount
         : Math.round((selectedCouponObj.discount / 100) * basePrice)
       : 0;
-
   const finalPrice = basePrice - discount;
 
   const handleApplyCoupon = () => {
     if (selectedCoupon) setCouponApplied(true);
   };
+
   //이용약관 동의
   const [openTerms, setOpenTerms] = useState(false);
   const [openPrivacy, setOpenPrivacy] = useState(false);
@@ -81,6 +92,75 @@ export default function ClassPayment() {
       };
       newAgreements.all = newAgreements.terms && newAgreements.privacy && newAgreements.caution;
       setAgreements(newAgreements);
+    }
+  };
+
+  //토스 결제
+  const [toss, setToss] = useState(null);
+  const [paymentInstance, setPaymentInstance] = useState(null);
+
+
+  console.log("✅ Toss Client Key:", import.meta.env.VITE_TOSS_CLIENT_KEY);
+  // TossPayments 인스턴스 로드
+  useEffect(() => {
+    const loadToss = async () => {
+      try {
+        const instance = await loadTossPayments(import.meta.env.VITE_TOSS_CLIENT_KEY);
+        const customerKey = user?.id ? `USER_${user.id}` : ANONYMOUS;
+        const payment = instance.payment({ customerKey });
+        setPaymentInstance(payment);
+      } catch (err) {
+        console.error("TossPayments 로드 실패", err);
+      }
+    };
+    if (user?.id) loadToss();
+  }, [user]);
+
+  // 결제 처리 1.결제 요청
+  const handlePay = async () => {
+    if (!(agreements.terms && agreements.privacy && agreements.caution)) {
+      alert('모든 필수 약관에 동의해주세요.');
+      return;
+    }
+    if (!user || !token) {
+      if (confirm('로그인이 필요합니다. 로그인하시겠습니까?')) {
+        navigate('/userlogin');
+      }
+      return;
+    }
+    if (!paymentInstance) {
+      alert('결제 모듈이 아직 준비되지 않았습니다.');
+      return;
+    }
+
+    const orderNo = `ORD-${user?.id}-${Date.now()}`;
+    const userCouponId = selectedCouponObj?.ucId || '';
+
+    try {
+      // ✅ 서버에 결제정보 저장 (권장)
+      token && await myAxios(token, setToken).post("/user/payment/init", {
+        orderNo,
+        calendarId: selectedCalendarId,
+        userCouponId,
+        amount: finalPrice,
+        paymentType: "카드",
+      });
+
+      // ✅ Toss 결제창 실행
+      token && await paymentInstance.requestPayment({
+        method: "CARD",
+        amount: { value: finalPrice, currency: "KRW" },
+        orderId: orderNo,
+        orderName: paymentInfo?.hostClass?.name || "클래스 결제",
+        successUrl: `${window.location.origin}/user/payment-success?orderId=${orderNo}&amount=${finalPrice}&calendarId=${selectedCalendarId}&userCouponId=${selectedCouponObj?.ucId || ''}`,
+        failUrl: `${window.location.origin}/payment/fail`,
+        customerEmail: user.email,
+        customerName: user.name,
+        customerMobilePhone: user.phone || "01000000000",
+      });
+    } catch (err) {
+      console.error("결제 요청 오류", err);
+      alert("결제 요청 중 문제가 발생했습니다.");
     }
   };
 
@@ -244,6 +324,7 @@ export default function ClassPayment() {
               <strong>₩{finalPrice.toLocaleString()}</strong>
             </div>
             <button className={styles.payButton}
+              onClick={handlePay}
               disabled={!(agreements.terms && agreements.privacy && agreements.caution)}
             >₩{finalPrice.toLocaleString()} 결제하기</button>
             {!(agreements.terms && agreements.privacy && agreements.caution) && (

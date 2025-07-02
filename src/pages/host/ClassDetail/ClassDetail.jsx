@@ -55,7 +55,7 @@ const ClassDetail = () => {
   }, [classId, calendarId, token]);
 
   const update = () => {
-    navigate(`/host/classUpdate/${classId}`)
+    navigate(`/host/classUpdate/${classId}/${calendarId}`)
   }
 
   const registerValidator = (index, validateFn) => {

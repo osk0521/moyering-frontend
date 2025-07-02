@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./MyGatherInquiryList.css";
 import Sidebar from "../common/Sidebar";
 import Header from "../../../common/Header";
+import Footer from "../../../../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue } from "jotai";
 import { tokenAtom, userAtom } from "../../../../atoms";
@@ -254,6 +255,7 @@ export default function GatherInquiry() {
           </div>
         </section>
       </main>
+      <Footer/>
     </div>
   );
 }

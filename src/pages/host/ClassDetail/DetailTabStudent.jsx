@@ -1,37 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './DetailTabStudent.css';
 import React from 'react'; // 이 한 줄만 추가!
-const DetailTabStudent = () => {
+import { myAxios } from "../../../config";
+import { useAtom } from "jotai";
+import { tokenAtom } from "../../../atoms";
+const DetailTabStudent = ({classData}) => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [token,setToken] = useAtom(tokenAtom);
+  const [students,setStudents] = useState([]);
 
-  const students = [
-    {
-      id: 1,
-      name: '망구',
-      phone: '010-1234-5678',
-      email: 'manggu1@example.com',
-      attendance: {
-        subject: '수학 기초',
-        current: 8,
-        total: 12,
-        date: '목, 14:00~16:00',
-        todayStatus: '출석 완료',
-      },
-    },
-    {
-      id: 2,
-      name: '망구',
-      phone: '010-7894-4561',
-      email: 'manggu2@example.com',
-      attendance: {
-        subject: '영어 회화',
-        current: 9,
-        total: 10,
-        date: '목, 10:00~12:00',
-        todayStatus: '출석 대기',
-      },
-    },
-  ];
+
+  useEffect(()=>{
+    token && myAxios(token,setToken).get("/host/classStudentList",{
+      params:{
+        calendarId : classData.calendarId,
+      }
+    })
+    .then(res=>{
+      console.log("학생~")
+      console.log(res.data)
+      setStudents(res.data);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  },[token])
+
 
   const toggleStudent = (id) => {
     setSelectedStudentId((prevId) => (prevId === id ? null : id));
@@ -49,14 +43,14 @@ const DetailTabStudent = () => {
           >
             <div>No. {index + 1}</div>
             <div className="KHJ-student-name KHJ-clickable">{student.name}</div>
-            <div>{student.phone}</div>
+            <div>{student.tel}</div>
             <div>{student.email}</div>
           </div>
 
-          {selectedStudentId === student.id && (
+          {/* {selectedStudentId === student.id && (
             <div className="KHJ-class-section">
               <div className="KHJ-class-block">
-                <p className="KHJ-class-title">{student.attendance.subject}</p>
+                <p className="KHJ-class-title"></p>
                 <div className="KHJ-progress-container">
                   <span>출석 진행</span>
                   <div className="KHJ-progress-bar-bg">
@@ -79,7 +73,7 @@ const DetailTabStudent = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       ))}
     </div>

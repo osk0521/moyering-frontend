@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSetAtom,useAtomValue } from "jotai";
+import { useSetAtom,useAtomValue, useAtom } from "jotai";
 import { recommendClassAtom,hotClassAtom ,recommendGatheringAtom,mainBannerList} from "../../atom/classAtom";
 import { myAxios } from "../../config";
 import { userAtom, tokenAtom } from "../../atoms";
@@ -11,10 +11,10 @@ export default function useRecommendClasses() {
   const setBanners = useSetAtom(mainBannerList);
 
   const user = useAtomValue(userAtom);    
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
 
   useEffect(() => {
-    myAxios(token)
+    myAxios(token,setToken)
       .get(`/main`)
       .then((res) => {
         //console.log(res);

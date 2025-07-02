@@ -18,6 +18,7 @@ import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
 import Header from "./Header";
 import aImage from "/detail2.png";
+import Footer from "../../components/Footer";
 export default function GatheringDetail() {
   const user = useAtomValue(userAtom);
   const [token,setToken] = useAtom(tokenAtom); 
@@ -28,6 +29,7 @@ export default function GatheringDetail() {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [aspirationContent, setAspirationContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
     // 약간의 지연을 두어 스토리지 로딩 완료 대기
@@ -79,6 +81,7 @@ export default function GatheringDetail() {
     preparationItems: "",
     tags: [],
     createDate: "",
+    acceptedCount: 0,
     category: "",
     subCategory: "",
     latitude: 0,
@@ -204,6 +207,7 @@ export default function GatheringDetail() {
         // gathering 데이터 설정
         const gathering = res.data.gathering;
         const organizer = res.data.organizer;
+        const recommendations = res.data.recommendations || [];
         const member = res.data.member || []; // member 배열 추출
         // const totalLikeNum = res.data.totalLikeNum;
         // tags 필드를 문자열에서 배열로 변환
@@ -242,6 +246,7 @@ export default function GatheringDetail() {
           intrOnln: gathering.intrOnln,
           status: gathering.status,
           locName: gathering.locName,
+          acceptedCount:gathering.acceptedCount
         });
 
         const organizerCategories = organizer
@@ -253,6 +258,7 @@ export default function GatheringDetail() {
               organizer.category5,
             ].filter((category) => category && category.trim() !== "")
           : [];
+
         setorganizerData({
           nickname: organizer.nickName,
           profileImage: organizer.profile,
@@ -260,16 +266,28 @@ export default function GatheringDetail() {
           intro: organizer.intro || "",
           tags: organizerCategories,
         });
+
         setMembers(
           member.map((m) => ({
             id: m.gatheringApplyId,
             name: m.name,
-            profileImage: m.profile ? `${url}/image/${m.profile}` : null,
+            profileImage: m.profile, 
             introduction: m.intro,
             applyDate: m.applyDate,
             aspiration: m.aspiration,
             isApprove: m.isApprove,
             userId: m.userId,
+          }))
+        );
+
+        setRecommendations(
+          recommendations.map((r) => ({
+          gatheringId: r.gatheringId,
+          category: `${r.categoryName} > ${r.subCategoryName}`,
+          title : r.title,
+          meetingDate : r.meetingDate,
+          thumbnailFileName:r.thumbnailFileName,
+          locName:r.locName
           }))
         );
 
@@ -282,33 +300,6 @@ export default function GatheringDetail() {
 
   const [activeTab, setActiveTab] = useState("details");
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const recommendations = [
-    {
-      id: 1,
-      category: "취미 > 수집",
-      title: "레트로 테마",
-      date: "2024년 6월 1일 (토)",
-      participants: "3/6명",
-      image: "./a.png",
-    },
-    {
-      id: 2,
-      category: "취미 > 수집",
-      title: "레트로 테마",
-      date: "2024년 6월 1일 (토)",
-      participants: "3/6명",
-      image: "./a.png",
-    },
-    {
-      id: 3,
-      category: "취미 > 수집",
-      title: "레트로 테마",
-      date: "2024년 6월 1일 (토)",
-      participants: "3/6명",
-      image: "./a.png",
-    },
-  ];
 
   const totalMembers = members.length;
   const CustomPrevArrow = ({ style, onClick, show }) => {
@@ -447,6 +438,31 @@ export default function GatheringDetail() {
   const handleExpandClick = () => {
     setIsExpanded(true);
   };
+  const isApplyDeadlinePassed = () => {
+  if (!gatheringData.applyDeadline) return false;
+  const now = new Date();
+  const deadline = new Date(gatheringData.applyDeadline);
+  return now > deadline;
+};
+
+const isMeetingDatePassed = () => {
+  if (!gatheringData.meetingDate) return false;
+  const now = new Date();
+  const meetingDate = new Date(gatheringData.meetingDate);
+  return now > meetingDate;
+};
+
+const isMaxAttendeesReached = () => {
+  return members.length >= gatheringData.maxAttendees;
+};
+
+const canApplyToGathering = () => {
+  return !isApplyDeadlinePassed() && !isMaxAttendeesReached() && !isMeetingDatePassed();
+};
+
+const canModifyGathering = () => {
+  return !isMeetingDatePassed();
+};
   // 스크롤 위치에 따라 활성 탭 변경
   useEffect(() => {
     const handleScroll = () => {
@@ -747,26 +763,26 @@ export default function GatheringDetail() {
                 )}
               </div>
 
-              {/* 추천 섹션 */}
               <div
                 id="GatheringDetail_recommendations_osk"
                 className="GatheringDetail_section-header_osk"
               >
                 <h3 className="GatheringDetail_section-title_osk">
-                  함께하면 좋을 모임을 찾아드려요
+                  함께하면 좋을 모임을 찾아드려요 
+                  {recommendations.length > 2 && (<span onClick={() => navigate('/a')}> 더보기</span>)}
                 </h3>
               </div>
               <div className="GatheringDetail_recommendations_osk">
                 {recommendations.map((recommendation) => (
                   <div
-                    key={recommendation.id}
+                    key={recommendation.gatheringId}
                     className="GatheringDetail_recommendation-card_osk"
                   >
-                    <img
-                      src={aImage}
-                      alt="추천 모임"
+                    <img 
+                      src={`${url}/image?filename=${recommendation.thumbnailFileName}`}
+                      alt={recommendation.title}
                       className="GatheringDetail_card-image_osk"
-                    />
+                    /> 
                     <div className="GatheringDetail_card-content_osk">
                       <div className="GatheringDetail_card-category_osk">
                         {recommendation.category}
@@ -775,9 +791,7 @@ export default function GatheringDetail() {
                         {recommendation.title}
                       </div>
                       <div className="GatheringDetail_card-info_osk">
-                        📅 {recommendation.date}
-                        <br />
-                        👥 {recommendation.participants}
+                        <CiCalendar /> {recommendation.meetingDate}
                       </div>
                     </div>
                   </div>
@@ -824,8 +838,7 @@ export default function GatheringDetail() {
                   <GoPeople />
                 </span>
                 <span>
-                  {members.length}명 참가 중 (최소 {gatheringData.minAttendees}
-                  명, 최대 {gatheringData.maxAttendees}명)
+                  {gatheringData.acceptedCount}명 참가 중 (최소 {gatheringData.minAttendees} 명, 최대 {gatheringData.maxAttendees}명)
                 </span>
               </div>
 
@@ -858,20 +871,43 @@ export default function GatheringDetail() {
 
                 {/* userId와 gatheringData.userId가 일치하는지 확인하여 버튼 변경 */}
                 {userId === gatheringData.userId ? (
-                  <button
-                    className="GatheringDetail_btn_osk GatheringDetail_btn-modify_osk"
-                    id="GatheringDetail_modify_osk"
-                    onClick={handleModifyButtonClick}
-                  >
-                    수정하기
-                  </button>
+                  // 모임장인 경우 - 수정하기 버튼
+                  canModifyGathering() && (
+                    <button
+                      className="GatheringDetail_btn_osk GatheringDetail_btn-modify_osk"
+                      id="GatheringDetail_modify_osk"
+                      onClick={handleModifyButtonClick}
+                    >
+                      수정하기
+                    </button>
+                  )
                 ) : (
-                  <button
-                    className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
-                    id="GatheringDetail_apply_osk"
-                    onClick={handleApplyButtonClick}
-                  >
-                    신청하기
+                  // 일반 사용자인 경우 - 신청하기 버튼
+                  canApplyToGathering() && (
+                    <button
+                      className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk"
+                      id="GatheringDetail_apply_osk"
+                      onClick={handleApplyButtonClick}
+                    >
+                      신청하기
+                    </button>
+                  )
+                )}
+                {userId !== gatheringData.userId && !canApplyToGathering() && (
+                  <button className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk">
+                    {isMeetingDatePassed() 
+                      ? "이미 종료된 모임입니다." 
+                      : isApplyDeadlinePassed() 
+                      ? "신청 기간이 마감되었습니다." 
+                      : isMaxAttendeesReached() 
+                      ? "정원이 모두 찼습니다." 
+                      : "현재 신청할 수 없습니다."}
+                  </button>
+                )}
+
+                {userId === gatheringData.userId && !canModifyGathering() && (
+                  <button className="GatheringDetail_status-message_osk">
+                    모임 날짜가 지나 수정할 수 없습니다.
                   </button>
                 )}
               </div>
@@ -892,7 +928,6 @@ export default function GatheringDetail() {
         >
           <form onSubmit={handleApplySubmit}>
             {" "}
-            {/* ← onSubmit 위치 수정 */}
             <ModalHeader
               toggle={toggleApplyModal}
               className="GatheringDetail_modal-header_osk"
@@ -992,6 +1027,7 @@ export default function GatheringDetail() {
           </form>
         </Modal>
       )}
+    <Footer/>
     </div>
   );
 }

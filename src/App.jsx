@@ -121,14 +121,14 @@ function App() {
         <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
         
         {/* 로그인한 유저 /user/~~~ */}
-        <Route path="/user/ClassPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />
+        <Route path="/user/classPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
-        <Route path="/user/success" element={<PaymentSuccess />} />
+        <Route path="/user/payment-success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />

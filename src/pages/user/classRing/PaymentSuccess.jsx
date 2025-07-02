@@ -1,40 +1,55 @@
 // /payment/success.jsx
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import { myAxios } from "../../../config"; // 경로는 알아서 맞추기
-import { tokenAtom } from "../../../atoms";
-import { useAtom } from "jotai";
+import { myAxios } from "../../../config"; 
+import { tokenAtom, userAtom,tokenAtom2  } from "../../../atoms";
+import { useSetAtom, useAtomValue, useAtom } from "jotai";
 
 export default function PaymentSuccess() {
     const [params] = useSearchParams();
+    const navigate = useNavigate();
     const [token, setToken] = useAtom(tokenAtom);
-    console.log("✅ PaymentSuccess mounted")
+    const user = useAtomValue(userAtom);
+    const tokenFromLocal = useAtomValue(tokenAtom2); // ✅ localStorage 기반
+    const calendarId = params.get('calendarId');
+    const userCouponId = params.get('userCouponId');
+
+
     useEffect(() => {
-        const orderNo = params.get("orderNo");
-        const calendarId = params.get("calendarId");
-        const userCouponId = params.get("userCouponId");
-        const amount = params.get("amount");
-
-        const approvePayment = async () => {
-            try {
-            await myAxios(token, setToken).post('/user/payment/approve', {
-                orderNo,
-                calendarId,
-                userCouponId: userCouponId || null,
-                amount: amount, 
-                paymentType: '카드',
-            });
-            alert('결제가 완료되었습니다.');
-            } catch (err) {
-            console.error("결제 승인 실패", err);
-            alert('결제 승인 중 문제가 발생했습니다.');
+        if (!token) {
+            const savedToken = localStorage.getItem("token");
+            if (savedToken) {
+                setToken(savedToken); // ✅ 직접 넣어줌
             }
-        };
-
-        if (orderNo && calendarId && amount) {
-            approvePayment();
-        }    
+        }
     }, []);
+
+    useEffect(() => {
+    const paymentKey = params.get('paymentKey');
+    const orderId = params.get('orderId');
+    const amount = params.get('amount');
+
+    if (paymentKey && orderId && amount) {
+        const approve = async () => {
+        try {
+            token && await myAxios(token, setToken).post('/user/payment/approve', {
+            paymentKey,
+            orderNo: orderId,
+            amount,
+            paymentType: '카드',
+            calendarId: parseInt(calendarId),
+            userCouponId: userCouponId ? parseInt(userCouponId) : null
+            });
+            navigate('/classList');
+        } catch (err) {
+            console.error('❌ 결제 승인 실패', err);
+            alert('결제 승인 중 문제가 발생했습니다.');
+        }
+        };
+        approve();
+    }
+    }, [params,token]);
+
 
     return (
     <div style={{ padding: "2rem", textAlign: "center" }}>

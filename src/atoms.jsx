@@ -14,3 +14,5 @@ export const userAtom = atomWithStorage("user",initUser,createJSONStorage(()=>se
 export const tokenAtom = atomWithStorage("token","",createJSONStorage(()=>sessionStorage));
 export const fcmTokenAtom = atomWithStorage("fcmToken", [], createJSONStorage(()=>sessionStorage));
 export const alarmsAtom = atomWithStorage("alarms", [], createJSONStorage(()=>sessionStorage));
+
+export const tokenAtom2 = atomWithStorage("token", "", createJSONStorage(() => localStorage));

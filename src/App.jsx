@@ -55,11 +55,6 @@ import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import Follower from './pages/user/socialRing/Follower.jsx';
 import Following from './pages/user/socialRing/Following.jsx';
-import NoticeManagement from "./pages/admin/NoticeManagement";
-import PaymentManagement from "./pages/admin/PaymentManagement";
-import ReportManagement from "./pages/admin/ReportManagement";
-import SettlementManagement from "./pages/admin/SettlementManagement";
-import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
 
@@ -139,7 +134,7 @@ function App() {
         <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
-        <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
+        <Route path="/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}

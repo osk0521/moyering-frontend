@@ -56,8 +56,8 @@ export default function Sidebar({ user = dummyUser }) {
                     <ul>
                         <li><strong>클래스링</strong></li>
                         <li><a href="/user/mypage/MyClassRegistList">수강 클래스링</a></li>
-                        <li><a href="#">클래스 후기</a></li>
-                        <li><a href="#">질문내역</a></li>
+                        <li><a href="/user/mypage/myReviewList">클래스 후기</a></li>
+                        <li><a href="/user/mypage/myClassInquiry">질문내역</a></li>
 
                         <li><strong>게더링</strong></li>
                         <li><a href="/user/mypage/myGatheringingApplyList">지원한 게더링</a></li>
@@ -70,8 +70,8 @@ export default function Sidebar({ user = dummyUser }) {
                         <li><a href="#">쪽지함</a></li>
 
                         <li><strong></strong></li>
-                        <li><a href="#">찜목록</a></li>
-                        <li><a href="#">마이 쿠폰</a></li>
+                        <li><a href="/user/mypage/myWishlist">찜목록</a></li>
+                        <li><a href="/user/mypage/myCouponList">마이 쿠폰</a></li>
                         <li><a href="#">알림 내역</a></li>
                         <li><a href="#">포인트 내역</a></li>
                         <li><a href="#">내 정보 수정</a></li>

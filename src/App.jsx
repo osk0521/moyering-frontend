@@ -136,8 +136,8 @@ function App() {
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
-        <Route path="/user/mypage/reviewList" element={<ReviewList />} />
-        <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
+        <Route path="/user/mypage/myReviewList" element={<ReviewList />} />
+        <Route path="/user/mypage/myClassInquiry" element={<ClassInquiry />} />
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>

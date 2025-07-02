@@ -30,7 +30,7 @@ export default function MySchedule() {
       }
     };
     fetchSchedule();
-  }, [token]); // ✅ 의존성 정리
+  }, [token]); 
 
   const formatTime = (timeStr) => {
     if (!timeStr) return '';

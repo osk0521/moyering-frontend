@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import styles from './MyClassRegistList.module.css';
 import { CiCalendar, CiLocationOn } from 'react-icons/ci';
 import { GoPeople } from 'react-icons/go';
+import Header from "../../../common/Header";
+import Footer from "../../../../components/Footer";
+import Sidebar from '../common/Sidebar';
 
 const classData = [
   {
@@ -82,12 +85,14 @@ export default function MyClassList() {
     filter === '전체' ? classData : classData.filter((cls) => cls.status === filter);
 
   return (
-    <div className={styles.classPage}>
-      <aside className={styles.sidebar}>
-        <div className={styles.sidebarBox}>회원정보</div>
-      </aside>
+    <>
+      <Header />
 
       <main className={styles.classContent}>
+        <aside className={styles.sidebarArea}>
+          <Sidebar />
+        </aside>
+        <section className={styles.calendarArea}>
         <h2 className={styles.pageTitle}>수강 클래스 목록</h2>
 
         <div className={styles.tabs}>
@@ -129,7 +134,9 @@ export default function MyClassList() {
             </div>
           ))}
         </div>
+      </section>
       </main>
-    </div>
+      <Footer />
+    </>
   );
 }

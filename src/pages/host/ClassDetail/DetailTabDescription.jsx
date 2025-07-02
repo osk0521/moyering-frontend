@@ -1,5 +1,6 @@
 import './DetailTabDescription.css';
 import React, { useEffect } from 'react';
+import { url } from '../../../config';
 
 const DetailTabDescription = ({ classData, registerValidator, isEditMode }) => {
   const {
@@ -33,7 +34,7 @@ const DetailTabDescription = ({ classData, registerValidator, isEditMode }) => {
         <div className="KHJ-description-image-list">
           {images.length > 0 ? (
             images.map((src, idx) => (
-              <img key={idx} src={src} alt={`대표 이미지${idx + 1}`} />
+              <img key={idx} src={`${url}/image?filename=${src}`} alt={`대표 이미지${idx + 1}`} />
             ))
           ) : (
             <p style={{ color: '#888' }}>등록된 이미지가 없습니다.</p>

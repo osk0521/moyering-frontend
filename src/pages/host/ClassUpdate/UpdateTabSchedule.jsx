@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './UpdateTabSchedule.css';
 import 'react-multi-date-picker/styles/colors/teal.css';
-import { Calendar } from 'react-multi-date-picker';
+import { Calendar, DateObject } from 'react-multi-date-picker';
 import React from 'react';
 
 const UpdateTabSchedule = ({ classData, setClassData }) => {
@@ -20,6 +20,10 @@ const UpdateTabSchedule = ({ classData, setClassData }) => {
         }
       }));
     }
+  }, []);
+
+  useEffect(() => {
+    console.log("👀 schedule 초기값 확인:", schedule.dates);
   }, []);
 
   const addScheduleDetail = () => {
@@ -81,7 +85,15 @@ const UpdateTabSchedule = ({ classData, setClassData }) => {
   };
 
   const handleDatesChange = (dates) => {
-    const formattedDates = dates.map((d) => d.format("YYYY-MM-DD"));
+    const formattedDates = dates.map((d) => ({
+      calendarId: null, // 신규 날짜는 아직 ID 없음
+      classId: classData.classId,
+      startDate: d.format("YYYY-MM-DD"),
+      endDate: d.format("YYYY-MM-DD"),
+      status: "임시저장",
+      registeredCount: 0
+    }));
+
     setClassData(prev => ({
       ...prev,
       schedule: {
@@ -174,12 +186,12 @@ const UpdateTabSchedule = ({ classData, setClassData }) => {
           <div className="add-entry" onClick={addScheduleDetail}>+ 내용 추가하기</div>
         </div>
 
-        <div className="KHJ-inline-form-row">
+        {/* <div className="KHJ-inline-form-row">
           <label className="KHJ-people-label"><span>*</span>일정설정</label>
           <div className="KHJ-date-picker-container">
             <Calendar
               multiple
-              value={schedule.dates}
+              value={(schedule.dates || []).map(item => new DateObject(item.startDate))}
               onChange={handleDatesChange}
               format="YYYY-MM-DD"
               locale={korean}
@@ -201,9 +213,9 @@ const UpdateTabSchedule = ({ classData, setClassData }) => {
               }}
             />
           </div>
-        </div>
+        </div> */}
 
-        {schedule.dates.length > 0 && (
+        {/* {schedule.dates.length > 0 && (
           <div className="KHJ-selected-dates">
             <strong>선택한 날짜:</strong>
             <ul>
@@ -212,7 +224,7 @@ const UpdateTabSchedule = ({ classData, setClassData }) => {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

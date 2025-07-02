@@ -61,17 +61,18 @@
   box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
 }
 .MyGatheringList_btn-add_osk {
-    right: 145px;
-    top: 270px;
-    position: absolute;
-    text-decoration:none;
+    right: -264px;
+    top: 3px;
+    position: relative;
+    text-decoration: none;
     background-color: #ffc107;
     border: none;
     border-radius: 5px;
-    padding: 10px 17px;
+    padding: 5px 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
+    max-height: 40px;
 }
 .MyGatheringList_btn-add_osk > a {
     color: white;
@@ -340,7 +341,7 @@
   font-weight: 500;
 }
 
-.MyGatheringList_badge_osk.MyGatheringList_orange_osk {
+.MyGatheringList_badge_osk.MyGatheringList_red_osk {
   background: #ff6b6b;
   color: white;
 }
@@ -388,8 +389,11 @@
   display: flex;
   gap: 8px;
   margin-top: 12px;
+  flex-direction: column;
 }
-
+.MyGatheringList_actions_osk > a{
+  text-decoration: none;
+}
 .MyGatheringList_btn-cancel_osk {
   background: #f44336;
   color: white;

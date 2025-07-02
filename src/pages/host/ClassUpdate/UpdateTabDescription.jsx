@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import './UpdateTabDescription.css';
 import React from 'react'; // 이 한 줄만 추가!
+import { url } from '../../../config';
 
 const UpdateTabDescription = ({ classData, setClassData }) => {
     const { description } = classData;
+
     const [images, setImages] = useState([
-        description.img1 && description.img1 instanceof File ? URL.createObjectURL(description.img1) : null,
-        description.img2 && description.img2 instanceof File ? URL.createObjectURL(description.img2) : null,
-        description.img3 && description.img3 instanceof File ? URL.createObjectURL(description.img3) : null,
-        description.img4 && description.img4 instanceof File ? URL.createObjectURL(description.img4) : null,
-        description.img5 && description.img5 instanceof File ? URL.createObjectURL(description.img5) : null,
+        description.imgName1,
+        description.imgName2,
+        description.imgName3,
+        description.imgName4,
+        description.imgName5,
     ]);
 
     const handleImageChange = (e, index) => {
@@ -21,6 +23,7 @@ const UpdateTabDescription = ({ classData, setClassData }) => {
         const updatedImages = [...images];
         updatedImages[index] = previewUrl;
         setImages(updatedImages);
+        setClassData({...classData, description:{...classData.description, [e.target.name]:file}})
 
         // 2. classData.description에 실제 파일 저장
         const imageKey = `img${index + 1}`;
@@ -58,11 +61,12 @@ const UpdateTabDescription = ({ classData, setClassData }) => {
                                 accept="image/*"
                                 onChange={(e) => handleImageChange(e, index)}
                                 id={`KHJ-image-input-${index}`}
+                                name={`img${index+1}`}
                                 style={{ display: 'none' }}
                             />
                             <label htmlFor={`KHJ-image-input-${index}`} className="KHJ-image-box-label">
                                 {image ? (
-                                    <img src={image} alt={`이미지 ${index + 1}`} className="KHJ-image-box-img" />
+                                    <img src={image.startsWith('blob:')? image : `${url}/image?filename=${image}`} alt={`이미지 ${index + 1}`} className="KHJ-image-box-img" />
                                 ) : (
                                     <div className="KHJ-plus-icon">+</div>
                                 )}

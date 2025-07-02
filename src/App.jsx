@@ -24,12 +24,14 @@ import './App.css';
 import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
 import UserFeed from './pages/user/socialRing/UserFeed';
+import Test2 from './pages/user/socialRing/Test2.jsx';
 
 // 관리자 페이지
 import BannerCreateModal from "./pages/admin/BannerCreateModal";
 import BannerManagement from "./pages/admin/BannerManagement";
 // import CategoryManagement from "./pages/admin/CategoryManagement";
 import ClassManagement from "./pages/admin/ClassManagement";
+import ClassManagementDetail from "./pages/admin/ClassManagementDetail";
 import Dashboard from "./pages/admin/Dashboard";
 import Login from "./pages/admin/Login";
 import MemberManagement from "./pages/admin/MemberManagement";
@@ -37,12 +39,22 @@ import NoticeCreate from "./pages/admin/NoticeCreate";
 import NoticeEdit from "./pages/admin/NoticeEdit"
 import CouponManagement from './pages/admin/CouponManagement.jsx';
 import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
-
+import UnsettlementManagement from './pages/admin/UnsettlementManagement.jsx';  
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
+import NoticeManagement from "./pages/admin/NoticeManagement";
+import PaymentManagement from "./pages/admin/PaymentManagement";
+import ReportManagement from "./pages/admin/ReportManagement";
+import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
+
+
+
+
+
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
-import FollowList from './pages/user/socialRing/Followlist.jsx';
+import Follower from './pages/user/socialRing/Follower.jsx';
+import Following from './pages/user/socialRing/Following.jsx';
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
@@ -109,11 +121,11 @@ function App() {
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
-
+<Route path="/test2" element={<Test2 />} />
         
-        <Route path="/myFeed" element={<MyFeed />} />
+        
         <Route path="/scrapList" element={<ScrapList />} />
-        <Route path="/followList" element={<FollowList />} />
+        
         <Route path="/join" element={<UserJoin />} />
         <Route path="/joinCategory" element={<UserJoinCategory />} />
         <Route path="/joinSuccess" element={<UserJoinSuccess />} />
@@ -141,6 +153,11 @@ function App() {
         <Route exact path="/user/mypage/myGatheringingApplyList" element={<MyGatheringApplyList />}></Route>
         <Route exact path="/user/mypage/myGatheringInquiryList" element={<MyGatherInquiryList />}></Route>
         <Route path="/user/mypage/myAlarmList" element={<MyAlarmList />} />
+        <Route path="/user/mypage/follower" element={<Follower />} />
+        <Route path="/user/mypage/following" element={<Following />} />
+        <Route path="/user/mypage/myFeed" element={<MyFeed />} />
+        
+
 
         {/* 강사 /host/~~~~~ */}
         <Route path="/host/intro" element={<HostIntroPage />} />
@@ -180,6 +197,7 @@ function App() {
         <Route path="/admin/dashboard" element={<Dashboard />} />        {/* 대시보드 페이지 */}
         <Route path="/admin/member" element={<MemberManagement />} />   {/* 회원 관리 페이지 */}
         <Route path="/admin/class" element={<ClassManagement />} />   {/* 클래스 관리 페이지 */}
+        <Route path="/admin/class/detail" element={<ClassManagementDetail />} />   {/* 클래스 관리 상세 페이지 */}
         <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
         <Route path="/admin/notice/edit/:noticeId" element={<NoticeEdit />} />     {/* 공지사항 수정 페이지  */}
@@ -189,7 +207,7 @@ function App() {
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
-        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산관리 페이지  */}
+        <Route path="/admin/unsettlement" element={<UnsettlementManagement />} />          {/* 미정산 관리 페이지  */}
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
       </Routes>
     </Router>

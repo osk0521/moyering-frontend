@@ -340,7 +340,7 @@ const ReportManagement = () => {
             />
           </div>
         </div>
-        <br></br>
+   
 
         {/* 필터 버튼들 */}
         <div className="filter-sectionHY">
@@ -356,9 +356,8 @@ const ReportManagement = () => {
         </div>
   
       {/* 검색 결과 수 표시 */}
-        <span className="result-countHY">
           총 <strong>{filteredAndSortedReports.length}</strong>건
-        </span>
+        
    
 
       {/* 신고 테이블 */}

@@ -48,9 +48,12 @@ const DetailTabDescription = ({ classData, registerValidator, isEditMode }) => {
       <div className="KHJ-description-detail-section">
         <div className="KHJ-description-detail-label">클래스 상세설명</div>
         <div className="KHJ-description-detail-content KHJ-description-box">
-          <p className="KHJ-description-paragraph">
-            {detailDescription || '설명이 없습니다.'}
-          </p>
+          <div
+            className="KHJ-description-paragraph"
+            dangerouslySetInnerHTML={{
+              __html: detailDescription || '<p>설명이 없습니다.</p>',
+            }}
+          />
         </div>
       </div>
     </div>

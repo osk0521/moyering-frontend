@@ -128,10 +128,9 @@ export default function ProfileManagement() {
           </div>
 
           <div className="KHJ-host-profile-group">
-            <label>휴대폰 인증</label>
+            <label>전화번호</label>
             <div className="KHJ-host-inline-input">
               <input type="text" placeholder={host.tel} />
-              <button type="button">인증</button>
             </div>
             <p className="KHJ-host-desc">
               실제 클래스를 운영하는 본인 연락처를 입력하세요.<br />

@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
     { id: 'member', label: '회원관리', icon: <MdPeople />, path: '/admin/member' },
     { id: 'class', label: '클래스 관리', icon: <MdSchool />, path: '/admin/class' },
     { id: 'payment', label: '결제 관리', icon: <MdPayment />, path: '/admin/payment' },
-    { id: 'settlement', label: '정산 관리', icon: <MdAccountBalance />, path: '/admin/settlement' },
+    { id: 'settlement', label: '미정산 관리', icon: <MdAccountBalance />, path: '/admin/unsettlement' },
     { id: 'coupon', label: '쿠폰 관리', icon: <MdLocalOffer />, path: '/admin/coupon' },
     { id: 'badge', label: '배지 관리', icon: <MdEmojiEvents />, path: '/admin/badge' },
     { id: 'banner', label: '배너 관리', icon: <MdImage />, path: '/admin/banner' },

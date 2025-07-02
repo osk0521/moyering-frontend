@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './HostProfile.css';
 import ProfileFooter from './ProfileFooter';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
-import { myAxios } from '../../config';
+import { myAxios, url } from '../../config';
 
 export default function ProfileManagement() {
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
   const [host, setHost] = useState({});
   const [text, setText] = useState('');
@@ -40,12 +40,13 @@ export default function ProfileManagement() {
   }
 
   useEffect(() => {
-    myAxios(token).get(`/host/hostProfile`, {
+    token && myAxios(token,setToken).get(`/host/hostProfile`, {
       params: {
         hostId: user.hostId
       }
     })
       .then(res => {
+        console.log(res.data);
         setHost(res.data);
         setInitialHost(res.data);
         setText(res.data.intro || '');
@@ -119,7 +120,7 @@ export default function ProfileManagement() {
         <form className="KHJ-host-profile-form">
           <div className="KHJ-host-profile-group KHJ-host-image-upload">
             <label>프로필 사진</label>
-            <img src={idImagePreview || host.profile || ''} alt="프로필" className="KHJ-host-profile-image" name="profile" />
+            <img src={idImagePreview || `${url}/image?filename=${host.profile}` || ''} alt="프로필" className="KHJ-host-profile-image" name="profile" />
             <div className="KHJ-host-file-box">
               <input type="file" placeholder="첨부파일" onChange={handleImageUpload} hidden name='profile' ref={fileInputRef}/>
               <button type="button" onClick={()=>fileInputRef.current.click()}>파일 선택</button>

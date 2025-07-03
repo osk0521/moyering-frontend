@@ -13,16 +13,18 @@ export default function FeedEdit() {
   const fileInputRef = useRef();
   const [token, setToken] = useAtom(tokenAtom)
   const user = useAtomValue(userAtom);
-  
-  const [imageFiles, setImageFiles] = useState(null);
+
+  const [imageFiles, setImageFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState('');
   const [text, setText] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [removeUrls, setRemoveUrls] = useState([]);
 
-console.log("userAtom에서 가져온 user:", user);
+  console.log("userAtom에서 가져온 user:", user);
   // 초기 데이터 로드
   useEffect(() => {
     if (!token) return;
@@ -55,7 +57,7 @@ console.log("userAtom에서 가져온 user:", user);
   if (error) return <div className="error">{error}</div>;
 
   const handleImageChange = e => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files).slice(0,5);
     if (!files.length) return;
     setImageFiles(files);
     setPreviewUrls(files.map(file => URL.createObjectURL(file)));
@@ -77,39 +79,71 @@ console.log("userAtom에서 가져온 user:", user);
   const handleSubmit = async () => {
     console.log('▶ handleSubmit 호출됨');
     const form = new FormData();
-    form.append('feed', new Blob([
-      JSON.stringify({ content: text, tags })
-    ], { type: 'application/json' }));
-    
-    if (imageFiles.length) {
-      imageFiles.forEach(file => form.append('images', file));
-    }
-    form.append('feedId',feedId);
-    form.append('userId',user.id);
+    // form.append('feed', new Blob([JSON.stringify({ content: text, tags })], { type: 'application/json' }));
+    form.append("text", text)
+    form.append("tags", tags)
 
-    // try {
-    //   await myAxios(token, setToken).patch(
-    //     `/user/socialing/feed/${feedId}`,
-    //     form
-    //     // { headers: { 'Content-Type': 'multipart/form-data' } }
-    //   );
-    //   navigate(`/feed/${feedId}`);
-    // } catch (e) {
-    //   console.error(e);
-    //   setError('수정에 실패했습니다.');
+
+
+    // if (imageFiles && imageFiles.length) {
+    //   imageFiles.forEach(file => form.append('images', file));
     // }
+    // 5개의 자리(1~5)에 대해
+  for (let i = 0; i < 5; i++) {
+    if (imageFiles[i]) {
+      // 새로 업로드한 파일이 있으면 파일을 보냄
+      form.append(`img${i+1}`, imageFiles[i]);
+    } else if (previewUrls[i] && !previewUrls[i].startsWith("blob:")) {
+      // 기존 서버 이미지가 있으면 파일명이든 경로든 문자열로 보내기
+      form.append(`img${i+1}`, previewUrls[i]);
+    } else {
+      // 아무것도 없으면 빈 문자열
+      form.append(`img${i+1}`, "");
+    }
+  }
+
+    if (removeUrls.length) {
+      removeUrls.forEach(url => form.append('removeUrls', url));
+    }
+
+    for (var pair of form.entries()) {
+      console.log(pair[0] + ':', pair[1]);
+    }
+
     try {
-      await myAxios(token, setToken).post(
-        "socialing/feed",
-        form
-        // { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
+      await myAxios(token, setToken).patch(`/user/socialing/feed/${feedId}`, form);
       navigate(`/feed/${feedId}`);
     } catch (e) {
       console.error(e);
       setError('수정에 실패했습니다.');
     }
+  }
+
+  const prevImage = () => {
+    setCurrentIndex(i => (i === 0 ? previewUrls.length - 1 : i - 1));
   };
+
+  const nextImage = () => {
+    setCurrentIndex(i => (i === previewUrls.length - 1 ? 0 : i + 1));
+  };
+
+  const removeCurrent = () => {
+    const idx = currentIndex;
+    const removedUrl = previewUrls[idx];
+    if (removedUrl && !removedUrl.startsWith("blob:")) {
+      // 서버에 삭제할 파일 경로 추가
+      setRemoveUrls(prev => [...prev, removedUrl.replace(`${url}/iupload/`, '')]);
+    }
+
+    const newFiles = imageFiles.filter((_, i) => i !== idx);
+    const newUrls = previewUrls.filter((_, i) => i !== idx);
+    setImageFiles(newFiles);
+    setPreviewUrls(newUrls);
+    if (idx === newUrls.length && idx > 0) {
+      setCurrentIndex(idx - 1);
+    }
+  };
+
 
   return (
     <div className="KYM-FeedEdit-container">
@@ -129,14 +163,23 @@ console.log("userAtom에서 가져온 user:", user);
       <div className="KYM-FeedEdit-main">
         <div className="KYM-FeedEdit-image-box" onClick={() => fileInputRef.current?.click()}>
           {previewUrls.length > 0 ? (
-            previewUrls.map((img, idx) => (
-              <img key={idx} src={img.startsWith('blob:') ? img : `${url}/iupload/${img}`} 
-              alt={`미리보기${idx}`} style={{ width: '100px', marginRight: '8px' }} />
-            ))
+            <>
+              <button className="carousel-btn left" onClick={e => { e.stopPropagation(); prevImage(); }}>‹</button>
+              <img
+                className="carousel-img"
+                src={previewUrls[currentIndex].startsWith('blob:')
+                  ? previewUrls[currentIndex]
+                  : `${url}/iupload/${previewUrls[currentIndex]}`
+                }
+                alt={`preview-${currentIndex}`}
+              />
+              <button className="carousel-btn right" onClick={e => { e.stopPropagation(); nextImage(); }}>›</button>
+              <button className="carousel-remove" onClick={e => { e.stopPropagation(); removeCurrent(); }}>×</button>
+            </>
           ) : (
-            <span className="KYM-FeedEdit-placeholder">사진 선택</span>
+            <span className="KYM-FeedEdit-placeholder">사진 선택 (최대 5장)</span>
           )}
-           <input
+          <input
             type="file"
             accept="image/*"
             multiple

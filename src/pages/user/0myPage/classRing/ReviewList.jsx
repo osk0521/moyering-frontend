@@ -24,6 +24,8 @@ export default function ReviewList() {
   const [maxDate, setMaxDate] = useState(null);
   const [openReviewId, setOpenReviewId] = useState(null);
   const [ratings, setRatings] = useState({});
+  const [contents, setContents] = useState({});
+  const [images, setImages] = useState({});
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -96,9 +98,31 @@ export default function ReviewList() {
   };
 
   // 리뷰등록 (사진과 함께~)
-  // const handleSubmitReview = async(item) => {
+  const handleSubmitReview = async(item) => {
+    const formData = new FormData();
+    formData.append("content", contents[item.calendarId] || "");
+    formData.append("star", ratings[item.calendarId]);
+    formData.append("calendarId", item.calendarId);
+    formData.append("hostId", item.hostId);
+
+    if (images[item.calendarId]) {
+      formData.append("reviewImg", images[item.calendarId]);
+    }
+
+    try {
+      token && await myAxios(token, setToken).post("/user/mypage/write-review", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("리뷰가 등록되었습니다!");
+      } catch (err) {
+        console.error("리뷰 등록 실패:", err);
+      }
+    };
     
-  // }
+
+  
 
   return (
     <>
@@ -196,13 +220,21 @@ export default function ReviewList() {
                       <textarea
                         placeholder="이 클래스는 어땠나요? 리뷰를 남겨주세요 😊"
                         className={styles.textarea}
+                        required
+                        value={contents[item.calendarId] || ""}
+                        onChange={(e) =>
+                          setContents((prev) => ({ ...prev, [item.calendarId]: e.target.value }))
+                        }
                       />
                       </div>
                       <div className={styles.reviewUploadRow}>
                         <input
                           type="file"
                           accept="image/*"
-                          onChange={(e) => handleImageChange(e, item.calendarId)}
+                          onChange={(e) => {
+                            setImages((prev) => ({ ...prev, [item.calendarId]: e.target.files[0] }));
+                            handleImageChange(e, item.calendarId);
+                          }}
                           className={styles.fileInput}
                         />
                       </div>
@@ -217,7 +249,7 @@ export default function ReviewList() {
                           </span>
                         ))}
                       </div>
-                      <button className={styles.submitButton}>등록</button>
+                      <button className={styles.submitButton} onClick={()=>handleSubmitReview(item)}>등록</button>
                     </>
                   ) : (
                       <>

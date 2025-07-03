@@ -65,7 +65,7 @@ const StudentSearch = () => {
           <h4>검색 결과 : {(Array.isArray(students) ? students.length : 0)}건</h4>
           {students.map((student) => (
             <div key={student.id} className="KHJ-student-item">
-              <div className="KHJ-student-info" onClick={() => handleStudentClick(student)}>
+              <div className="KHJ-student-info" /*onClick={() => handleStudentClick(student)}*/>
                 <div className="KHJ-student-details">
                   <span className="KHJ-student-name">{student.name}</span>
                   <span>전화번호: {student.tel}</span>
@@ -73,7 +73,7 @@ const StudentSearch = () => {
                   <span>내 강의 수: 1</span>
                 </div>
               </div>
-              {selectedStudent === student.id && (
+              {/* {selectedStudent === student.id && (
                 <div className="KHJ-dropdown-classes">
                   {student.classes.map((classItem, index) => (
                     <div key={index} className="KHJ-class-item">
@@ -86,7 +86,7 @@ const StudentSearch = () => {
                     </div>
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
           ))}
         </div>

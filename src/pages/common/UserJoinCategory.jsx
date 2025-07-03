@@ -5,6 +5,7 @@ import { myAxios, url } from '../../config';
 import axios from 'axios';
 import { useAtom } from 'jotai';
 import { tokenAtom } from './../../atoms';
+import LoginHeader from './LoginHeaders';
 
 const UserJoinCategory = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -13,6 +14,9 @@ const UserJoinCategory = () => {
   const location = useLocation();
   const [token, setToken] = useAtom(tokenAtom);
   const nUser = location.state;
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
 
   const [user, setUser] = useState({
     ...nUser,
@@ -22,6 +26,16 @@ const UserJoinCategory = () => {
     category4: selectedCategories[3] || '',
     category5: selectedCategories[4] || '',
   });
+
+  const checkFormValidity = () => {
+    if (
+      user.category1 && user.intro
+    ) {
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+  }
 
   useEffect(() => {
     myAxios()
@@ -45,11 +59,12 @@ const UserJoinCategory = () => {
       category4: selectedCategories[3] || '',
       category5: selectedCategories[4] || '',
     });
-     console.log("선택된 카테고리들:", selectedCategories);
+    console.log("선택된 카테고리들:", selectedCategories);
   }, [selectedCategories]); // selectedCategories가 변경될 때마다 실행
 
   const edit = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+    checkFormValidity();
   };
 
   const toggleCategory = (categoryName) => {
@@ -100,44 +115,54 @@ const UserJoinCategory = () => {
   };
 
   return (
-    <div className="category-wrapper">
-      <h2 className="category-title">회원가입</h2>
-      <p className="category-sub">
-        관심있는 카테고리를 골라보세요!
-        <br />최대 5개까지 고를 수 있습니다!
-      </p>
+    <>
+      <LoginHeader />
+      <div className="category-wrapper">
+        <h2 className="category-title">회원가입</h2>
+        <p className="category-sub">
+          관심있는 카테고리를 골라보세요!
+          <br />최대 5개까지 고를 수 있습니다!
+        </p>
 
-      <div className="category-box">
-        {categoryList.map((cat, index) => (
-          <div
-            key={index}
-            className={`category-item ${selectedCategories.includes(cat.subCategoryName) ? 'selected' : ''}`}
-            onClick={() => toggleCategory(cat.subCategoryName)} // ID 값으로 선택
-          >
-            {cat.subCategoryName}
-          </div>
-        ))}
+        <div className="category-box">
+          {categoryList.map((cat, index) => (
+            <div
+              key={index}
+              className={`category-item ${selectedCategories.includes(cat.subCategoryName) ? 'selected' : ''}`}
+              onClick={() => toggleCategory(cat.subCategoryName)} // ID 값으로 선택
+            >
+              {cat.subCategoryName}
+            </div>
+          ))}
+        </div>
+
+        <div className="intro-section">
+          <label className="intro-label">한줄 소개</label>
+          <textarea
+            className="intro-textarea"
+            placeholder="자신을 간단히 소개해주세요."
+            rows="3"
+            maxLength={500}
+            name="intro"
+            value={user.intro}
+            onChange={edit}
+          />
+          <div className="intro-count">{(user.intro ?? '').length}/500</div>
+          <p className="intro-desc">한줄 소개는 게더링 참여시 모임장에게 보여집니다.</p>
+        </div>
+        <div
+          className="tooltip-wrapper"
+          onMouseEnter={() => !isFormValid && setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        ></div>
+        <button className="submit-btn" onClick={submit} disabled={!isFormValid}>
+          회원가입
+        </button>
+        {showTooltip && (
+          <div className="tooltip-msg">아직 모든 항목을 입력하지 않았습니다!</div>
+        )}
       </div>
-
-      <div className="intro-section">
-        <label className="intro-label">한줄 소개</label>
-        <textarea
-          className="intro-textarea"
-          placeholder="자신을 간단히 소개해주세요."
-          rows="3"
-          maxLength={500}
-          name="intro"
-          value={user.intro}
-          onChange={edit}
-        />
-        <div className="intro-count">{(user.intro ?? '').length}/500</div>
-        <p className="intro-desc">한줄 소개는 게더링 참여시 모임장에게 보여집니다.</p>
-      </div>
-
-      <button className="submit-btn" onClick={submit}>
-        회원가입
-      </button>
-    </div>
+    </>
   );
 };
 

@@ -14,7 +14,6 @@ const DetailTabSchedule = ({couponList}) => {
                 <th>번호</th>
                 <th>쿠폰 이름</th>
                 <th>할인</th>
-                <th>기간</th>
                 <th>매수</th>
               </tr>
             </thead>
@@ -24,7 +23,6 @@ const DetailTabSchedule = ({couponList}) => {
                   <td>{c.classCouponId}</td>
                   <td>{c.couponName || '(미지정)'}</td>
                   <td>{c.discount}{c.discountType === 'RT' ? '%' : '원'}</td>
-                  <td>{c.validFrom} ~ {c.validUntil}</td>
                   <td>{c.amount}</td>
                 </tr>
               ))}

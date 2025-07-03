@@ -1,86 +1,114 @@
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import koLocale from '@fullcalendar/core/locales/ko';
+import React, { useEffect, useState } from 'react';
 import './ClassCalendar.css';
-import React, { useEffect, useState } from 'react'; // 이 한 줄만 추가!
 import { myAxios } from '../../config';
 import { tokenAtom, userAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 import { useNavigate } from 'react-router';
 
-
-
 const ClassCalendar = () => {
   const token = useAtomValue(tokenAtom);
-  const user = useAtomValue(userAtom)
-  const [calendarData, setCalendarData] = useState([]);
-  const classColorMap = {};
+  const user = useAtomValue(userAtom);
   const navigate = useNavigate();
-  const handleEventClick = (info) => {
-    const classId = info.event.extendedProps.classId;
-    const calendarId = info.event.extendedProps.calendarId;
-    navigate(`/host/detail/${classId}/${calendarId}`)
-  }
+  const [calendarData, setCalendarData] = useState([]);
 
-  const getBrightColor = () => {
-    const hue = Math.floor(Math.random() * 360);     // 색상 범위 (0~360도)
-    const saturation = 70 + Math.random() * 20;      // 채도 70~90%
-    const lightness = 60 + Math.random() * 10;       // 밝기 60~70%
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-  };
+  const today = new Date();
+  const [year, setYear] = useState(today.getFullYear());
+  const [month, setMonth] = useState(today.getMonth());
 
-  const getColorByClassId = (classId) => {
-    if (!classColorMap[classId]) {
-      classColorMap[classId] = getBrightColor();
-    }
-    return classColorMap[classId];
-  }
-
-
-  const addOneDay = (dateStr) => {
-    const date = new Date(dateStr);
-    date.setDate(date.getDate() + 1);
-    return date.toISOString().split('T')[0]; // 'YYYY-MM-DD' 포맷
-  };
-
-  const events = calendarData.map(item => ({
-    title: item.name,
-    start: item.startDate,
-    end: addOneDay(item.startDate),
-    backgroundColor: getColorByClassId(item.classId),
-    borderColor: getColorByClassId(item.classId),
-    allDay: true,
-    classId:item.classId,
-    calendarId:item.calendarId,
-  }))
   useEffect(() => {
-    myAxios(token).get(`/host/calendar?hostId=${user.hostId}`)
-      .then(res => {
-        setCalendarData(res.data);
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }, [token, user.hostId])
+    if (!token || !user.hostId) return;
+    myAxios(token)
+      .get(`/host/calendar?hostId=${user.hostId}`)
+      .then((res) => setCalendarData(res.data))
+      .catch((err) => console.error(err));
+  }, [token, user.hostId]);
+
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+
+  const handlePrev = () => {
+    if (month === 0) {
+      setYear((prev) => prev - 1);
+      setMonth(11);
+    } else {
+      setMonth((prev) => prev - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (month === 11) {
+      setYear((prev) => prev + 1);
+      setMonth(0);
+    } else {
+      setMonth((prev) => prev + 1);
+    }
+  };
+
+  const formatTime = (timeStr) => {
+    if (!timeStr) return '';
+    const [h, m] = timeStr.split(':');
+    const hour = parseInt(h, 10);
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+    return `${isPM ? '오후' : '오전'} ${formattedHour}:${m}`;
+  };
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const lastDate = new Date(year, month + 1, 0).getDate();
+
+  const dates = [];
+  for (let i = 0; i < firstDay; i++) dates.push(null);
+  for (let d = 1; d <= lastDate; d++) dates.push(d);
+
+  const mStr = String(month + 1).padStart(2, '0');
 
   return (
     <div className="KHJ-class-calendar-wrapper">
       <h3 className="KHJ-class-calendar-title">일정 캘린더</h3>
-      <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        headerToolbar={{
-          left: 'prev',
-          center: 'title',
-          right: 'next'
-        }}
-        events={events}
-        eventClick={handleEventClick}
-        height="auto"
-        locale={koLocale}
-      />
+
+      <div className="calendar-header">
+        <button className="calendar-header-btn" onClick={handlePrev}>〈</button>
+        <span className="calendar-month-label">{year}년 {month + 1}월</span>
+        <button className="calendar-header-btn" onClick={handleNext}>〉</button>
+      </div>
+
+      <div className="calendar-grid">
+        {days.map((day, idx) => (
+          <div key={idx} className="calendar-day">{day}</div>
+        ))}
+
+        {dates.map((date, idx) => {
+          if (date === null) return <div key={idx} className="calendar-cell empty"></div>;
+
+          const dStr = String(date).padStart(2, '0');
+          const fullDate = `${year}-${mStr}-${dStr}`;
+          const daySchedules = calendarData.filter(item => item.startDate === fullDate);
+
+          const isToday =
+            today.getFullYear() === year &&
+            today.getMonth() === month &&
+            today.getDate() === date;
+
+          return (
+            <div
+              key={idx}
+              className={`calendar-cell ${isToday ? 'today-cell' : ''}`}
+            >
+              <div className="date-num">{date}</div>
+              {daySchedules.map((item, i) => (
+                <div
+                  key={i}
+                  className="schedule-box"
+                  onClick={() => navigate(`/host/detail/${item.classId}/${item.calendarId}`)}
+                >
+                  {item.name}
+                  <br />
+                  {formatTime(item.startTime)}
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -69,7 +69,9 @@
   font-size: 14px;
   color: #444;
 }
-
+.KHJ-description-detail-content img{
+  max-width: 100px;
+}
 .KHJ-description-paragraph {
   margin-bottom: 10px;
 }

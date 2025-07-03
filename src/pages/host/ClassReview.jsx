@@ -3,6 +3,7 @@ import './ClassReview.css';
 import { myAxios } from './../../config';
 import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
+import { useLocation } from 'react-router';
 
 const ClassReview = () => {
   const [searchFilter, setSearchFilter] = useState('클래스명');
@@ -19,23 +20,28 @@ const ClassReview = () => {
   const [replyStatus, setReplyStatus] = useState('');
   const [pageInfo,setPageInfo] = useState([]);
 
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const calendarParam = params.get("calendarId");
+
   useEffect(() => {
-    if (token) {
-      myAxios(token, setToken)
-        .get('/host/review', {
-          params: {
-            hostId: user.hostId,
-          },
-        })
+    const params ={
+      hostId:user.hostId,
+      calendarId:calendarParam ? Number(calendarParam) : undefined,
+      page:0,
+      size:10,
+    }  
+    
+    token&&myAxios(token, setToken).post('/host/review/search', params)
         .then((res) => {
           console.log(res.data);
-          setReviews(res.data);
+          setReviews(res.data.content);
+          setPageInfo(res.data.pageInfo);
         })
         .catch((err) => {
           console.log(err);
         });
-    }
-  }, [token, user.hostId]);
+    },[token]);
 
   const handleSearch = () => {
     const params = {
@@ -51,9 +57,7 @@ const ClassReview = () => {
 
     console.log("✅ 전송 데이터 확인:", JSON.stringify(params, null, 2));
 
-    token &&
-      myAxios(token, setToken)
-        .post('/host/review/search', params)
+    token &&myAxios(token, setToken).post('/host/review/search', params)
         .then((res) => {
           console.log(res.data.content);
           setReviews(res.data.content);

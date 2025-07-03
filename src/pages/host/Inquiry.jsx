@@ -3,6 +3,7 @@ import './Inquiry.css';
 import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
 import { myAxios } from '../../config';
+import { useLocation } from 'react-router';
 
 const Inquiry = () => {
   const [searchFilter, setSearchFilter] = useState('클래스명');
@@ -17,18 +18,29 @@ const Inquiry = () => {
   const [inquiry, setInquiry] = useState([]);
   const [selectedInquiryId, setSelectedInquiryId] = useState(null);
   const [replyStatus, setReplyStatus] = useState('');
-  const [pageInfo,setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState([]);
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const classIdParam = params.get("classId");
+  const calendarIdParam = params.get("calendarId")
 
   useEffect(() => {
-    token && myAxios(token, setToken).get(`/host/inquiry?hostId=${user.hostId}`)
+    const params = {
+      hostId: user.hostId,
+      classId: classIdParam ? Number(classIdParam) : undefined,
+      calendarId: calendarIdParam ? Number(calendarIdParam) : undefined,
+      page: 0,
+      size: 10,
+    };
+
+    token && myAxios(token, setToken).post("/host/inquiry/search", params)
       .then(res => {
-        console.log(res.data);
-        setInquiry(res.data);
+        setInquiry(res.data.content);
+        setPageInfo(res.data.pageInfo);
       })
-      .catch(err => {
-        console.log(err);
-      })
-  }, [token])
+      .catch(err => console.error(err));
+  }, [token]);
 
 
   const handleSearch = () => {

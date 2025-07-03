@@ -220,8 +220,8 @@ const ClassUpdatePage = () => {
         <div className="KHJ-info-grid">
           <div><div className="KHJ-label">클래스</div><div>-</div></div>
           <div><div className="KHJ-label">ID</div><div>{classId}</div></div>
-          <div><div className="KHJ-label">상태</div><div className="KHJ-status current">현재</div></div>
-          <div><div className="KHJ-label">검수상태</div><div className="KHJ-status current">현재</div></div>
+          <div><div className="KHJ-label">상태</div><div className="KHJ-status current">{classData.status}</div></div>
+          <div><div className="KHJ-label">검수상태</div><div className="KHJ-status current">{classData.status !== "검수중" ? "모집중" : classData.status}</div></div>
         </div>
       </div>
 

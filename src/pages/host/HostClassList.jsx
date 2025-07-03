@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './HostClassList.css';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { myAxios } from '../../config';
+import { myAxios, url } from '../../config';
 import { useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
 
@@ -130,10 +130,10 @@ const ClassList = () => {
         <div className="KHJ-status-section">
           <label>클래스 상태</label>
           <div className="KHJ-checkbox-group">
-            {['ongoing', 'upcoming', 'completed'].map(key => (
+            {['검수중', '검수완료', '모집중'].map(key => (
               <label key={key}>
                 <input type="checkbox" checked={classStatus[key]} onChange={() => setClassStatus({ ...classStatus, [key]: !classStatus[key] })} />
-                {key === 'ongoing' ? '등록중' : key === 'upcoming' ? '오픈대기' : '오픈'}
+                {key === '검수중' ? '검수중' : key === '검수완료' ? '검수완료' : key === '모집중'?'모집중' :  '오픈'}
               </label>
             ))}
           </div>
@@ -146,7 +146,7 @@ const ClassList = () => {
           {classData.map((result, index) => (
             <div key={index} className="KHJ-result-item">
               <div className="KHJ-result-image">
-                <img src={result.imgName1} alt={result.name} />
+                <img src={`${url}/iupload/${result.imgName1}`} alt={result.name} />
               </div>
               <div className="KHJ-result-info">
                 <h5>{result.name}</h5>

@@ -17,6 +17,7 @@ const ClassReview = () => {
   const [reviews, setReviews] = useState([]);
   const [selectedReviewId, setSelectedReviewId] = useState(null); // 선택된 리뷰 ID 상태
   const [replyStatus, setReplyStatus] = useState('');
+  const [pageInfo,setPageInfo] = useState([]);
 
   useEffect(() => {
     if (token) {
@@ -56,6 +57,7 @@ const ClassReview = () => {
         .then((res) => {
           console.log(res.data.content);
           setReviews(res.data.content);
+          setPageInfo(res.data.pageInfo)
         })
         .catch((err) => {
           console.log(err);
@@ -76,7 +78,11 @@ const ClassReview = () => {
   // 답변하기 버튼 클릭 시, 선택된 리뷰 ID를 상태에 저장
   const toggleReply = (index, reviewId) => {
     setReplyOpenIndex(replyOpenIndex === index ? null : index);
-    setSelectedReviewId(reviewId); // reviewId 저장
+    setSelectedReviewId(reviewId); // 리뷰 ID 저장
+
+    setTimeout(() => {
+      setExpandedIndex(replyOpenIndex === index ? null : index);
+    }, 400);
   };
 
   const handleReplyChange = (e) => {
@@ -95,8 +101,8 @@ const ClassReview = () => {
       token && myAxios(token, setToken).post('/host/reviewReply', null, {
         params: {
           hostId: user.hostId,
-          revRegContent: revRegContent, // 답변 내용을 서버에 전송
-          reviewId: selectedReviewId, // 선택된 리뷰 ID 전송
+          revRegContent: revRegContent, // 답변 내용
+          reviewId: selectedReviewId, // 리뷰 ID
         },
       })
         .then((res) => {
@@ -104,6 +110,14 @@ const ClassReview = () => {
           alert('답변이 저장되었습니다!');
           setRevRegContent(''); // 답변 입력 필드 초기화
           setReplyOpenIndex(null); // 폼 닫기
+
+          return token && myAxios(token, setToken).get("/host/review", {
+            params: { hostId: user.hostId },
+          });
+        })
+        .then((res) => {
+          setReviews(res.data); // 리뷰 업데이트
+          setExpandedIndex(null); // 테이블 유지
         })
         .catch((err) => {
           console.log(err);
@@ -198,10 +212,10 @@ const ClassReview = () => {
                   {review.state === 0 ? <td>답변대기</td> : <td>답변완료</td>}
                 </tr>
                 <tr>
-                  <td colSpan="6" className="KHJ-review-class-detail-cell">
+                  <td colSpan="5" className="KHJ-review-class-detail-cell">
                     <div className={`KHJ-review-class-detail ${expandedIndex === index ? 'open' : ''}`}>
                       <div className="KHJ-review-class-content">
-                        <p>{review.content}</p>
+                        <div className="KHJ-review-content"><p>{review.content}</p></div>
                         <button className="KHJ-review-class-reply-btn" onClick={() => toggleReply(index, review.reviewId)}>답변하기</button>
                       </div>
                       {replyOpenIndex === index && (
@@ -210,7 +224,8 @@ const ClassReview = () => {
                           submit(); // reviewId를 사용하여 답변을 제출
                         }}>
                           <textarea
-                            placeholder="답변을 입력하세요"
+                            placeholder={review.revRegContent || '답변을 입력하세요'}
+                            className='KHJ-review-textarea'
                             value={revRegContent}
                             onChange={handleReplyChange} // 단일 문자열로 관리
                           />
@@ -228,6 +243,54 @@ const ClassReview = () => {
             ))}
           </tbody>
         </table>
+         {pageInfo.allPage > 1 && (
+          <div className="KHJ-pagination">
+            {(() => {
+              const totalPage = pageInfo.allPage;
+              const currentPage = pageInfo.curPage;
+              const maxButtons = 5;
+
+              let start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+              let end = start + maxButtons - 1;
+
+              if (end > totalPage) {
+                end = totalPage;
+                start = Math.max(1, end - maxButtons + 1);
+              }
+
+              const pages = [];
+
+              if (currentPage > 1) {
+                pages.push(
+                  <button key="prev" onClick={() => fetchClassList(currentPage - 1)} className="KHJ-page-button">
+                    ◀ 이전
+                  </button>
+                );
+              }
+
+              for (let i = start; i <= end; i++) {
+                pages.push(
+                  <button
+                    key={i}
+                    onClick={() => fetchClassList(i)}
+                    className={`KHJ-page-button ${i === currentPage ? 'active' : ''}`}
+                  >
+                    {i}
+                  </button>
+                );
+              }
+
+              if (currentPage < totalPage) {
+                pages.push(
+                  <button key="next" onClick={() => fetchClassList(currentPage + 1)} className="KHJ-page-button">
+                    다음 ▶
+                  </button>
+                );
+              }
+              return pages;
+            })()}
+          </div>
+        )}
       </div>
     </div>
   );

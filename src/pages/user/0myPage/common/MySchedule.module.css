@@ -1,9 +1,9 @@
 .page {
+  padding: 2rem 2rem 2rem 2rem;  
+  width: 1280px;
+  margin: auto;
   display: flex;
-  padding: 2rem;
-  gap: 2rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .sidebarArea {
@@ -46,7 +46,7 @@
 }
 
 .calendarArea {
-  width: 72%;
+  width: 78%;
 }
 
 .calendar {
@@ -135,6 +135,7 @@
   white-space: pre-line;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
   font-weight: 500;
+  cursor: pointer;
 }
 
 .classType {

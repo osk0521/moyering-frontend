@@ -58,7 +58,7 @@ import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
 
 import Main from "./pages/common/Main.jsx";
 import ClassInquiry from "./pages/user/0myPage/classRing/ClassInquiry.jsx";
-import MyClassList from "./pages/user/0myPage/classRing/MyClassList.jsx";
+import MyClassRegistList from "./pages/user/0myPage/classRing/MyClassRegistList.jsx";
 import ReviewList from "./pages/user/0myPage/classRing/ReviewList.jsx";
 import MyCouponList from "./pages/user/0myPage/common/MyCouponList.jsx";
 import MySchedule from "./pages/user/0myPage/common/MySchedule.jsx";
@@ -137,10 +137,9 @@ function App() {
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
-        <Route path="/user/mypage/reviewList" element={<ReviewList />} />
-        <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
+        <Route path="/user/mypage/myReviewList" element={<ReviewList />} />
+        <Route path="/user/mypage/myClassInquiry" element={<ClassInquiry />} />
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
-        <Route path="/user/mypage/myClassList" element={<MyClassList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
         <Route exact path="/user/mypage/myGatheringingApplyList" element={<MyGatheringApplyList />}></Route>
@@ -181,7 +180,7 @@ function App() {
         <Route path="/user/mypage/reviewList" element={<ReviewList />} />
         <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
-        <Route path="/user/mypage/myClassList" element={<MyClassList />} />
+        <Route path="/user/mypage/myClassRegistList" element={<MyClassRegistList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
 
         {/* 관리자(/admin) */}

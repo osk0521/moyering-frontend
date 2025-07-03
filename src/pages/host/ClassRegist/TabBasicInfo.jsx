@@ -20,6 +20,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const [showLocation, setShowLocation] = useState(false);
   const [tempLocName, setTempLocName] = useState('');
   const [selectedAddress, setSelectedAddress] = useState('');
+  const [detailAddr,setDetailAddr] = useState('');
   const [coordLat, setCoordLat] = useState('');
   const [coordLng, setCoordLng] = useState('');
   const [token, setToken] = useAtom(tokenAtom);
@@ -106,7 +107,10 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   };
 
   const handleAddressSelect = (data) => {
-    setSelectedAddress(data.address);
+    console.log(detailAddr);
+    const fullAddress = data.address;
+    const city = fullAddress.split(' ')[0]+fullAddress.split(' ')[1]; // 주소의 첫 번째 부분이 시 정보일 가능성이 높음
+    setSelectedAddress(city);
   };
 
   const handleAddressConfirm = () => {
@@ -125,6 +129,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
         ...prev.basicInfo,
         locName: tempLocName,
         addr: selectedAddress,
+        detailAddr: detailAddr,
         longitude: coordLng,
         latitude: coordLat,
         category1: category1Name, // 선택된 카테고리 이름도 저장
@@ -144,6 +149,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
         ...prev.basicInfo,
         locName: '',
         addr: '',
+        detailAddr:'',
         longitude: '',
         latitude: ''
       }
@@ -242,16 +248,18 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
                       className="KHJ-detailaddr-input"
                       placeholder="예: 3층 301호"
                       name='detailAddr'
-                      value={basicInfo.detailAddr || ''}
-                      onChange={(e) =>
-                        setClassData(prev => ({
-                          ...prev,
-                          basicInfo: {
-                            ...prev.basicInfo,
-                            detailAddr: e.target.value
-                          }
-                        }))
-                      }
+                      // value={basicInfo.detailAddr || ''}
+                      value={detailAddr}
+                      onChange={(e) => setDetailAddr(e.target.value)} 
+                      // onChange={(e) =>
+                      //   setClassData(prev => ({
+                      //     ...prev,
+                      //     basicInfo: {
+                      //       ...prev.basicInfo,
+                      //       detailAddr: e.target.value
+                      //     }
+                      //   }))
+                      // }
                     />
                     <div className="KHJ-location-btn-row">
                       <button className="KHJ-location-confirm-btn" onClick={handleAddressConfirm}>장소 등록</button>

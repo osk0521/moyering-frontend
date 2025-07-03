@@ -1,8 +1,14 @@
 // MainContent.jsx
+import { useAtom } from 'jotai';
+import { myAxios } from '../../config';
 import './MainContent.css';
-import React from 'react'; // 이 한 줄만 추가!
+import React, { useEffect, useState } from 'react'; // 이 한 줄만 추가!
+import { tokenAtom } from '../../atoms';
 
 export default function MainContent() {
+  const [token,setToken] = useAtom(tokenAtom)
+  const [noticeList,setNoticeList] = useState([]);
+  const [noticeDate,setNoticeDate] = useState([]);
   const stats = [
     { label: '전체 판매금액', value: '100,000,000' },
     { label: '이번달 판매금액', value: '250,000' },
@@ -13,6 +19,17 @@ export default function MainContent() {
     { label: '평균 평점', value: '4.41' },
     { label: '문의 응답률', value: '91.12%' },
   ];
+
+  useEffect(()=>{
+    token && myAxios(token,setToken).get("/host/notice")
+    .then(res=>{
+      console.log(res);
+      setNoticeList(res.data);
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  },[token])
 
   return (
     <main className="KHJ-main">
@@ -35,11 +52,11 @@ export default function MainContent() {
 
       <section className="KHJ-main__notice-board">
         <h2>공지사항</h2>
-        {[...Array(4)].map((_, i) => (
+        {noticeList.map((item, i) => (
           <div className="KHJ-main__notice" key={i}>
             <span className="KHJ-main__badge">공지</span>
-            <span className="KHJ-main__text">[6월] 모임 기획전 참여 호스트 모집 공고</span>
-            <span className="KHJ-main__date">2025-05-22</span>
+            <span className="KHJ-main__text">{item.title}</span>
+            <span className="KHJ-main__date">{new Date(item.lastModifiedDate).toLocaleDateString("en-CA")}</span>
           </div>
         ))}
       </section>

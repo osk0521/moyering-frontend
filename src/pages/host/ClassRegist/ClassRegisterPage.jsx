@@ -141,6 +141,7 @@ const ClassRegisterPage = () => {
     let formData = new FormData();
     formData.append("hostId", user.hostId)
     formData.append("addr", reqData.addr)
+    formData.append("detailAddr",reqData.detailAddr)
     formData.append("category1", reqData.category1)
     formData.append("category2", reqData.category2)
     formData.append("subCategoryId",parseInt(reqData.subCategoryId))

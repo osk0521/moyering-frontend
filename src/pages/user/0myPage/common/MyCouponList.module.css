@@ -32,6 +32,7 @@
   padding: 1.2rem 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border: 1px solid #f0f0f0;
+  margin-bottom: 10px;
 }
 
 .couponHeader {
@@ -68,4 +69,35 @@
 .couponDate {
   font-size: 0.9rem;
   color: #999;
+}
+
+/* 페이지네이션 */
+.pagination {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.pageBtn {
+  border: none;
+  padding: 0.5rem 0.9rem;
+  background-color: #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+}
+
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageBtnActive {
+  background-color: #f58020;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
 }

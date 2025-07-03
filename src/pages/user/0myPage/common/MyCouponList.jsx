@@ -94,14 +94,14 @@ export default function MyCouponList() {
 
   const [coupons, setCoupons] = useState([]);
   const [page, setPage] = useState(0);
-  const [size] = useState(10);
+  const [size] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!token || !hostId) {
+    if (!token ) {
       setLoading(false);
       return;
     }
@@ -124,7 +124,7 @@ export default function MyCouponList() {
     };
 
     fetchCoupons();
-  }, [token, setToken, hostId, page, size]);
+  }, [token, page, size]);
 
   if (loading) return <p>로딩 중…</p>;
   if (error)   return <p>쿠폰을 불러오는 중 오류가 발생했습니다.</p>;
@@ -144,10 +144,14 @@ export default function MyCouponList() {
           {coupons.map((coupon) => (
             <div key={coupon.userCouponId} className={styles.couponBox}>
               <div className={styles.couponHeader}>
-                <strong>{coupon.couponName}</strong>
+                {
+                  coupon.discountType==='RT' ? <strong>[{coupon.discount}%] {coupon.couponName}</strong> 
+                  : <strong>[{coupon.discount}원] {coupon.couponName}</strong>
+                }
+                
                 <span
                   className={
-                    coupon.status === '사용완료'
+                    coupon.status === '사용'
                       ? styles.usedBadge
                       : styles.notUsedBadge
                   }
@@ -165,23 +169,34 @@ export default function MyCouponList() {
           ))}
 
           {/* 간단 페이지네이션 */}
-          <div className={styles.pagination}>
-            <button
-              onClick={() => setPage((p) => Math.max(p - 1, 0))}
-              disabled={page === 0}
-            >
-              이전
-            </button>
-            <span>
-              {page + 1} / {totalPages}
-            </span>
-            <button
-              onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
-              disabled={page + 1 === totalPages}
-            >
-              다음
-            </button>
-          </div>
+            <div className={styles.pagination}>
+              <button
+                className={styles.pageBtn}
+                onClick={() => setPage((p) => Math.max(p - 1, 0))}
+                disabled={page === 0}
+              >
+                &lt;
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  className={`${styles.pageBtn} ${page === i ? styles.pageBtnActive : ''}`}
+                  onClick={() => setPage(i)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                className={styles.pageBtn}
+                onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
+                disabled={page + 1 === totalPages}
+              >
+                &gt;
+              </button>
+            </div>
+
         </section>
       </main>
       <Footer />

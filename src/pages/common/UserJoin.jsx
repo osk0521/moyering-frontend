@@ -3,6 +3,7 @@ import './UserJoin.css';
 import { useNavigate } from 'react-router';
 import DaumPostcode from 'react-daum-postcode';
 import { myAxios } from '../../config';
+import LoginHeader from './LoginHeaders';
 
 const UserJoin = () => {
   const [user, setUser] = useState({
@@ -21,6 +22,7 @@ const UserJoin = () => {
   const [isPasswordConfirmFocus, setIsPasswordConfirmFocus] = useState(false);
   const navigate = useNavigate();
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const checkFormValidity = () => {
     if (
@@ -37,8 +39,10 @@ const UserJoin = () => {
     try {
       await myAxios().post("/api/auth/register", user);
       setMessage('이메일 인증을 확인하세요!');
+      alert('작성하신 이메일로 코드를 발송했습니다! 확인해주세요!');
     } catch (error) {
       setMessage('회원가입 실패!');
+      alert('작성하신 메일은 없는 메일입니다!');
     }
   };
 
@@ -93,8 +97,10 @@ const UserJoin = () => {
     setIsPasswordConfirmFocus(true);
   };
 
-  return (
+  return (<>
+    <LoginHeader />
     <div className="join-wrapper">
+
       <h2 className="join-title">회원가입</h2>
       <form className="join-form"
         onSubmit={(e) => {
@@ -196,10 +202,25 @@ const UserJoin = () => {
             </div>
           </div>
         )}
-
-        <button type="submit" className="submit-btn" disabled={!isFormValid}>다음</button>
+        <div
+          className="tooltip-wrapper"
+          onMouseEnter={() => !isFormValid && setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        >
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={!isFormValid}
+          >
+            다음
+          </button>
+          {showTooltip && (
+            <div className="tooltip-msg">{!isVerified ? '이메일 인증이 필요합니다!' : '아직 모든 항목을 입력하지 않았습니다!'}</div>
+          )}
+        </div>
       </form>
     </div>
+  </>
   );
 };
 

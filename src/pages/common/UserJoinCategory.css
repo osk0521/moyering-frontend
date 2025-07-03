@@ -108,3 +108,21 @@
 .submit-btn:hover {
   background-color: #e0a800;
 }
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-msg {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  background-color: #333;
+  color: #fff;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1000;
+}

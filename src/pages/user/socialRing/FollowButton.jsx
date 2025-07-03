@@ -7,21 +7,17 @@ import { myAxios } from '../../../config';
 
 export default function FollowButton({ targetUserId, className, style }) {
     const currentUser = useAtomValue(userAtom);
-
-    console.log('▶ FollowButton targetUserId:', targetUserId);
     const [token, setToken] = useAtom(tokenAtom);
     const [isFollowing, setIsFollowing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // **로그인된 사용자(=토큰)가 아니면 컴포넌트 자체를 안 보이게**
-    if (!token) {
-        return null;
-    }
+    console.log('▶ FollowButton targetUserId:', targetUserId);
+
     useEffect(() => {
-        if (!targetUserId) return;
+        if (!token || !targetUserId) return;
         setLoading(true);
-        myAxios(token,setToken).get(`/user/socialing/follow/status/${targetUserId}`)
+        myAxios(token, setToken).get(`/user/socialing/follow/status/${targetUserId}`)
             .then(res => setIsFollowing(res.data))
             .catch(err => setError(err))
             .finally(() => setLoading(false));
@@ -31,23 +27,27 @@ export default function FollowButton({ targetUserId, className, style }) {
         if (loading) return;
         setLoading(true);
         const req = isFollowing
-            ? myAxios(token,setToken).delete(`/user/socialing/follow/${targetUserId}`)
-            : myAxios(token,setToken).post(`/user/socialing/follow/${targetUserId}`);
+            ? myAxios(token, setToken).delete(`/user/socialing/follow/${targetUserId}`)
+            : myAxios(token, setToken).post(`/user/socialing/follow/${targetUserId}`);
         req
             .then(() => setIsFollowing(x => !x))
             .catch(err => setError(err))
             .finally(() => setLoading(false));
     };
 
+    // 여기서부터 조건부 렌더링
+    if (!token) return null;
     if (error) return <button disabled className={className} style={style}>오류</button>;
     if (loading) return <button disabled className={className} style={style}>로딩…</button>;
     if (targetUserId === currentUser.id) {
-        return (
-            <button disabled className={className} style={{ opacity: 0.5, ...style }}>
-                내 프로필
-            </button>
-        );
+        return null;
+        // (
+        //     <button disabled className={className} style={{ opacity: 0.5, ...style }}>
+        //         내 프로필
+        //     </button>
+        // );
     }
+
     return (
         <button
             onClick={toggleFollow}

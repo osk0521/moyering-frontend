@@ -111,12 +111,12 @@ function App() {
         <Route path="/gatheringList" element={<GatheringList />} />
         <Route path="/class/classRingDetail/:classId" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
-        <Route path="/feeds" element={<FeedPage />} />
+        {/* <Route path="/feeds" element={<FeedPage />} /> */}
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
-<Route path="/test2" element={<Test2 />} />
+<Route path="/feeds" element={<Test2 />} />
         
         
         <Route path="/scrapList" element={<ScrapList />} />

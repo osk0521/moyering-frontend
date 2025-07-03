@@ -219,7 +219,7 @@
   margin-bottom: 16px;
   line-height: 1.5;
   color: #333;
-  min-height: 100px;
+  /* min-height: 100px; */
   font-size: 20px;
 }
 
@@ -253,6 +253,7 @@
   border-radius: 8px;
   border: 1px solid #e9ecef;
   display: inline-flex;
+  width: 100%;
 }
 
 .MyGatherInquiryList_answer-textarea_osk {

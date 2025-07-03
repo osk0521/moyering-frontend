@@ -1,8 +1,9 @@
-// GatheringChat.jsx
 import React, { useState } from 'react';
 import './GatheringChat.css';
 import { BsPaperclip, BsArrowUpCircleFill } from "react-icons/bs";
 import { HiOutlineMenu } from "react-icons/hi";
+import Header from "../../common/Header";
+import Footer from "../../../components/Footer";
 
 export default function Chat() {
   const [activeTab, setActiveTab] = useState('개더링');
@@ -23,9 +24,10 @@ export default function Chat() {
   ];
 
   return (
+  <div>
+    <Header />
     <div className="GatheringChat_chat-app_osk">
       <div className="GatheringChat_main-content_osk">
-        {/* Sidebar */}
         <aside className="GatheringChat_sidebar_osk">
           <div className="GatheringChat_chat-tabs_osk">
             <button 
@@ -106,6 +108,8 @@ export default function Chat() {
           </div>
         </main>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }

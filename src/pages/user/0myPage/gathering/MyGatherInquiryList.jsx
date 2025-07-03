@@ -9,59 +9,79 @@ import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue } from "jotai";
 import { tokenAtom, userAtom } from "../../../../atoms";
 import { myAxios, url } from "../../../../config";
+import { ko } from "date-fns/locale";
 
 export default function GatherInquiry() {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
   const [token, setToken] = useAtom(tokenAtom);
-  
+
   // 상태 관리
-  const [activeTab, setActiveTab] = useState("participated");
+  const [activeTab, setActiveTab] = useState("registered");
   const [myInquiryCnt, setMyInquiryCnt] = useState(0);
   const [myInquiryList, setMyInquiryList] = useState([]);
   const [receivedInquiryCnt, setReceivedInquiryCount] = useState(0);
   const [receivedInquiryList, setReceivedInquiryList] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState("전체");
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const [openId, setOpenId] = useState(null);
   const [replyText, setReplyText] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   // 페이지네이션 상태
-  const [currentPage, setCurrentPage] = useState(1);
   const [pageInfo, setPageInfo] = useState({
     curPage: 1,
     allPage: 1,
     startPage: 1,
     endPage: 1
   });
+  const [pageNums, setPageNums] = useState([]);
+  const [search, setSearch] = useState({
+    page: 1,
+    status: "",
+    startDate: "",
+    endDate: ""
+  });
 
-  // 검색 조건 생성 함수
-  const createSearchParams = useCallback((page = 1) => {
-    const params = { page };
-    
-    if (selectedStatus !== "전체") {
-      params.status = selectedStatus;
+  // 탭 정의
+  const tabs = [
+    { display: "내가 등록한 게더링 문의", value: "registered" },
+    { display: "내가 주최한 게더링 문의", value: "organized" }
+  ];
+
+  // 검색 파라미터 생성
+  const createRequestBody = useCallback(() => {
+    const requestBody = {
+      page: search.page,
+    };
+
+    if (selectedStatus !== null) {
+      requestBody.isAnswered = selectedStatus;
     }
-    
-    if (startDate && endDate) {
-      params.startDate = startDate.toISOString().split('T')[0];
-      params.endDate = endDate.toISOString().split('T')[0];
-    }
-    
-    return params;
-  }, [selectedStatus, startDate, endDate]);
+    if (startDate) {
+      requestBody.startDate = startDate.toISOString().split('T')[0];
+    }  
+    if (endDate) {
+      requestBody.endDate = endDate.toISOString().split('T')[0];
+    } 
+    return requestBody;
+  }, [search, startDate, endDate]);
 
   // 데이터 로딩 함수
-  const loadInquiryData = useCallback(async (page = 1) => {
+  const loadInquiryData = useCallback(async () => {
     if (!user && !token) {
-      if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
+      if (window.confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
         navigate("/userlogin");
       } else {
-        navigate(-1);
+        window.history.back();
       }
+      return;
+    }
+
+    if (!token) {
+      console.log('토큰이 없습니다. 로딩을 건너뜁니다.');
       return;
     }
 
@@ -69,20 +89,33 @@ export default function GatherInquiry() {
     setError(null);
 
     try {
-      const requestParams = createSearchParams(page);
+      const requestBody = createRequestBody();
       const isOrganized = activeTab === "organized";
-      const endpoint = isOrganized 
+      const endpoint = isOrganized
         ? `/user/getGatheringInquiriesByOrganizerUserId`
         : `/user/getGatheringInquiriesByUserId`;
 
-      const response = await myAxios(token, setToken).get(endpoint, { params: requestParams });
+      console.log("API 요청:", { endpoint, requestBody });
+
+      const response = await myAxios(token, setToken).post(endpoint, requestBody );
       const { data } = response;
+
+      console.log("API 응답:", data);
 
       setMyInquiryCnt(data.findInquirieCntSentByUser || 0);
       setReceivedInquiryCount(data.findInquirieCntReceivedByOrganizer || 0);
-      setPageInfo(data.pageInfo || { curPage: 1, allPage: 1, startPage: 1, endPage: 1 });
-      setCurrentPage(data.pageInfo?.curPage || 1);
 
+      // 페이지 정보 설정
+      if (data.pageInfo) {
+        setPageInfo(data.pageInfo);
+        const pages = [];
+        for (let i = data.pageInfo.startPage; i <= data.pageInfo.endPage; i++) {
+          pages.push(i);
+        }
+        setPageNums(pages);
+      }
+
+      // 문의 목록 설정
       if (isOrganized) {
         setReceivedInquiryList(data.gatheringInquiryList || []);
       } else {
@@ -91,33 +124,71 @@ export default function GatherInquiry() {
 
     } catch (err) {
       console.error("데이터 로딩 오류:", err);
-      setError("데이터를 불러오는 중 오류가 발생했습니다.");
+
+      if (err.response?.status === 401) {
+        setError("인증이 만료되었습니다. 다시 로그인해주세요.");
+        setToken('');
+        if (window.confirm("로그인이 만료되었습니다. 로그인 페이지로 이동하시겠습니까?")) {
+          navigate("/userlogin");
+        }
+      } else {
+        setError("데이터를 불러오는 중 오류가 발생했습니다.");
+      }
     } finally {
       setLoading(false);
     }
-  }, [user, token, activeTab, createSearchParams, navigate, setToken]);
-
-  // 검색 실행
-  const handleSearch = useCallback(() => {
-    setCurrentPage(1);
-    loadInquiryData(1);
-  }, [loadInquiryData]);
+  }, [user, token, activeTab, createRequestBody, navigate, setToken]);
 
   // 페이지 변경
   const handlePageChange = useCallback((page) => {
-    setCurrentPage(page);
-    loadInquiryData(page);
-  }, [loadInquiryData]);
+    setSearch(prev => ({ ...prev, page }));
+  }, []);
 
   // 탭 변경
-  const handleTabChange = useCallback((tab) => {
-    setActiveTab(tab);
-    setSelectedStatus("전체");
-    setCurrentPage(1);
+  const handleTabChange = useCallback((tabValue) => {
+    setActiveTab(tabValue);
+    setSelectedStatus(null);
+    setSearch(prev => ({
+      ...prev,
+      page: 1,
+      isAnswered: null
+    }));
     setOpenId(null);
     setReplyText({});
   }, []);
 
+  // 상태 변경
+  const handleStatusChange = useCallback((statusValue) => {
+  let booleanStatus = null;
+  switch(statusValue) {
+    case "전체":
+      booleanStatus = null;
+      break;
+    case "답변대기":
+      booleanStatus = false;
+      break;
+    case "답변완료":
+      booleanStatus = true;
+      break;
+    default:
+      booleanStatus = null;
+  }
+  
+  console.log("변환된 Boolean 값:", booleanStatus);
+  
+  setSelectedStatus(booleanStatus);
+  setSearch(prev => ({ 
+    ...prev, 
+    isAnswered: booleanStatus, 
+    page: 1 
+  }));
+}, []);
+  const getStatusDisplayText = (booleanStatus) => {
+      if (booleanStatus === null) return "전체";
+      if (booleanStatus === true) return "답변완료";
+      if (booleanStatus === false) return "답변대기";
+      return "전체";
+    };
   // 답변 등록
   const handleReplySubmit = useCallback(async (inquiryId) => {
     const reply = replyText[inquiryId];
@@ -125,34 +196,53 @@ export default function GatherInquiry() {
       alert("답변을 입력해주세요.");
       return;
     }
-
-    try {
-      setLoading(true);
-      // API 호출 로직 추가 필요
-      // await myAxios(token, setToken).post(`/user/submitInquiryResponse`, {
-      //   inquiryId,
-      //   responseContent: reply.trim()
-      // });
-      
-      alert("답변이 등록되었습니다.");
-      setReplyText(prev => ({ ...prev, [inquiryId]: "" }));
-      loadInquiryData(currentPage); // 데이터 재로딩
-    } catch (err) {
-      console.error("답변 등록 오류:", err);
-      alert("답변 등록 중 오류가 발생했습니다.");
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('inquiryId', inquiryId);
+    formData.append('responseContent', reply.trim());
+    formData.append('responseDate', new Date().toISOString().split('T')[0]);
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
     }
-  }, [replyText, token, setToken, currentPage, loadInquiryData]);
+    const response = await myAxios(token, setToken).post(
+      `/user/responseToGatheringInquiry`, 
+      formData
+    );
+    alert("답변이 등록되었습니다.");
+    setReplyText(prev => ({ ...prev, [inquiryId]: "" }));
+    setOpenId(null); // 아코디언 닫기
+    loadInquiryData(); // 데이터 재로딩
+    
+  } catch (err) {
+    console.error("답변 등록 오류:", err);
+    
+    if (err.response?.status === 401) {
+      setError("인증이 만료되었습니다. 다시 로그인해주세요.");
+      setToken('');
+      if (window.confirm("로그인이 만료되었습니다. 로그인 페이지로 이동하시겠습니까?")) {
+        navigate("/userlogin");
+      }
+    } else if (err.response?.status === 400) {
+      alert("잘못된 요청입니다. 입력 내용을 확인해주세요.");
+    } else {
+      alert("답변 등록 중 오류가 발생했습니다.");
+    }
+  } finally {
+    setLoading(false);
+  }
+}, [replyText, token, setToken, loadInquiryData, navigate, setError, setToken]);
 
-  // 초기 로딩 및 조건 변경 시 재로딩
+  // 데이터 로딩 useEffect
   useEffect(() => {
-    loadInquiryData(1);
-  }, [activeTab, selectedStatus, startDate, endDate]);
+    if (token && user) {
+      loadInquiryData();
+    }
+  }, [token, user, search, activeTab, selectedStatus, startDate, endDate, loadInquiryData]);
 
   // 현재 탭에 따른 데이터 선택
-  const currentData = activeTab === "participated" ? myInquiryList : receivedInquiryList;
-  const currentCount = activeTab === "participated" ? myInquiryCnt : receivedInquiryCnt;
+  const currentData = activeTab === "registered" ? myInquiryList : receivedInquiryList;
+  const currentCount = activeTab === "registered" ? myInquiryCnt : receivedInquiryCnt;
 
   // 아코디언 토글
   const toggleAccordion = useCallback((id) => {
@@ -167,6 +257,13 @@ export default function GatherInquiry() {
   // 날짜 변경
   const onChange = useCallback((dates) => {
     const [start, end] = dates;
+    if (start && end) {
+      if (end < start) {
+        setStartDate(start);
+        setEndDate(start);
+        return;
+      }
+    }
     setStartDate(start);
     setEndDate(end);
   }, []);
@@ -177,26 +274,7 @@ export default function GatherInquiry() {
     setEndDate(null);
   }, []);
 
-  // 페이지네이션 렌더링
-  const renderPagination = () => {
-    const pages = [];
-    for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
-      pages.push(
-        <button
-          key={i}
-          className={`MyGatherInquiryList_pagination-btn_osk ${
-            i === currentPage ? "MyGatherInquiryList_pagination-active_osk" : ""
-          }`}
-          onClick={() => handlePageChange(i)}
-          disabled={loading}
-        >
-          {i}
-        </button>
-      );
-    }
-    return pages;
-  };
-
+  // 에러 상태 렌더링
   if (error) {
     return (
       <div>
@@ -204,9 +282,10 @@ export default function GatherInquiry() {
         <main className="MyGatherPage_container MyGatherInquiryList_gather-inquiry-page_osk">
           <Sidebar />
           <section className="MyGatherInquiryList_inquiry-section_osk">
-            <div className="error-message">
+            <div className="MyGatherInquiryList_error-state_osk">
+              <h4>오류가 발생했습니다</h4>
               <p>{error}</p>
-              <button onClick={() => loadInquiryData(currentPage)}>다시 시도</button>
+              <button onClick={() => loadInquiryData()}>다시 시도</button>
             </div>
           </section>
         </main>
@@ -237,6 +316,9 @@ export default function GatherInquiry() {
                   className="MyGatherInquiryList_date-picker_osk"
                   dateFormat="yyyy.MM.dd"
                   isClearable={false}
+                  locale={ko} // 한글 로케일 설정 추가
+                  maxDate={new Date()} // 오늘 이후 날짜 선택 불가 추가
+                  shouldCloseOnSelect={false} // 범위 선택 완료 후 닫기 추가
                 />
                 {(startDate || endDate) && (
                   <button
@@ -249,34 +331,32 @@ export default function GatherInquiry() {
                   </button>
                 )}
               </div>
+
               <span className="MyGatherInquiryList_date-label_osk">상태</span>
               <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
+                value={getStatusDisplayText(selectedStatus)} 
+                onChange={(e) => handleStatusChange(e.target.value)}
                 className="MyGatherInquiryList_status-select_osk"
               >
                 <option value="전체">전체</option>
-                <option value="답변대기">답변대기</option>
-                <option value="답변완료">답변완료</option>
+                <option value="답변대기">답변대기</option>    
+                <option value="답변완료">답변완료</option>   
               </select>
             </div>
           </div>
 
           <div className="MyGatherInquiryList_inquiry-tabs_osk">
-            <button
-              className={activeTab === "participated" ? "MyGatherInquiryList_active_osk" : ""}
-              onClick={() => handleTabChange("participated")}
-              disabled={loading}
-            >
-              내가 등록한 모임문의 ({myInquiryCnt})
-            </button>
-            <button
-              className={activeTab === "organized" ? "MyGatherInquiryList_active_osk" : ""}
-              onClick={() => handleTabChange("organized")}
-              disabled={loading}
-            >
-              내가 주최한 모임문의 ({receivedInquiryCnt})
-            </button>
+            {tabs.map((tab) => (
+              <button
+                key={tab.value}
+                className={`MyGatherInquiryList_tab_osk ${activeTab === tab.value ? "MyGatherInquiryList_active_osk" : ""
+                  }`}
+                onClick={() => handleTabChange(tab.value)}
+                disabled={loading}
+              >
+                {tab.display} ({tab.value === "registered" ? myInquiryCnt : receivedInquiryCnt})
+              </button>
+            ))}
           </div>
 
           {loading && (
@@ -286,9 +366,12 @@ export default function GatherInquiry() {
           )}
 
           <div className="MyGatherInquiryList_inquiry-list_osk">
-            {currentData.length === 0 ? (
-              <div className="MyGatherInquiryList_no-data_osk">
-                <p>문의 내역이 없습니다.</p>
+            {currentCount <= 0 ? (
+              <div className="MyGatherInquiryList_empty-state_osk">
+                <div className="MyGatherInquiryList_empty-content_osk">
+                  <h4>조회된 문의가 없습니다</h4>
+                  <p>검색 조건을 변경하거나 새로운 문의를 등록해보세요.</p>
+                </div>
               </div>
             ) : (
               currentData.map((item) => (
@@ -299,9 +382,15 @@ export default function GatherInquiry() {
                   >
                     <div className="MyGatherInquiryList_inquiry-info_osk">
                       <div className="MyGatherInquiryList_user-info_osk">
-                        <div className="MyGatherInquiryList_user-profile_osk">
+                        <div className="MyGatherInquiryList_user-profile_osk ">
                           {item.profile && (
-                            <img src={`${url}/image?filename=${item.profile}`} alt= {item.nickName} />
+                            <img
+                              src={`${url}/image?filename=${item.profile}`}
+                              alt="프로필"
+                              onError={(e) => {
+                                e.target.src = '/default-profile.png';
+                              }}
+                            />
                           )}
                         </div>
                         <span className="MyGatherInquiryList_username_osk">
@@ -331,7 +420,7 @@ export default function GatherInquiry() {
                       <p className="MyGatherInquiryList_question_osk">
                         Q. {item.inquiryContent}
                       </p>
-                      
+
                       {item.responseContent ? (
                         <div className="MyGatherInquiryList_answer_osk">
                           <p>
@@ -353,7 +442,7 @@ export default function GatherInquiry() {
                               onClick={() => handleReplySubmit(item.inquiryId)}
                               disabled={loading || !replyText[item.inquiryId]?.trim()}
                             >
-                              {loading ? "등록 중..." : "등록"}
+                              등록
                             </button>
                           </div>
                         </div>
@@ -371,21 +460,38 @@ export default function GatherInquiry() {
 
           {pageInfo.allPage > 1 && (
             <div className="MyGatherInquiryList_pagination_osk">
-              <button
-                className="MyGatherInquiryList_pagination-btn_osk"
-                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1 || loading}
-              >
-                ‹
-              </button>
-              {renderPagination()}
-              <button
-                className="MyGatherInquiryList_pagination-btn_osk"
-                onClick={() => handlePageChange(Math.min(pageInfo.allPage, currentPage + 1))}
-                disabled={currentPage === pageInfo.allPage || loading}
-              >
-                ›
-              </button>
+              {pageInfo.curPage > 1 && (
+                <button
+                  className="MyGatherInquiryList_pagination-btn_osk"
+                  onClick={() => handlePageChange(pageInfo.curPage - 1)}
+                  disabled={loading}
+                >
+                  〈
+                </button>
+              )}
+              {pageNums.map((pageNum) => (
+                <button
+                  key={pageNum}
+                  onClick={() => handlePageChange(pageNum)}
+                  className={
+                    pageInfo.curPage === pageNum
+                      ? "MyGatherInquiryList_pagination-btn_osk MyGatherInquiryList_pagination-active_osk"
+                      : "MyGatherInquiryList_pagination-btn_osk"
+                  }
+                  disabled={loading}
+                >
+                  {pageNum}
+                </button>
+              ))}
+              {pageInfo.curPage < pageInfo.allPage && (
+                <button
+                  className="MyGatherInquiryList_pagination-btn_osk"
+                  onClick={() => handlePageChange(pageInfo.curPage + 1)}
+                  disabled={loading}
+                >
+                  〉
+                </button>
+              )}
             </div>
           )}
         </section>

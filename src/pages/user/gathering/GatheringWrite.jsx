@@ -14,6 +14,7 @@ import DaumPostcode from "react-daum-postcode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import Header from "../../common/Header";
+import Footer from "../../../components/Footer";
 import { useNavigate } from "react-router-dom";
 import "./GatheringWrite.css";
 
@@ -1139,6 +1140,7 @@ useEffect(() => {
           </div>
         )}
       </form>
+    <Footer />
     </div>
   );
 }

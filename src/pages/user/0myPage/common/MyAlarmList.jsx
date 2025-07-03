@@ -22,6 +22,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './MyAlarmList.css';
 
+import Header from "../../../common/Header";
+import Footer from "../../../../components/Footer";
+import Sidebar from "./Sidebar";
 export default function MyAlarmList() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [endDate, setEndDate] = useState(null);

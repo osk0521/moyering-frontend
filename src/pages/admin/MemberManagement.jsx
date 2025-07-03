@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { myAxios } from "/src/config"; 
 import Layout from "./Layout";
-import { useNavigate } from 'react-router-dom';
 import './MemberManagement.css';
-import MemberDetailModal from './MemberDetailModal';
 import { useAtomValue } from 'jotai';
 import { tokenAtom } from '../../atoms';
 
 const MemberManagement = () => {
   const [searchTerm, setSearchTerm] = useState(''); // 검색어
   const [memberType, setMemberType] = useState('전체'); // 일반/강사 필터
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-
-  // 회원 선택 및 모달 상태
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [startDate, setStartDate] = useState(''); // 가입기간 - START 상태
+  const [endDate, setEndDate] = useState(''); // 가입기간 - END 상태 
 
   // 백엔드 연동 데이터
   const [memberData, setMemberData] = useState([]);
@@ -108,8 +103,7 @@ const MemberManagement = () => {
       }
     } catch (err) {
       console.error('회원 목록 조회 실패:', err);
-      setError('회원 목록을 불러오는데 실패했습니다.');
-      setMemberData([]);
+      // alert('회원 목록을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -123,47 +117,6 @@ const MemberManagement = () => {
   // 회원 유형 필터 변경
   const handleMemberTypeChange = (type) => {
     setMemberType(type);
-  };
-
-  // 회원 아이디 클릭 시 상세 모달 열기
-  const handleMemberClick = async (member) => {
-    try {
-      setLoading(true);
-      // DTO의 userId 사용
-      const response = await myAxios(token).get(`/api/member/${member.userId}`);
-      
-      if (response.data) {
-        setSelectedMember(response.data);
-        setIsModalOpen(true);
-      }
-    } catch (err) {
-      console.error('회원 상세 정보 조회 실패:', err);
-      setError('회원 상세 정보를 불러오는데 실패했습니다.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 모달 닫기
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedMember(null);
-  };
-
-  // 회원 상태 변경 (모달에서 호출될 수 있도록 prop으로 전달)
-  const handleUpdateMemberStatus = async (userId, status) => {
-    try {
-      await myAxios(token).patch(`/api/member/${userId}/status`, null, {
-        params: { status }
-      });
-      
-      // 상태 변경 후 목록 다시 조회
-      fetchMembers();
-      alert('회원 상태가 성공적으로 변경되었습니다.');
-    } catch (err) {
-      console.error('회원 상태 변경 실패:', err);
-      alert('회원 상태 변경에 실패했습니다.');
-    }
   };
 
   // 페이지 변경
@@ -225,7 +178,7 @@ const MemberManagement = () => {
             value={searchTerm}
             onChange={handleSearch}
             className="search-inputHY"
-            />
+          />
         </div>
         <div className="date-filter-group">
           <label className="date-labelHY">가입기간</label>
@@ -242,8 +195,15 @@ const MemberManagement = () => {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
+          <button 
+            onClick={handleDateReset}
+            className="date-reset-btn"
+            type="button"
+          >
+            초기화
+          </button>
         </div>
-        </div>
+      </div>
       
       {/* 회원 유형 필터 */}
       <div className="filter-sectionHY">
@@ -292,8 +252,8 @@ const MemberManagement = () => {
               <th>이메일</th>
               <th>연락처</th>
               <th>가입일</th>
-              <th>사용여부</th>
-              <th>관리</th>
+              <th>결제내역</th>
+              <th>정산내역</th>
             </tr>
           </thead>
           <tbody>
@@ -306,25 +266,11 @@ const MemberManagement = () => {
                       {member.userType}
                     </span>
                   </td>
-                  {/* 회원아이디 클릭하면 회원상세보기 모달창으로 이동 */}
-                  <td>
-                    <span 
-                      className="username-linkHY"
-                      onClick={() => handleMemberClick(member)}
-                      style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
-                    >
-                      {member.username}
-                    </span>
-                  </td>
+                  <td>{member.username}</td>
                   <td>{member.name}</td>
                   <td>{member.email}</td>
                   <td>{member.tel}</td>
                   <td>{formatDate(member.regDate)}</td>
-                  <td>
-                    <span className={`status-${member.useYn === 'Y' ? 'active' : 'inactive'}`}>
-                      {member.useYn === 'Y' ? '사용' : '미사용'}
-                    </span>
-                  </td>
                   <td>
                     <div className="action-buttonsHY">
                       {/* 모든 사용자에게 결제내역 버튼 표시 */}
@@ -396,19 +342,6 @@ const MemberManagement = () => {
           >
             다음
           </button>
-        </div>
-      )}
-
-      {/* 회원 상세 모달 */}
-      {isModalOpen && selectedMember && (
-        <div className="modal-overlayHY">
-          <div className="modal-contentHY">
-            <MemberDetailModal 
-              member={selectedMember}
-              onClose={handleCloseModal}
-              onUpdateStatus={handleUpdateMemberStatus}
-            />
-          </div>
         </div>
       )}
     </Layout>

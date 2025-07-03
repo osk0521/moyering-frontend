@@ -66,9 +66,3 @@
   transform: translateY(-1px);
 }
 
-/* 테이블 셀 내 버튼 정렬 */
-.tableHY td:last-child {
-  text-align: center;
-  vertical-align: middle;
-  padding: 8px 4px; /* 셀 패딩 조정 */
-}

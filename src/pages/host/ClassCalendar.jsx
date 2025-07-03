@@ -1,6 +1,7 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import koLocale from '@fullcalendar/core/locales/ko';
 import './ClassCalendar.css';
 import React, { useEffect, useState } from 'react'; // 이 한 줄만 추가!
 import { myAxios } from '../../config';
@@ -71,13 +72,14 @@ const ClassCalendar = () => {
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         headerToolbar={{
-          left: 'prev,next',
+          left: 'prev',
           center: 'title',
-          right: ''
+          right: 'next'
         }}
         events={events}
         eventClick={handleEventClick}
         height="auto"
+        locale={koLocale}
       />
     </div>
   );

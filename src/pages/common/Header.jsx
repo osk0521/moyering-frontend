@@ -187,7 +187,7 @@ export default function Header() {
                                 </small>
                               </div>
                             </div>
-                            <Button className="Header_notification-confirm_osk" onClick={(e) => handleNotificationClick(alarms, e)}>확인</Button>
+                            <span className="Header_notification-confirm_osk" onClick={(e) => handleNotificationClick(alarms, e)}>확인</span>
                           </div>
                         </DropdownItem>
                       ))}        

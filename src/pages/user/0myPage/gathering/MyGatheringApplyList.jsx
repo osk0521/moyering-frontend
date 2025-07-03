@@ -60,7 +60,6 @@ export default function MyGatheringApplyList() {
       if (!isConfirmed) {
         return;
       }
-
       const response = await myAxios(token, setToken).post(`/user/cancelGatheringApply/${gathering.gatheringApplyId}`);
 
       if (response.status === 200) {

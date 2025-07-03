@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue } from "jotai";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
@@ -17,8 +17,8 @@ import KakaoMap from "./KakaoMap";
 import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
 import Header from "./Header";
-import aImage from "/detail2.png";
 import Footer from "../../components/Footer";
+import {fetchGatheringListAtom} from '../../hooks/common/fetchGatheringListAtom';
 export default function GatheringDetail() {
   const user = useAtomValue(userAtom);
   const [token,setToken] = useAtom(tokenAtom); 
@@ -30,7 +30,9 @@ export default function GatheringDetail() {
   const [aspirationContent, setAspirationContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
-
+ useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     // 약간의 지연을 두어 스토리지 로딩 완료 대기
     const timer = setTimeout(() => {
@@ -240,7 +242,9 @@ export default function GatheringDetail() {
           tags: parsedTags,
           createDate: gathering.createDate,
           category: gathering.categoryName,
+          categoryId: gathering.categoryId,
           subCategory: gathering.subCategoryName,
+          subCategoryId: gathering.subCategoryId,
           latitude: gathering.latitude,
           longitude: gathering.longitude,
           intrOnln: gathering.intrOnln,
@@ -769,7 +773,7 @@ const canModifyGathering = () => {
               >
                 <h3 className="GatheringDetail_section-title_osk">
                   함께하면 좋을 모임을 찾아드려요 
-                  {recommendations.length > 2 && (<span onClick={() => navigate('/a')}> 더보기</span>)}
+                  {recommendations.length > 2 && (<span onClick={() => navigate('/gatheringList')}> 더보기</span>)}
                 </h3>
               </div>
               <div className="GatheringDetail_recommendations_osk">
@@ -777,20 +781,26 @@ const canModifyGathering = () => {
                   <div
                     key={recommendation.gatheringId}
                     className="GatheringDetail_recommendation-card_osk"
+                    // onClick={() => window.location.href = `/gatheringDetail/${recommendation.gatheringId}`}
                   >
-                    <img 
+                    <img
                       src={`${url}/image?filename=${recommendation.thumbnailFileName}`}
                       alt={recommendation.title}
                       className="GatheringDetail_card-image_osk"
-                    /> 
+                    />
+                    
                     <div className="GatheringDetail_card-content_osk">
                       <div className="GatheringDetail_card-category_osk">
                         {recommendation.category}
                       </div>
-                      <div className="GatheringDetail_card-title_osk">
+                      
+                      <div 
+                        className="GatheringDetail_card-title_osk"
+                      >
                         {recommendation.title}
                       </div>
-                      <div className="GatheringDetail_card-info_osk">
+                      
+                      <div className="GatheringDetail_card-date_osk">
                         <CiCalendar /> {recommendation.meetingDate}
                       </div>
                     </div>
@@ -948,12 +958,11 @@ const canModifyGathering = () => {
                     <span>
                       제목: {gatheringData.title} <br />
                     </span>
-                  </div>
-
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <span>
-                      소개: {gatheringData.introOnline} <br />
+                      소개: {gatheringData.intrOnln} <br />
                     </span>
+                  </div>
                   </div>
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />

@@ -137,7 +137,7 @@ export default function GatherInquiry() {
     } finally {
       setLoading(false);
     }
-  }, [user, token, activeTab, createRequestBody, navigate, setToken]);
+  }, [user, token, activeTab, createRequestBody]);
 
   // 페이지 변경
   const handlePageChange = useCallback((page) => {
@@ -316,9 +316,9 @@ export default function GatherInquiry() {
                   className="MyGatherInquiryList_date-picker_osk"
                   dateFormat="yyyy.MM.dd"
                   isClearable={false}
-                  locale={ko} // 한글 로케일 설정 추가
-                  maxDate={new Date()} // 오늘 이후 날짜 선택 불가 추가
-                  shouldCloseOnSelect={false} // 범위 선택 완료 후 닫기 추가
+                  locale={ko} 
+                  maxDate={new Date()} 
+                  shouldCloseOnSelect={false} 
                 />
                 {(startDate || endDate) && (
                   <button

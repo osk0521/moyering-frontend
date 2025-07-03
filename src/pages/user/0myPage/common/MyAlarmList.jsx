@@ -104,8 +104,16 @@ export default function MyAlarmList() {
               alarmDate: item.alarmDate,
               isRead: item.confirm,
             }));
-
-
+            
+      // 페이지 정보 설정
+      if (data.pageInfo) {
+        setPageInfo(data.pageInfo);
+        const pages = [];
+        for (let i = data.pageInfo.startPage; i <= data.pageInfo.endPage; i++) {
+          pages.push(i);
+        }
+        setPageNums(pages);
+      }
             console.log("Transformed Data:", transformedData);
             setAlarmList(transformedData);
           } else {

@@ -498,7 +498,7 @@ export default function GatheringModify() {
             change: () => {
               try {
                 // 에디터 입력 중에는 trim하지 않고 원본 내용 그대로 저장
-                const content = editorInstance.getMarkdown();
+                const content = editorInstance.getHTML();
                 setFormData((prev) => ({
                   ...prev,
                   content: content, // trim() 제거됨

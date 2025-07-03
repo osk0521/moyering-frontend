@@ -457,7 +457,7 @@ useEffect(() => {
             },
             events: {
               change: () => {
-                const content = editorInstance.getMarkdown();
+                const content = editorInstance.getHTML();
                 setFormData((prev) => ({
                   ...prev,
                   content: content,

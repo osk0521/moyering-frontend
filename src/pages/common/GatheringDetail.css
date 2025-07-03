@@ -197,6 +197,10 @@ html {
   margin-top: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+.GatheringDetail_detail-content_osk img{
+  width: fit-content;
+  max-width:700px !important;
+}
 
 .GatheringDetail_detail-section_osk {
   margin-bottom: 48px;

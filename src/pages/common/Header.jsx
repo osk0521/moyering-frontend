@@ -272,7 +272,7 @@ export default function Header() {
             <span
               className="Header_nav-item_osk"
               onClick={() => 
-              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/host/intro")}}
+              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/classList")}}
             >
               클래스잉
             </span>

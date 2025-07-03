@@ -4,30 +4,42 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './FeedEdit.css';
 import plusIcon from './icons/plus.svg';
 import { myAxios, url } from '../../../config';
-import { tokenAtom } from '../../../atoms';
+import { tokenAtom, userAtom } from '../../../atoms';
 import { useAtom, useAtomValue } from 'jotai';
 
 export default function FeedEdit() {
   const { feedId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef();
-  const [token,setToken] = useAtom(tokenAtom)
-  const [imageFile, setImageFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [token, setToken] = useAtom(tokenAtom)
+  const user = useAtomValue(userAtom);
+  
+  const [imageFiles, setImageFiles] = useState(null);
+  const [previewUrls, setPreviewUrls] = useState('');
   const [text, setText] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+console.log("userAtom에서 가져온 user:", user);
   // 초기 데이터 로드
   useEffect(() => {
     if (!token) return;
     (async () => {
       try {
-        console.log(token)
-        const { data } = await myAxios(token,setToken).get(`/socialing/feed?feedId=${feedId}`);
-        setPreviewUrl(data.img1 || '');
+        const { data } = await myAxios(token, setToken).get(`/socialing/feed?feedId=${feedId}`);
+        console.log("로드된 피드:", data);
+        console.log("로그인된 유저 ID:", user?.userId);
+        console.log("피드 작성자 ID:", data.writerUserId);
+        // 만약 현재 로그인한 userId 와 작성자가 다르면 접근 차단
+        if (data.writerUserId !== Number(user.id)) {
+          alert("본인이 작성한 게시글만 수정할 수 있습니다.");
+          navigate('/'); // 혹은 /myPage 로 보내도 됨
+          return;
+        }
+
+        setPreviewUrls([data.img1, data.img2, data.img3, data.img4, data.img5].filter(Boolean));
         setText(data.content);
         setTags([data.tag1, data.tag2, data.tag3, data.tag4, data.tag5].filter(Boolean));
       } catch (e) {
@@ -37,16 +49,16 @@ export default function FeedEdit() {
         setLoading(false);
       }
     })();
-  }, [feedId,token]);
+  }, [feedId, token]);
 
   // if (loading) return <div>로딩 중...</div>;
   if (error) return <div className="error">{error}</div>;
 
   const handleImageChange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setImageFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    setImageFiles(files);
+    setPreviewUrls(files.map(file => URL.createObjectURL(file)));
   };
 
   const handleTextChange = e => {
@@ -68,11 +80,27 @@ export default function FeedEdit() {
     form.append('feed', new Blob([
       JSON.stringify({ content: text, tags })
     ], { type: 'application/json' }));
-    if (imageFile) form.append('images', imageFile);
+    
+    if (imageFiles.length) {
+      imageFiles.forEach(file => form.append('images', file));
+    }
+    form.append('feedId',feedId);
+    form.append('userId',user.id);
 
+    // try {
+    //   await myAxios(token, setToken).patch(
+    //     `/user/socialing/feed/${feedId}`,
+    //     form
+    //     // { headers: { 'Content-Type': 'multipart/form-data' } }
+    //   );
+    //   navigate(`/feed/${feedId}`);
+    // } catch (e) {
+    //   console.error(e);
+    //   setError('수정에 실패했습니다.');
+    // }
     try {
-      await myAxios(token,setToken).patch(
-        `/user/socialing/feed/${feedId}`,
+      await myAxios(token, setToken).post(
+        "socialing/feed",
         form
         // { headers: { 'Content-Type': 'multipart/form-data' } }
       );
@@ -99,14 +127,19 @@ export default function FeedEdit() {
       </header>
 
       <div className="KYM-FeedEdit-main">
-        <div className="KYM-FeedEdit-image-box" onClick={() => fileInputRef.current.click()}>
-          {previewUrl
-            ? <img src={`${url}/iupload/previewUrl`} alt="미리보기" />
-            : <span className="KYM-FeedEdit-placeholder">사진 선택</span>
-          }
-          <input
+        <div className="KYM-FeedEdit-image-box" onClick={() => fileInputRef.current?.click()}>
+          {previewUrls.length > 0 ? (
+            previewUrls.map((img, idx) => (
+              <img key={idx} src={img.startsWith('blob:') ? img : `${url}/iupload/${img}`} 
+              alt={`미리보기${idx}`} style={{ width: '100px', marginRight: '8px' }} />
+            ))
+          ) : (
+            <span className="KYM-FeedEdit-placeholder">사진 선택</span>
+          )}
+           <input
             type="file"
             accept="image/*"
+            multiple
             ref={fileInputRef}
             style={{ display: 'none' }}
             onChange={handleImageChange}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './SettlementInfo.css';
 import ProfileFooter from './ProfileFooter';
-import { myAxios } from '../../config';
+import { myAxios, url } from '../../config';
 import { tokenAtom, userAtom } from '../../atoms';
 import { useAtomValue } from 'jotai';
 
@@ -177,7 +177,7 @@ const SettlementInfo = () => {
             </>
           ) : (
             <div className="KHJ-settlement__image-preview-wrapper">
-              <img src={idImagePreview} alt="신분증 미리보기" className="KHJ-settlement__image-preview" />
+              <img src={`${url}/files?filename=${idImagePreview}`} alt="신분증 미리보기" className="KHJ-settlement__image-preview" />
               <button type="button" className="KHJ-remove-btn" onClick={removeImage}>×</button>
             </div>
           )}

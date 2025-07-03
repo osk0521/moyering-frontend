@@ -1,4 +1,7 @@
 .KHJ-host-header {
+  display: flex;
+  justify-content: space-between; /* 텍스트는 왼쪽, 로고는 오른쪽 */
+  align-items: center; /* 세로로 중앙 정렬 */
   background-color: white;
   padding: 24px;
   font-size: 1.5rem;
@@ -10,4 +13,9 @@
   margin: 0;
   font-weight: bold;
   color: #ffbf00;
+}
+
+.KHJ-host-logo {
+  margin-left: auto; /* 로고를 오른쪽으로 이동 */
+  width: 200px;
 }

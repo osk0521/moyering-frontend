@@ -125,10 +125,8 @@ const HostRegist = () => {
         <label className="form-label">휴대전화</label>
         <div className="input-row">
           <input type="text" placeholder="전화번호 입력" className="form-input" onChange={edit} name="tel" />
-          <button type="button" className="verify-btn">인증번호 보내기</button>
         </div>
-        <input type="text" placeholder="인증번호 입력" className="form-input" />
-        <p className="error-msg">인증번호가 틀립니다! 인증에 실패하였습니다!</p>
+        
 
         <label className="form-label">공개전화번호</label>
         <input type="text" placeholder="전화번호 입력" className="form-input" onChange={edit} name="publicTel" />

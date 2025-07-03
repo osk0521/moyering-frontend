@@ -50,17 +50,6 @@
   font-size: 0.95rem;
 }
 
-.KHJ-review-class-search-btn,
-.KHJ-review-class-reset-btn {
-  padding: 8px 16px;
-  border: none;
-  background-color: #ffa500;
-  color: #fff;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .KHJ-review-class-date-separator {
   margin: 0 5px;
 }
@@ -139,7 +128,7 @@
 }
 
 .KHJ-review-class-reply-btn {
-  background-color: #ffa500;
+  background-color: #ffbf00;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
@@ -147,6 +136,50 @@
   cursor: pointer;
 }
 
+/* 공통 버튼 스타일 */
+.KHJ-review-class-btn,
+.KHJ-review-class-reset-btn,
+.KHJ-review-class-search-btn,
+.KHJ-review-class-reply-btn,
+.KHJ-review-class-reply-form button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #ffbf00; /* 버튼 배경색 */
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 부드러운 색상 전환 */
+}
+
+.KHJ-review-class-btn:hover,
+.KHJ-review-class-reset-btn:hover,
+.KHJ-review-class-search-btn:hover,
+.KHJ-review-class-reply-btn:hover,
+.KHJ-review-class-reply-form button:hover {
+  background-color: #ff9f00; /* 호버 시 배경색 변경 */
+}
+
+/* '답변 저장' 및 '답변 수정' 버튼 크기 조정 */
+.KHJ-review-class-reply-form button {
+  margin-top: 20px;
+  margin-right: 15px;
+  align-self: flex-end;
+  padding: 10px 20px;
+  background-color: #ffbf00;
+  color: white;
+}
+
+.KHJ-review-class-btn {
+  width: 120px; /* 검색, 초기화 버튼 등 */
+}
+
+.KHJ-review-class-reply-btn {
+  padding: 8px 20px;
+  width: 120px;
+}
+
+/* 답변 입력 폼 */
 .KHJ-review-class-reply-form {
   margin-top: 16px;
   display: flex;
@@ -156,20 +189,52 @@
 
 .KHJ-review-class-reply-form textarea {
   width: 90%;
-  min-height: 80px;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-  resize: none;
+  min-height: 100px; /* 최소 높이를 조금 더 키워서 여백을 충분히 확보 */
+  padding: 12px; /* 내용과 경계 사이 간격 추가 */
+  border-radius: 8px; /* 둥글게 처리 */
+  border: 1px solid #ddd; /* 테두리 색상 */
+  font-size: 1rem; /* 글자 크기 */
+  font-weight: 400; /* 글씨 두께 */
+  color: #444; /* 텍스트 색상 */
+  background-color: #f9f9f9; /* 배경색 연한 회색 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 효과 */
+  resize: none; /* 리사이즈 막기 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+  margin-bottom: 15px; /* 아래쪽 여백 */
 }
 
-.KHJ-review-class-reply-form button {
-  align-self: flex-end;
-  padding: 8px 16px;
-  background-color: #218838;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.KHJ-review-class-reply-form textarea:focus {
+  outline: none; /* 포커스 시 기본 테두리 없애기 */
+  border-color: #ffbf00; /* 포커스 시 테두리 색상 변경 */
+  background-color: #fffbe6; /* 포커스 시 배경색 강조 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 포커스 시 그림자 효과 강화 */
+}
+
+.KHJ-review-textarea{
+  margin: 0 auto;
+}
+
+.KHJ-review-content {
+  margin: 0 auto;
+  background-color: #f9f9f9; /* 배경색은 연한 회색 */
+  padding: 15px; /* 내용과 경계 사이에 간격을 추가 */
+  border-radius: 8px; /* 테두리 둥글게 */
+  border: 1px solid #ddd; /* 경계선 추가 */
+  font-size: 1rem; /* 폰트 크기 */
+  font-weight: 500; /* 글씨 두께 */
+  color: #444; /* 텍스트 색상 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* 약간의 그림자 효과 추가 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+  margin-bottom: 15px; /* 아래쪽 여백 */
+}
+
+.KHJ-review-content p {
+  margin: 0; /* p 태그의 기본 마진을 없애서 불필요한 여백 제거 */
+  word-wrap: break-word; /* 긴 단어가 한 줄을 넘어갈 때 자동으로 줄 바꿈 */
+}
+
+.KHJ-review-content:hover {
+  background-color: #fffbe6; /* 호버 시 배경색을 살짝 변경하여 강조 */
+  border-color: #ffbf00; /* 호버 시 경계선 색상 변경 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 효과 강화 */
 }

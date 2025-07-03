@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './TabDescription.css';
 import React from 'react'; // 이 한 줄만 추가!
+import { Editor } from '@toast-ui/editor';
 
 const TabDescription = ({ classData, setClassData }) => {
+    const editorRef = useRef();
+    const editorInstanceRef = useRef();
     const { description } = classData;
     const [images, setImages] = useState([
         description.img1 ? URL.createObjectURL(description.img1) : null,
@@ -34,16 +37,61 @@ const TabDescription = ({ classData, setClassData }) => {
     };
 
 
-    const handledetailDescriptionChange = (e) => {
-        setClassData(prev => ({
-            ...prev,
-            description: {
-                ...prev.description,
-                detailDescription: e.target.value
-            }
-        }))
-    }
+    // const handledetailDescriptionChange = (e) => {
+    //     setClassData(prev => ({
+    //         ...prev,
+    //         description: {
+    //             ...prev.description,
+    //             detailDescription: e.target.value
+    //         }
+    //     }))
+    // }
 
+    useEffect(() => {
+        if (editorRef.current && !editorInstanceRef.current) {
+            const instance = new Editor({
+                el: editorRef.current,
+                height: '400px',
+                initialEditType: 'wysiwyg',
+                previewStyle: 'vertical',
+                initialValue: description.detailDescription || '',
+                placeholder: '모임에 대한 상세한 설명을 작성해주세요',
+                hideModeSwitch: true,
+                theme: 'default',
+                toolbarItems: [
+                    ['heading', 'bold', 'italic', 'strike'],
+                    ['hr', 'quote'],
+                    ['ul', 'ol'],
+                    ['table', 'link'],
+                    ['image'],
+                ],
+                hooks: {
+                    addImageBlobHook: (blob, callback) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const imageUrl = e.target.result;
+                            callback(imageUrl, blob.name || 'uploaded image');
+                        };
+                        reader.readAsDataURL(blob);
+                    },
+                },
+                events: {
+                    change: () => {
+                        const content = instance.getHTML();
+                        setClassData((prev) => ({
+                            ...prev,
+                            description: {
+                                ...prev.description,
+                                detailDescription: content,
+                            },
+                        }));
+                    },
+                },
+            });
+
+            editorInstanceRef.current = instance;
+        }
+    }, [editorRef]);
     return (
         <div className="KHJ-class-info-box">
             <h3 className="KHJ-section-title">클래스 설명</h3>
@@ -84,13 +132,14 @@ const TabDescription = ({ classData, setClassData }) => {
                 <label className="KHJ-description-label">
                     <span className="KHJ-required-text-dot">*</span>클래스 상세설명
                 </label>
-                <textarea
+                {/* <textarea
                     value={description.detailDescription || ''}
                     onChange={handledetailDescriptionChange}
                     placeholder="클래스에 대한 설명을 작성해주세요."
                     className="KHJ-description-textarea"
                     maxLength="2000"
-                />
+                /> */}
+               <div ref={editorRef} />
                 <div className="KHJ-footer">
                     <span>{(description.detailDescription || '').length} / 2000</span>
                 </div>

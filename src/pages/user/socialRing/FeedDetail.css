@@ -155,6 +155,14 @@
   border: none;
   margin-right: 16px;
 }
+.KYM-detail-container .KYM-action-icon2 {
+  font-size: 26px;
+  width: 26px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  margin-right: 16px;
+}
 
 .KYM-detail-container .KYM-action-icon.liked {
   color: #ed4956;

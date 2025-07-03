@@ -68,3 +68,19 @@
   width: 20px;
   margin-right: 8px;
 }
+
+.KHJ-join-btn {
+  text-align: left;
+  color: rgb(182, 182, 182);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.KHJ-join-btn:visited,
+.KHJ-join-btn:hover,
+.KHJ-join-btn:active,
+.KHJ-join-btn:focus {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}

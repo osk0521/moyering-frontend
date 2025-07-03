@@ -1,6 +1,6 @@
 .card {
   width: 278px;
-  border-radius: 20px;
+  border-radius: 8px;
   overflow: hidden;
   background: white;
   box-shadow: 2px 2px 7px 2px rgb(0 0 0 / 8%);
@@ -19,8 +19,6 @@
   background-color: #ddd;
   background-size: cover;
   background-position: center;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
 }
 
 .badge {

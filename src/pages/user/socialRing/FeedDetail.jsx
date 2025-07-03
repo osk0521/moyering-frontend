@@ -9,6 +9,8 @@ import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
 import Header from '../../common/Header';
 import FollowButton from './FollowButton';
+import { useQuery } from '@tanstack/react-query';
+import share from './icons/share.png';
 
 export default function FeedDetail() {
   // Jotai atom에서 토큰 읽어오기
@@ -17,7 +19,7 @@ export default function FeedDetail() {
 
   const [commentText, setCommentText] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
+  const [showReplyPickerId, setShowReplyPickerId] = useState(null);
   const { feedId } = useParams();
   // const [feed, setFeed] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -35,23 +37,46 @@ export default function FeedDetail() {
   const [feed, setFeed] = useState([]);
   const [comment, setComment] = useState([]);
 
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(0);
+  const [menuOpenId, setMenuOpenId] = useState(null);
+
+  // useEffect(() => {
+  //   console.log(token)
+  //   myAxios().get(`/socialing/feed?feedId=${feedId}`)
+  //     .then(res => {
+  //       console.log('▶ feed detail:', res.data);
+  //       console.log(res)
+  //       setFeed(res.data)
+  //       console.log("댓글")
+  //       console.log(res.data.comments)
+  //       setComment(res.data.comments)
+  //       console.log(token)
+  //       console.log('▶ writerUserId:', feed.writerUserId);
+  //     })
+  //     .catch(err => {
+  //       console.log(err)
+  //     })
+  // }, [token])
   useEffect(() => {
-    console.log(token)
     myAxios().get(`/socialing/feed?feedId=${feedId}`)
       .then(res => {
-        console.log('▶ feed detail:', res.data);
-        console.log(res)
-        setFeed(res.data)
-        console.log("댓글")
-        console.log(res.data.comments)
-        setComment(res.data.comments)
-        console.log(token)
-        console.log('▶ writerUserId:', feed.writerUserId);
+        const data = res.data;
+        setFeed(data);
+        setComment(data.comments);
+        setLikes(data.likesCount || 0);
+
+        // FeedDetail에선 likedByUser 불확실하니까 별도 체크
+        if (token) {
+          myAxios(token, setToken).get(`/user/socialing/likes`)
+            .then(likesRes => {
+              const likedIds = likesRes.data.filter(f => f.likedByUser).map(f => f.feedId);
+              setLiked(likedIds.includes(Number(feedId)));
+            });
+        }
       })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [token])
+      .catch(console.error);
+  }, [feedId, token]);
 
   if (error) return <div className="KYM-detail-container">{error}</div>;
   if (!feed) return <div className="KYM-detail-container">피드가 없습니다.</div>;
@@ -109,18 +134,29 @@ export default function FeedDetail() {
 
       //  올바른 엔드포인트, 올바른 Body
       const payload = {
+
         content: replyText,        // 답글 내용
         parentId: replyingTo      // 최상위라면 null
       };
 
-      console.log("▶ 요청 보낼 URL:", `/user/socialing/feed/${feedId}/comment`);
-      console.log("▶ 요청 보낼 payload:", payload);
+      // console.log("▶ 요청 보낼 URL:", `/user/socialing/feed/${feedId}/comment`);
+      // console.log("▶ 요청 보낼 payload:", payload);
 
       // 4️⃣ 실제 POST 요청
       const res = await myAxios(token, setToken).post(
-        "/user/socialing/feed/comment", feed.feedId,
-        payload
+        "/user/socialing/feed/comment", {
+        feedId: feedId,
+        content: replyText,
+        parentId: replyingTo
+      }
       );
+      // 답글 등록 후 다시 불러오기
+      const { data } = await myAxios().get(`/socialing/feed?feedId=${feedId}`);
+      setFeed(data);
+      setComment(data.comments);
+      setReplyText('');
+      setReplyingTo(null);
+
       console.log("▶ 댓글 등록 성공:", res.status, res.data);
 
     } catch (err) {
@@ -128,6 +164,13 @@ export default function FeedDetail() {
       console.error("▶ 댓글 등록 에러:", err.response?.status, err.response?.data);
     }
   };
+
+  const onReplyClick = (commentId) => {
+    setReplyingTo(prev => (prev === commentId ? null : commentId));
+    setReplyText('');
+  };
+
+
   // 이모지 선택 핸들러
   const onEmojiClick = (emojiData, event) => {
     setCommentText(text => text + emojiData.emoji);
@@ -137,7 +180,7 @@ export default function FeedDetail() {
   // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
   useEffect(() => {
     let mounted = true;
-    myAxios(token,setToken).get(`user/socialing/scrap/${feedId}`)
+    myAxios(token, setToken).get(`user/socialing/scrap/${feedId}`)
       .then(res => {
         if (mounted) setScrapped(res.data);
       })
@@ -163,7 +206,117 @@ export default function FeedDetail() {
       setLoading(false);
     }
   };
+  const { data: likedIds = [] } = useQuery({
+    queryKey: ['likes'],
+    queryFn: async () => {
+      if (!token) return [];
+      const res = await myAxios(token, setToken).get(`/user/socialing/likes`);
+      return res.data.filter(item => item.likedByUser).map(item => item.feedId);
+    },
+    enabled: !!token
+  });
 
+  // 좋아요 토글
+  const toggleLike = async () => {
+    if (!isLoggedIn) return alert("로그인 후 이용해주세요.");
+    try {
+      await myAxios(token, setToken).post(`/user/socialing/likes/${feedId}`);
+      setLiked(!liked);
+      setLikes(prev => liked ? prev - 1 : prev + 1);
+    } catch (err) {
+      console.error('좋아요 토글 실패:', err);
+      alert("좋아요 처리에 실패했습니다.");
+    }
+  };
+
+  const renderComment = (c, level = 0) => (
+    <div key={c.commentId} className="KYM-comment-block" style={{ marginLeft: `${level * 20}px` }}>
+      <img className="KYM-comment-avatar" src={c.userProfile || null} alt="" />
+      <div className="KYM-comment-body">
+        <div className="KYM-comment-header">
+          <span className="KYM-comment-author">{c.writerId}</span>
+        </div>
+        <p className="KYM-comment-text">
+          {c.parentWriterId && <span style={{ color: '#888' }}>@{c.parentWriterId} </span>}
+          {c.content}
+        </p>
+        <div className="KYM-comment-actions">
+          <span className="KYM-comment-date">{formatDate(c.createAt)}</span>
+          {c.replies && c.replies.length > 0 && (
+            <button
+              className="KYM-reply-toggle"
+              onClick={() => onToggleReplies(c.commentId)}
+            >
+              {showReplies[c.commentId] ? '답글 숨기기' : '답글 보기'}
+            </button>
+          )}
+          {isLoggedIn && (
+            <button
+              className="KYM-reply-add"
+              onClick={() => onReplyClick(c.commentId)}
+            >
+              답글 달기
+            </button>
+          )}
+        </div>
+
+        {replyingTo === c.commentId && (
+          <div className="KYM-add-comment">
+            <span
+              className="KYM-input-emoji"
+              onClick={() => {
+                if (!isLoggedIn) return window.alert('로그인 후 이용해주세요.');
+                setShowReplyPickerId(c.commentId);
+              }}
+            >
+              😊
+            </span>
+            {showReplyPickerId === c.commentId && (
+              <div className="emoji-picker-wrapper">
+                <EmojiPicker
+                  onEmojiClick={(emojiData) => {
+                    setReplyText(text => text + emojiData.emoji);
+                    setShowReplyPickerId(null);
+                  }}
+                  disableSearchBar={true}
+                />
+              </div>
+            )}
+            <input
+              className="KYM-input-field"
+              placeholder={isLoggedIn ? "답글 달기..." : "로그인 후 댓글 작성 가능"}
+              disabled={!isLoggedIn}
+              value={replyText}
+              onChange={e => setReplyText(e.target.value)}
+            />
+            <button
+              className="KYM-input-post"
+              disabled={!isLoggedIn || !replyText.trim()}
+              onClick={replysubmit}
+            >
+              게시
+            </button>
+          </div>
+        )}
+
+        {showReplies[c.commentId] && c.replies?.map(r => renderComment(r, level + 1))}
+      </div>
+    </div>
+  );
+
+  const handleShare = () => {
+          if (navigator.share) {
+              navigator.share({
+                  title: '게시물 제목',
+                  text: '게시물 설명',
+                  url: window.location.href,
+              })
+                  .catch(console.error);
+          } else {
+              alert("이 브라우저에서는 공유를 지원하지 않습니다. 카카오톡으로 공유하려면 별도 버튼을 이용하세요.");
+              // 또는 Kakao.Share.sendDefault(...) 호출
+          }
+      };
 
   return (
     <>
@@ -251,81 +404,27 @@ export default function FeedDetail() {
 
             {/* comments */}
             <div className="KYM-detail-comments">
-              {comment.map(c => (
-                <div key={c.commentId} className="KYM-comment-block">
-                  <img className="KYM-comment-avatar" src={c.userProfile || null} alt="" />
-                  <div className="KYM-comment-body">
-                    <div className="KYM-comment-header">
-                      <span className="KYM-comment-author">{c.writerId}</span>
-                    </div>
-                    <p className="KYM-comment-text">{c.content}</p>
-                    <div className="KYM-comment-actions">
-                      <span className="KYM-comment-date">{formatDate(c.createAt)}</span>
-                      {c.replies && c.replies.length > 0 && (
-                        <button
-                          className="KYM-reply-toggle"
-                          onClick={() => onToggleReplies(c.commentId)}
-                        >
-                          {showReplies[c.commentId] ? '답글 숨기기' : '답글 보기'}
-                        </button>
-                      )}
-                      {isLoggedIn && (
-                        <button
-                          className="KYM-reply-add"
-                          onClick={() => onReplyClick(c.commentId)}
-                        >
-                          답글 달기
-                        </button>
-                      )}
-                    </div>
-                    {showReplies[c.commentId] && c.replies?.map(r => (
-                      <div key={r.commentId} className="KYM-reply-item">
-                        <img className="KYM-reply-avatar" src={r.userProfile || null} alt="" />
-                        <div className="KYM-reply-body">
-                          <div className="KYM-comment-header">
-                            <span className="KYM-comment-author">{r.writerId}</span>
-                            <span className="KYM-comment-date">{formatDate(r.createAt)}</span>
-                          </div>
-                          <p className="KYM-comment-text">{r.content}</p>
-                        </div>
-                      </div>
-                    ))}
-                    {replyingTo === c.commentId && (
-                      <div className="KYM-reply-input">
-                        <input
-                          value={replyText}
-                          onChange={e => setReplyText(e.target.value)}
-                          placeholder="답글을 입력하세요..."
-                        />
-                        <button className="KYM-btn KYM-submit" onClick={replysubmit}>
-                          등록
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+              {comment.map(c => renderComment(c))}
             </div>
 
             {/* 액션 + stats */}
             <div className="KYM-actions">
               <button
-                className={`KYM-action-icon ${likedByUser ? 'liked' : ''}`}
-                disabled={!isLoggedIn}
-                onClick={() => {
-                  if (!isLoggedIn) return window.alert('로그인 후 이용해주세요.');
-                  // TODO: 좋아요 API 호출
-                }}
+                className={`KYM-action-icon ${liked ? 'liked' : ''}`}
+                onClick={toggleLike}
               >
-                {likedByUser ? '❤️' : '🤍'}
+                {liked ? '❤️' : '🤍'}
               </button>
               <button className="KYM-action-icon">💬</button>
-              <button className="KYM-action-icon">✈️</button>
+              <img src={share} alt="공유" className="KYM-action-icon2" onClick={() => {
+                                                    handleShare(feed);
+                                                    setMenuOpenId(null);}}/>
+              {/* <button className="KYM-action-icon">{share}</button> */}
               <div className="KYM-action-spacer" />
-              <button className="KYM-action-icon">🔖</button>
+              {/* <button className="KYM-action-icon">🔖</button> */}
             </div>
             <div className="KYM-like-info">
-              <span className="KYM-like-count">좋아요 {likesCount}개</span>
+              <span className="KYM-like-count">좋아요 {likes}개</span>
               <span className="KYM-detail-date">{formatDate(createdAt)}</span>
             </div>
 

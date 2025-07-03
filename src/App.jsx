@@ -52,6 +52,7 @@ import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
 // import SettlementManagement from "./pages/admin/SettlementManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
+
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
 
@@ -108,12 +109,12 @@ function App() {
         <Route path="/gatheringList" element={<GatheringList />} />
         <Route path="/class/classRingDetail/:classId" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
-        <Route path="/feeds" element={<FeedPage />} />
+        {/* <Route path="/feeds" element={<FeedPage />} /> */}
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
-<Route path="/test2" element={<Test2 />} />
+<Route path="/feeds" element={<Test2 />} />
         
         
         <Route path="/scrapList" element={<ScrapList />} />
@@ -131,7 +132,7 @@ function App() {
         <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}></Route>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
-        <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
+        <Route path="/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}

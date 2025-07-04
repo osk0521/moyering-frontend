@@ -5,55 +5,43 @@
     background: #fff;
 }
 
-.KYM-photo-cell,
-.KYM-badge-cell {
+.KYM-profile-wrap .KYM-photo-cell,
+.KYM-profile-wrap .KYM-badge-cell {
     text-align: left;
-    /* 텍스트는 왼쪽 정렬 */
 }
 
-.KYM-photo-cell .KYM-photo-title,
-.KYM-badge-cell .KYM-badge-top {
+.KYM-profile-wrap .KYM-photo-cell .KYM-photo-title,
+.KYM-profile-wrap .KYM-badge-cell .KYM-badge-top {
     margin-bottom: 10px;
 }
 
-.KYM-photo-cell img,
-.KYM-badge-cell img,
-.KYM-photo-cell button,
-.KYM-badge-cell button {
-    display: block;
-    margin: 0 auto;
-    /* 가운데 */
-}
-
-/* 좀 더 세밀하게: flex 사용 */
-.KYM-photo-cell-content,
-.KYM-badge-cell-content {
+.KYM-profile-wrap .KYM-photo-cell-content,
+.KYM-profile-wrap .KYM-badge-cell-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* 이미지+버튼은 가운데 정렬 */
 }
 
-.KYM-profile-table {
+.KYM-profile-wrap .KYM-profile-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
 
-.KYM-profile-table td {
+.KYM-profile-wrap .KYM-profile-table td {
     border-top: 1px solid #eee;
     padding: 15px;
     vertical-align: top;
 }
 
-.KYM-photo-title {
+.KYM-profile-wrap .KYM-photo-title {
     margin-bottom: 8px;
     font-size: 0.95rem;
     text-align: left;
 }
 
-.KYM-photo-img,
-.KYM-badge-img {
+.KYM-profile-wrap .KYM-photo-img,
+.KYM-profile-wrap .KYM-badge-img {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -61,7 +49,7 @@
     margin-bottom: 10px;
 }
 
-.KYM-badge-top {
+.KYM-profile-wrap .KYM-badge-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -69,22 +57,22 @@
     margin-bottom: 8px;
 }
 
-.KYM-badge-title {
+.KYM-profile-wrap .KYM-badge-title {
     font-size: 0.95rem;
 }
 
-.KYM-active-wrap {
+.KYM-profile-wrap .KYM-active-wrap {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.KYM-active-score {
+.KYM-profile-wrap .KYM-active-score {
     color: #666;
     font-size: 0.9rem;
 }
 
-.KYM-help-btn {
+.KYM-profile-wrap .KYM-help-btn {
     background: none;
     border: 1px solid #ffa500;
     color: #ffa500;
@@ -95,16 +83,15 @@
     font-weight: bold;
 }
 
-.KYM-profile-table tr:first-child td {
+.KYM-profile-wrap .KYM-profile-table tr:first-child td {
     border-top: none;
 }
 
-.KYM-profile-table tr td+td {
+.KYM-profile-wrap .KYM-profile-table tr td+td {
     border-left: 1px solid #eee;
-    /* 가운데 구분선 */
 }
 
-.KYM-profile-table button {
+.KYM-profile-wrap .KYM-profile-table button {
     background: #ffa500;
     border: none;
     color: #fff;
@@ -113,16 +100,16 @@
     cursor: pointer;
 }
 
-.KYM-address-box,
-.KYM-category-section,
-.KYM-intro-box {
+.KYM-profile-wrap .KYM-address-box,
+.KYM-profile-wrap .KYM-category-section,
+.KYM-profile-wrap .KYM-intro-box {
     border-top: 1px solid #eee;
     padding-top: 20px;
     margin-top: 20px;
 }
 
-.KYM-address-box input,
-.KYM-intro-box textarea {
+.KYM-profile-wrap .KYM-address-box input,
+.KYM-profile-wrap .KYM-intro-box textarea {
     width: calc(100% - 20px);
     padding: 8px;
     margin: 5px 0;
@@ -130,14 +117,14 @@
     border-radius: 6px;
 }
 
-.KYM-category-list {
+.KYM-profile-wrap .KYM-category-list {
     display: flex;
     gap: 10px;
     margin-top: 10px;
 }
 
-.KYM-category-list span,
-.KYM-category-list button {
+.KYM-profile-wrap .KYM-category-list span,
+.KYM-profile-wrap .KYM-category-list button {
     border: 1px solid #f6b74d;
     border-radius: 20px;
     padding: 6px 12px;
@@ -145,12 +132,12 @@
     cursor: pointer;
 }
 
-.KYM-btns {
+.KYM-profile-wrap .KYM-btns {
     text-align: center;
     margin-top: 20px;
 }
 
-.KYM-btns button {
+.KYM-profile-wrap .KYM-btns button {
     background: #ffa500;
     color: #fff;
     border: none;
@@ -160,43 +147,34 @@
     cursor: pointer;
 }
 
-.KYM-td-flex {
+.KYM-profile-wrap .KYM-td-flex {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.KYM-td-flex label {
+.KYM-profile-wrap .KYM-td-flex label {
     width: 80px;
     flex-shrink: 0;
 }
 
-.KYM-td-flex input {
+.KYM-profile-wrap .KYM-td-flex input {
     flex: 1;
     padding: 8px 12px;
     border: 1px solid #f6b74d;
     border-radius: 6px;
 }
 
-.KYM-address-box input[type="text"]:first-child {
-    width: auto;
-    flex: 0 0 300px;
-    /* 우편번호 */
-}
-
-.KYM-address-box .KYM-post-row {
+.KYM-profile-wrap .KYM-address-box .KYM-post-row {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 10px;
 }
 
-.modal-overlay {
+.KYM-profile-wrap .modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
@@ -204,13 +182,13 @@
     z-index: 999;
 }
 
-.modal-content {
+.KYM-profile-wrap .modal-content {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
 }
 
-.close-btn {
+.KYM-profile-wrap .close-btn {
     margin-top: 10px;
     background: #ffa500;
     border: none;
@@ -220,7 +198,7 @@
     cursor: pointer;
 }
 
-.category-item {
+.KYM-profile-wrap .category-item {
     border: 1px solid #f6b74d;
     border-radius: 20px;
     padding: 6px 12px;
@@ -228,12 +206,12 @@
     cursor: pointer;
 }
 
-.category-item.selected {
+.KYM-profile-wrap .category-item.selected {
     background: #ffa500;
     color: #fff;
 }
 
-.selected-cat {
+.KYM-profile-wrap .selected-cat {
     border: 1px solid #f6b74d;
     border-radius: 20px;
     padding: 6px 12px;
@@ -245,7 +223,7 @@
     gap: 6px;
 }
 
-.modify-btn {
+.KYM-profile-wrap .modify-btn {
     padding: 6px 12px;
     border: 1px solid #f6b74d;
     border-radius: 20px;
@@ -253,21 +231,33 @@
     cursor: pointer;
 }
 
-.modal-category-list {
+.KYM-profile-wrap .modal-category-list {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 15px;
 }
 
-.category-item {
-    border: 1px solid #f6b74d;
-    border-radius: 20px;
-    padding: 6px 12px;
-    cursor: pointer;
+.KYM-profile-wrap .modal-badge-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
 }
 
-.category-item.selected {
-    background: #ffa500;
-    color: #fff;
+.KYM-profile-wrap .badge-item {
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 8px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.KYM-profile-wrap .badge-item.selected {
+    border-color: gold;
+}
+
+.KYM-profile-wrap .badge-item img {
+    width: 60px;
+    height: 60px;
 }

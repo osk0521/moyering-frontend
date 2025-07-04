@@ -88,7 +88,12 @@ const Inquiry = () => {
     setSearchFilter('클래스명');
     setStartDate('');
     setEndDate('');
+    setReplyStatus('');
   };
+
+  useEffect(() => {
+    handleSearch();
+  }, [replyStatus, searchQuery, startDate, endDate])
 
   const submit = () => {
     token && myAxios(token, setToken).post("/host/inquiryReply", null, {
@@ -122,14 +127,14 @@ const Inquiry = () => {
 
         <div className="KHJ-form-row">
           <label>검색어</label>
-          <select
+          {/* <select
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             className="KHJ-inquiry-select"
           >
             <option value="클래스명">클래스명</option>
             <option value="학생명">사용자명</option>
-          </select>
+          </select> */}
 
           <input
             type="text"
@@ -139,7 +144,7 @@ const Inquiry = () => {
             className="KHJ-inquiry-input"
           />
 
-          <button className="KHJ-inquiry-btn search" onClick={handleSearch}>검색</button>
+          {/* <button className="KHJ-inquiry-btn search" onClick={handleSearch}>검색</button> */}
           <button className="KHJ-inquiry-btn reset" onClick={handleReset}>초기화</button>
         </div>
 
@@ -176,7 +181,7 @@ const Inquiry = () => {
               type="radio"
               name="status"
               value="답변대기"
-              checked={replyStatus === '답변대기'}
+              checked={replyStatus === '0'}
               onChange={() => setReplyStatus('답변대기')}
             />
             답변대기
@@ -186,7 +191,7 @@ const Inquiry = () => {
               type="radio"
               name="status"
               value="답변완료"
-              checked={replyStatus === '답변완료'}
+              checked={replyStatus === '1'}
               onChange={() => setReplyStatus('답변완료')}
             />
             답변완료
@@ -220,9 +225,10 @@ const Inquiry = () => {
                   <tr className="KHJ-inquiry-detail-row">
                     <td colSpan="6" className="KHJ-inquiry-td">
                       <div className={`KHJ-inquiry-dropdown-wrapper ${expandedIndex === index ? 'open' : ''}`}>
-                        <div className="KHJ-inquiry-content-box">
-                          <p className="KHJ-inquiry-content">{item.content}</p>
-                          <button className="KHJ-reply-button" onClick={() => handleReplyClick(index, item.inquiryId)}>답변하기</button>
+                        <div className="KHJ-inquiry-content-wrapper">
+                          <div className="KHJ-inquiry-content-box">
+                            <p className="KHJ-inquiry-content">{item.content}</p>
+                          </div>
                         </div>
                         <div className={`KHJ-reply-dropdown ${showReplyFormIndex === index ? 'open' : ''}`}>
                           <form

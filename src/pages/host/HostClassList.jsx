@@ -105,19 +105,16 @@ const handleReset = () => {
           <label>검색어</label>
           <div className="KHJ-search-input-container">
             <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="클래스명을 입력하세요." />
-            <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="KHJ-search-filter">
-              <option value="name">이름</option>
-              <option value="category">카테고리</option>
-            </select>
-            <button onClick={handleSearch}>검색</button>
+            
+            {/* <button onClick={handleSearch}>검색</button> */}
             <button onClick={handleReset}>초기화</button>
           </div>
         </div>
 
         <div className="KHJ-date-section">
           <div className="KHJ-date-range-wrapper">
-            <label>조회기간</label>
-            <div className="KHJ-date-range">
+            <label>클래스 기간</label>
+            <div className="KHJ-date-range" style={{flexDirection : 'row'}} >
               <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
               <span className="KHJ-date-tilde">~</span>
               <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />

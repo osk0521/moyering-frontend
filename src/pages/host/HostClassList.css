@@ -86,23 +86,41 @@
   background-color: #e0a800;
 }
 
+.KHJ-date-range-wrapper {
+  display: flex;
+  align-items: left;
+  gap: 12px;
+  flex-direction: column;
+
+}
+
+.KHJ-date-tilde {
+  margin: 0 4px;
+  font-weight: bold;
+}
+
 .KHJ-date-section .KHJ-date-range {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  /* 세로 정렬도 이쁘게 */
+  gap: 8px;
+  width: 50%;
+  
 }
 
 .KHJ-date-range input[type="date"] {
-  flex: 1; /* 동일한 너비로 설정 */
+  flex: 1;
+  /* 동일한 너비로 설정 */
   min-width: 150px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+
 }
 
 .KHJ-date-section input[type="date"] {
   padding: 8px;
-  width: 100%;
   border: 1px solid #ccc;
   border-radius: 4px;
 }

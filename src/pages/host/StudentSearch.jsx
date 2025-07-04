@@ -40,6 +40,9 @@ const StudentSearch = () => {
     setSelectedStudent(student.id === selectedStudent ? null : student.id);
   };
 
+  token && myAxios(token,setToken).get
+
+
  return (
     <>
       <div className="KHJ-class-search-container">

@@ -118,7 +118,7 @@ export default function MyGatheringList() {
   
   const [searchWord, setSearchWord] = useState("");
 
-  // 탭 변경 핸들러 수정
+  // 탭 변경 핸들러=
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSearch((prev) => ({ ...prev, status: tab, page: 1 }));
@@ -421,7 +421,7 @@ const handleRemoveAccepted = async (applyId) => {
                               <span className="MyGatheringList_meta-icon_osk">
                                 <GoPeople />
                               </span>
-                              <span>참석 인원: {item.participants}, 지원자 총 {item.appliedCount} 명, {item.acceptedCount} 명 참여 중,</span>
+                              <span>참석 인원: {item.participants}, 지원자 총 {item.appliedCount} 명, {item.acceptedCount} 명 참여 중</span>
                             </div>
                             <div className="MyGatheringList_meta-row_osk">
                               <span className="MyGatheringList_meta-icon_osk">

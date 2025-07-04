@@ -16,8 +16,10 @@ const ClassList = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [dateFilter, setDateFilter] = useState('');
-  const [classStatus, setClassStatus] = useState({ ongoing: false, upcoming: false, completed: false });
+  const [classStatus, setClassStatus] = useState('전체');
+  const statusFilter = classStatus === '전체' ? '' : classStatus;
   const [dropdownIndex, setDropdownIndex] = useState(null);
+
 
   const navigate = useNavigate();
 
@@ -26,7 +28,8 @@ const ClassList = () => {
       startDate: customStartDate,
       endDate: customEndDate,
     });
-    const statusFilter = Object.keys(classStatus).filter(k => classStatus[k]);
+
+    const statusFilter = classStatus === '전체' ? '' : classStatus;
 
     myAxios(token)
       .post(`/host/class/list`, {
@@ -36,7 +39,7 @@ const ClassList = () => {
         keyword: searchQuery,
         category1: '',
         category2: '',
-        status: statusFilter.length > 0 ? statusFilter[0] : '',
+        status: statusFilter,
         startDate: customStartDate || '',
         endDate: customEndDate || '',
       })
@@ -53,7 +56,7 @@ const ClassList = () => {
 
   useEffect(() => {
     if (user?.hostId) fetchClassList(1);
-  }, [user]);
+  }, [user, startDate, endDate, searchQuery, searchType, classStatus]);
 
   const handleDateFilterClick = (label) => {
     const today = new Date();
@@ -82,14 +85,14 @@ const ClassList = () => {
 
   const handleSearch = () => fetchClassList(1);
 
-  const handleReset = () => {
-    setSearchQuery('');
-    setStartDate('');
-    setEndDate('');
-    setClassStatus({ ongoing: false, upcoming: false, completed: false });
-    setDateFilter('');
-    fetchClassList(1);
-  };
+const handleReset = () => {
+  setSearchQuery('');
+  setStartDate('');
+  setEndDate('');
+  setClassStatus('전체'); // ✅ 이 부분!
+  setDateFilter('');
+  fetchClassList(1);
+};
 
   const toggleDropdown = (index) => setDropdownIndex(dropdownIndex === index ? null : index);
   const handleNavigate = (path) => navigate(path);
@@ -102,19 +105,16 @@ const ClassList = () => {
           <label>검색어</label>
           <div className="KHJ-search-input-container">
             <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="클래스명을 입력하세요." />
-            <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="KHJ-search-filter">
-              <option value="name">이름</option>
-              <option value="category">카테고리</option>
-            </select>
-            <button onClick={handleSearch}>검색</button>
+            
+            {/* <button onClick={handleSearch}>검색</button> */}
             <button onClick={handleReset}>초기화</button>
           </div>
         </div>
 
         <div className="KHJ-date-section">
           <div className="KHJ-date-range-wrapper">
-            <label>조회기간</label>
-            <div className="KHJ-date-range">
+            <label>클래스 기간</label>
+            <div className="KHJ-date-range" style={{flexDirection : 'row'}} >
               <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
               <span className="KHJ-date-tilde">~</span>
               <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
@@ -130,10 +130,16 @@ const ClassList = () => {
         <div className="KHJ-status-section">
           <label>클래스 상태</label>
           <div className="KHJ-checkbox-group">
-            {['검수중', '검수완료', '모집중'].map(key => (
+            {['전체', '검수중', '모집중', '모집완료', '수강중', '수강완료', '폐강'].map(key => (
               <label key={key}>
-                <input type="checkbox" checked={classStatus[key]} onChange={() => setClassStatus({ ...classStatus, [key]: !classStatus[key] })} />
-                {key === '검수중' ? '검수중' : key === '검수완료' ? '검수완료' : key === '모집중'?'모집중' :  '오픈'}
+                <input
+                  type="radio"
+                  name="classStatus"
+                  value={key}
+                  checked={classStatus === key}
+                  onChange={() => setClassStatus(key)}
+                />
+                {key}
               </label>
             ))}
           </div>
@@ -155,14 +161,11 @@ const ClassList = () => {
                 <p><strong>상태:</strong> {result.status}</p>
               </div>
               <div className="KHJ-result-actions">
-                <button onClick={() => toggleDropdown(index)}>더 보기</button>
-                {dropdownIndex === index && (
-                  <div className="KHJ-dropdown-menu">
-                    <button onClick={() => handleNavigate('/host/inquiry')}>문의 관리</button>
-                    <button onClick={() => handleNavigate('/host/classReview')}>리뷰 관리</button>
-                    <button onClick={() => handleNavigate(`/host/detail/${result.classId}/${result.calendarId}`)}>상품 상세</button>
-                  </div>
-                )}
+                <button onClick={() => handleNavigate(`/host/inquiry?classId=${result.classId}&calendarId=${result.calendarId}`)}>문의</button>
+                <br />
+                <button onClick={() => handleNavigate(`/host/classReview?calendarId=${result.calendarId}`)}>리뷰</button>
+                <br />
+                <button onClick={() => handleNavigate(`/host/detail/${result.classId}/${result.calendarId}`)}>상세</button>
               </div>
             </div>
           ))}

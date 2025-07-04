@@ -187,7 +187,7 @@ export default function Header() {
                                 </small>
                               </div>
                             </div>
-                            <Button className="Header_notification-confirm_osk" onClick={(e) => handleNotificationClick(alarms, e)}>확인</Button>
+                            <span className="Header_notification-confirm_osk" onClick={(e) => handleNotificationClick(alarms, e)}>확인</span>
                           </div>
                         </DropdownItem>
                       ))}        
@@ -272,7 +272,7 @@ export default function Header() {
             <span
               className="Header_nav-item_osk"
               onClick={() => 
-              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/host/intro")}}
+              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/classList")}}
             >
               클래스잉
             </span>

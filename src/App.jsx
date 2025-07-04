@@ -39,8 +39,9 @@ import NoticeCreate from "./pages/admin/NoticeCreate";
 import NoticeEdit from "./pages/admin/NoticeEdit"
 import CouponManagement from './pages/admin/CouponManagement.jsx';
 import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
-import UnsettlementManagement from './pages/admin/UnsettlementManagement.jsx';  
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
+import UnsettlementManagement  from "./pages/admin/UnSettlementManagement";
+
 
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
@@ -58,7 +59,7 @@ import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
 
 import Main from "./pages/common/Main.jsx";
 import ClassInquiry from "./pages/user/0myPage/classRing/ClassInquiry.jsx";
-import MyClassList from "./pages/user/0myPage/classRing/MyClassList.jsx";
+import MyClassRegistList from "./pages/user/0myPage/classRing/MyClassRegistList.jsx";
 import ReviewList from "./pages/user/0myPage/classRing/ReviewList.jsx";
 import MyCouponList from "./pages/user/0myPage/common/MyCouponList.jsx";
 import MySchedule from "./pages/user/0myPage/common/MySchedule.jsx";
@@ -131,17 +132,16 @@ function App() {
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route path="/user/logout"/>
-        <Route exact path="/user/chat" element={<GatheringChat />}></Route>
+        <Route exact path="/user/chat" element={<GatheringChat />}/>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />
-        <Route path="/user/mypage/reviewList" element={<ReviewList />} />
-        <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
+        <Route path="/user/mypage/myReviewList" element={<ReviewList />} />
+        <Route path="/user/mypage/myClassInquiry" element={<ClassInquiry />} />
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
-        <Route path="/user/mypage/myClassList" element={<MyClassList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
         <Route exact path="/user/mypage/myGatheringList" element={<MyGatheringList />}></Route>
         <Route exact path="/user/mypage/myGatheringingApplyList" element={<MyGatheringApplyList />}></Route>
@@ -183,7 +183,7 @@ function App() {
         <Route path="/user/mypage/reviewList" element={<ReviewList />} />
         <Route path="/user/mypage/classInquiry" element={<ClassInquiry />} />
         <Route path="/user/mypage/myCouponList" element={<MyCouponList />} />
-        <Route path="/user/mypage/myClassList" element={<MyClassList />} />
+        <Route path="/user/mypage/myClassRegistList" element={<MyClassRegistList />} />
         <Route path="/user/mypage/myWishlist" element={<MyWishlist />} />
 
         {/* 관리자(/admin) */}

@@ -1,15 +1,13 @@
 .KHJ-class-calendar-wrapper {
-  width: 100%;
-  max-width: 900px;
-  background-color: #fff;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin: 20px auto;
-  animation: KHJ-calendarFadeIn 0.4s ease-in-out;
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 32px;
+  background-color: #fff6ec;
+  border-radius: 20px;
+  animation: KHJ-reviewFadeIn 0.4s ease-in-out;
 }
 
-@keyframes KHJ-calendarFadeIn {
+@keyframes KHJ-reviewFadeIn {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -21,52 +19,91 @@
 }
 
 .KHJ-class-calendar-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 24px;
-  color: #333;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 28px;
+  color: #f58020;
+  text-align: center;
 }
 
-/* FullCalendar 내부 스타일은 그대로 유지 */
-.fc {
-  width: 100%;
-  height: 100%;
-}
-
-.fc .fc-daygrid-event {
-  font-size: 0.85em;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #333;
-  font-weight: 500;
-}
-
-.fc .fc-toolbar-title {
+/* 헤더 */
+.calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
   font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #f58020;
 }
 
-/* 일요일 - 빨간색 */
-.fc-day-sun a,
-.fc-day-sun {
-  color: red;
+.calendar-header-btn {
+  background-color: #ffe7c1;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #f58020;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* 토요일 - 파란색 */
-.fc-day-sat a,
-.fc-day-sat {
-  color: blue;
+.calendar-header-btn:hover {
+  background-color: #ffddb0;
 }
 
-/* 평일 - 검정색 */
-.fc-day-mon a,
-.fc-day-tue a,
-.fc-day-wed a,
-.fc-day-thu a,
-.fc-day-fri a,
-.fc-day-mon,
-.fc-day-tue,
-.fc-day-wed,
-.fc-day-thu,
-.fc-day-fri {
-  color: black;
+/* 캘린더 그리드 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 0.5rem 0;
+  background: #ffe7c1;
+  color: #c07015;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0;
+  font-size: 0.9rem;
+}
+
+.calendar-cell {
+  background: white;
+  border: 1px solid #f2e6dc;
+  min-height: 100px;
+  padding: 0.4rem;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.calendar-cell:hover {
+  background-color: #fff4e2;
+}
+
+.today-cell {
+  border: 2px solid #f58020;
+}
+
+.date-num {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.schedule-box {
+  padding: 0.35rem 0.5rem;
+  margin-top: 0.3rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: pre-line;
+  background-color: #D7F2FF;
+  color: #185b84;
+  font-weight: 500;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 }

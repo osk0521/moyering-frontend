@@ -1,5 +1,7 @@
 .GatheringChat_chat-app_osk {
   min-height: 100vh;
+  width: 1280px;
+  margin: 0 auto;
   background: #f8f9fa;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -70,13 +72,13 @@
 
 .GatheringChat_main-content_osk {
   display: flex;
-  height: calc(100vh - 120px);
+  height: 900px;
 }
 
 .GatheringChat_sidebar_osk {
   width: 300px;
   background: white;
-  border-right: 1px solid #e9ecef;
+  border: 1px solid #e9ecef;
 }
 
 .GatheringChat_chat-tabs_osk {

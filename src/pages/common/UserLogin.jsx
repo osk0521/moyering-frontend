@@ -47,7 +47,7 @@ const Login = () => {
   return (
     <div className="KHJ-login-container">
       <div className="KHJ-login-box">
-        <img src="/logo.png" alt="로고" className="KHJ-login-logo" />
+        <img src="/logo.png" alt="로고" className="KHJ-login-logo" onClick={()=>navigate('/')} />
         <h2>로그인</h2>
         <form onSubmit={handleLogin} className="KHJ-login-form">
           <label>아이디</label>
@@ -66,6 +66,7 @@ const Login = () => {
             value={login.password}
             onChange={edit}
           />
+          <a className='KHJ-join-btn' onClick={()=>navigate('/join')}>회원가입</a>
           <button type="submit" className="KHJ-login-btn">로그인</button>
         </form>
         <a href={`${url}/oauth2/authorization/kakao`} className="KHJ-kakao-btn" >

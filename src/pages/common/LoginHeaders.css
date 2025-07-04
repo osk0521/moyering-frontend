@@ -1,0 +1,21 @@
+.KHJ-join-header {
+  display: flex;
+  justify-content: flex-start; /* 👈 왼쪽 정렬 확실하게 */
+  align-items: center;
+  background-color: white;
+  padding: 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.KHJ-join-logo {
+  width: 150px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.KHJ-join-header-title {
+  font-size: 30px;
+  margin: 0;
+  font-weight: bold;
+  color: #ffbf00;
+}

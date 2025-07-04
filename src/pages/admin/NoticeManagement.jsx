@@ -13,7 +13,7 @@ export default function NoticeList() {
     number: 0,
     totalPages: 1,
     totalElements: 0,
-    size: 10,
+    size: 20,
     first: true,
     last: true
   }); // Spring Boot Pageable 형식
@@ -40,7 +40,7 @@ export default function NoticeList() {
     try { 
       const params = {
         page: search.page,
-        size: 10,
+        size: 20,
         sort: 'createdAt,desc'
       };
       
@@ -92,7 +92,6 @@ export default function NoticeList() {
       });
       
       if (response.status === 201) {
-        alert('공지사항이 등록되었습니다.');
         loadNoticeList(); // 목록 새로고침
         return response.data;
       }
@@ -394,9 +393,7 @@ const showNotice = async (noticeId) => {
         <table className="tableHY">
           <thead>
             <tr>
-              <th className="checkbox-colHY">
-                <input type="checkbox" />
-              </th>
+  
               <th>번호</th>
               <th 
                 className="sortableHY"
@@ -426,9 +423,7 @@ const showNotice = async (noticeId) => {
             ) : (
               sortedNoticeList.map((notice, index) => (
                 <tr key={notice.noticeId} className={notice.pinYn ? 'pinned-row' : ''}>
-                  <td>
-                    <input type="checkbox" />
-                  </td>
+             
                   <td>
                     {notice.pinYn && <span className="pin-iconHY">📌</span>}
                     {pageInfo.totalElements - (pageInfo.number * pageInfo.size) - index}
@@ -538,19 +533,15 @@ const showNotice = async (noticeId) => {
               <div className="notice-detailHY">
                 <div className="detail-itemHY">
                   <label>제목:</label>
-                  <span>{selectedNotice.title}</span>
                 </div>
                 
                 <div className="detail-itemHY">
                   <label>작성일:</label>
-                  <span>{formatDate(selectedNotice.createdAt)}</span>
                 </div>
                 
                 <div className="detail-itemHY">
                   <label>게시 상태:</label>
-                  <span className={`status-badgeHY ${!selectedNotice.isHidden ? 'status-published' : 'status-unpublished'}`}>
-                    {!selectedNotice.isHidden ? '게시중' : '비게시'}
-                  </span>
+              
                 </div>
                 
                 <div className="detail-itemHY">

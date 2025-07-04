@@ -44,7 +44,8 @@ import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
-import UnsettlementManagement  from "./pages/admin/UnSettlementManagement";
+import SettlementManagement  from "./pages/admin/SettlementManagement"; 
+
 
 
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
@@ -52,6 +53,7 @@ import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import Follower from './pages/user/socialRing/Follower.jsx';
 import Following from './pages/user/socialRing/Following.jsx';
+
 // import SettlementManagement from "./pages/admin/SettlementManagement";
 
 import ClassList from "./pages/common/ClassList.jsx";
@@ -84,6 +86,7 @@ import{useSetAtom, useAtom} from 'jotai'
 import{fcmTokenAtom, alarmsAtom} from './atoms'
 import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 import PaymentSuccess from './pages/user/classRing/PaymentSuccess.jsx';
+import MyProfilePage from './pages/user/0myPage/common/MyProfilePage.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -133,7 +136,7 @@ function App() {
         <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}/>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
-        <Route path="/feedEdit/:feedId" element={<FeedEdit />} />
+        <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
@@ -149,6 +152,7 @@ function App() {
         <Route path="/user/mypage/follower" element={<Follower />} />
         <Route path="/user/mypage/following" element={<Following />} />
         <Route path="/user/mypage/myFeed" element={<MyFeed />} />
+        <Route path="/user/mypage/myProfile" element={<MyProfilePage />} />
         
 
 
@@ -200,7 +204,7 @@ function App() {
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
-        <Route path="/admin/unsettlement" element={<UnsettlementManagement />} />          {/* 미정산 관리 페이지  */}
+        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산 관리 페이지  */}
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
       </Routes>
     </Router>

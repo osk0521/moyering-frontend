@@ -136,13 +136,6 @@
   padding: 32px !important;
 }
 
-.action-buttonsHY {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding-top: 24px;
-  border-top: 1px solid #e5e7eb;
-}
 
 /* 상태 배지 */
 .status-badgeHY {

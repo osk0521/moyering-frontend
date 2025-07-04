@@ -18,14 +18,7 @@
   color: #2ac084;
 }
 
-/* 액션 버튼 컨테이너 */
-.action-buttonsHY {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  min-height: 32px; /* 버튼 높이를 고정하여 정렬 */
-}
+
 
 /* 액션 버튼 기본 스타일 */
 .action-btnHY {
@@ -48,11 +41,11 @@
 .payment-btnHY {
   background-color: #007bff;
   color: white;
+  justify-content: center;
 }
 
 .payment-btnHY:hover {
   background-color: #0056b3;
-  transform: translateY(-1px);
 }
 
 /* 정산내역 버튼 스타일 */
@@ -63,6 +56,5 @@
 
 .settlement-btnHY:hover {
   background-color: #1e7e34;
-  transform: translateY(-1px);
 }
 

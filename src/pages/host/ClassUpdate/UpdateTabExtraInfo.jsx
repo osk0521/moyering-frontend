@@ -180,7 +180,6 @@ const UpdateTabExtraInfo = ({ registerValidator, classData, setClassData }) => {
                 <th>코드</th>
                 <th>쿠폰 이름</th>
                 <th>할인</th>
-                <th>기간</th>
                 <th>매수</th>
               </tr>
             </thead>
@@ -190,7 +189,6 @@ const UpdateTabExtraInfo = ({ registerValidator, classData, setClassData }) => {
                   <td>{c.couponCode}</td>
                   <td>{c.couponName || '(미지정)'}</td>
                   <td>{c.discount}{c.discountType === 'RT' ? '%' : '원'}</td>
-                  <td>{c.validFrom} ~ {c.validUntil}</td>
                   <td>{c.amount}</td>
                 </tr>
               ))}
@@ -221,7 +219,6 @@ const UpdateTabExtraInfo = ({ registerValidator, classData, setClassData }) => {
                       </label>
                       <div>코드: {coupon.couponCode}</div>
                       <div>할인: {coupon.discount}{discountUnit}</div>
-                      <div>기간: {coupon.validFrom} ~ {coupon.validUntil}</div>
                     </div>
                     {selected && (
                       <div className="KHJ-coupon-inputs">

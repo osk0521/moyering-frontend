@@ -18,14 +18,7 @@
   color: #2ac084;
 }
 
-/* 액션 버튼 컨테이너 */
-.action-buttonsHY {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  min-height: 32px; /* 버튼 높이를 고정하여 정렬 */
-}
+
 
 /* 액션 버튼 기본 스타일 */
 .action-btnHY {

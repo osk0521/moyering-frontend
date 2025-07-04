@@ -112,6 +112,7 @@ const PaymentManagement = () => {
         )}
       </div>
       
+      <div className = "search-filter-group">
       <div className="search-sectionHY">
         <div className="search-boxHY">
           <span className="search-iconHY">🔍</span>
@@ -123,6 +124,7 @@ const PaymentManagement = () => {
             className="search-inputHY"
           />
         </div>
+        <div className = "date-filter-group">
         <label className="date-labelHY">결제 기간</label>
         <input
           type="date"
@@ -137,6 +139,8 @@ const PaymentManagement = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
+      </div>
+      </div>
       </div>
 
       {/* 필터와 엑셀 다운로드 */}

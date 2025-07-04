@@ -230,6 +230,15 @@ body {
   margin-bottom: 20px !important;
 }
 
+/* 공통 테이블 스타일 */
+.table-containerHY {
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  overflow: hidden !important;
+  margin-bottom: 20px !important;
+}
+
 .tableHY {
   width: 100% !important;
   border-collapse: collapse !important;
@@ -242,17 +251,28 @@ body {
   color: #333 !important;
   font-weight: 600 !important;
   padding: 12px 16px !important;
-  text-align: left !important;
+  text-align: center !important;
   border-bottom: 1px solid #e9ecef !important;
+  border-right: 1px solid #e9ecef !important;
   font-size: 13px !important;
+}
+
+.tableHY thead th:last-child {
+  border-right: none !important;
 }
 
 .tableHY tbody td {
   padding: 12px 16px !important;
   border-bottom: 1px solid #f1f3f4 !important;
+  border-right: 1px solid #f1f3f4 !important;
   color: #333 !important;
   vertical-align: middle !important;
   background: white !important;
+  text-align: center !important;
+}
+
+.tableHY tbody td:last-child {
+  border-right: none !important;
 }
 
 .tableHY tbody tr:hover {
@@ -261,4 +281,190 @@ body {
 
 .tableHY tbody tr:last-child td {
   border-bottom: none !important;
+}
+
+/* 날짜 필터 그룹 */
+.date-filter-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 8px 16px !important;
+  background-color: #f8f9fa !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.date-labelHY {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+
+.date-inputHY {
+  padding: 8px 12px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  background-color: white !important;
+  color: #374151 !important;
+  min-width: 140px !important;
+  transition: all 0.2s ease !important;
+}
+
+.date-inputHY:focus {
+  outline: none !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.date-separatorHY {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+
+.date-reset-btn {
+  padding: 8px 16px !important;
+  border: 1px solid #d1d5db !important;
+  background-color: white !important;
+  color: #6b7280 !important;
+  border-radius: 6px !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.date-reset-btn:hover {
+  background-color: #f3f4f6 !important;
+  border-color: #9ca3af !important;
+  color: #374151 !important;
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+  .search-sectionHY {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  
+  .search-boxHY {
+    max-width: none !important;
+    min-width: auto !important;
+  }
+  
+  .date-filter-group {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .date-filter-group {
+    padding: 6px 12px !important;
+  }
+  
+  .date-inputHY {
+    min-width: 100px !important;
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+  }
+  
+  .date-reset-btn {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* 액션 버튼들 */
+.action-buttonsHY {
+  display: flex;
+  gap: 4px;
+}
+
+수정하기 ,삭제하기, 결제내역, 정산내역 
+.btn-editHY, .btn-deleteHY .btn-paymentlistHY .btn-settlementListHY {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-editHY {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.btn-editHY:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-deleteHY {
+  background-color: #fed7cc;
+  color: #c53030;
+}
+
+.btn-deleteHY:hover {
+  background-color: #fbb6a0;
+}
+
+
+.btn-paymentlistHY {
+  background-color: #fed7cc;
+  color: #c53030;
+}
+
+.btn-paymentlistHY:hover {
+  background-color: #fbb6a0;
+}
+
+
+.btn-settlementlistHY {
+  background-color: #fed7cc;
+  color: #c53030;
+}
+
+.btn-settlementlistHY:hover {
+  background-color: #fbb6a0;
+}
+/* ===== 페이지네이션 ===== */
+.paginationHY {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+
+.page-btnHY {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  color: #4a5568;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.page-btnHY:hover {
+  background-color: #f7fafc;
+}
+
+.page-btnHY.active {
+  background-color: #3182ce;
+  color: white;
+  border-color: #3182ce;
+}
+
+.page-numbersHY {
+  display: flex;
+  gap: 4px;
+}
 }

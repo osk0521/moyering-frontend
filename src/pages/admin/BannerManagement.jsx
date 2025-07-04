@@ -207,7 +207,7 @@ const BannerManagement = () => {
         formData.append("status", "0"); // 0 = 숨김 상태
 
         if (saveData.image) {
-          formData.append("ifile", saveData.image);
+          formData.append("bannerImg", saveData.image);
         } else {
           alert("이미지를 선택해주세요.");
           return;
@@ -250,29 +250,32 @@ const BannerManagement = () => {
     return date.toLocaleDateString("ko-KR");
   };
 
-  const getBannerImageUrl = (ifile) => {
-    if (!ifile) return null;
-    return `${url}/uploads/${ifile}`;
+  const getBannerImageUrl = (bannerImg) => {
+    if (!bannerImg) return null;
+    return `${url}/uploads/${bannerImg}`;
   };
 
+
+  // 페이지 번호 배열 생성 (최대 5개 페이지 번호 표시)
   const getPageNumbers = () => {
     const currentPage = pageInfo.number;
     const totalPages = pageInfo.totalPages;
     const maxVisible = 5;
-
+    
     let start = Math.max(0, currentPage - Math.floor(maxVisible / 2));
     let end = Math.min(totalPages - 1, start + maxVisible - 1);
-
+    
     if (end - start + 1 < maxVisible) {
       start = Math.max(0, end - maxVisible + 1);
     }
-
+    
     const pages = [];
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
     return pages;
   };
+
 
   return (
     <Layout>
@@ -357,10 +360,10 @@ const BannerManagement = () => {
                       {banner.bannerId || banner.id}
                     </td>
                     <td className="banner-image">
-                      {banner.ifile || banner.bannerImg ? (
+                      {banner.bannerImg || banner.bannerImg ? (
                         <img
                           src={getBannerImageUrl(
-                            banner.ifile || banner.bannerImg
+                            banner.bannerImg || banner.bannerImg
                           )}
                           alt={banner.title}
                           style={{
@@ -378,7 +381,7 @@ const BannerManagement = () => {
                         className="image-placeholder"
                         style={{
                           display:
-                            banner.ifile || banner.bannerImg ? "none" : "block",
+                            banner.bannerImg || banner.bannerImg ? "none" : "block",
                         }}
                       >
                         <span>이미지 없음</span>

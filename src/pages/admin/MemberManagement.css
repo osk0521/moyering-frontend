@@ -41,11 +41,11 @@
 .payment-btnHY {
   background-color: #007bff;
   color: white;
+  justify-content: center;
 }
 
 .payment-btnHY:hover {
   background-color: #0056b3;
-  transform: translateY(-1px);
 }
 
 /* 정산내역 버튼 스타일 */
@@ -56,6 +56,5 @@
 
 .settlement-btnHY:hover {
   background-color: #1e7e34;
-  transform: translateY(-1px);
 }
 

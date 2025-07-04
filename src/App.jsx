@@ -44,7 +44,6 @@ import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
-import UnsettlementManagement  from "./pages/admin/UnSettlementManagement";
 import SettlementManagement  from "./pages/admin/SettlementManagement"; 
 
 
@@ -203,8 +202,7 @@ function App() {
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
-        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 미정산 관리 페이지  */}
-        <Route path="/admin/unsettlement" element={<UnsettlementManagement />} />          {/* 미정산 관리 페이지  */}
+        <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산 관리 페이지  */}
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
       </Routes>
     </Router>

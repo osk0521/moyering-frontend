@@ -168,6 +168,7 @@ const MemberManagement = () => {
         <h1>회원 관리</h1>
       </div>
 
+
       {/* 검색 및 필터 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">

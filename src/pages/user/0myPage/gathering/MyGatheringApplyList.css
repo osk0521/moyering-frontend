@@ -285,17 +285,10 @@
   color: #666;
   transition: all 0.2s;
 }
-
-.MyGatheringApplyList_pagination_osk button:hover {
-  background: #f8f9fa;
-  border-color: #ddd;
-}
-
 .MyGatheringApplyList_pagination_osk button.MyGatheringApplyList_active_osk {
   color: #ffc107;
-  border-bottom: 2px solid #ffc107;
   font-weight: 600;
-  color: white;
+  background-color: white;
 }
 
 /* 추가 스타일링 */

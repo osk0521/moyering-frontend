@@ -131,7 +131,7 @@ function App() {
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route path="/user/logout"/>
-        <Route exact path="/user/chat" element={<GatheringChat />}></Route>
+        <Route exact path="/user/chat" element={<GatheringChat />}/>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />

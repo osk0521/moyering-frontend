@@ -100,28 +100,6 @@ export default function ClassRingDetail() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  //데이터 fetch용
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res =  await myAxios(token,setToken).get(`/class/classRingDetail/${classId}`);
-  //       setCalendarList(res.data.calendarList);
-  //       setClassDetailAtom(res.data.hostClass);
-  //       setCurrListAtom(res.data.currList);
-  //       setHostAtom(res.data.host);
-  //       setReviewListAtom(res.data.reviews);
-  //       setCoupons(res.data.coupons);
-  //       console.log(res);
-  //     } catch (err) {
-  //       console.error("클래스 상세 데이터 로딩 실패", err);
-  //     }
-  //   };
-
-  //   if (classId && token) {
-  //   }
-  //   fetchData();
-  // }, [classId, token]);
-
     useEffect(() => {
         myAxios(token,setToken)
           .get(`/class/classRingDetail/${classId}`)
@@ -141,11 +119,6 @@ export default function ClassRingDetail() {
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
   const selectedCalendar = calendarList.find(c => c.calendarId == selectedCalendarId);
-  // useEffect(() => {
-  //   if (calendarList.length > 0 && !selectedCalendarId) {
-  //     setSelectedCalendarId(calendarList[0].calendarId);
-  //   }
-  // }, [calendarList, selectedCalendarId]);
 
   useEffect(() => {
   if (calendarList.length > 0) {

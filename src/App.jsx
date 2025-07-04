@@ -40,7 +40,6 @@ import NoticeEdit from "./pages/admin/NoticeEdit"
 import CouponManagement from './pages/admin/CouponManagement.jsx';
 import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
-<<<<<<< HEAD
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
@@ -48,24 +47,12 @@ import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import UnsettlementManagement  from "./pages/admin/UnSettlementManagement";
 
 
-
-
-=======
->>>>>>> b837a7e37fd3d81410ca8c08e45a4ae218f68b91
-
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import Follower from './pages/user/socialRing/Follower.jsx';
 import Following from './pages/user/socialRing/Following.jsx';
-<<<<<<< HEAD
-=======
-import NoticeManagement from "./pages/admin/NoticeManagement";
-import PaymentManagement from "./pages/admin/PaymentManagement";
-import ReportManagement from "./pages/admin/ReportManagement";
 // import SettlementManagement from "./pages/admin/SettlementManagement";
-import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
->>>>>>> b837a7e37fd3d81410ca8c08e45a4ae218f68b91
 
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";

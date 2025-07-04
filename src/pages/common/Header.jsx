@@ -75,18 +75,18 @@ export default function Header() {
     }
   }, [token, setAlarms]);
 
-    useEffect(() => {
-      console.log(user);
-      if (user&&token) {
-        myAxios(token,setToken).post('/user/alarms')
-          .then(response=> {
-            console.log(response.data)
-            setAlarms([...response.data])
-          })
-          .catch(err=> {
-            console.log(err)
-          })
-      } 
+  useEffect(() => {
+    console.log(user);
+    if (user&&token) {
+      myAxios(token,setToken).post('/user/alarms')
+        .then(response=> {
+          console.log(response.data)
+          setAlarms([...response.data])
+        })
+        .catch(err=> {
+          console.log(err)
+        })
+    } 
   }, [user]);
 
   return (
@@ -123,8 +123,11 @@ export default function Header() {
                   tag="button"
                   className="Header_notification-button_osk"
                 >
-                  {alarms.length > 0 ? (
-                    <FaBell className="Header_top-icon_osk Header_notification-active_osk" />
+                  {alarms.length > 0 ? (  
+                    <>
+                      <FaBell className="Header_top-icon_osk Header_notification-active_osk" />
+                      <span className="Header_notification-badge_osk alarm-count">{alarms.length > 9 ? '9+' : alarms.length}</span>
+                    </>
                   ) : (
                     <FaRegBell className="Header_top-icon_osk" />
                   )}

@@ -508,25 +508,42 @@
 .Header_notification-main_osk {
   flex-grow: 1;
   padding-right: 12px;
+  max-width: 300px;
 }
 
+.Header_notification-badge_osk {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff4757;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+}
 .Header_notification-item-title_osk {
   font-weight: 600;
   color: #212529;
   margin-bottom: 4px;
   font-size: 0.9rem;
   line-height: 1.4;
+  max-width: 280px;
+  overflow: hidden;
+white-space: nowrap;
+  text-overflow: ellipsis;
 }
-
 .Header_notification-body_osk {
   color: #6c757d;
   margin-bottom: 8px;
   font-size: 0.8rem;
   line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  max-width: 280px;
   overflow: hidden;
+white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .Header_notification-meta_osk {

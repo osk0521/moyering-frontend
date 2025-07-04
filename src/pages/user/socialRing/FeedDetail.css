@@ -112,10 +112,22 @@
 }
 
 .KYM-detail-container .KYM-detail-more {
-  margin-left: 8px;
+  margin-left: 360px;
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+.KYM-detail-container .KYM-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.KYM-detail-container .KYM-left-info {
+  display: flex;
+  align-items: center;
 }
 
 .KYM-detail-container .KYM-detail-menu {

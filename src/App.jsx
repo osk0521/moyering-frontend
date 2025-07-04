@@ -84,6 +84,7 @@ import{useSetAtom, useAtom} from 'jotai'
 import{fcmTokenAtom, alarmsAtom} from './atoms'
 import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 import PaymentSuccess from './pages/user/classRing/PaymentSuccess.jsx';
+import MyProfilePage from './pages/user/0myPage/common/MyProfilePage.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -133,7 +134,7 @@ function App() {
         <Route path="/user/logout"/>
         <Route exact path="/user/chat" element={<GatheringChat />}/>
         <Route path="/user/feedCreate" element={<FeedCreate />} />
-        <Route path="/feedEdit/:feedId" element={<FeedEdit />} />
+        <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
@@ -149,6 +150,7 @@ function App() {
         <Route path="/user/mypage/follower" element={<Follower />} />
         <Route path="/user/mypage/following" element={<Following />} />
         <Route path="/user/mypage/myFeed" element={<MyFeed />} />
+        <Route path="/user/mypage/myProfile" element={<MyProfilePage />} />
         
 
 

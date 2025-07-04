@@ -123,6 +123,7 @@ const ClassManagement = () => {
         <h1>클래스 관리</h1>
       </div>
       {/* 검색 및 필터 영역 */}
+      <div className = "search-filter-group">
       <div className="search-sectionHY">
         <div className="search-boxHY">
           <span className="search-iconHY">🔍</span>
@@ -134,6 +135,8 @@ const ClassManagement = () => {
             className="search-inputHY"
           />
         </div>
+        
+        <div className = "date-filter-group">
         <label className="date-labelHY">개설일</label>
         <input
           type="date"
@@ -148,6 +151,8 @@ const ClassManagement = () => {
           value={endDate}
           onChange={handleEndDate}
         />
+        </div>
+        </div>
         {/* 1차 카테고리 */}
         <div className="category-sectionHY">
           <select className="category-selectHY" value={firstCategory} onChange={handleFirstCategory}>

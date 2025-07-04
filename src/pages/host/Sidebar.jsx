@@ -60,7 +60,7 @@ export default function Sidebar() {
             </svg>
           </li>
           <ul className={`KHJ-sidebar__submenu ${openSection === 'settlement' ? 'open' : ''}`}>
-            <li onClick={() => handleNavigation('/host/classSettlement')}>정산계좌</li>
+            <li onClick={() => handleNavigation('/host/classSettlement')}>정산관리</li>
           </ul>
             <li className="KHJ-sidebar__menu-title" onClick={() => toggleSection('')}>
             강사홍보

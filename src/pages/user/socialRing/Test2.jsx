@@ -31,10 +31,10 @@ export default function FeedPage2() {
     const { data: feeds = [] } = useQuery({
         queryKey: ['feeds', sortType, token],
         queryFn: async () => {
-            const res = await myAxios(token, setToken).get(`/socialing/feeds?sort=${sortType}`);
+            const res = await myAxios().get(`/socialing/feeds?sort=${sortType}`);
             return res.data;
         },
-        enabled: !!token
+        // enabled: !!token
     });
 
     // 👉 인기 피드

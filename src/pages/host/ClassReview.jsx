@@ -3,6 +3,7 @@ import './ClassReview.css';
 import { myAxios } from './../../config';
 import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
+import { useLocation } from 'react-router';
 
 const ClassReview = () => {
   const [searchFilter, setSearchFilter] = useState('클래스명');
@@ -17,25 +18,30 @@ const ClassReview = () => {
   const [reviews, setReviews] = useState([]);
   const [selectedReviewId, setSelectedReviewId] = useState(null); // 선택된 리뷰 ID 상태
   const [replyStatus, setReplyStatus] = useState('');
-  const [pageInfo,setPageInfo] = useState([]);
+  const [pageInfo, setPageInfo] = useState([]);
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const calendarParam = params.get("calendarId");
 
   useEffect(() => {
-    if (token) {
-      myAxios(token, setToken)
-        .get('/host/review', {
-          params: {
-            hostId: user.hostId,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          setReviews(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    const params = {
+      hostId: user.hostId,
+      calendarId: calendarParam ? Number(calendarParam) : undefined,
+      page: 0,
+      size: 10,
     }
-  }, [token, user.hostId]);
+
+    token && myAxios(token, setToken).post('/host/review/search', params)
+      .then((res) => {
+        console.log(res.data);
+        setReviews(res.data.content);
+        setPageInfo(res.data.pageInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [token]);
 
   const handleSearch = () => {
     const params = {
@@ -51,17 +57,15 @@ const ClassReview = () => {
 
     console.log("✅ 전송 데이터 확인:", JSON.stringify(params, null, 2));
 
-    token &&
-      myAxios(token, setToken)
-        .post('/host/review/search', params)
-        .then((res) => {
-          console.log(res.data.content);
-          setReviews(res.data.content);
-          setPageInfo(res.data.pageInfo)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    token && myAxios(token, setToken).post('/host/review/search', params)
+      .then((res) => {
+        console.log(res.data.content);
+        setReviews(res.data.content);
+        setPageInfo(res.data.pageInfo)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleReset = () => {
@@ -94,6 +98,10 @@ const ClassReview = () => {
     setRevRegContent(''); // 답변 제출 후, 상태 초기화
     setReplyOpenIndex(null);
   };
+
+  useEffect(() => {
+    handleSearch();
+  }, [replyStatus, searchQuery, startDate, endDate])
 
   // 제출 시 선택된 리뷰 ID를 함께 보내기
   const submit = () => {
@@ -134,25 +142,26 @@ const ClassReview = () => {
 
         <div className="KHJ-review-class-form-row">
           <label className="KHJ-review-class-label">검색어</label>
-          <select value={searchFilter} onChange={(e) => setSearchFilter(e.target.value)}>
+          {/* <select value={searchFilter} onChange={(e) => setSearchFilter(e.target.value)}>
             <option value="클래스명">클래스명</option>
             <option value="학생명">학생명</option>
-          </select>
+          </select> */}
           <input
             type="text"
             placeholder="검색어를 입력하세요."
+            className='KHJ-review-search'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button className="KHJ-review-class-search-btn" onClick={handleSearch}>검색</button>
+          {/* <button className="KHJ-review-class-search-btn" onClick={handleSearch}>검색</button> */}
           <button className="KHJ-review-class-reset-btn" onClick={handleReset}>초기화</button>
         </div>
 
         <div className="KHJ-review-class-form-row">
           <label className="KHJ-review-class-label">날짜</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          <input className="KHJ-review-date" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
           <span className="KHJ-review-class-date-separator">~</span>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          <input className="KHJ-review-date" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
         </div>
         <div className="KHJ-form-row">
           <label>답변 상태</label>
@@ -214,28 +223,21 @@ const ClassReview = () => {
                 <tr>
                   <td colSpan="5" className="KHJ-review-class-detail-cell">
                     <div className={`KHJ-review-class-detail ${expandedIndex === index ? 'open' : ''}`}>
-                      <div className="KHJ-review-class-content">
-                        <div className="KHJ-review-content"><p>{review.content}</p></div>
-                        <button className="KHJ-review-class-reply-btn" onClick={() => toggleReply(index, review.reviewId)}>답변하기</button>
+                      <div className="KHJ-review-class-content-wrapper">
+                        <div className="KHJ-review-content">{review.content}</div>
+                          <form className="KHJ-review-class-reply-form" onSubmit={(e) => {
+                            e.preventDefault();
+                            submit();
+                          }}>
+                            <textarea
+                              placeholder={review.revRegContent || '답변을 입력하세요'}
+                              className='KHJ-review-textarea'
+                              value={revRegContent}
+                              onChange={handleReplyChange}
+                            />
+                            <button type="submit">{review.state === 0 ? '답변 저장' : '답변 수정'}</button>
+                          </form>
                       </div>
-                      {replyOpenIndex === index && (
-                        <form className="KHJ-review-class-reply-form" onSubmit={(e) => {
-                          e.preventDefault();
-                          submit(); // reviewId를 사용하여 답변을 제출
-                        }}>
-                          <textarea
-                            placeholder={review.revRegContent || '답변을 입력하세요'}
-                            className='KHJ-review-textarea'
-                            value={revRegContent}
-                            onChange={handleReplyChange} // 단일 문자열로 관리
-                          />
-                          {review.state === 0 ? (
-                            <button type="submit">답변 저장</button> // "답변대기" 상태에서 저장 버튼
-                          ) : (
-                            <button type="submit">답변 수정</button> // "답변완료" 상태에서 수정 버튼
-                          )}
-                        </form>
-                      )}
                     </div>
                   </td>
                 </tr>
@@ -243,7 +245,7 @@ const ClassReview = () => {
             ))}
           </tbody>
         </table>
-         {pageInfo.allPage > 1 && (
+        {pageInfo.allPage > 1 && (
           <div className="KHJ-pagination">
             {(() => {
               const totalPage = pageInfo.allPage;

@@ -301,7 +301,6 @@
 .btn-settlementHY:focus,
 .btn-approveHY:focus,
 .btn-rejectHY:focus {
-  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 

@@ -11,6 +11,7 @@ import Header from '../../common/Header';
 import FollowButton from './FollowButton';
 import { useQuery } from '@tanstack/react-query';
 import share from './icons/share.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function FeedDetail() {
   // Jotai atom에서 토큰 읽어오기
@@ -40,7 +41,9 @@ export default function FeedDetail() {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [menuOpenId, setMenuOpenId] = useState(null);
-
+  const currentUser = useAtomValue(userAtom);
+  const isMyFeed = feed.writerUserId === currentUser.id;
+  const navigate = useNavigate();
   // useEffect(() => {
   //   console.log(token)
   //   myAxios().get(`/socialing/feed?feedId=${feedId}`)
@@ -65,7 +68,6 @@ export default function FeedDetail() {
         setFeed(data);
         setComment(data.comments);
         setLikes(data.likesCount || 0);
-
         // FeedDetail에선 likedByUser 불확실하니까 별도 체크
         if (token) {
           myAxios(token, setToken).get(`/user/socialing/likes`)
@@ -95,7 +97,7 @@ export default function FeedDetail() {
   const toggleMenu = () => setShowMenu(v => !v);
   const openReport = () => { setShowMenu(false); setShowReport(true); };
   const closeReport = () => setShowReport(false);
-
+  console.log("▶ mine :", mine);
   const onToggleReplies = (commentId) => {
     setShowReplies(prev => ({
       ...prev,
@@ -305,18 +307,18 @@ export default function FeedDetail() {
   );
 
   const handleShare = () => {
-          if (navigator.share) {
-              navigator.share({
-                  title: '게시물 제목',
-                  text: '게시물 설명',
-                  url: window.location.href,
-              })
-                  .catch(console.error);
-          } else {
-              alert("이 브라우저에서는 공유를 지원하지 않습니다. 카카오톡으로 공유하려면 별도 버튼을 이용하세요.");
-              // 또는 Kakao.Share.sendDefault(...) 호출
-          }
-      };
+    if (navigator.share) {
+      navigator.share({
+        title: '게시물 제목',
+        text: '게시물 설명',
+        url: window.location.href,
+      })
+        .catch(console.error);
+    } else {
+      alert("이 브라우저에서는 공유를 지원하지 않습니다. 카카오톡으로 공유하려면 별도 버튼을 이용하세요.");
+      // 또는 Kakao.Share.sendDefault(...) 호출
+    }
+  };
 
   return (
     <>
@@ -366,30 +368,47 @@ export default function FeedDetail() {
           <div className="KYM-detail-side">
             {/* header */}
             <div className="KYM-detail-header">
-              <img className="KYM-detail-avatar" src={writerProfile} alt="" />
-              <span className="KYM-detail-nickname">{writerId}</span>
-              {writerBadge && <span className="KYM-detail-badge">🏅</span>}
-              {!mine
-                ? <FollowButton
-                  targetUserId={feed.writerUserId}             // 숫자 ID를 전달
-                  className="KYM-follow-btn"                // 필요 시 CSS 클래스
-                  style={{ marginLeft: '8px' }}             // 인라인 스타일도 가능
-                />
-                : <button className="KYM-edit-btn">수정</button>}
+              <div className="KYM-left-info">
+                <img className="KYM-detail-avatar" src={writerProfile} alt="" />
+                <span className="KYM-detail-nickname">{writerId}</span>
+                {writerBadge && <span className="KYM-detail-badge">🏅</span>}
+                {!mine
+                  ? <FollowButton
+                    targetUserId={feed.writerUserId}
+                    className="KYM-follow-btn"
+                    style={{ marginLeft: '8px' }}
+                  />
+                  : <>
+                    <button className="KYM-edit-btn" onClick={() => navigate(`/feed/${feed.feedId}/edit`)}>수정</button>
+                    <button className="KYM-edit-btn" onClick={() => navigate(`/some/other/path`)}>수정2</button>
+                  </>
+                }
+              </div>
               <div className="KYM-more-wrapper" ref={menuRef}>
                 <img className="KYM-detail-more" src={moreIcon} onClick={toggleMenu} alt="more" />
                 {showMenu && (
                   <ul className="KYM-detail-menu">
+                    {isMyFeed && (
+                      <li
+                        
+                        onClick={() => navigate(`/user/feedEdit/${feed.feedId}`)}
+                      >
+                        수정
+                      </li>
+                    )}
                     <li onClick={openReport}>신고하기</li>
                     <li onClick={() => navigator.clipboard.writeText(window.location.href)}>링크복사</li>
                     <li>공유하기</li>
                     <li>DM 보내기</li>
-                    <li onClick={() => {
-                      handleScrapToggle();
-                      setShowMenu(false);
-                    }}
+                    <li
+                      onClick={() => {
+                        handleScrapToggle();
+                        setShowMenu(false);
+                      }}
                       style={{ opacity: loading ? 0.5 : 1, pointerEvents: loading ? 'none' : 'auto' }}
-                    >{scrapped ? '스크랩 해제' : '스크랩하기'}</li>
+                    >
+                      {scrapped ? '스크랩 해제' : '스크랩하기'}
+                    </li>
                   </ul>
                 )}
               </div>
@@ -417,8 +436,9 @@ export default function FeedDetail() {
               </button>
               <button className="KYM-action-icon">💬</button>
               <img src={share} alt="공유" className="KYM-action-icon2" onClick={() => {
-                                                    handleShare(feed);
-                                                    setMenuOpenId(null);}}/>
+                handleShare(feed);
+                setMenuOpenId(null);
+              }} />
               {/* <button className="KYM-action-icon">{share}</button> */}
               <div className="KYM-action-spacer" />
               {/* <button className="KYM-action-icon">🔖</button> */}

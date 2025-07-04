@@ -1,0 +1,263 @@
+.KYM-profile-wrap {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #fff;
+}
+
+.KYM-profile-wrap .KYM-photo-cell,
+.KYM-profile-wrap .KYM-badge-cell {
+    text-align: left;
+}
+
+.KYM-profile-wrap .KYM-photo-cell .KYM-photo-title,
+.KYM-profile-wrap .KYM-badge-cell .KYM-badge-top {
+    margin-bottom: 10px;
+}
+
+.KYM-profile-wrap .KYM-photo-cell-content,
+.KYM-profile-wrap .KYM-badge-cell-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.KYM-profile-wrap .KYM-profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.KYM-profile-wrap .KYM-profile-table td {
+    border-top: 1px solid #eee;
+    padding: 15px;
+    vertical-align: top;
+}
+
+.KYM-profile-wrap .KYM-photo-title {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.KYM-profile-wrap .KYM-photo-img,
+.KYM-profile-wrap .KYM-badge-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.KYM-profile-wrap .KYM-badge-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.KYM-profile-wrap .KYM-badge-title {
+    font-size: 0.95rem;
+}
+
+.KYM-profile-wrap .KYM-active-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.KYM-profile-wrap .KYM-active-score {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.KYM-profile-wrap .KYM-help-btn {
+    background: none;
+    border: 1px solid #ffa500;
+    color: #ffa500;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.KYM-profile-wrap .KYM-profile-table tr:first-child td {
+    border-top: none;
+}
+
+.KYM-profile-wrap .KYM-profile-table tr td+td {
+    border-left: 1px solid #eee;
+}
+
+.KYM-profile-wrap .KYM-profile-table button {
+    background: #ffa500;
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.KYM-profile-wrap .KYM-address-box,
+.KYM-profile-wrap .KYM-category-section,
+.KYM-profile-wrap .KYM-intro-box {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.KYM-profile-wrap .KYM-address-box input,
+.KYM-profile-wrap .KYM-intro-box textarea {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #f6b74d;
+    border-radius: 6px;
+}
+
+.KYM-profile-wrap .KYM-category-list {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.KYM-profile-wrap .KYM-category-list span,
+.KYM-profile-wrap .KYM-category-list button {
+    border: 1px solid #f6b74d;
+    border-radius: 20px;
+    padding: 6px 12px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.KYM-profile-wrap .KYM-btns {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.KYM-profile-wrap .KYM-btns button {
+    background: #ffa500;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.KYM-profile-wrap .KYM-td-flex {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.KYM-profile-wrap .KYM-td-flex label {
+    width: 80px;
+    flex-shrink: 0;
+}
+
+.KYM-profile-wrap .KYM-td-flex input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #f6b74d;
+    border-radius: 6px;
+}
+
+.KYM-profile-wrap .KYM-address-box .KYM-post-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.KYM-profile-wrap .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.KYM-profile-wrap .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.KYM-profile-wrap .close-btn {
+    margin-top: 10px;
+    background: #ffa500;
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.KYM-profile-wrap .category-item {
+    border: 1px solid #f6b74d;
+    border-radius: 20px;
+    padding: 6px 12px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.KYM-profile-wrap .category-item.selected {
+    background: #ffa500;
+    color: #fff;
+}
+
+.KYM-profile-wrap .selected-cat {
+    border: 1px solid #f6b74d;
+    border-radius: 20px;
+    padding: 6px 12px;
+    background: #ffa500;
+    color: #f6b74d;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.KYM-profile-wrap .modify-btn {
+    padding: 6px 12px;
+    border: 1px solid #f6b74d;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.KYM-profile-wrap .modal-category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.KYM-profile-wrap .modal-badge-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.KYM-profile-wrap .badge-item {
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 8px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.KYM-profile-wrap .badge-item.selected {
+    border-color: gold;
+}
+
+.KYM-profile-wrap .badge-item img {
+    width: 60px;
+    height: 60px;
+}

@@ -77,6 +77,14 @@ export default function ClassInquiry() {
     setOpenInquiryId((prev) => (prev === id ? null : id));
   };
 
+  const handlePageChange = (newPage) => {
+    if (activeTab === 'pending') {
+      setPendingPage(newPage);
+
+    } else {
+      setCompletedPage(newPage);
+    }
+  };
   return (
     <>
       <Header />
@@ -147,7 +155,7 @@ export default function ClassInquiry() {
               <div>
                 {data.map((item) => (
                   <div
-                    key={item.reviewId || item.calendarId}
+                    key={item.inquiryId}
                     className={`${styles.reviewBox} ${activeTab === 'compeleted' ? styles.reviewBoxDone : ''}`}
                   >
     
@@ -179,47 +187,47 @@ export default function ClassInquiry() {
                   </div>
                 ))}
     
-                <div className={styles.pagination}>
-                  <button
-                    className={styles.pageBtn}
-                    onClick={() => handlePageChange(getCurrentPage() - 1)}
-                    disabled={getCurrentPage() === 1}
-                  >
-                    &lt;
-                  </button>
-    
-                  {
-                    (() => {
-                      const pageGroup = Math.floor((getCurrentPage() - 1) / 5); // 0부터 시작
-                      const startPage = pageGroup * 5 + 1;
-                      const endPage = Math.min(startPage + 4, totalPages);
-                      const buttons = [];
-    
-                      for (let i = startPage; i <= endPage; i++) {
-                        buttons.push(
-                          <button
-                            key={i}
-                            className={`${styles.pageBtn} ${getCurrentPage() === i ? styles.pageBtnActive : ""}`}
-                            onClick={() => handlePageChange(i)}
-                            disabled={getCurrentPage() === i}
-                          >
-                            {i}
-                          </button>
-                        );
-                      }
-    
-                      return buttons;
-                    })()
+            <div className={styles.pagination}>
+              <button
+                className={styles.pageBtn}
+                onClick={() => handlePageChange(getCurrentPage() - 1)}
+                disabled={getCurrentPage() === 1}
+              >
+                &lt;
+              </button>
+
+              {
+                (() => {
+                  const pageGroup = Math.floor((getCurrentPage() - 1) / 5); // 0부터 시작
+                  const startPage = pageGroup * 5 + 1;
+                  const endPage = Math.min(startPage + 4, totalPages);
+                  const buttons = [];
+
+                  for (let i = startPage; i <= endPage; i++) {
+                    buttons.push(
+                      <button
+                        key={i}
+                        className={`${styles.pageBtn} ${getCurrentPage() === i ? styles.pageBtnActive : ""}`}
+                        onClick={() => handlePageChange(i)}
+                        disabled={getCurrentPage() === i}
+                      >
+                        {i}
+                      </button>
+                    );
                   }
-    
-                  <button
-                    className={styles.pageBtn}
-                    onClick={() => handlePageChange(getCurrentPage() + 1)}
-                    disabled={getCurrentPage() === totalPages}
-                  >
-                    &gt;
-                  </button>
-                </div>
+
+                  return buttons;
+                })()
+              }
+
+              <button
+                className={styles.pageBtn}
+                onClick={() => handlePageChange(getCurrentPage() + 1)}
+                disabled={getCurrentPage() === totalPages}
+              >
+                &gt;
+              </button>
+            </div>
     
               </div>                    
         </section>

@@ -72,7 +72,7 @@ export default function Sidebar({ user = dummyUser }) {
                         <li><strong></strong></li>
                         <li><a href="/user/mypage/myWishlist">찜목록</a></li>
                         <li><a href="/user/mypage/myCouponList">마이 쿠폰</a></li>
-                        <li><a href="#">알림 내역</a></li>
+                        <li><a href="/user/mypage/myAlarmList">알림 내역</a></li>
                         <li><a href="#">포인트 내역</a></li>
                         <li><a href="#">내 정보 수정</a></li>
                         <li><a href="#">고객센터</a></li>

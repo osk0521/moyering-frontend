@@ -197,6 +197,10 @@ html {
   margin-top: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+.GatheringDetail_detail-content_osk img{
+  width: fit-content;
+  max-width:700px !important;
+}
 
 .GatheringDetail_detail-section_osk {
   margin-bottom: 48px;
@@ -836,30 +840,14 @@ button.GatheringDetail_more_osk {
   border: 1px solid #ddd;
   color: #666;
 }
+.GatheringDetail_disabled_btn_osk{
+
+}
 
 .GatheringDetail_btn-outline_osk:hover {
   background: #f8f9fa;
   border-color: #ccc;
 }
-
-.GatheringDetail_btn-primary_osk {
-  background: #ff6b6b;
-  color: white;
-}
-
-.GatheringDetail_btn-primary_osk:hover {
-  background: #ff5252;
-}
-
-.GatheringDetail_btn-apply_osk {
-  background: #ff6b6b;
-  color: white;
-}
-
-.GatheringDetail_btn-apply_osk:hover {
-  background: #ff5252;
-}
-
 .GatheringDetail_notice-text_osk {
   font-size: 12px;
   color: #ff5722;

@@ -21,7 +21,7 @@ import aImage from "/detail2.png";
 import Footer from "../../components/Footer";
 export default function GatheringDetail() {
   const user = useAtomValue(userAtom);
-  const [token,setToken] = useAtom(tokenAtom); 
+  const [token, setToken] = useAtom(tokenAtom);
   const userId = user.id;
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -39,7 +39,6 @@ export default function GatheringDetail() {
 
     return () => clearTimeout(timer);
   }, []);
-
   const { gatheringId } = useParams();
 
   const navigate = useNavigate();
@@ -50,7 +49,7 @@ export default function GatheringDetail() {
   useEffect(() => {
     if (!isLoaded) return; // 로딩 완료 전에는 실행하지 않음
     if (token) {
-      myAxios(token,setToken)
+      myAxios(token, setToken)
         .get(`/user/detailGathering?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("추가 데이터 API 응답:", res.data);
@@ -147,8 +146,9 @@ export default function GatheringDetail() {
       const formData = {
         gatheringId: parseInt(gatheringId),
         aspiration: aspirationContent.trim(),
+        title: gatheringData.title,
       };
-      const response = await myAxios(token,setToken).post(
+      const response = await myAxios(token, setToken).post(
         "/user/applyGathering",
         formData
       );
@@ -180,7 +180,7 @@ export default function GatheringDetail() {
       const newLikedState = !isLiked;
       setIsLiked(newLikedState);
 
-      token && myAxios(token,setToken)
+      token && myAxios(token, setToken)
         .post(`/user/toggleGatheringLike?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("API 성공:", res.data);
@@ -246,17 +246,16 @@ export default function GatheringDetail() {
           intrOnln: gathering.intrOnln,
           status: gathering.status,
           locName: gathering.locName,
-          acceptedCount:gathering.acceptedCount
+          acceptedCount: gathering.acceptedCount
         });
-
         const organizerCategories = organizer
           ? [
-              organizer.category1,
-              organizer.category2,
-              organizer.category3,
-              organizer.category4,
-              organizer.category5,
-            ].filter((category) => category && category.trim() !== "")
+            organizer.category1,
+            organizer.category2,
+            organizer.category3,
+            organizer.category4,
+            organizer.category5,
+          ].filter((category) => category && category.trim() !== "")
           : [];
 
         setorganizerData({
@@ -271,7 +270,7 @@ export default function GatheringDetail() {
           member.map((m) => ({
             id: m.gatheringApplyId,
             name: m.name,
-            profileImage: m.profile, 
+            profileImage: m.profile,
             introduction: m.intro,
             applyDate: m.applyDate,
             aspiration: m.aspiration,
@@ -282,15 +281,15 @@ export default function GatheringDetail() {
 
         setRecommendations(
           recommendations.map((r) => ({
-          gatheringId: r.gatheringId,
-          category: `${r.categoryName} > ${r.subCategoryName}`,
-          title : r.title,
-          meetingDate : r.meetingDate,
-          thumbnailFileName:r.thumbnailFileName,
-          locName:r.locName
+            gatheringId: r.gatheringId,
+            category: `${r.categoryName} > ${r.subCategoryName}`,
+            title: r.title,
+            meetingDate: r.meetingDate,
+            thumbnailFileName: r.thumbnailFileName,
+            locName: r.locName
           }))
         );
-
+        window.scrollTo(0, 0);
         console.log("변환된 tags:", parsedTags);
       })
       .catch((err) => {
@@ -439,30 +438,30 @@ export default function GatheringDetail() {
     setIsExpanded(true);
   };
   const isApplyDeadlinePassed = () => {
-  if (!gatheringData.applyDeadline) return false;
-  const now = new Date();
-  const deadline = new Date(gatheringData.applyDeadline);
-  return now > deadline;
-};
+    if (!gatheringData.applyDeadline) return false;
+    const now = new Date();
+    const deadline = new Date(gatheringData.applyDeadline);
+    return now > deadline;
+  };
 
-const isMeetingDatePassed = () => {
-  if (!gatheringData.meetingDate) return false;
-  const now = new Date();
-  const meetingDate = new Date(gatheringData.meetingDate);
-  return now > meetingDate;
-};
+  const isMeetingDatePassed = () => {
+    if (!gatheringData.meetingDate) return false;
+    const now = new Date();
+    const meetingDate = new Date(gatheringData.meetingDate);
+    return now > meetingDate;
+  };
 
-const isMaxAttendeesReached = () => {
-  return members.length >= gatheringData.maxAttendees;
-};
+  const isMaxAttendeesReached = () => {
+    return members.length >= gatheringData.maxAttendees;
+  };
 
-const canApplyToGathering = () => {
-  return !isApplyDeadlinePassed() && !isMaxAttendeesReached() && !isMeetingDatePassed();
-};
+  const canApplyToGathering = () => {
+    return !isApplyDeadlinePassed() && !isMaxAttendeesReached() && !isMeetingDatePassed();
+  };
 
-const canModifyGathering = () => {
-  return !isMeetingDatePassed();
-};
+  const canModifyGathering = () => {
+    return !isMeetingDatePassed();
+  };
   // 스크롤 위치에 따라 활성 탭 변경
   useEffect(() => {
     const handleScroll = () => {
@@ -512,45 +511,40 @@ const canModifyGathering = () => {
             <div className="GatheringDetail_tabs_osk">
               <div className="GatheringDetail_tab-list_osk">
                 <button
-                  className={`GatheringDetail_tab_osk ${
-                    activeTab === "details" ? "GatheringDetail_active_osk" : ""
-                  }`}
+                  className={`GatheringDetail_tab_osk ${activeTab === "details" ? "GatheringDetail_active_osk" : ""
+                    }`}
                   onClick={() => handleTabClick("details")}
                 >
                   상세 정보
                 </button>
                 <button
-                  className={`GatheringDetail_tab_osk ${
-                    activeTab === "organizer" ? "GatheringDetail_active_osk" : ""
-                  }`}
+                  className={`GatheringDetail_tab_osk ${activeTab === "organizer" ? "GatheringDetail_active_osk" : ""
+                    }`}
                   onClick={() => handleTabClick("organizer")}
                 >
                   모임장
                 </button>
                 <button
-                  className={`GatheringDetail_tab_osk ${
-                    activeTab === "questions"
+                  className={`GatheringDetail_tab_osk ${activeTab === "questions"
                       ? "GatheringDetail_active_osk"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => handleTabClick("questions")}
                 >
                   문의
                 </button>
                 <button
-                  className={`GatheringDetail_tab_osk ${
-                    activeTab === "members" ? "GatheringDetail_active_osk" : ""
-                  }`}
+                  className={`GatheringDetail_tab_osk ${activeTab === "members" ? "GatheringDetail_active_osk" : ""
+                    }`}
                   onClick={() => handleTabClick("members")}
                 >
                   멤버
                 </button>
                 <button
-                  className={`GatheringDetail_tab_osk ${
-                    activeTab === "recommendations"
+                  className={`GatheringDetail_tab_osk ${activeTab === "recommendations"
                       ? "GatheringDetail_active_osk"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => handleTabClick("recommendations")}
                 >
                   추천
@@ -560,14 +554,10 @@ const canModifyGathering = () => {
 
             {/* 상세 정보 내용 */}
             <div className="GatheringDetail_detail-content_osk">
-              {/* 상세 소개 */}
               <div
                 id="GatheringDetail_details_osk"
                 className="GatheringDetail_detail-section_osk"
               >
-                <h3 className="text-xl font-bold mb-4 text-gray-800">
-                  상세 소개
-                </h3>
                 <p className="mb-4 text-gray-700 leading-relaxed">
                   {gatheringData.intrOnln}
                 </p>
@@ -768,34 +758,41 @@ const canModifyGathering = () => {
                 className="GatheringDetail_section-header_osk"
               >
                 <h3 className="GatheringDetail_section-title_osk">
-                  함께하면 좋을 모임을 찾아드려요 
-                  {recommendations.length > 2 && (<span onClick={() => navigate('/a')}> 더보기</span>)}
+                  함께하면 좋을 모임을 찾아드려요
+                  {recommendations.length > 2 && (<span onClick={() => navigate('/gatheringList')}> 더보기</span>)}
                 </h3>
               </div>
               <div className="GatheringDetail_recommendations_osk">
-                {recommendations.map((recommendation) => (
-                  <div
-                    key={recommendation.gatheringId}
-                    className="GatheringDetail_recommendation-card_osk"
-                  >
-                    <img 
-                      src={`${url}/image?filename=${recommendation.thumbnailFileName}`}
-                      alt={recommendation.title}
-                      className="GatheringDetail_card-image_osk"
-                    /> 
-                    <div className="GatheringDetail_card-content_osk">
-                      <div className="GatheringDetail_card-category_osk">
-                        {recommendation.category}
-                      </div>
-                      <div className="GatheringDetail_card-title_osk">
-                        {recommendation.title}
-                      </div>
-                      <div className="GatheringDetail_card-info_osk">
-                        <CiCalendar /> {recommendation.meetingDate}
-                      </div>
+                  {recommendations.length === 0 ? (
+                    <div className="GatheringDetail_no-members_osk">
+                      <p>조회된 게더링이 없습니다.</p>
                     </div>
-                  </div>
-                ))}
+                  ) : (
+                    recommendations.map((recommendation) => (
+                      <div
+                        key={recommendation.gatheringId}
+                        className="GatheringDetail_recommendation-card_osk"
+                        onClick={() => navigate(`/gatheringDetail/${recommendation.gatheringId}`)}
+                      >
+                        <img
+                          src={`${url}/image?filename=${recommendation.thumbnailFileName}`}
+                          alt={recommendation.title}
+                          className="GatheringDetail_card-image_osk"
+                        />
+                        <div className="GatheringDetail_card-content_osk">
+                          <div className="GatheringDetail_card-category_osk">
+                            {recommendation.category}
+                          </div>
+                          <div className="GatheringDetail_card-title_osk">
+                            {recommendation.title}
+                          </div>
+                          <div className="GatheringDetail_card-info_osk">
+                            <CiCalendar /> {recommendation.meetingDate}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
               </div>
             </div>
           </main>
@@ -894,14 +891,14 @@ const canModifyGathering = () => {
                   )
                 )}
                 {userId !== gatheringData.userId && !canApplyToGathering() && (
-                  <button className="GatheringDetail_btn_osk GatheringDetail_btn-apply_osk">
-                    {isMeetingDatePassed() 
-                      ? "이미 종료된 모임입니다." 
-                      : isApplyDeadlinePassed() 
-                      ? "신청 기간이 마감되었습니다." 
-                      : isMaxAttendeesReached() 
-                      ? "정원이 모두 찼습니다." 
-                      : "현재 신청할 수 없습니다."}
+                  <button className=" GatheringDetail_disabled_btn_osk GatheringDetail_btn_osk GatheringDetail_btn-apply_osk">
+                    {isMeetingDatePassed()
+                      ? "이미 종료된 모임입니다."
+                      : isApplyDeadlinePassed()
+                        ? "신청 기간이 마감되었습니다."
+                        : isMaxAttendeesReached()
+                          ? "정원이 모두 찼습니다."
+                          : "현재 신청할 수 없습니다."}
                   </button>
                 )}
 
@@ -911,9 +908,11 @@ const canModifyGathering = () => {
                   </button>
                 )}
               </div>
-              <div className="GatheringDetail_notice-text_osk">
-                신청 마감: {formatDateTime(gatheringData.applyDeadline)}까지
-              </div>
+              {gatheringData.applyDeadline && (
+                <div className="GatheringDetail_notice-text_osk">
+                  신청 마감: {formatDateTime(gatheringData.applyDeadline)}까지
+                </div>
+              )}
             </div>
           </aside>
         </div>
@@ -1027,7 +1026,7 @@ const canModifyGathering = () => {
           </form>
         </Modal>
       )}
-    <Footer/>
+      <Footer />
     </div>
   );
 }

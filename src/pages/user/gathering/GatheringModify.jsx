@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import getLatLngFromAddress from '../../../hooks/common/getLatLngFromAddress';
 import "@toast-ui/editor/dist/toastui-editor.css";
 import Header from "../../common/Header";
+import Footer from "../../../components/Footer";
 import { useNavigate, useParams } from "react-router-dom";
 import "./GatheringWrite.css";
 
@@ -41,13 +42,11 @@ const getMaxDeadlineDateTime = (meetingDate) => {
   return `${meetingDate}T23:59`;
 };
 
-// datetime-local 형식으로 변환하는 함수
 const formatDateTimeLocal = (dateTimeString) => {
   if (!dateTimeString) return "";
   
   try {
     let date;
-    
     if (dateTimeString.includes("T") && dateTimeString.includes("+")) {
       // ISO 8601 UTC 형식인 경우 (예: "2025-06-24T05:38:00.000+00:00")
       date = new Date(dateTimeString);
@@ -58,7 +57,6 @@ const formatDateTimeLocal = (dateTimeString) => {
       // "YYYY-MM-DD HH:mm:ss" 형식인 경우
       date = new Date(dateTimeString.replace(" ", "T"));
     }
-    
     // 한국 시간으로 변환 (UTC+9)
     const koreanTime = new Date(date.getTime() + (9 * 60 * 60 * 1000));
     
@@ -79,7 +77,6 @@ const formatDateTimeLocal = (dateTimeString) => {
 export default function GatheringModify() {
   const navigate = useNavigate();
   const { gatheringId } = useParams();
-
   const user = useAtomValue(userAtom);    
   const [token,setToken] = useAtom(tokenAtom)
   const userId = user.id;
@@ -87,7 +84,6 @@ export default function GatheringModify() {
   const [coordinates, setCoordinates] = useState({ x: "", y: "" });
   const [geocodingError, setGeocodingError] = useState("");
   const [geocodingLoading, setGeocodingLoading] = useState(false);
-
   // 이미지 업로드 관련 상태들
   const [fileName, setFileName] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
@@ -101,10 +97,8 @@ export default function GatheringModify() {
   const [thumbnail, setThumbnail] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("initial");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-    const [coordLat,setCoordLat] = useState('');
-    const [coordLng,setCoordLng] = useState('');
-  
-
+  const [coordLat,setCoordLat] = useState('');
+  const [coordLng,setCoordLng] = useState('');
   // 폼 데이터 상태
   const [formData, setFormData] = useState({
     title: "",
@@ -128,7 +122,6 @@ export default function GatheringModify() {
     if (!formData.address) return;
 
     console.log("지오코딩 시작 - 주소:", formData.address);
-    
     getLatLngFromAddress(formData.address)
       .then(coords => {
         if (coords) {
@@ -159,7 +152,6 @@ export default function GatheringModify() {
   }, [formData.address]);
   useEffect(() => {
     if (gatheringId && token) {
-      console.log('전달하는 토큰:', token); // 이 값이 실제로 무엇인지
       token && myAxios(token,setToken).get(`/user/detailForModifyGathering?gatheringId=${gatheringId}`)
         .then((res) => {
           console.log("API Response:", res.data);
@@ -201,9 +193,6 @@ export default function GatheringModify() {
             latitude: gathering.latitude || 0,   
             longitude: gathering.longitude || 0,
           });
-
-
-
           // 기존 썸네일 이미지 설정
           if (gathering.thumbnailFileName) {
             setPreviewUrl(
@@ -509,7 +498,7 @@ export default function GatheringModify() {
             change: () => {
               try {
                 // 에디터 입력 중에는 trim하지 않고 원본 내용 그대로 저장
-                const content = editorInstance.getMarkdown();
+                const content = editorInstance.getHTML();
                 setFormData((prev) => ({
                   ...prev,
                   content: content, // trim() 제거됨
@@ -610,7 +599,6 @@ export default function GatheringModify() {
       alert("주소를 좌표로 변환하는데 실패했습니다. 주소를 확인해주세요.");
       return;
     }
-
 
     // FormData 객체 생성
     const formDataToSend = new FormData();
@@ -1175,6 +1163,7 @@ export default function GatheringModify() {
           </div>
         )}
       </form>
+    <Footer />
     </div>
   );
 }

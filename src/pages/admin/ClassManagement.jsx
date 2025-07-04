@@ -38,7 +38,7 @@ const ClassManagement = () => {
   // 카테고리 데이터 fetch
   useEffect(() => {
     myAxios(token) 
-      .get('/categories/suball')
+      .get('categories/suball')
       .then(res => {
         setCategoryList(res.data || []);
       })

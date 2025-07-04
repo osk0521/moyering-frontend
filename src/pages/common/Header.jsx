@@ -18,7 +18,7 @@ export default function Header() {
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
-
+  
   // Dropdown 상태 관리
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -38,7 +38,7 @@ export default function Header() {
   }, [notificationDropdownOpen]);
 
   // 모든 알림을 읽음으로 처리
-  const handleMarkAllAsRead = useCallback(async (e) => {
+ const handleMarkAllAsRead = useCallback(async (e) => {
     e.stopPropagation(); // 드롭다운이 닫히지 않도록
     if (!Array.isArray(alarms) || alarms.length === 0) {
       console.log('알림이 없어서 함수 종료');
@@ -56,12 +56,12 @@ export default function Header() {
   }, [alarms, token, setAlarms]);
 
   // 알림 클릭 처리
-  const handleNotificationClick = useCallback(async (notification, e) => {
+ const handleNotificationClick = useCallback(async (notification, e) => {
     e.stopPropagation(); // 드롭다운이 닫히지 않도록
-
+    
     try {
       const response = await myAxios(token).post(`/confirm/${notification.alarmId}`);
-
+      
       if (response.data === true) {
         // 확인된 알림을 목록에서 제거
         setAlarms(prevAlarms => prevAlarms.filter(alarm => alarm.alarmId !== notification.alarmId));
@@ -75,20 +75,19 @@ export default function Header() {
     }
   }, [token, setAlarms]);
 
-  useEffect(() => {
-    console.log(user);
-    if (user && token) {
-      myAxios(token, setToken).post('/user/alarms')
-        .then(response => {
-          console.log(response.data)
-          setAlarms([...response.data])
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
+    useEffect(() => {
+      console.log(user);
+      if (user&&token) {
+        myAxios(token,setToken).post('/user/alarms')
+          .then(response=> {
+            console.log(response.data)
+            setAlarms([...response.data])
+          })
+          .catch(err=> {
+            console.log(err)
+          })
+      } 
   }, [user]);
-
 
   return (
     <div className="Header_header-container_osk">
@@ -100,9 +99,9 @@ export default function Header() {
                 <img
                   src={
                     user.profile
-                      ? user.profile.startsWith("http")
+                      ? user.profile.startsWith("http") 
                         ? user.profile
-                        : `${url}/image?filename=${user.profile}`
+                        : `${url}/image?filename=${user.profile}` 
                       : '/profile.png'
                   }
                   alt={`${user.nickName}`}
@@ -110,13 +109,13 @@ export default function Header() {
                 />
                 <span>{user.nickName} 님</span>
               </span>
-
+              
               <Button className="Header_icon-button_osk Header_heart-button_osk">
                 <FaHeart className="Header_top-icon_osk login" />
               </Button>
 
-              <Dropdown
-                isOpen={notificationDropdownOpen}
+              <Dropdown 
+                isOpen={notificationDropdownOpen} 
                 toggle={toggleNotificationDropdown}
                 className="Header_notification-dropdown-container_osk"
               >
@@ -131,25 +130,25 @@ export default function Header() {
                   )}
 
                   {alarms.length > 0 && (
-                    <Badge
-                      color="danger"
-                      pill
+                    <Badge 
+                      color="danger" 
+                      pill 
                       className="Header_notification-badge_osk"
                     >
                     </Badge>
                   )}
                 </DropdownToggle>
 
-                <DropdownMenu
-                  end
+                <DropdownMenu 
+                  end 
                   className="Header_notification-dropdown-menu_osk"
                 >
                   <div className="Header_notification-header_osk">
                     <h6 className="Header_notification-title_osk">알림</h6>
                     {Array.isArray(alarms) && alarms.length > 0 && (
-                      <Button
-                        size="sm"
-                        color="link"
+                      <Button 
+                        size="sm" 
+                        color="link" 
                         className="Header_mark-all-read-btn_osk"
                         onClick={handleMarkAllAsRead}
                       >
@@ -167,12 +166,12 @@ export default function Header() {
                     </DropdownItem>
                   ) : (
                     <>
-
+                      
                       {alarms.map((alarms, index) => (
                         <DropdownItem
                           key={alarms?.num || index}
                           className="Header_notification-item_osk"
-
+                          
                         >
                           <div className="Header_notification-content_osk">
                             <div className="Header_notification-main_osk">
@@ -188,10 +187,10 @@ export default function Header() {
                                 </small>
                               </div>
                             </div>
-                            <Button className="Header_notification-confirm_osk" onClick={(e) => handleNotificationClick(alarms, e)}>확인</Button>
+                            <span className="Header_notification-confirm_osk" onClick={(e) => handleNotificationClick(alarms, e)}>확인</span>
                           </div>
                         </DropdownItem>
-                      ))}
+                      ))}        
                     </>
                   )}
                 </DropdownMenu>
@@ -205,7 +204,7 @@ export default function Header() {
                 <a href="/user/mypage/mySchedule">마이페이지</a>
               </span>
               <span className="Header_top-menu-link_osk">
-                {user.userType === "ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : ''}
+                {user.userType==="ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : ''}
               </span>
               <span className="Header_top-menu-link_osk">
                 <button className="Header_top-menu-logout" onClick={logout}>로그아웃</button>
@@ -219,7 +218,7 @@ export default function Header() {
               <span className="Header_top-menu-link_osk">
                 <a href="/join">회원가입</a>
               </span>
-
+              
               <Button className="Header_icon-button_osk Header_heart-button_osk">
                 <FaHeart className="Header_top-icon_osk" />
               </Button>
@@ -272,7 +271,8 @@ export default function Header() {
           <div className="Header_nav-section_osk">
             <span
               className="Header_nav-item_osk"
-              onClick={() => { token ? user.userType === "ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/host/intro") : alert('로그인이 필요합니다!') }}
+              onClick={() => 
+              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/classList")}}
             >
               클래스잉
             </span>

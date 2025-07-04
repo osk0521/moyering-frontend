@@ -6,7 +6,8 @@ import Footer from "../../../../components/Footer";
 import Sidebar from '../common/Sidebar';
 import { tokenAtom, userAtom } from "../../../../atoms";
 import { useSetAtom, useAtomValue, useAtom } from "jotai";
-import { myAxios } from "../../../../config";
+import { myAxios,url } from "../../../../config";
+
 
 export default function ReviewList() {
   const [activeTab, setActiveTab] = useState('writable');
@@ -34,7 +35,7 @@ export default function ReviewList() {
         const res = token && await myAxios(token, setToken).post(`/user/mypage/reviewList/${activeTab}`, {
           tab: activeTab,
           page: page - 1,
-          size: 10,
+          size: 5,
           startDate: minDate,
           endDate: maxDate,
         });
@@ -65,6 +66,7 @@ export default function ReviewList() {
   const handlePageChange = (newPage) => {
     if (activeTab === 'writable') {
       setWritablePage(newPage);
+
     } else {
       setDonePage(newPage);
     }
@@ -104,18 +106,18 @@ export default function ReviewList() {
     formData.append("star", ratings[item.calendarId]);
     formData.append("calendarId", item.calendarId);
     formData.append("hostId", item.hostId);
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
 
     if (images[item.calendarId]) {
       formData.append("reviewImg", images[item.calendarId]);
     }
 
     try {
-      token && await myAxios(token, setToken).post("/user/mypage/write-review", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      alert("리뷰가 등록되었습니다!");
+      token && await myAxios(token, setToken).post("/user/mypage/write-review", formData);
+      setActiveTab("done");
+      setDonePage(1);
       } catch (err) {
         console.error("리뷰 등록 실패:", err);
       }
@@ -198,12 +200,39 @@ export default function ReviewList() {
                 key={item.reviewId || item.calendarId}
                 className={`${styles.reviewBox} ${activeTab === 'done' ? styles.reviewBoxDone : ''}`}
               >
-                <div className={styles.accordionHeader} onClick={() => toggleAccordion(item.reviewId || item.calendarId)}>
-                  <p>
-                    <strong>{item.classTitle}</strong> | 수강일: {item[dateKey]}
-                  </p>
-                  <span>{openReviewId === (item.reviewId || item.calendarId) ? '▲' : '▼'}</span>
-                </div>
+
+                {activeTab==='done' ? (
+                  <>
+                  <div className={styles.accordionHeader} onClick={() => { if (item.teacherReply) toggleAccordion(item.reviewId || item.calendarId);}}>
+                    <p>
+                      <strong>{item.classTitle}</strong> | 수강일: {item[dateKey]}
+                    </p>
+                    {item.teacherReply && (<span>{openReviewId === (item.reviewId || item.calendarId) ? '▲' : '답변보기'}</span>)}
+                  </div>
+                  <div className={styles.reviewDone}>
+                    <img src={`${url}/image?filename=${encodeURIComponent(item.reviewImgName)}`} alt="리뷰 이미지" className={styles.mainImage} />
+                    <div className={styles.reviewBB}>
+                      <div className={styles.starDisplay}>
+                        {[...Array(5)].map((_, i) =>
+                          i < item.star ? (
+                            <FaStar key={i} className={styles.star} />
+                          ) : (
+                            <FaRegStar key={i} className={styles.star} />
+                          )
+                        )}
+                      </div>
+                      <p className={styles.reviewContent}>{item.content}</p>
+                    </div>
+                  </div>
+                  </>
+                ) : (<>
+                  <div className={styles.accordionHeader} onClick={() => toggleAccordion(item.reviewId || item.calendarId)}>
+                    <p>
+                      <strong>{item.classTitle}</strong> | 수강일: {item[dateKey]}
+                    </p>
+                    <span>{openReviewId === (item.reviewId || item.calendarId) ? '▲' : '▼'}</span>
+                  </div>
+                </>)}
 
                 {openReviewId === (item.reviewId || item.calendarId) && (
                   <div className={styles.accordionBody}>
@@ -253,16 +282,7 @@ export default function ReviewList() {
                     </>
                   ) : (
                       <>
-                        <div className={styles.starDisplay}>
-                          {[...Array(5)].map((_, i) =>
-                            i < item.star ? (
-                              <FaStar key={i} className={styles.star} />
-                            ) : (
-                              <FaRegStar key={i} className={styles.star} />
-                            )
-                          )}
-                        </div>
-                        <p className={styles.reviewContent}>{item.content}</p>
+
                         {item.teacherReply && (
                           <div className={styles.teacherReply}>
                             <p><strong>강사답변</strong> ({item.responseDate})</p>
@@ -277,16 +297,47 @@ export default function ReviewList() {
             ))}
 
             <div className={styles.pagination}>
-              {[...Array(totalPages)].map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`${styles.pageButton} ${getCurrentPage() === idx + 1 ? styles.pageButtonActive : ''}`}
-                  onClick={() => handlePageChange(idx + 1)}
-                >
-                  {idx + 1}
-                </button>
-              ))}
+              <button
+                className={styles.pageBtn}
+                onClick={() => handlePageChange(getCurrentPage() - 1)}
+                disabled={getCurrentPage() === 1}
+              >
+                &lt;
+              </button>
+
+              {
+                (() => {
+                  const pageGroup = Math.floor((getCurrentPage() - 1) / 5); // 0부터 시작
+                  const startPage = pageGroup * 5 + 1;
+                  const endPage = Math.min(startPage + 4, totalPages);
+                  const buttons = [];
+
+                  for (let i = startPage; i <= endPage; i++) {
+                    buttons.push(
+                      <button
+                        key={i}
+                        className={`${styles.pageBtn} ${getCurrentPage() === i ? styles.pageBtnActive : ""}`}
+                        onClick={() => handlePageChange(i)}
+                        disabled={getCurrentPage() === i}
+                      >
+                        {i}
+                      </button>
+                    );
+                  }
+
+                  return buttons;
+                })()
+              }
+
+              <button
+                className={styles.pageBtn}
+                onClick={() => handlePageChange(getCurrentPage() + 1)}
+                disabled={getCurrentPage() === totalPages}
+              >
+                &gt;
+              </button>
             </div>
+
           </div>
         </section>
       </main>

@@ -85,6 +85,9 @@ import{fcmTokenAtom, alarmsAtom} from './atoms'
 import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 import PaymentSuccess from './pages/user/classRing/PaymentSuccess.jsx';
 import MyProfilePage from './pages/user/0myPage/common/MyProfilePage.jsx';
+import FindId from './pages/common/FindId.jsx';
+import FindPassword from './pages/common/FindPassword.jsx';
+import ResetPassword from './pages/common/ResetPassword.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -115,6 +118,9 @@ function App() {
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
+        <Route path="/findId" element={<FindId/>}/>
+        <Route path="/findPassword" element={<FindPassword/>}/>
+        <Route path="/resetPassword" element={<ResetPassword/>}/>
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
 <Route path="/feeds" element={<Test2 />} />
         

@@ -272,9 +272,9 @@ export default function Header() {
             <span
               className="Header_nav-item_osk"
               onClick={() => 
-              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/classList")}}
+               navigate("/classList")}
             >
-              클래스잉
+              클래스링
             </span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/gatheringList`)}>게더링</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/feeds`)}>소셜링</span>

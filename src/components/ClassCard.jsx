@@ -21,7 +21,6 @@ export default function ClassCard({ classInfo, onClick  }) {
               backgroundPosition: "center",
             }}
       >        
-        <span className={styles.badge}>추천</span>
         {classLikes.some(like => like.classId === classInfo.classId) ? (
           <FaHeart  className={styles.likeIcon1} />
         ) : (

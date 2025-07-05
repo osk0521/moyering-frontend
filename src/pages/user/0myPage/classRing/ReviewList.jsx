@@ -207,7 +207,7 @@ export default function ReviewList() {
                     <p>
                       <strong>{item.classTitle}</strong> | 수강일: {item[dateKey]}
                     </p>
-                    {item.teacherReply && (<span>{openReviewId === (item.reviewId || item.calendarId) ? '▲' : '답변보기'}</span>)}
+                    {item.teacherReply && (<span>{openReviewId === (item.reviewId || item.calendarId) ? '▲' : '▼'}</span>)}
                   </div>
                   <div className={styles.reviewDone}>
                     <img src={`${url}/image?filename=${encodeURIComponent(item.reviewImgName)}`} alt="리뷰 이미지" className={styles.mainImage} />

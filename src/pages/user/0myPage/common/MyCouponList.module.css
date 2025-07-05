@@ -18,7 +18,8 @@
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: bold;
   margin-bottom: 1.5rem;
 }
 
@@ -100,4 +101,9 @@
   color: white;
   font-weight: bold;
   border-radius: 50%;
+}
+.noneCoupon{
+  display: flex;
+  justify-content: center; /* 가로 중앙 */
+  align-items: center;   
 }

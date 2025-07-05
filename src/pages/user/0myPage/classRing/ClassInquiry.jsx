@@ -160,11 +160,11 @@ export default function ClassInquiry() {
                   >
     
                     <>
-                      <div className={styles.accordionHeader} onClick={() => toggleAccordion(item.inquiryId)}>
+                      <div className={styles.accordionHeader} onClick={() => {if (item.state===1) toggleAccordion(item.inquiryId);}}>
                         <p>
                           <strong>{item.className}</strong> | 문의일: {item.inquiryDate}
                         </p>
-                        <span>{openInquiryId === item.inquiryId ? '▲' : '▼'}</span>
+                        <span>{ item.state===1 ? ( openInquiryId === item.inquiryId  ? '▲' : '▼') :(<></>)}</span>
                       </div>
                       <div>
                         <p className={styles.inContent}>{item.content}</p>

@@ -111,7 +111,7 @@
 }
 
 .curriculumTime {
-  width: 60px;
+  width: 120px;
   font-weight: bold;
 }
 
@@ -352,7 +352,7 @@
 
 /* 사이드바 */
 .sidebar {
-  width: 350px;
+  width: 400px;
   position: sticky;
   top: 100px;
   height: fit-content;
@@ -436,11 +436,9 @@
 }
 
 .outlineBtn {
-  flex: 1;
-  padding: 12px;
   border-radius: 8px;
   background: white;
-  border: 1px solid #ddd;
+  border: none;
   color: #666;
   font-size: 14px;
   display: flex;
@@ -448,19 +446,34 @@
   justify-content: center;
   gap: 4px;
   cursor: pointer;
+  width: 20px;
 }
-
+.likeIcon {
+  font-size: 54px;
+}
+.likeIcon2 {
+  font-size: 54px;
+  color: #ff5c5c;
+}
 .applyBtn {
   flex: 1;
-  padding: 12px;
+  padding: 8px;
   border-radius: 8px;
   background: #FFB22C;
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   border: none;
   cursor: pointer;
 }
-
+.questionButton {
+  flex: 1;
+  padding: 8px;
+  border:  1px solid #FFB22C;
+    border-radius: 8px;
+  background: white;
+  font-size: 16px;
+  cursor: pointer;
+}
 /* 쿠폰 */
 .customDropdown {
   position: relative;

@@ -5,7 +5,7 @@ import { url } from '../config';
 import { useAtomValue } from "jotai";
 import { classLikesAtom } from "../atom/classAtom";
 import { FaRegHeart } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa6";
+import { GoHeart,GoHeartFill  } from "react-icons/go";
 
 export default function ClassCard({ classInfo, onClick  }) {
     const classLikes = useAtomValue(classLikesAtom);
@@ -22,9 +22,9 @@ export default function ClassCard({ classInfo, onClick  }) {
             }}
       >        
         {classLikes.some(like => like.classId === classInfo.classId) ? (
-          <FaHeart  className={styles.likeIcon1} />
+          <GoHeartFill  className={styles.likeIcon1} />
         ) : (
-          <FaRegHeart  className={styles.likeIcon2} />
+          <GoHeart  className={styles.likeIcon2} />
         )}
       </div>
       <div className={styles.cardContent}>

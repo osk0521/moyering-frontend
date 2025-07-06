@@ -234,7 +234,7 @@ const handleReset = () => {
           ) : (
             classList.map((classInfo, idx) => (
             <ClassCard
-              key={idx}
+              key={classInfo.classId}
               classInfo={classInfo}
               onClick={() => navigate(`/class/classRingDetail/${classInfo.classId}`)}
             />

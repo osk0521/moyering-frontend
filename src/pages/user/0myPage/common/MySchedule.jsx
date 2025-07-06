@@ -15,6 +15,7 @@ export default function MySchedule() {
 
   const [classList, setClassList] = useState([]);
   const [gatheringList, setGatheringList] = useState([]);
+  const [gatheringList2, setGatheringList2] = useState([]);
   const [token, setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
   const navigate = useNavigate();
@@ -23,8 +24,9 @@ export default function MySchedule() {
     const fetchSchedule = async () => {
       try {
         const res = token && await myAxios(token, setToken).get('/user/mypage/schedule');
-        setClassList(res.data.classSchedules);       // ✅ 수정됨
-        setGatheringList(res.data.gatheringSchedules); // ✅ 수정됨
+        setClassList(res.data.classSchedules);       
+        setGatheringList(res.data.gatheringSchedules); 
+        setGatheringList2(res.data.gatheringSchedules2); 
       } catch (e) {
         console.error('일정 가져오기 실패', e);
       }
@@ -53,6 +55,15 @@ export default function MySchedule() {
     ...(Array.isArray(gatheringList) ? gatheringList : []).map((g) => ({
       id: g.gatheringId,
       type: 'gather',
+      name: g.title,
+      host: g.nickName,
+      memberCount: g.memberCount,
+      date: typeof g.meetingDate === 'string' ? g.meetingDate.slice(0, 10) : '',
+      time: formatTime(g.startTime),
+    })),
+        ...(Array.isArray(gatheringList2) ? gatheringList2 : []).map((g) => ({
+      id: g.gatheringId,
+      type: 'myGather',
       name: g.title,
       host: g.nickName,
       memberCount: g.memberCount,
@@ -96,7 +107,7 @@ export default function MySchedule() {
           <Sidebar />
         </aside>
         <section className={styles.calendarArea}>
-          <h2>모여링 일정</h2>
+          <h2 className={styles.title}>모여링 일정</h2>
 
           <div className={styles.calendar}>
             <div className={styles.calendarHeader}>
@@ -104,7 +115,11 @@ export default function MySchedule() {
               <span>{year}년 {month + 1}월</span>
               <button className={styles.calendarHeaderBtn} onClick={handleNext}>〉</button>
             </div>
-
+            <div className={styles.description}> 
+              <span><span className={styles.circle1}></span> 수강 클래스</span>
+              <span><span className={styles.circle2}></span> 지원한 게더링</span>
+              <span><span className={styles.circle3}></span> 개설한 게더링</span>
+            </div>
             <div className={styles.calendarGrid}>
               {days.map((day) => (
                 <div key={day} className={styles.calendarDay}>{day}</div>
@@ -134,13 +149,15 @@ export default function MySchedule() {
                       <div
                         key={i}
                         className={`${styles.scheduleBox} ${
-                          item.type === 'class' ? styles.classType : styles.gatherType
+                          item.type === 'class' ? styles.classType : (item.type === 'gather' ?styles.gatherType :styles.myGatherType ) 
                         }`}
                         onClick={() => {
                           if (item.type === 'class') {
                             navigate(`/user/mypage/MyClassRegistList`);
                           } else if (item.type === 'gather') {
                             navigate(`/user/mypage/myGatheringingApplyList`);
+                          } else if (item.type === 'myGather') {
+                            navigate(`/user/mypage/myGatheringList`);
                           }
                         }}                      
                         >

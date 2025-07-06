@@ -39,6 +39,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 10px;
 }
 
 .datePickerInput {
@@ -217,7 +218,7 @@
   border-radius: 12px;
   margin-bottom: 1rem;
   padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: 0.2s ease;
 }
 
@@ -386,4 +387,31 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+}
+.noneCoupon{
+  display: flex;
+  justify-content: center; /* 가로 중앙 */
+  align-items: center;   
+}
+.classNone {
+    text-align: center;
+    color: #666;
+}
+.classH4 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 600;
+    line-height: 1.2;
+}
+.noneDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 0px 20px;
+}
+.tabDiv {
+  display: flex;
+  justify-content: space-between;
 }

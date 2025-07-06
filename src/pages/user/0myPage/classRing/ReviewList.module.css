@@ -90,7 +90,7 @@
   border-radius: 12px;
   margin-bottom: 1rem;
   padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: 0.2s ease;
 }
 
@@ -259,4 +259,9 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+}
+.noneCoupon{
+  display: flex;
+  justify-content: center; /* 가로 중앙 */
+  align-items: center;   
 }

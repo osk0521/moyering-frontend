@@ -108,3 +108,8 @@
   cursor: pointer;
   font-size: 14px;
 }
+.noneInq{
+  margin: 24px auto;
+    display: flex;
+    justify-content: center;
+}

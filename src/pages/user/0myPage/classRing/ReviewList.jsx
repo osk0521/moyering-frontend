@@ -195,6 +195,7 @@ export default function ReviewList() {
 
 
           <div>
+            {data.length === 0 && <p className={styles.noneCoupon}>리뷰 내역이 없습니다.</p>}
             {data.map((item) => (
               <div
                 key={item.reviewId || item.calendarId}

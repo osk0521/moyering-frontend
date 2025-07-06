@@ -47,7 +47,6 @@ export default function MyCouponList() {
     fetchCoupons();
   }, [token, page, size]);
 
-  if (loading) return <p>로딩 중…</p>;
   if (error)   return <p>쿠폰을 불러오는 중 오류가 발생했습니다.</p>;
 
   return (

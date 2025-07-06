@@ -21,8 +21,8 @@ export default function ClassInquiry() {
   const [completedTotalPages, setCompletedTotalPages] = useState(1);
   const [pendindTotalPages, setPendindTotalPages] = useState(1);
   
-  const [minDate, setMinDate] = useState(null);
-  const [maxDate, setMaxDate] = useState(null);
+  const [minDate, setMinDate] = useState('');
+  const [maxDate, setMaxDate] = useState('');
   const [keywords, setkeywords] = useState(null);
   const [openInquiryId, setOpenInquiryId] = useState(null);
   const [contents, setContents] = useState({});
@@ -64,14 +64,6 @@ export default function ClassInquiry() {
 
   const data = activeTab === 'pending' ? pendindInquries : completedInquries;
   const totalPages = activeTab === 'pending' ? pendindTotalPages : completedTotalPages;
-
-  const inquiries = [
-    { id: 1, classTitle: '클래스 A', date: '2025-06-22', question: '준비물이 뭔가요?', answer: '' },
-    { id: 2, classTitle: '클래스 B', date: '2025-06-20', question: '장소가 어디인가요?', answer: '강남역 근처입니다.' },
-    { id: 3, classTitle: '클래스 C', date: '2025-06-18', question: '주차 가능한가요?', answer: '' },
-    { id: 4, classTitle: '클래스 D', date: '2025-06-15', question: '강사님은 누구인가요?', answer: '홍길동 강사님입니다.' },
-  ];
-
   
   const toggleAccordion = (id) => {
     setOpenInquiryId((prev) => (prev === id ? null : id));
@@ -95,8 +87,8 @@ export default function ClassInquiry() {
 
         <section className={styles.classInquiryPage}>
           <h2 className={styles.pageTitle}>클래스 질문내역</h2>
-
-          <div className={styles.tabs}>
+          <div className={styles.tabDiv}>
+            <div className={styles.tabs}>
             <button
               className={`${styles.tabButton} ${activeTab === 'pending' ? styles.tabButtonActive : ''}`}
               onClick={() => {
@@ -121,30 +113,30 @@ export default function ClassInquiry() {
             <label className={styles.label}>시작일:</label>
             <input
               type="date"
-              value={minDate}
+              value={minDate || ''}
               onChange={(e) => {
                 setMinDate(e.target.value);
-                setWritablePage(1);
-                setDonePage(1);
+                setPendingPage(1);
+                setCompletedPage(1);
               }}
               className={styles.dateInput}
             />
             <label className={styles.label}>종료일:</label>
             <input
               type="date"
-              value={maxDate}
+              value={maxDate||''}
               onChange={(e) => {
                 setMaxDate(e.target.value);
-                setWritablePage(1);
-                setDonePage(1);
+                setPendingPage(1);
+                setCompletedPage(1);
               }}
               className={styles.dateInput}
             />
             <button
               className={styles.resetButton}
               onClick={() => {
-                setMinDate(null);
-                setMaxDate(null);
+                setMinDate('');
+                setMaxDate('');
                 setPendingPage(1);
                 setCompletedPage(1);
               }}
@@ -152,7 +144,16 @@ export default function ClassInquiry() {
               초기화
             </button>
             </div>
+          </div>
               <div>
+
+                {data.length === 0 && 
+                <div className={styles.noneDiv}>
+                  <div className={styles.classNone}>
+                    <h4 className={styles.classH4}>조회된 목록이 없습니다</h4>
+                    <p>검색 조건을 변경하거나 새로운 질문을 남겨보세요.</p>
+                  </div>
+                </div>                }
                 {data.map((item) => (
                   <div
                     key={item.inquiryId}

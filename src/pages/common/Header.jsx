@@ -10,6 +10,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { tokenAtom, userAtom, alarmsAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
+import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 
 export default function Header() {
   const user = useAtomValue(userAtom);
@@ -18,7 +19,8 @@ export default function Header() {
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
-  
+  useFetchUserClassLikes();
+
   // Dropdown 상태 관리
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);

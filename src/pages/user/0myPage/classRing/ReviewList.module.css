@@ -260,3 +260,8 @@
   cursor: pointer;
   font-size: 14px;
 }
+.noneCoupon{
+  display: flex;
+  justify-content: center; /* 가로 중앙 */
+  align-items: center;   
+}

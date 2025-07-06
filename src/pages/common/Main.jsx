@@ -3,7 +3,6 @@ import styles from "./Main.module.css";
 import ClassCard from "../../components/ClassCard";
 import { recommendClassAtom,hotClassAtom ,recommendGatheringAtom,mainBannerList } from "../../atom/classAtom";
 import useRecommendClasses from "../../hooks/common/useRecommendClasses";
-import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 import { useAtomValue } from "jotai";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -16,7 +15,6 @@ import Slider from "react-slick";
 
 export default function Main() {
     useRecommendClasses(); // userId 없으면 null 넘기기
-  useFetchUserClassLikes();
 //슬라이더 
 const settings = {
   dots: true,

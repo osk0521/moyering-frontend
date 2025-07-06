@@ -139,11 +139,51 @@
 }
 
 .classType {
-  background-color: #FFF1C6;
+  background-color: #fde9ac;
   color: #5a3e1b;
 }
 
 .gatherType {
   background-color: #D7F2FF;
   color: #185b84;
+}
+
+.myGatherType {
+  background-color: #d1ffc3;
+  color: #438418;
+}
+.description {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.description span {
+  display: flex;
+  align-items: center;
+  font-weight: 600;  
+}
+
+.description span span {
+  display: inline-block;
+  width: 10px;           
+  height: 10px;
+  border-radius: 50%;   
+  margin-right: 0.5rem;
+}
+/* 원 색상 지정 */
+.circle1 {
+  background-color: #fde9ac;  
+}
+
+.circle2 {
+  background-color: #D7F2FF;
+}
+.circle3 {
+  background-color: #d1ffc3; 
+}
+.title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
 }

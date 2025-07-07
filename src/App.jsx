@@ -25,6 +25,7 @@ import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
 import UserFeed from './pages/user/socialRing/UserFeed';
 import Test2 from './pages/user/socialRing/Test2.jsx';
+import MyScrapList from './pages/user/socialRing/MyScrapList.jsx';
 import NoticeList from './pages/common/NoticeList';
 import NoticeDetail from './pages/common/NoticeDetail';
 
@@ -47,6 +48,8 @@ import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import SettlementManagement  from "./pages/admin/SettlementManagement"; 
+// import SettlementModal  from "./pages/admin/SettlementModal.jsx"; 
+
 
 
 
@@ -161,6 +164,7 @@ function App() {
         <Route path="/user/mypage/following" element={<Following />} />
         <Route path="/user/mypage/myFeed" element={<MyFeed />} />
         <Route path="/user/mypage/myProfile" element={<MyProfilePage />} />
+        <Route path="/user/mypage/myScraps" element={<MyScrapList />} />
         
 
 
@@ -213,6 +217,7 @@ function App() {
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
         <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산 관리 페이지  */}
+
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
       </Routes>
     </Router>

@@ -136,7 +136,7 @@ export default function FollowList() {
                 </ul>
 
                 {loading && <div className="loading">로딩 중...</div>}
-                {!hasMore && <div className="end">마지막 페이지입니다.</div>}
+                {/* {!hasMore && <div className="end">마지막 페이지입니다.</div>} */}
             </div>
         </>
     );

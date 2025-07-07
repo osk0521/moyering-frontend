@@ -93,6 +93,7 @@ import MyProfilePage from './pages/user/0myPage/common/MyProfilePage.jsx';
 import FindId from './pages/common/FindId.jsx';
 import FindPassword from './pages/common/FindPassword.jsx';
 import ResetPassword from './pages/common/ResetPassword.jsx';
+import MainSearch from './pages/common/MinSearch.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -115,6 +116,7 @@ function App() {
       <Routes>
         {/* 공통 /~~~으로 시작 */}
         <Route path="/" element={<Main />} />
+        <Route path="/mainSearch" element={<MainSearch />}/>
         <Route path="/classList" element={<ClassList />} />
         <Route path="/gatheringList" element={<GatheringList />} />
         <Route path="/class/classRingDetail/:classId" element={<ClassRingDetail />} />

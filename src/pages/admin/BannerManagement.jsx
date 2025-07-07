@@ -277,7 +277,6 @@ const BannerManagement = () => {
 
       <div className="search-sectionHY">
         <div className="search-boxHY">
-          <span className="search-iconHY">🔍</span>
           <input
             type="text"
             placeholder="배너 제목, 내용 검색"

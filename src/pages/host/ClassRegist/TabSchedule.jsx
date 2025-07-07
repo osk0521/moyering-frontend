@@ -48,7 +48,34 @@ const TabSchedule = ({ classData, setClassData }) => {
 
   const updateScheduleDetail = (index, field, value) => {
     const newDetails = [...(schedule.scheduleDetail || [])];
-    newDetails[index][field] = value;
+
+    const updatedEntry = { ...newDetails[index], [field]: value };
+    newDetails[index] = updatedEntry;
+
+    const start = updatedEntry.startTime;
+    const end = updatedEntry.endTime;
+
+    console.log(start);
+    console.log(end);
+
+    const isValidTimeFormat = (time) => time && time.length === 5;
+
+    if (isValidTimeFormat(start) && isValidTimeFormat(end)) {
+      if (start >= end) {
+        alert("시작 시간은 종료시간보다 빠르게 지정해야 합니다.")
+        return;
+      }
+
+      if (index > 0 && isValidTimeFormat(start)) {
+        const prevEnd = newDetails[index - 1].endTime;
+        if (isValidTimeFormat(prevEnd)) {
+          if (start <= prevEnd) {
+            alert("이전 스케쥴의 종료시간보다 늦게 시작시간을 지정할 수 없습니다.")
+            return;
+          }
+        }
+      }
+    }
     setClassData(prev => ({
       ...prev,
       schedule: {
@@ -60,24 +87,42 @@ const TabSchedule = ({ classData, setClassData }) => {
 
   const handleCruitMinChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
-    setClassData(prev => ({
-      ...prev,
-      schedule: {
-        ...prev.schedule,
-        recruitMin: value
+    setClassData(prev => {
+      const newMin = value;
+      const max = prev.schedule.recruit;
+
+      const newMax = max !== '' && parseInt(newMin) > parseInt(max) ? newMin : max;
+
+      return {
+        ...prev,
+        schedule: {
+          ...prev.schedule,
+          recruitMin: newMin,
+          recruitMax: newMax
+        }
       }
-    }));
+    });
   };
 
   const handleCruitMaxChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
-    setClassData(prev => ({
-      ...prev,
-      schedule: {
-        ...prev.schedule,
-        recruitMax: value
+    setClassData(prev => {
+      const min = prev.schedule.recruitMin;
+
+      if (min !== '' && parseInt(value) < parseInt(min)) {
+        alert("최대 인원은 최소인원보다 작을 수 없습니다.");
+
+        return prev;
       }
-    }));
+
+      return {
+        ...prev,
+        schedule: {
+          ...prev.schedule,
+          recruitMax: value,
+        }
+      }
+    });
   };
 
   const handleDatesChange = (dates) => {

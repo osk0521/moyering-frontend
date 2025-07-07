@@ -65,8 +65,10 @@ export default function Sidebar({ user = dummyUser }) {
                         <li><a href="/user/mypage/myGatheringInquiryList">게더링 문의</a></li>
 
                         <li><strong>소셜링</strong></li>
-                        <li><a href="#">작성한 피드</a></li>
-                        <li><a href="#">스크랩 목록</a></li>
+                        <li><a href="/user/mypage/myFeed">작성한 피드</a></li>
+                        <li><a href="/user/mypage/myScraps">스크랩 목록</a></li>
+                        <li><a href="/user/mypage/follower">팔로우 목록</a></li>
+                        <li><a href="/user/mypage/following">팔로잉 목록</a></li>
                         <li><a href="#">쪽지함</a></li>
 
                         <li><strong></strong></li>

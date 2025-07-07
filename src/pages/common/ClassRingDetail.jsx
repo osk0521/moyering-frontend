@@ -33,7 +33,6 @@ import {
   ModalFooter,
   Button,
 } from "reactstrap";
-import ClassCard from '../../components/ClassCard';
 
 export default function ClassRingDetail() {
   useFetchUserClassLikes();
@@ -52,6 +51,8 @@ export default function ClassRingDetail() {
   const setHostAtom = useSetAtom(hostAtom);
   const setReviewListAtom = useSetAtom(reviewListAtom);
   const [detailDtos,setDetailDtos] = useState([]);
+  const [recommends,setRecommends] = useState([]);
+  const [registeds,setRegisteds] = useState([]);
 
   const calendarList = useAtomValue(calendarListAtom);
   const classDetail = useAtomValue(classDetailAtom);
@@ -67,27 +68,6 @@ export default function ClassRingDetail() {
   const [coupons, setCoupons] = useState([]);
   //유저가 소유한 쿠폰
   const [myCoupons, setMyCoupons] = useState([]);
-  
-
-  const recommendedClasses = [
-    {
-      id: 1,
-      image: "/img/class1.png",
-      category: "핸드메이드",
-      location: "서울/성동구",
-      title: "세상에서 하나뿐인 머그컵 만들기",
-      date: "25.6(월) 오후 2:00",
-    },
-    {
-      id: 2,
-      image: "/img/class2.png",
-      category: "핸드메이드",
-      location: "서울/마포구",
-      title: "향수 만들기 원데이 클래스",
-      date: "25.6(월) 오후 2:00",
-    },
-  ];
-
 
   const handleExpandClick = () => setIsExpanded(true);
   const handleTabClick = (id) => {
@@ -123,10 +103,12 @@ export default function ClassRingDetail() {
             setCoupons(res.data.coupons);
             setMyCoupons(res.data.userCoupons || []);
             setDetailDtos(res.data.detailDtos || []);
+            setRecommends(res.data.recommends || []);
+            setRegisteds(res.data.registeds || []);
             console.log(res.data);
           })
           .catch((err) => console.error("클래스 추천 데이터 로딩 실패", err));
-  }, [token]);
+  }, [token,classId]);
 
   //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
@@ -136,7 +118,8 @@ export default function ClassRingDetail() {
   if (calendarList.length > 0) {
     setSelectedCalendarId(calendarList[0].calendarId);
   }
-}, [classId, calendarList]);
+  }, [classId, calendarList]);
+
   //쿠폰 데이터
   // 쿠폰 상태 바뀔 때마다 실행됨
   useEffect(() => {
@@ -397,18 +380,60 @@ export default function ClassRingDetail() {
           {/* 추천 클래스 섹션 */}
           <section className={styles.section} id="recommend">
             <div className={styles.recommendHeader}>
-              <h2>같은 카테고리의 모임은 어때요</h2>
-              {/* <button className={styles.recommendMoreBtn}>더보기</button> */}
+              <h2>같은 카테고리의 클래스링은 어때요</h2>
+              {recommends.length>0? 
+                (
+                  <button className={styles.recommendMoreBtn}
+                    onClick={() =>
+                      navigate("/classList", {
+                        state: {
+                          category1: classDetail?.categoryId,
+                          category2: classDetail?.subCategoryId,
+                        }
+                      })
+                    }>
+                    더보기
+                  </button>
+                ) : (<></>)}
+
             </div>
-            <p className={styles.subText}>비슷한 주제 모임</p>
+            <p className={styles.subText}>비슷한 주제의 클래스링</p>
             <div className={styles.recommendGrid}>
-              {/* {recommendedClasses.map((cls) => (
-                <ClassCard
-                  key={cls.id}
-                  classInfo={recommendedClasses}
-                  onClick={() => navigate(`/class/classRingDetail/${cls.classId}`)}
-                />                
-              ))} */}
+                {recommends.length===0? 
+                (
+                  <p className={styles.noneCoupon}>같은 카테고리의 클래스가 없습니다.</p>
+                ) : (<></>)}
+              {recommends.map((classInfo) => (
+                  <div className={styles.card}  
+                  onClick={()=> { navigate(`/class/classRingDetail/${classInfo.classId}`);
+                  window.scrollTo({ top: 0, behavior: "auto" });
+                  }}>
+                    <div
+                      className={styles.cardImage}
+                      style={{
+                            backgroundImage: `url(${url}/image?filename=${classInfo.imgName1})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                    >        
+                      {classLikes.some(like => like.classId === classInfo.classId) ? (
+                        <GoHeartFill  className={styles.likeIcon4} />
+                      ) : (
+                        <GoHeart  className={styles.likeIcon3} />
+                      )}
+                    </div>
+                    <div className={styles.cardContent}>
+                      <div className={styles.cardTags}>
+                        <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}&gt;{classInfo.category2}</span>
+                        <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
+                      </div>
+                      <div className={styles.cardEtc}>
+                        <span className={styles.cardTitle}>{classInfo.name}</span>
+                        <span className={styles.cardPrice}>{classInfo.price.toLocaleString()}원</span>
+                      </div>
+                    </div>
+                  </div>             
+              ))}
             </div>
           </section>
         </main>
@@ -522,16 +547,29 @@ export default function ClassRingDetail() {
               >
                 {isLiked ? (
                 <>
-                  <GoHeart className={styles.likeIcon} />{" "}
+                  <GoHeartFill className={styles.likeIcon2} />{" "}
                 </>
               ) : (
                 <>
-                  <GoHeartFill className={styles.likeIcon2}/>{" "}
+                  <GoHeart className={styles.likeIcon}/>{" "}
                 </>
               )}
               </button>
               <button className={styles.questionButton} onClick={toggleQuestionModal}>질문하기</button> 
-              <button className={styles.applyBtn} onClick={()=> navigate(`/user/classPayment/${classId}/${selectedCalendarId}`)}>신청하기</button>
+              {registeds.some(r => r.calendarId === selectedCalendarId) ? (
+                <button className={styles.applyBtnDis} disabled>
+                  신청 완료
+                </button>
+              ) : (
+                <button
+                  className={styles.applyBtn}
+                  onClick={() =>
+                    navigate(`/user/classPayment/${classId}/${selectedCalendarId}`)
+                  }
+                >
+                  신청하기
+                </button>
+              )}
             </div>
             <p className={styles.etc}>결제 취소는 수강 2일 전까지만 가능합니다.</p>
           </div>

@@ -436,12 +436,12 @@ const SettlementManagement = () => {
       )}
 
       {/* 수강생 결제 내역 모달 */}
-      <SettlementModal
+      {/* <SettlementModal
         isOpen={showModal}
         onClose={handleCloseModal}
         classInfo={selectedClass}
         onFetchStudents={fetchStudentList} // 실제 API 연동 시 사용
-      />
+      /> */}
     </Layout>
   );
 };

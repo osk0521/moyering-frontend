@@ -281,7 +281,7 @@ export default function Header() {
             </span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/gatheringList`)}>게더링</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/feeds`)}>소셜링</span>
-            <span className="Header_nav-item_osk" onClick={() => navigate(`/`)}>공지사항</span>
+            <span className="Header_nav-item_osk" onClick={() => navigate(`/noticeList`)}>공지사항</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/`)}>고객센터</span>
           </div>
         </div>

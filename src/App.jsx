@@ -25,6 +25,8 @@ import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
 import UserFeed from './pages/user/socialRing/UserFeed';
 import Test2 from './pages/user/socialRing/Test2.jsx';
+import NoticeList from './pages/common/NoticeList';
+import NoticeDetail from './pages/common/NoticeDetail';
 
 // 관리자 페이지
 import BannerCreateModal from "./pages/admin/BannerCreateModal";
@@ -128,6 +130,8 @@ function App() {
         <Route path="/joinSuccess" element={<UserJoinSuccess />} />
         <Route path="/userlogin" element={<UserLogin />} />
         <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
+        <Route path="/noticeList" element={<NoticeList />} />
+        <Route path="/notice/:noticeId" element={<NoticeDetail />} />
         
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/classPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />

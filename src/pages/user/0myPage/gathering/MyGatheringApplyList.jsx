@@ -63,7 +63,7 @@ export default function MyGatheringApplyList() {
       const response = await myAxios(token, setToken).post(`/user/cancelGatheringApply/${gathering.gatheringApplyId}`);
 
       if (response.status === 200) {
-        alert('모임이 성공적으로 취소되었습니다.');
+        // alert('모임이 성공적으로 취소되었습니다.');
         // 목록 새로고침
         setSearch(prev => ({ ...prev }));
       }
@@ -234,7 +234,8 @@ export default function MyGatheringApplyList() {
                   }
                 }}
               />
-              <CiSearch className="MyGatheringApplyList_search-icon_osk" />
+              <CiSearch className="MyGatheringApplyList_search-icon_osk"  onClick={handleSearch}
+                style={{ cursor: "pointer" }} />
             </div>
           </div>
 

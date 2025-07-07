@@ -84,18 +84,18 @@ export default function Header() {
     }
   }, [token, setAlarms]);
 
-    useEffect(() => {
-      console.log(user);
-      if (user&&token) {
-        myAxios(token,setToken).post('/user/alarms')
-          .then(response=> {
-            console.log(response.data)
-            setAlarms([...response.data])
-          })
-          .catch(err=> {
-            console.log(err)
-          })
-      } 
+  useEffect(() => {
+    console.log(user);
+    if (user&&token) {
+      myAxios(token,setToken).post('/user/alarms')
+        .then(response=> {
+          console.log(response.data)
+          setAlarms([...response.data])
+        })
+        .catch(err=> {
+          console.log(err)
+        })
+    } 
   }, [user]);
 
   return (
@@ -119,7 +119,8 @@ export default function Header() {
                 <span>{user.nickName} 님</span>
               </span>
               
-              <Button className="Header_icon-button_osk Header_heart-button_osk">
+              <Button className="Header_icon-button_osk Header_heart-button_osk" 
+                onClick={() => navigate(`/user/mypage/myWishlist`)}>
                 <FaHeart className="Header_top-icon_osk login" />
               </Button>
 
@@ -132,8 +133,11 @@ export default function Header() {
                   tag="button"
                   className="Header_notification-button_osk"
                 >
-                  {alarms.length > 0 ? (
-                    <FaBell className="Header_top-icon_osk Header_notification-active_osk" />
+                  {alarms.length > 0 ? (  
+                    <>
+                      <FaBell className="Header_top-icon_osk Header_notification-active_osk" />
+                      <span className="Header_notification-badge_osk alarm-count">{alarms.length > 9 ? '9+' : alarms.length}</span>
+                    </>
                   ) : (
                     <FaRegBell className="Header_top-icon_osk" />
                   )}
@@ -228,7 +232,7 @@ export default function Header() {
                 <a href="/join">회원가입</a>
               </span>
               
-              <Button className="Header_icon-button_osk Header_heart-button_osk">
+              {/* <Button className="Header_icon-button_osk Header_heart-button_osk">
                 <FaHeart className="Header_top-icon_osk" />
               </Button>
               <Button className="Header_icon-button_osk">
@@ -236,7 +240,7 @@ export default function Header() {
               </Button>
               <Button className="Header_icon-button_osk">
                 <LuMessageCircleMore className="Header_top-icon_osk" />
-              </Button>
+              </Button> */}
             </>
           )}
         </div>
@@ -289,7 +293,7 @@ export default function Header() {
             </span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/gatheringList`)}>게더링</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/feeds`)}>소셜링</span>
-            <span className="Header_nav-item_osk" onClick={() => navigate(`/`)}>공지사항</span>
+            <span className="Header_nav-item_osk" onClick={() => navigate(`/noticeList`)}>공지사항</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/`)}>고객센터</span>
           </div>
         </div>

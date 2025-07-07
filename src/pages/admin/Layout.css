@@ -10,10 +10,9 @@
   position: relative;
 }
 
-/* 전체 body 강제 설정 */
 body {
-  margin: 0 !important;
-  padding: 20 20px !important;
+  margin: 0 ;
+  padding: 0 0px ;
   box-sizing : border-box;
   background: #ffffff !important;
 }
@@ -96,7 +95,7 @@ body {
   background-color: #dc2626 !important;
 }
 
-/* 사이드바 - 절대 위치로 확실하게 */
+/* 사이드바  */
 .sidebarHY {
   width: 180px !important;
   position: fixed !important;
@@ -104,7 +103,7 @@ body {
   left: 0 !important;
   height: calc(100vh - 70px) !important;
   background-color: #ffffff !important;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: flex;
   flex-direction: column;
   z-index: 1000 !important;
@@ -118,7 +117,7 @@ body {
 /* 사이드바 네비게이션 */
 .sidebar-navHY {
   flex: 1;
-  padding: 20px 0 0 0;
+  padding: 20px 20px 0 0;
   background-color: #ffffff;
   overflow-y: auto;
 }
@@ -189,9 +188,9 @@ body {
   color: white !important;
 }
 
-/* 메인 컨텐츠 - 절대 위치로 확실하게 */
+/* 메인 컨텐츠  */
 .main-contentHY {
-  position: absolute !important;
+  position: relative;
   top: 80px ;
   left: 220px;
   right: 0 ;
@@ -224,8 +223,12 @@ body {
 
 /* 공통 테이블 스타일 */
 .table-containerHY {
-  background: white ;
+  background: white !important;
+  border-radius: 4px !important;
   margin-bottom: 20px !important;
+  width: 100% !important;
+  overflow-x: auto !important; /* 가로 스크롤 추가 */
+  border: 1px solid #e9ecef !important; /* 테두리 추가 */
 }
 
 /* 공통 테이블 스타일 */
@@ -236,20 +239,24 @@ body {
 }
 
 .tableHY {
-  width: 100% !important;
-  font-size: 15px !important;
+  width: 85%;
+  font-size: 14px ;
   background: white !important;
+  table-layout: auto !important; /* 내용에 따라 자동 조정 */
+  min-width: auto  !important; /* 최소 너비 설정 */
+  margin-bottom: 0 !important;
 }
 
 .tableHY thead th {
   background-color: #f8f9fa !important;
   color: #333 !important;
-  font-weight: 800 !important;
-  padding: 12px 16px !important;
+  font-weight: 700 !important; /* 800에서 700으로 조정 */
+  padding: 8px 12px !important; /* 12px 16px에서 줄임 */
   text-align: center !important;
   border-bottom: 1px solid #e9ecef !important;
   border-right: 1px solid #e9ecef !important;
-  font-size: 15px !important;
+  font-size: 13px !important; /* 15px에서 13px로 줄임 */
+  white-space: nowrap !important; /* 텍스트 줄바꿈 방지 */
 }
 
 .tableHY thead th:last-child {
@@ -257,18 +264,17 @@ body {
 }
 
 .tableHY tbody td {
-  padding: 10px 15px !important;
+  padding: 6px 10px !important; /* 10px 15px에서 줄임 */
   border-bottom: 1px solid #f1f3f4 !important;
   border-right: 1px solid #f1f3f4 !important;
   color: #333 !important;
   vertical-align: middle !important;
   background: white !important;
   text-align: center !important;
+  font-size: 13px !important; /* 폰트 크기 조정 */
+  white-space: nowrap !important; /* 텍스트 줄바꿈 방지 */
 }
-
-.tableHY tbody td:last-child {
-  border-right: none !important;
-}
+ 
 
 .tableHY tbody tr:hover {
   background-color: #f8f9fa !important;
@@ -342,8 +348,33 @@ body {
   }
   
   .search-boxHY {
-    max-width: none !important;
-    min-width: auto !important;
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    
+  }
+
+  .search-inputHY {
+    flex: 1; /* 너비 자동 확장 */
+    max-width: 300px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+  }
+  
+  .search-btnHY {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #2d6dcc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .search-btnHY:hover {
+    background-color: #1e4e9a;
   }
   
   .date-filter-group {
@@ -455,4 +486,135 @@ body {
   display: flex;
   gap: 4px;
 }
+}
+
+
+
+
+/* 컬럼별 최적화 */
+.tableHY .col-no { 
+  width: 50px !important; 
+  min-width: 50px !important;
+}
+
+.tableHY .col-type { 
+  width: 80px !important; 
+  min-width: 80px !important;
+}
+
+.tableHY .col-id { 
+  width: 100px !important; 
+  min-width: 100px !important;
+}
+
+.tableHY .col-name { 
+  width: 90px !important; 
+  min-width: 90px !important;
+}
+
+.tableHY .col-email { 
+  width: 200px !important; 
+  min-width: 180px !important;
+  max-width: 220px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.tableHY .col-phone { 
+  width: 130px !important; 
+  min-width: 130px !important;
+}
+
+.tableHY .col-date { 
+  width: 100px !important; 
+  min-width: 100px !important;
+}
+
+.tableHY .col-action { 
+  width: 90px !important; 
+  min-width: 90px !important;
+}
+
+/* 액션 버튼들 수정 */
+.action-buttonsHY {
+  display: flex !important;
+  gap: 2px !important; /* 4px에서 2px로 줄임 */
+  justify-content: center !important;
+}
+
+.btn-editHY, 
+.btn-deleteHY, 
+.btn-paymentlistHY, 
+.btn-settlementListHY {
+  padding: 4px 8px !important; /* 6px 12px에서 줄임 */
+  border: none !important;
+  border-radius: 4px !important;
+  font-size: 11px !important; /* 12px에서 11px로 줄임 */
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  white-space: nowrap !important;
+}
+
+/* 회원구분 배지 스타일 추가 */
+.badge-memberHY {
+  display: inline-block !important;
+  padding: 2px 6px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  white-space: nowrap !important;
+}
+
+.badge-adminHY {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.badge-teacherHY {
+  background-color: #10b981 !important;
+  color: white !important;
+}
+
+.badge-userHY {
+  background-color: #6b7280 !important;
+  color: white !important;
+}
+
+/* 반응형 테이블 */
+@media (max-width: 1200px) {
+  .tableHY .col-email {
+    display: none !important; /* 작은 화면에서 이메일 컬럼 숨김 */
+  }
+}
+
+@media (max-width: 992px) {
+  .tableHY .col-phone,
+  .tableHY .col-date {
+    display: none !important; /* 더 작은 화면에서 연락처, 날짜 숨김 */
+  }
+  
+  .tableHY {
+    min-width: 600px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .tableHY thead th,
+  .tableHY tbody td {
+    padding: 4px 6px !important;
+    font-size: 12px !important;
+  }
+  
+  .action-buttonsHY {
+    flex-direction: column !important;
+    gap: 1px !important;
+  }
+  
+  .btn-editHY, 
+  .btn-deleteHY, 
+  .btn-paymentlistHY, 
+  .btn-settlementListHY {
+    padding: 2px 4px !important;
+    font-size: 10px !important;
+  }
 }

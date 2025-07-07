@@ -322,6 +322,14 @@
   border-top: 1px solid #eee;
 }
 
+.MyGatherInquiryList_empty-state_osk{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 40px 20px;
+}
+
 .MyGatherInquiryList_pagination-btn_osk {
   padding: 8px 12px;
   border: 1px solid #ddd;

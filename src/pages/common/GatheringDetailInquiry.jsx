@@ -124,10 +124,11 @@ export default function GatheringDetailInquiry({ gatheringId }) {
     }
 
     const formDataToSend = {
-      gatheringId: gatheringId,
+      gatheringId: parseInt(gatheringId),
       inquiryContent: questionContent.trim(),
+      title:gatheringData.title,
     };
-
+    console.log("Form Data to Send:", formDataToSend);
     try {
       const response = await myAxios(token,setToken).post(
         `/user/writeGatheringInquiry`,

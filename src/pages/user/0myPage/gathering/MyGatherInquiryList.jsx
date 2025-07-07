@@ -190,33 +190,40 @@ export default function GatherInquiry() {
       return "전체";
     };
   // 답변 등록
-  const handleReplySubmit = useCallback(async (inquiryId) => {
-    const reply = replyText[inquiryId];
-    if (!reply || !reply.trim()) {
-      alert("답변을 입력해주세요.");
-      return;
-    }
-  try {
+ const handleReplySubmit = useCallback(async (inquiryId) => {
+  const reply = replyText[inquiryId];
+  if (!reply || !reply.trim()) {
+    alert("답변을 입력해주세요.");
+    return;
+  }
+
+  // currentInquiry 찾기 및 검증을 먼저 수행
+  const currentInquiry = receivedInquiryList.find(item => item.inquiryId === inquiryId);
+  if (!currentInquiry) {
+    alert("문의 정보를 찾을 수 없습니다.");
+    return;
+  }
+
+try {
     setLoading(true);
-    const formData = new FormData();
-    formData.append('inquiryId', inquiryId);
-    formData.append('responseContent', reply.trim());
-    formData.append('responseDate', new Date().toISOString().split('T')[0]);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+    
+    const requestData = {
+        inquiryId: inquiryId,
+        gatheringId: currentInquiry.gatheringId,
+        responseContent: reply.trim(),
+        responseDate: new Date().toISOString().split('T')[0]
+    };
+    
     const response = await myAxios(token, setToken).post(
-      `/user/responseToGatheringInquiry`, 
-      formData
+        `/user/responseToGatheringInquiry`, 
+        requestData 
     );
     alert("답변이 등록되었습니다.");
     setReplyText(prev => ({ ...prev, [inquiryId]: "" }));
     setOpenId(null); // 아코디언 닫기
     loadInquiryData(); // 데이터 재로딩
-    
   } catch (err) {
     console.error("답변 등록 오류:", err);
-    
     if (err.response?.status === 401) {
       setError("인증이 만료되었습니다. 다시 로그인해주세요.");
       setToken('');

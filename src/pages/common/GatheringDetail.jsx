@@ -148,6 +148,7 @@ export default function GatheringDetail() {
         aspiration: aspirationContent.trim(),
         title: gatheringData.title,
       };
+      console.log(formData, 'formData')
       const response = await myAxios(token, setToken).post(
         "/user/applyGathering",
         formData

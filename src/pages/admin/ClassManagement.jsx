@@ -112,9 +112,31 @@ const ClassManagement = () => {
     navigate(`/admin/class/${classItem.classId}`);
   };
 
-  // 페이지네이션
-  const goToPage = (page) => {
-    if (page >= 0 && page < totalPages) setCurrentPage(page);
+  // 페이지네이션 - 페이지 번호 배열 생성 (공지사항 관리와 동일)
+  const getPageNumbers = () => {
+    const currentPageNum = currentPage;
+    const maxVisible = 5;
+    
+    let start = Math.max(0, currentPageNum - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages - 1, start + maxVisible - 1);
+    
+    // 끝에서부터 계산해서 start 조정
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(0, end - maxVisible + 1);
+    }
+    
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  // 페이지 변경
+  const changePage = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setCurrentPage(newPage);
+    }
   };
 
   return (
@@ -123,7 +145,6 @@ const ClassManagement = () => {
         <h1>클래스 관리</h1>
       </div>
       {/* 검색 및 필터 영역 */}
-      <div className = "search-filter-group">
       <div className="search-sectionHY">
         <div className="search-boxHY">
           <span className="search-iconHY">🔍</span>
@@ -152,28 +173,9 @@ const ClassManagement = () => {
           onChange={handleEndDate}
         />
         </div>
-        </div>
-        {/* 1차 카테고리 */}
-        <div className="category-sectionHY">
-          <select className="category-selectHY" value={firstCategory} onChange={handleFirstCategory}>
-            <option value="">1차 카테고리</option>
-            {categoryList.map(cat => (
-              <option key={cat.firstCategory} value={cat.firstCategory}>{cat.firstCategory}</option>
-            ))}
-          </select>
-        </div>
-        {/* 2차 카테고리 */}
-        <div className="category-sectionHY">
-          <select className="category-selectHY" value={secondCategory} onChange={handleSecondCategory} disabled={!firstCategory}>
-            <option value="">2차 카테고리</option>
-            {secondCategoryList.map(sub => (
-              <option key={sub} value={sub}>{sub}</option>
-            ))}
-          </select>
-        </div>
       </div>
    
-      
+    
       {/* 상태 필터 */}
       <div className="filter-sectionHY">
         {statusOptions.map((opt) => (
@@ -229,11 +231,34 @@ const ClassManagement = () => {
           </tbody>
         </table>
       </div>
-      {/* 페이지네이션 */}
-      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
-        <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 0}>이전</button>
-        <span style={{ margin: '0 10px' }}>{currentPage + 1} / {totalPages}</span>
-        <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage + 1 >= totalPages}>다음</button>
+
+      {/* 페이지네이션 - 공지사항 관리와 동일한 스타일 */}
+      <div className="paginationHY">
+        <button 
+          className="page-btnHY prev"
+          onClick={() => changePage(currentPage - 1)}
+          disabled={currentPage === 0}
+        >
+          이전
+        </button>
+        <span className="page-numbersHY">
+          {getPageNumbers().map(num => (
+            <button 
+              key={num}
+              className={`page-btnHY ${num === currentPage ? 'activeHY' : ''}`}
+              onClick={() => changePage(num)}
+            >
+              {num + 1}
+            </button>
+          ))}
+        </span>
+        <button 
+          className="page-btnHY next"
+          onClick={() => changePage(currentPage + 1)}
+          disabled={currentPage >= totalPages - 1}
+        >
+          다음
+        </button>
       </div>
     </Layout>
   );

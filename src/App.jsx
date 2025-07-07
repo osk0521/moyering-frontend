@@ -57,6 +57,7 @@ import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import Follower from './pages/user/socialRing/Follower.jsx';
 import Following from './pages/user/socialRing/Following.jsx'
 import HostFeedPage from './pages/user/socialRing/HostFeedPage.jsx';
+import HostFeedCreate from './pages/user/socialRing/FeedHostCreate.jsx';
 
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
@@ -92,6 +93,8 @@ import MyProfilePage from './pages/user/0myPage/common/MyProfilePage.jsx';
 import FindId from './pages/common/FindId.jsx';
 import FindPassword from './pages/common/FindPassword.jsx';
 import ResetPassword from './pages/common/ResetPassword.jsx';
+import HostFeedDetail from './pages/user/socialRing/HostFeedDetail.jsx';
+
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -128,6 +131,8 @@ function App() {
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
         <Route path="/feeds" element={<Test2 />} />
         <Route path="/hostFeeds" element={<HostFeedPage />} />
+        <Route path="/host/createFeed" element={<HostFeedCreate />} />
+        <Route path="/hostFeed/:feedId" element={<HostFeedDetail />} />
 
 
         <Route path="/scrapList" element={<ScrapList />} />

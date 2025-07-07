@@ -1,77 +1,47 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAtom, useAtomValue } from 'jotai';
-import { tokenAtom, userAtom } from '../../../atoms';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { myAxios, url } from '../../../config';
 import './HostFeedPage.css';
-import heartOutline from './icons/heart-outline.png';
-import heartFilled from './icons/heart-filled.png';
-import plusIcon from './icons/plus.svg';
+import Header from '../../common/Header';
 
 export default function HostFeedPage() {
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
-    const [token, setToken] = useAtom(tokenAtom);
-    const { hostId } = useParams();
     const [category, setCategory] = useState('');
     const [offset, setOffset] = useState(0);
     const [size] = useState(10);
     const [menuOpenId, setMenuOpenId] = useState(null);
     const [imageIndexes, setImageIndexes] = useState({});
 
-    // 👉 전체 조회 or 카테고리 필터
+    // 👉 전체 조회 (카테고리 필터도 서버에서 무시하도록 요청 가능)
     const { data: feeds = [] } = useQuery({
-        queryKey: ['hostFeeds', hostId, category, offset, size],
+        queryKey: ['hostFeeds', category, offset, size],
         queryFn: async () => {
             const params = new URLSearchParams({ offset, size });
             if (category) params.append('category', category);
-            const endpoint = category
-                ? `/api/hostFeeds/${hostId}/category?${params.toString()}`
-                : `/api/hostFeeds/${hostId}?${params.toString()}`;
+            const endpoint = `/feedHost?${params.toString()}`;
             const res = await myAxios().get(endpoint);
             return res.data;
         }
     });
 
-    // 👉 좋아요 (socialing과 동일 로직이라면 유지)
-    const { data: likedIds = [] } = useQuery({
-        queryKey: ['likes'],
-        queryFn: async () => {
-            if (!token) return [];
-            const res = await myAxios(token, setToken).get(`/user/socialing/likes`);
-            return res.data.filter(item => item.likedByUser).map(item => item.feedId);
-        },
-        enabled: !!token
-    });
-    const likedFeedIdSet = useMemo(() => new Set(likedIds), [likedIds]);
-
-    // 👉 좋아요 mutation
-    const likeMutation = useMutation({
-        mutationFn: (feedId) => myAxios(token, setToken).post(`/user/socialing/likes/${feedId}`),
-        onSuccess: () => {
-            queryClient.invalidateQueries(['likes']);
-            queryClient.invalidateQueries(['hostFeeds', hostId, category, offset, size]);
-        }
-    });
-    const toggleLike = (feed) => {
-        if (!token) return alert("로그인이 필요합니다.");
-        likeMutation.mutate(feed.feedId);
-    };
-
-    // 👉 이미지 helpers
     const getFeedImages = feed =>
         [feed.img1, feed.img2, feed.img3, feed.img4, feed.img5].filter(Boolean);
 
     return (
+        <>
+        <Header/>
         <div className="KYM-feed-container">
-            <h2>강사 홍보 피드</h2>
+            <h2>강사 홍보</h2>
 
             <div className="KYM-feed-filters">
                 {['', '스포츠', '음식', '공예 / DIY', '뷰티', '문화예술', '심리 / 상담', '자유모임'].map(cat => (
                     <button key={cat}
                         className={`KYM-filter-button${category === cat ? ' active' : ''}`}
-                        onClick={() => setCategory(cat)}>
+                        onClick={() => {
+                setCategory(cat);
+                setOffset(0);
+            }}>
                         {cat || '전체'}
                     </button>
                 ))}
@@ -89,9 +59,9 @@ export default function HostFeedPage() {
                                     <div className="KYM-user-info">
                                         <img src={`${url}/iupload/${feed.hostProfile}`} alt="강사 프로필"
                                             className="KYM-avatar" style={{ cursor: "pointer" }}
-                                            onClick={() => navigate(`/host/${feed.hostId}`)} />
+                                            onClick={() => navigate(`/feedHost/${feed.hostId}`)} />
                                         <span className="KYM-nickname"
-                                            onClick={() => navigate(`/host/${feed.hostId}`)}
+                                            onClick={() => navigate(`/feedHost/${feed.hostId}`)}
                                             style={{ cursor: "pointer" }}>
                                             {feed.hostName}
                                         </span>
@@ -129,19 +99,13 @@ export default function HostFeedPage() {
                                     </div>
                                 </div>
 
-                                <div className="KYM-post-footer">
-                                    <button
-                                        className={`KYM-like-button${likedFeedIdSet.has(feed.feedId) ? ' active' : ''}`}
-                                        onClick={() => toggleLike(feed)}
-                                    >
-                                        <img src={likedFeedIdSet.has(feed.feedId) ? heartFilled : heartOutline} alt="좋아요" />
-                                    </button>
-                                </div>
+                                {/* 좋아요 버튼 완전히 제거 */}
                             </div>
                         );
                     })}
                 </div>
             </div>
         </div>
+        </>
     );
 }

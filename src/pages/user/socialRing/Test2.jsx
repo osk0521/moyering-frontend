@@ -158,7 +158,7 @@ export default function FeedPage2() {
         <>
             <Header />
             <div className="KYM-feed-container">
-                <div className="KYM-feed-title"><h2>커뮤니티 피드</h2></div>
+                <div className="KYM-feed-title"><h2>소셜링</h2></div>
 
                 <div className="KYM-feed-filters">
                     {['전체', '좋아요순', '댓글순', '팔로워'].map((txt, idx) => {

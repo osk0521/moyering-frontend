@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { myAxios } from "/src/config";
 import Layout from "./Layout";
+
+// import SettlementModal from './SettlementModal'; // 모달 컴포넌트 import
 import './SettlementManagement.css';
 import { useAtomValue } from 'jotai';
 import { tokenAtom } from '../../atoms';
@@ -11,24 +13,26 @@ const SettlementManagement = () => {
   const userInfo = location.state; // MemberManagement에서 전달받은 사용자 정보
   const token = useAtomValue(tokenAtom);
   
-  // ===== 상태 관리 =====
-  const [activeTab, setActiveTab] = useState('unsettled');
-  
+
   // 검색 상태
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-
+  
   // 백엔드 연동 데이터
   const [settlementData, setSettlementData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  
   // 페이징 관련 상태
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [pageSize] = useState(10);
+  const [pageSize] = useState(20);
+  
+  // 모달 관련 상태
+  const [showModal, setShowModal] = useState(false);
+  const [selectedClass, setSelectedClass] = useState(null);
 
   // 사용자 정보가 있으면 검색어를 자동으로 설정
   useEffect(() => {
@@ -51,12 +55,12 @@ const SettlementManagement = () => {
         size: pageSize,
         sort: 'settlementDate,desc'
       };
-
+      
       // 검색어 처리
       if (searchTerm.trim()) {
         params.keyword = searchTerm.trim();
       }
-
+      
       // 날짜 필터링
       if (startDate) {
         params.startDate = startDate;
@@ -64,9 +68,8 @@ const SettlementManagement = () => {
       if (endDate) {
         params.endDate = endDate;
       }
-
+      
       console.log('API 호출 - endpoint:', endpoint, 'params:', params);
-
       const response = await myAxios(token).get(endpoint, { params });
       
       if (response.data) {
@@ -83,8 +86,6 @@ const SettlementManagement = () => {
           }
         });
         
-        // ✅ 백엔드에서 이미 정렬했으니 프론트에서는 그대로 사용
-        // 백엔드 정렬: RQ(0) > WP(1) > CP(2) 순서로 이미 처리됨
         setSettlementData(uniqueContent);
         setTotalPages(totalPages || 0);
         setTotalElements(totalElements || 0);
@@ -115,6 +116,29 @@ const SettlementManagement = () => {
     }
   };
 
+  // 수강생 목록 조회 API (실제 연동 시 사용)
+  const fetchStudentList = async (classId) => {
+    try {
+      const response = await myAxios(token).get(`/api/class/${classId}/students`);
+      return response.data || [];
+    } catch (err) {
+      console.error('수강생 조회 실패:', err);
+      throw err;
+    }
+  };
+
+  // 클래스명 클릭 핸들러
+  const handleClassNameClick = (classInfo) => {
+    setSelectedClass(classInfo);
+    setShowModal(true);
+  };
+
+  // 모달 닫기 핸들러
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedClass(null);
+  };
+
   // ===== useEffect 훅들 =====
   // 초기 로딩
   useEffect(() => {
@@ -132,7 +156,6 @@ const SettlementManagement = () => {
       setCurrentPage(0);
       fetchSettlementData();
     }, 500);
-
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
@@ -160,8 +183,8 @@ const SettlementManagement = () => {
     switch (status) {
       case 'PENDING':
       case 'WT':
-      case 'WP':  // ✅ 정산대기 추가
-      case 'RQ':  // ✅ 정산요청 추가
+      case 'WP':  
+      case 'RQ':  
         return 'status-pendingHY';
       case 'COMPLETED':
       case 'CP':
@@ -296,11 +319,9 @@ const SettlementManagement = () => {
               <th>정산 예정일</th>
               <th>정산 확정 금액</th>
               <th>정산 완료일</th>
-          
               <th>은행</th>
               <th>계좌번호</th>
               <th>상태</th>
-            
               <th>액션</th>
             </tr>
           </thead>
@@ -315,7 +336,15 @@ const SettlementManagement = () => {
                   <td className="calendar-idHY">{item.calendarId}</td>
                   <td className="host-idHY">{item.username}</td>
                   <td className="host-nameHY">{item.hostName}</td>
-                  <td className="class-nameHY">{item.className}</td>
+                  <td className="class-nameHY">
+                    <span         
+                      className="class-name-clickable"
+                      onClick={() => handleClassNameClick(item)}
+                      style={{ cursor: 'pointer', color: '#3b82f6', textDecoration: 'underline' }}
+                    >
+                      {item.className}
+                    </span>
+                  </td>
                   <td className="expected-amountHY">
                     {formatAmount(item.settleAmountToDo)}원
                   </td>
@@ -324,9 +353,6 @@ const SettlementManagement = () => {
                     {formatAmount(item.settlementAmount)}원
                   </td>
                   <td className="settled-dateHY">{formatDate(item.settledAt)}</td>
-                         
-            
-             
                   <td className="bank-nameHY">{item.bankName || '-'}</td>
                   <td className="account-numHY">{item.accNum || '-'}</td>
                   <td className="statusHY">
@@ -334,7 +360,6 @@ const SettlementManagement = () => {
                       {getStatusText(item.settlementStatus)}
                     </span>
                   </td>
-       
                   <td className="actionHY">
                     {(item.settlementStatus === 'PENDING' || 
                       item.settlementStatus === 'WT' || 
@@ -409,6 +434,14 @@ const SettlementManagement = () => {
           </button>
         </div>
       )}
+
+      {/* 수강생 결제 내역 모달 */}
+      <SettlementModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        classInfo={selectedClass}
+        onFetchStudents={fetchStudentList} // 실제 API 연동 시 사용
+      />
     </Layout>
   );
 };

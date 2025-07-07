@@ -47,6 +47,8 @@ import PaymentManagement from "./pages/admin/PaymentManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import SettlementManagement  from "./pages/admin/SettlementManagement"; 
+// import SettlementModal  from "./pages/admin/SettlementModal.jsx"; 
+
 
 
 
@@ -213,6 +215,7 @@ function App() {
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}
         <Route path="/admin/payment" element={<PaymentManagement />} />     {/* 결제관리 페이지  */}
         <Route path="/admin/settlement" element={<SettlementManagement />} />          {/* 정산 관리 페이지  */}
+
         {/* <Route path="/admin/category" element={<CategoryManagement />} />    카테고리 관리 페이지  */}
       </Routes>
     </Router>

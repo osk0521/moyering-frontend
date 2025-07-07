@@ -25,8 +25,6 @@ export default function NoticeList() {
 
   // UI 상태 관리
   const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' }); // 작성일 기준 내림차순 
-  const [isModalOpen, setIsModalOpen] = useState(false); // + 새 공지사항 모달 창 열기 
-  const [selectedNotice, setSelectedNotice] = useState(null); // 선택한 공지사항 (수정/삭제)
 
   // 컴포넌트 마운트시 게시글 목록 로드
   // search.page : 페이지 이동할 때 새 데이터 로드, search.keyword : 검색어 변경할 때 새 데이터 로드 
@@ -170,17 +168,8 @@ export default function NoticeList() {
     navigate(`/admin/notice/edit/${noticeId}`);
   };
 
-  // 공지사항 상세 모달 열기
-  const openNoticeModal = (notice) => {
-    setSelectedNotice(notice);
-    setIsModalOpen(true);
-  };
 
-  // 모달 닫기
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedNotice(null);
-  };
+
 
   // 내용 100자 제한 함수
   const truncateContent = (content, maxLength = 100) => {
@@ -250,56 +239,29 @@ const hideNotice = async (noticeId) => {
       alert("공지사항이 숨겨졌습니다.");
       
       if (response.data) {
-        console.log('=== 상태 업데이트 시작 ===');
-        console.log('업데이트할 데이터:', response.data);
-        console.log('업데이트할 데이터의 isHidden:', response.data.isHidden);
-        
-        // 기존 목록 출력
-        console.log('=== 기존 noticeList ===');
-        console.log(noticeList);
-        
         setNoticeList(prevList => {
           const newList = prevList.map(notice => {
             if (notice.noticeId === noticeId) {
-              console.log('=== 매칭된 notice 발견 ===');
-              console.log('기존 notice:', notice);
-              console.log('새로운 data:', response.data);
               return response.data;
             }
             return notice;
           });
-          
-          console.log('=== 업데이트된 noticeList ===');
-          console.log(newList);
           return newList;
         });
         
-        console.log('=== 상태 업데이트 완료 ===');
       } else {
-        console.log('=== 응답 데이터가 없어서 전체 새로고침 ===');
         await loadNoticeList();
       }
     }
   } catch (error) {
-    console.error("숨기기 실패:", error);
     alert("숨기기에 실패했습니다.");
   }
   
-  console.log('=== 숨기기 끝 ===');
 };
 
-const showNotice = async (noticeId) => {
-  console.log('=== 보이기 시작 ===');
-  console.log('요청 noticeId:', noticeId);
-  
+const showNotice = async (noticeId) => {  
   try {
-    const response = await axios.patch(`${url}/api/notice/${noticeId}/show`);
-    
-    console.log('=== 서버 응답 ===');
-    console.log('응답 상태:', response.status);
-    console.log('응답 데이터:', response.data);
-    console.log('응답 데이터 타입:', typeof response.data);
-    
+    const response = await axios.patch(`${url}/api/notice/${noticeId}/show`);    
     if (response.status === 200) {
       alert("공지사항이 게시되었습니다.");
       
@@ -311,20 +273,14 @@ const showNotice = async (noticeId) => {
         setNoticeList(prevList => {
           const newList = prevList.map(notice => {
             if (notice.noticeId === noticeId) {
-              console.log('=== 매칭된 notice 발견 ===');
-              console.log('기존 notice:', notice);
-              console.log('새로운 data:', response.data);
               return response.data;
             }
             return notice;
           });
           
-          console.log('=== 업데이트된 noticeList ===');
-          console.log(newList);
           return newList;
         });
         
-        console.log('=== 상태 업데이트 완료 ===');
       } else {
         console.log('=== 응답 데이터가 없어서 전체 새로고침 ===');
         await loadNoticeList();
@@ -429,14 +385,7 @@ const showNotice = async (noticeId) => {
                     {pageInfo.totalElements - (pageInfo.number * pageInfo.size) - index}
                   </td>
                   <td>{formatDate(notice.createdAt)}</td>
-                  <td className="title-cellHY">
-                    <button 
-                      className="title-linkHY"
-                      onClick={() => openNoticeModal(notice)}
-                    >
-                      {notice.title}
-                    </button>
-                  </td>
+                  <td>{notice.title}</td>
                   <td className="content-cellHY">
                     {truncateContent(notice.content)}
                   </td>
@@ -519,68 +468,6 @@ const showNotice = async (noticeId) => {
           다음
         </button>
       </div>
-
-      {/* 공지사항 상세 모달 */}
-      {isModalOpen && selectedNotice && (
-        <div className="modal-overlayHY" onClick={closeModal}>
-          <div className="modal-contentHY" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-headerHY">
-              <h2>공지사항 상세</h2>
-              <button className="modal-closeHY" onClick={closeModal}>×</button>
-            </div>
-            
-            <div className="modal-bodyHY">
-              <div className="notice-detailHY">
-                <div className="detail-itemHY">
-                  <label>제목:</label>
-                </div>
-                
-                <div className="detail-itemHY">
-                  <label>작성일:</label>
-                </div>
-                
-                <div className="detail-itemHY">
-                  <label>게시 상태:</label>
-              
-                </div>
-                
-                <div className="detail-itemHY">
-                  <label>상단 고정:</label>
-                  <span className={`status-badge ${selectedNotice.pinYn ? 'status-pinned' : 'status-unpinned'}`}>
-                    {selectedNotice.pinYn ? '고정됨' : '일반'}
-                  </span>
-                </div>
-                
-                <div className="detail-item full-widthHY">
-                  <label>내용:</label>
-                  <div className="content-displayHY">
-                    {selectedNotice.content}
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="modal-footerHY">
-              <button className="btn-secondaryHY" onClick={closeModal}>닫기</button>
-              <button 
-                className="btn-primaryHY"
-                onClick={() => handleEditNotice(selectedNotice.noticeId)}
-              >
-                수정
-              </button>
-              <button 
-                className="btn-dangerHY"
-                onClick={() => {
-                  closeModal();
-                  deleteNotice(selectedNotice.noticeId);
-                }}
-              >
-                삭제
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </Layout>
   );
 };

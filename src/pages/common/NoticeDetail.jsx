@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
 import Footer from "../../components/Footer";
@@ -19,47 +19,108 @@ export default function NoticeDetail() {
   const setToken = useSetAtom(tokenAtom);
 
   // 공지사항 상세 데이터 로딩
-  useEffect(() => {
-    const loadNoticeDetail = async () => {
-      if (!noticeId) {
-        setError('공지사항 ID가 없습니다.');
-        setLoading(false);
-        return;
-      }
+  const loadNoticeDetail = useCallback(async () => {
+    if (!noticeId) {
+      setError('공지사항 ID가 없습니다.');
+      setLoading(false);
+      return;
+    }
 
-      try {
-        setLoading(true);
-        const response = await myAxios().get(`/detailNotice?noticeId=${noticeId}`);
-        if (!response.ok) {
-          throw new Error('공지사항을 불러올 수 없습니다.');
-        }
-
-        const data = await response.data;
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // GET 요청으로 쿼리 파라미터 전달
+      const response = await myAxios().get(`/detailNotice?noticeId=${noticeId}`);
+      const data = response.data;
+      
+      // 응답 데이터 검증
+      if (data && typeof data === 'object' && data.result) {
         setNotice(data.result);
-        setError(null);
-      } catch (err) {
-        console.error('공지사항 로딩 실패:', err);
-        setError(err.message);
-        setNotice(null);
-      } finally {
-        setLoading(false);
+      } else {
+        throw new Error('공지사항 데이터를 불러올 수 없습니다.');
       }
-    };
+      
+    } catch (err) {
+      console.error('공지사항 로딩 실패:', err);
+      
+      // 에러 상세 정보 로깅
+      if (err.response) {
+        console.error('Response error:', err.response.status, err.response.data);
+        
+        // 401 에러 처리 (토큰 만료)
+        if (err.response.status === 401) {
+          setToken(null);
+          setUser(null);
+          navigate('/login');
+          return;
+        }
+        
+        // 404 에러 처리 (공지사항 없음)
+        if (err.response.status === 404) {
+          setError('존재하지 않는 공지사항입니다.');
+        } else if (err.response.status === 400) {
+          setError('잘못된 요청입니다.');
+        } else {
+          setError('서버 오류가 발생했습니다.');
+        }
+      } else if (err.request) {
+        console.error('Request error:', err.request);
+        setError('네트워크 연결을 확인해주세요.');
+      } else {
+        console.error('Error:', err.message);
+        setError(err.message || '알 수 없는 오류가 발생했습니다.');
+      }
+      
+      setNotice(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [noticeId, setToken, setUser, navigate]);
 
+  // 컴포넌트 마운트 시 데이터 로드
+  useEffect(() => {
     loadNoticeDetail();
-  }, [noticeId]);
+  }, [loadNoticeDetail]);
+
+  // 목록으로 돌아가기 핸들러
+  const handleBackToList = useCallback(() => {
+    navigate('/noticeList');
+  }, [navigate]);
 
   // 날짜 포맷팅 함수
-  const formatDate = (dateString) => {
+  const formatDate = useCallback((dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
       month: '2-digit',
-      day: '2-digit'
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
     });
-  };
+  }, []);
 
+  // 공지사항 제목 렌더링
+  const renderTitle = useCallback((notice) => {
+    return (
+      <>
+        {notice.pinYn && <span className="NoticeDetail_pin_badge_osk">[공지] </span>}
+        {notice.title || '제목 없음'}
+      </>
+    );
+  }, []);
+
+  // 공지사항 내용 렌더링
+  const renderContent = useCallback((content) => {
+    if (!content) return <div>내용이 없습니다.</div>;
+    
+    return content.split('\n').map((line, index) => (
+      <div key={index} className="NoticeDetail_content_line_osk">
+        {line || '\u00A0'} {/* 빈 줄 처리 */}
+      </div>
+    ));
+  }, []);
 
   // 로딩 중일 때
   if (loading) {
@@ -68,7 +129,10 @@ export default function NoticeDetail() {
         <Header />
         <main className="NoticeDetail_main_osk">
           <div className="NoticeDetail_content_osk">
-            <div className="NoticeDetail_loading_osk">로딩 중...</div>
+            <div className="NoticeDetail_loading_osk">
+              <div className="NoticeDetail_loading_spinner_osk"></div>
+              <span>로딩 중...</span>
+            </div>
           </div>
         </main>
         <Footer />
@@ -79,21 +143,35 @@ export default function NoticeDetail() {
   // 에러가 있을 때
   if (error) {
     return (
-      <div className="NoticeDetail_container_osk">
-        <Header />
-        <main className="NoticeDetail_main_osk">
-          <div className="NoticeDetail_content_osk">
-            <div className="NoticeDetail_error_osk">
-              <h2>오류가 발생했습니다</h2>
-              <p>{error}</p>
-              <button className="NoticeDetail_back_button_osk" onClick={navigate('/noticeList')}>
-                목록으로 돌아가기
-              </button>
+      <>
+      <Header />
+        <div className="NoticeDetail_container_osk">
+          <main className="NoticeDetail_main_osk">
+            <div className="NoticeDetail_content_osk">
+              <div className="NoticeDetail_error_osk">
+                <div className="NoticeDetail_error_icon_osk">⚠️</div>
+                <h2 className="NoticeDetail_error_title_osk">오류가 발생했습니다</h2>
+                <p className="NoticeDetail_error_message_osk">{error}</p>
+                <div className="NoticeDetail_error_actions_osk">
+                  <button 
+                    className="NoticeDetail_retry_button_osk" 
+                    onClick={loadNoticeDetail}
+                  >
+                    다시 시도
+                  </button>
+                  <button 
+                    className="NoticeDetail_back_button_osk" 
+                    onClick={handleBackToList}
+                  >
+                    목록으로 돌아가기
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
+          </main>
+        </div>
+      <Footer />
+      </>
     );
   }
 
@@ -105,8 +183,15 @@ export default function NoticeDetail() {
         <main className="NoticeDetail_main_osk">
           <div className="NoticeDetail_content_osk">
             <div className="NoticeDetail_error_osk">
-              <h2>공지사항을 찾을 수 없습니다</h2>
-              <button className="NoticeDetail_back_button_osk" onClick={navigate('/noticeList')}>
+              <div className="NoticeDetail_error_icon_osk">📋</div>
+              <h2 className="NoticeDetail_error_title_osk">공지사항을 찾을 수 없습니다</h2>
+              <p className="NoticeDetail_error_message_osk">
+                요청하신 공지사항이 존재하지 않거나 삭제되었을 수 있습니다.
+              </p>
+              <button 
+                className="NoticeDetail_back_button_osk" 
+                onClick={handleBackToList}
+              >
                 목록으로 돌아가기
               </button>
             </div>
@@ -118,82 +203,90 @@ export default function NoticeDetail() {
   }
 
   return (
-    <div className="NoticeDetail_container_osk">
+    
+      <>
       <Header />
+    <div className="NoticeDetail_container_osk">
 
       <main className="NoticeDetail_main_osk">
         <div className="NoticeDetail_content_osk">
-          <div className="NoticeDetail_header_osk">
+          {/* 헤더 섹션 */}
+          <div className="NoticeDetail_header_section_osk">
+            {/* <div className="NoticeDetail_breadcrumb_osk">
+              <span onClick={handleBackToList} className="NoticeDetail_breadcrumb_link_osk">
+                공지사항
+              </span>
+              <span className="NoticeDetail_breadcrumb_separator_osk"> &gt; </span>
+              <span className="NoticeDetail_breadcrumb_current_osk">상세보기</span>
+            </div> */}
             <h1 className="NoticeDetail_title_osk">
-              {notice.pinYn && <span className="NoticeDetail_pin_badge_osk">[공지] </span>}
-              {notice.title}
+              {renderTitle(notice)}
             </h1>
             <div className="NoticeDetail_meta_osk">
-              <div className="NoticeDetail_date_osk">{formatDate(notice.createdAt)}</div>
-              {notice.updatedAt && (
-                <div className="NoticeDetail_updated_osk">
-                  (수정: {formatDate(notice.updatedAt)})
+              <div className="NoticeDetail_date_info_osk">
+                <span className="NoticeDetail_date_label_osk">작성일:</span>
+                <span className="NoticeDetail_date_value_osk">
+                  {formatDate(notice.createdAt)}
+                </span>
+              </div>
+              {notice.updatedAt && notice.updatedAt !== notice.createdAt && (
+                <div className="NoticeDetail_date_info_osk">
+                  <span className="NoticeDetail_date_label_osk">수정일:</span>
+                  <span className="NoticeDetail_date_value_osk">
+                    {formatDate(notice.updatedAt)}
+                  </span>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="NoticeDetail_notice_card_osk">
+          {/* 공지사항 카드 */}
+          <div>
             <div className="NoticeDetail_card_header_osk">
               <div className="NoticeDetail_brand_osk">모여링</div>
               <div className="NoticeDetail_main_title_osk">공지사항</div>
-              <div className="NoticeDetail_subtitle_osk">
-                {notice.pinYn ? '중요 공지사항' : '일반 공지사항'}
-              </div>
-            </div>
-
-            <div className="NoticeDetail_icon_container_osk">
-              <div className="NoticeDetail_notice_icon_osk">
-                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                  <ellipse cx="40" cy="40" rx="38" ry="38" fill="#6B9BD6" stroke="#4A7BA7" strokeWidth="2" />
-                  {notice.pinYn ? (
-                    // 고정 공지사항용 아이콘
-                    <path d="M35 25L45 25C46.1 25 47 25.9 47 27L47 35L49 37L49 39L31 39L31 37L33 35L33 27C33 25.9 33.9 25 35 25ZM35 41L45 41L45 43C45 44.1 44.1 45 43 45L37 45C35.9 45 35 44.1 35 43L35 41ZM38 47L42 47L42 50L38 50L38 47Z" fill="white" />
-                  ) : (
-                    // 일반 공지사항용 아이콘
-                    <path d="M30 30L50 30C51.1 30 52 30.9 52 32L52 48C52 49.1 51.1 50 50 50L30 50C28.9 50 28 49.1 28 48L28 32C28 30.9 28.9 30 30 30ZM30 35L50 35M33 38L47 38M33 42L47 42M33 46L42 46" stroke="white" strokeWidth="2" fill="none" />
-                  )}
-                </svg>
-              </div>
             </div>
 
             <div className="NoticeDetail_message_osk">
-              <div className="NoticeDetail_message_main_osk">{notice.title}</div>
+              <div className="NoticeDetail_message_main_osk">{notice.title || '제목 없음'}</div>
               <div className="NoticeDetail_message_sub_osk">
                 {formatDate(notice.createdAt)} 작성
               </div>
             </div>
           </div>
-
-          <div className="NoticeDetail_content_box_osk">
-            <div className="NoticeDetail_content_text_osk">
-              {notice.content.split('\n').map((line, index) => (
-                <div key={index}>{line}</div>
-              ))}
+          {/* 내용 섹션 */}
+          <div className="NoticeDetail_content_section_osk">
+            <div className="NoticeDetail_content_box_osk">
+              <div className="NoticeDetail_content_text_osk">
+                {renderContent(notice.content)}
+              </div>
             </div>
           </div>
 
           {/* 숨김 처리된 공지사항인 경우 경고 표시 */}
           {notice.isHidden && (
             <div className="NoticeDetail_hidden_warning_osk">
-              <p>⚠️ 이 공지사항은 현재 숨김 처리된 상태입니다.</p>
+              <div className="NoticeDetail_warning_icon_osk">⚠️</div>
+              <p className="NoticeDetail_warning_text_osk">
+                이 공지사항은 현재 숨김 처리된 상태입니다.
+              </p>
             </div>
           )}
 
+          {/* 버튼 컨테이너 */}
           <div className="NoticeDetail_button_container_osk">
-            <button className="NoticeDetail_back_button_osk" onClick={navigate('/noticeList')}>
+            <button 
+              className="NoticeDetail_back_button_osk" 
+              onClick={handleBackToList}
+            >
               목록
             </button>
           </div>
         </div>
       </main>
 
-      <Footer />
     </div>
+      <Footer />
+      </>
   );
 }

@@ -183,8 +183,10 @@ export default function FeedPage2() {
                                 <div className="KYM-post-card" key={feed.feedId}>
                                     <div className="KYM-post-header">
                                         <div className="KYM-user-info">
-                                            <img src={feed.writerProfile} alt="프로필" className="KYM-avatar" />
-                                            <span className="KYM-nickname">{feed.writerId}</span>
+                                            <img src={feed.writerProfile} alt="프로필" className="KYM-avatar" 
+                                            onClick={()=> navigate(`/userFeed/${feed.writerId}`)} style={{cursor: "pointer"}}/>
+                                            <span className="KYM-nickname"
+                                            onClick={()=> navigate(`/userFeed/${feed.writerId}`)} style={{cursor: "pointer"}} >{feed.writerId}</span>
                                             {feed.writerBadge && <span className="KYM-detail-badge">🏅</span>}
 
                                             {/* 👍 팔로우 버튼 */}

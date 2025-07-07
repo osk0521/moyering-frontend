@@ -136,7 +136,6 @@ const PaymentManagement = () => {
       <div className = "search-filter-group">
       <div className="search-sectionHY">
         <div className="search-boxHY">
-          <span className="search-iconHY">🔍</span>
           <input
             type="text"
             placeholder="주문번호, 클래스명, 수강생 ID 검색"
@@ -144,6 +143,7 @@ const PaymentManagement = () => {
             onChange={handleSearch}
             className="search-inputHY"
           />
+              
         </div>
         <div className = "date-filter-group">
         <label className="date-labelHY">결제 기간</label>

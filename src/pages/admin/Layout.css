@@ -1,6 +1,6 @@
 /* 전체 레이아웃 - 완전히 새로운 접근 */
 .admin-layoutHY {
-  display: block !important; /* flex 대신 block 사용 */
+  display: block !important;
   height: 100vh;
   width: 100vw;
   margin: 0;
@@ -11,9 +11,9 @@
 }
 
 body {
-  margin: 0 ;
-  padding: 0 0px ;
-  box-sizing : border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   background: #ffffff !important;
 }
 
@@ -95,7 +95,7 @@ body {
   background-color: #dc2626 !important;
 }
 
-/* 사이드바  */
+/* 사이드바 */
 .sidebarHY {
   width: 180px !important;
   position: fixed !important;
@@ -103,10 +103,10 @@ body {
   left: 0 !important;
   height: calc(100vh - 70px) !important;
   background-color: #ffffff !important;
-  /* overflow: hidden; */
   display: flex;
   flex-direction: column;
   z-index: 1000 !important;
+  border-right: 1px solid #e5e7eb !important;
 }
 
 /* 사이드바 헤더 - 완전히 숨김 */
@@ -188,25 +188,26 @@ body {
   color: white !important;
 }
 
-/* 메인 컨텐츠  */
+/* 메인 컨텐츠 - 수정된 부분 */
 .main-contentHY {
-  position: relative;
-  top: 80px ;
-  left: 220px;
-  right: 0 ;
+  position: fixed !important;
+  top: 70px !important;
+  left: 200px !important; /* 사이드바 너비와 일치 */
+  right: 0px;
   bottom: 0 !important;
   background: #ffffff !important;
   padding: 0 !important;
   overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
 /* 페이지 컨텐츠 */
 .page-contentHY {
-  flex: 1 !important;
-  padding: 20px !important;
+  padding: 30px !important;
   background: #ffffff !important;
   width: 100% !important;
   box-sizing: border-box !important;
+  min-height: 100% !important;
 }
 
 /* 페이지 제목 */
@@ -221,42 +222,35 @@ body {
   margin: 0 !important;
 }
 
-/* 공통 테이블 스타일 */
+/* 공통 테이블 스타일 - 수정된 부분 */
 .table-containerHY {
   background: white !important;
   border-radius: 4px !important;
   margin-bottom: 20px !important;
   width: 100% !important;
-  overflow-x: auto !important; /* 가로 스크롤 추가 */
-  border: 1px solid #e9ecef !important; /* 테두리 추가 */
-}
-
-/* 공통 테이블 스타일 */
-.table-containerHY {
-  background: white !important;
-  border-radius: 4px !important;
-  margin-bottom: 20px !important;
+  overflow-x: auto !important;
+  border: 1px solid #e9ecef !important;
 }
 
 .tableHY {
-  width: 85%;
-  font-size: 14px ;
+  width: 100% !important; /* 85%에서 100%로 변경 */
+  font-size: 14px;
   background: white !important;
-  table-layout: auto !important; /* 내용에 따라 자동 조정 */
-  min-width: auto  !important; /* 최소 너비 설정 */
+  table-layout: fixed !important; /* auto에서 fixed로 변경하여 컬럼 너비 제어 */
+  min-width: 1000px !important; /* 최소 너비 설정 */
   margin-bottom: 0 !important;
 }
 
 .tableHY thead th {
   background-color: #f8f9fa !important;
   color: #333 !important;
-  font-weight: 700 !important; /* 800에서 700으로 조정 */
-  padding: 8px 12px !important; /* 12px 16px에서 줄임 */
+  font-weight: 700 !important;
+  padding: 12px 8px !important;
   text-align: center !important;
   border-bottom: 1px solid #e9ecef !important;
   border-right: 1px solid #e9ecef !important;
-  font-size: 13px !important; /* 15px에서 13px로 줄임 */
-  white-space: nowrap !important; /* 텍스트 줄바꿈 방지 */
+  font-size: 13px !important;
+  white-space: nowrap !important;
 }
 
 .tableHY thead th:last-child {
@@ -264,17 +258,22 @@ body {
 }
 
 .tableHY tbody td {
-  padding: 6px 10px !important; /* 10px 15px에서 줄임 */
+  padding: 10px 8px !important;
   border-bottom: 1px solid #f1f3f4 !important;
   border-right: 1px solid #f1f3f4 !important;
   color: #333 !important;
   vertical-align: middle !important;
   background: white !important;
   text-align: center !important;
-  font-size: 13px !important; /* 폰트 크기 조정 */
-  white-space: nowrap !important; /* 텍스트 줄바꿈 방지 */
+  font-size: 13px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
- 
+
+.tableHY tbody td:last-child {
+  border-right: none !important;
+}
 
 .tableHY tbody tr:hover {
   background-color: #f8f9fa !important;
@@ -284,6 +283,138 @@ body {
   border-bottom: none !important;
 }
 
+/* 컬럼별 최적화 - 수정된 부분 */
+.tableHY .col-no { 
+  width: 60px !important;
+}
+
+.tableHY .col-image { 
+  width: 80px !important;
+}
+
+.tableHY .col-title { 
+  width: 150px !important;
+}
+
+.tableHY .col-content { 
+  width: 120px !important;
+}
+
+.tableHY .col-status { 
+  width: 100px !important;
+}
+
+.tableHY .col-date { 
+  width: 120px !important;
+}
+
+.tableHY .col-action { 
+  width: 120px !important;
+}
+
+.tableHY .col-type { 
+  width: 80px !important;
+}
+
+.tableHY .col-id { 
+  width: 100px !important;
+}
+
+.tableHY .col-name { 
+  width: 100px !important;
+}
+
+.tableHY .col-email { 
+  width: 200px !important;
+}
+
+.tableHY .col-phone { 
+  width: 130px !important;
+}
+
+/* 액션 버튼들 */
+.action-buttonsHY {
+  display: flex !important;
+  gap: 4px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.btn-editHY, 
+.btn-deleteHY, 
+.btn-paymentlistHY, 
+.btn-settlementListHY {
+  padding: 4px 8px !important;
+  border: none !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  white-space: nowrap !important;
+  min-width: 40px !important;
+}
+
+.btn-editHY {
+  background-color: #edf2f7 !important;
+  color: #4a5568 !important;
+}
+
+.btn-editHY:hover {
+  background-color: #e2e8f0 !important;
+}
+
+.btn-deleteHY {
+  background-color: #fed7cc !important;
+  color: #c53030 !important;
+}
+
+.btn-deleteHY:hover {
+  background-color: #fbb6a0 !important;
+}
+
+.btn-paymentlistHY {
+  background-color: #bee3f8 !important;
+  color: #2b6cb0 !important;
+}
+
+.btn-paymentlistHY:hover {
+  background-color: #90cdf4 !important;
+}
+
+.btn-settlementListHY {
+  background-color: #c6f6d5 !important;
+  color: #276749 !important;
+}
+
+.btn-settlementListHY:hover {
+  background-color: #9ae6b4 !important;
+}
+
+/* 회원구분 배지 스타일 */
+.badge-memberHY {
+  display: inline-block !important;
+  padding: 3px 8px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  white-space: nowrap !important;
+}
+
+.badge-adminHY {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.badge-teacherHY {
+  background-color: #10b981 !important;
+  color: white !important;
+}
+
+.badge-userHY {
+  background-color: #6b7280 !important;
+  color: white !important;
+}
+
 /* 날짜 필터 그룹 */
 .date-filter-group {
   display: flex !important;
@@ -291,6 +422,8 @@ body {
   gap: 12px !important;
   padding: 8px 16px !important;
   border: 1px solid #e2e8f0 !important;
+  margin-bottom: 16px !important;
+  border-radius: 6px !important;
 }
 
 .date-labelHY {
@@ -339,120 +472,66 @@ body {
   color: #374151 !important;
 }
 
-/* 반응형 대응 */
-@media (max-width: 768px) {
-  .search-sectionHY {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 12px !important;
-  }
-  
-  .search-boxHY {
-    display: flex;
-    align-items: center;
-    gap: 8px; 
-    
-  }
-
-  .search-inputHY {
-    flex: 1; /* 너비 자동 확장 */
-    max-width: 300px;
-    padding: 8px 12px;
-    font-size: 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-  }
-  
-  .search-btnHY {
-    padding: 8px 16px;
-    font-size: 14px;
-    background-color: #2d6dcc;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .search-btnHY:hover {
-    background-color: #1e4e9a;
-  }
-  
-  .date-filter-group {
-    justify-content: center !important;
-    flex-wrap: wrap !important;
-  }
+/* 검색 섹션 */
+.search-sectionHY {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 16px !important;
+  gap: 16px !important;
 }
 
-@media (max-width: 480px) {
-  .date-filter-group {
-    padding: 6px 12px !important;
-  }
-  
-  .date-inputHY {
-    min-width: 100px !important;
-    padding: 6px 8px !important;
-    font-size: 13px !important;
-  }
-  
-  .date-reset-btn {
-    padding: 6px 12px !important;
-    font-size: 12px !important;
-  }
-
-  /* 액션 버튼들 */
-.action-buttonsHY {
-  display: flex;
-  gap: 4px;
+.search-boxHY {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
 }
 
-수정하기 ,삭제하기, 결제내역, 정산내역 
-.btn-editHY, .btn-deleteHY .btn-paymentlistHY .btn-settlementListHY {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
+.search-inputHY {
+  padding: 10px 12px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  min-width: 250px !important;
+  height: 40px !important;
+  box-sizing: border-box !important;
 }
 
-.btn-editHY {
-  background-color: #edf2f7;
-  color: #4a5568;
+.search-inputHY:focus {
+  outline: none !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
-.btn-editHY:hover {
-  background-color: #e2e8f0;
+.search-btnHY {
+  padding: 10px 20px !important;
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  height: 40px !important;
+  min-width: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
 }
 
-.btn-deleteHY {
-  background-color: #fed7cc;
-  color: #c53030;
+.search-btnHY:hover {
+  background-color: #2563eb !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
-.btn-deleteHY:hover {
-  background-color: #fbb6a0;
+.search-btnHY:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-
-.btn-paymentlistHY {
-  background-color: #fed7cc;
-  color: #c53030;
-}
-
-.btn-paymentlistHY:hover {
-  background-color: #fbb6a0;
-}
-
-
-.btn-settlementlistHY {
-  background-color: #fed7cc;
-  color: #c53030;
-}
-
-.pamymentlistHY:hover {
-  background-color: #fbb6a0;
-}
-/* ===== 페이지네이션 ===== */
+/* 페이지네이션 */
 .paginationHY {
   display: flex;
   justify-content: center;
@@ -486,128 +565,97 @@ body {
   display: flex;
   gap: 4px;
 }
-}
 
-
-
-
-/* 컬럼별 최적화 */
-.tableHY .col-no { 
-  width: 50px !important; 
-  min-width: 50px !important;
-}
-
-.tableHY .col-type { 
-  width: 80px !important; 
-  min-width: 80px !important;
-}
-
-.tableHY .col-id { 
-  width: 100px !important; 
-  min-width: 100px !important;
-}
-
-.tableHY .col-name { 
-  width: 90px !important; 
-  min-width: 90px !important;
-}
-
-.tableHY .col-email { 
-  width: 200px !important; 
-  min-width: 180px !important;
-  max-width: 220px !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-.tableHY .col-phone { 
-  width: 130px !important; 
-  min-width: 130px !important;
-}
-
-.tableHY .col-date { 
-  width: 100px !important; 
-  min-width: 100px !important;
-}
-
-.tableHY .col-action { 
-  width: 90px !important; 
-  min-width: 90px !important;
-}
-
-/* 액션 버튼들 수정 */
-.action-buttonsHY {
-  display: flex !important;
-  gap: 2px !important; /* 4px에서 2px로 줄임 */
-  justify-content: center !important;
-}
-
-.btn-editHY, 
-.btn-deleteHY, 
-.btn-paymentlistHY, 
-.btn-settlementListHY {
-  padding: 4px 8px !important; /* 6px 12px에서 줄임 */
-  border: none !important;
-  border-radius: 4px !important;
-  font-size: 11px !important; /* 12px에서 11px로 줄임 */
-  cursor: pointer !important;
-  transition: all 0.2s !important;
-  white-space: nowrap !important;
-}
-
-/* 회원구분 배지 스타일 추가 */
-.badge-memberHY {
-  display: inline-block !important;
-  padding: 2px 6px !important;
-  font-size: 10px !important;
-  font-weight: 600 !important;
-  border-radius: 12px !important;
-  white-space: nowrap !important;
-}
-
-.badge-adminHY {
-  background-color: #3b82f6 !important;
-  color: white !important;
-}
-
-.badge-teacherHY {
-  background-color: #10b981 !important;
-  color: white !important;
-}
-
-.badge-userHY {
-  background-color: #6b7280 !important;
-  color: white !important;
-}
-
-/* 반응형 테이블 */
+/* 반응형 디자인 */
 @media (max-width: 1200px) {
-  .tableHY .col-email {
-    display: none !important; /* 작은 화면에서 이메일 컬럼 숨김 */
+  .sidebarHY {
+    width: 60px !important;
+  }
+  
+  .main-contentHY {
+    left: 60px !important;
+  }
+  
+  .menu-labelHY {
+    display: none !important;
+  }
+  
+  .menu-linkHY {
+    justify-content: center !important;
+    padding: 14px 8px !important;
   }
 }
 
-@media (max-width: 992px) {
-  .tableHY .col-phone,
-  .tableHY .col-date {
-    display: none !important; /* 더 작은 화면에서 연락처, 날짜 숨김 */
+@media (max-width: 768px) {
+  .sidebarHY {
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+  }
+  
+  .main-contentHY {
+    left: 0 !important;
+  }
+  
+  .headerHY {
+    padding: 0 16px !important;
+  }
+  
+  .page-contentHY {
+    padding: 16px !important;
+  }
+  
+  .tableHY {
+    min-width: 800px !important;
+  }
+  
+
+  
+  .search-boxHY {
+    justify-content: center !important;
+  }
+  
+  .search-inputHY {
+    min-width: 200px !important;
+    flex: 1 !important;
+  }
+  
+  .search-btnHY {
+    min-width: 80px !important;
+  }
+  
+  .date-filter-group {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerHY {
+    padding: 0 12px !important;
+  }
+  
+  .page-contentHY {
+    padding: 12px !important;
   }
   
   .tableHY {
     min-width: 600px !important;
   }
-}
-
-@media (max-width: 768px) {
-  .tableHY thead th,
-  .tableHY tbody td {
-    padding: 4px 6px !important;
+  
+  .search-inputHY {
+    min-width: 150px !important;
     font-size: 12px !important;
+  }
+  
+  .search-btnHY {
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+    min-width: 50px !important;
   }
   
   .action-buttonsHY {
     flex-direction: column !important;
-    gap: 1px !important;
+    gap: 2px !important;
   }
   
   .btn-editHY, 
@@ -616,5 +664,6 @@ body {
   .btn-settlementListHY {
     padding: 2px 4px !important;
     font-size: 10px !important;
+    min-width: 35px !important;
   }
 }

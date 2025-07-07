@@ -133,6 +133,7 @@ const MemberManagement = () => {
       <div className="page-titleHY">
         <h1>회원 관리</h1>
       </div>
+      <br />
 
 
       <div className="search-sectionHY">

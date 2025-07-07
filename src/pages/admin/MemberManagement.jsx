@@ -144,16 +144,21 @@ const MemberManagement = () => {
             value={searchTerm}
             onChange={handleSearch}
             className="search-inputHY"
+            
           />
-          <button
+                            <button
             className="search-btnHY"
             onClick={handleSearchClick}
             type="button"
           >
             검색
           </button>
+          
+
         </div>
+
       </div>
+      
 
       {error && <div className="error-messageHY">{error}</div>}
       {loading && <div className="loading-messageHY">데이터를 불러오는 중...</div>}

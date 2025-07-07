@@ -204,31 +204,26 @@ export default function GatherInquiry() {
     return;
   }
 
-  try {
+try {
     setLoading(true);
-    const formData = new FormData();
-    formData.append('inquiryId', inquiryId);
-    formData.append('gatheringId', currentInquiry.gatheringId); // 이제 안전하게 사용 가능
-    formData.append('responseContent', reply.trim());
-    formData.append('responseDate', new Date().toISOString().split('T')[0]);
     
-    // FormData 내용 확인용 로그
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+    const requestData = {
+        inquiryId: inquiryId,
+        gatheringId: currentInquiry.gatheringId,
+        responseContent: reply.trim(),
+        responseDate: new Date().toISOString().split('T')[0]
+    };
     
     const response = await myAxios(token, setToken).post(
-      `/user/responseToGatheringInquiry`, 
-      formData
+        `/user/responseToGatheringInquiry`, 
+        requestData 
     );
     alert("답변이 등록되었습니다.");
     setReplyText(prev => ({ ...prev, [inquiryId]: "" }));
     setOpenId(null); // 아코디언 닫기
     loadInquiryData(); // 데이터 재로딩
-    
   } catch (err) {
     console.error("답변 등록 오류:", err);
-    
     if (err.response?.status === 401) {
       setError("인증이 만료되었습니다. 다시 로그인해주세요.");
       setToken('');

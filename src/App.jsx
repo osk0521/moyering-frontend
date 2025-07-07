@@ -25,6 +25,7 @@ import FeedDetail from './pages/user/socialRing/FeedDetail';
 import FeedPage from './pages/user/socialRing/FeedPage';
 import UserFeed from './pages/user/socialRing/UserFeed';
 import Test2 from './pages/user/socialRing/Test2.jsx';
+import MyScrapList from './pages/user/socialRing/MyScrapList.jsx';
 import NoticeList from './pages/common/NoticeList';
 import NoticeDetail from './pages/common/NoticeDetail';
 
@@ -163,6 +164,7 @@ function App() {
         <Route path="/user/mypage/following" element={<Following />} />
         <Route path="/user/mypage/myFeed" element={<MyFeed />} />
         <Route path="/user/mypage/myProfile" element={<MyProfilePage />} />
+        <Route path="/user/mypage/myScraps" element={<MyScrapList />} />
         
 
 

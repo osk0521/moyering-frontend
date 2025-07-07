@@ -202,8 +202,11 @@ console.log('userId:', userId);
                 <div key={feed.feedId} className="KYM-post-card">
                   <div className="KYM-post-header">
                     <div className="KYM-user-info">
-                      <img src={feed.writerProfile} alt="프로필" className="KYM-avatar" />
-                      <span className="KYM-nickname">{feed.writerId}</span>
+                      <img src={feed.writerProfile} alt="프로필" className="KYM-avatar"
+                       />
+                      <span className="KYM-nickname" 
+                      onClick={()=> navigate(`/userFeed/${feed.writerId}`)}>{feed.writerId}
+                      </span>
                       <img src={badgeIcon} alt="배지" className="KYM-badge-icon" />
                     </div>
                     <div className="KYM-more-container">

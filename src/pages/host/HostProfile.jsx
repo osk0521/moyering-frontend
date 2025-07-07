@@ -6,7 +6,7 @@ import { tokenAtom, userAtom } from '../../atoms';
 import { myAxios, url } from '../../config';
 
 export default function ProfileManagement() {
-  const [token,setToken] = useAtom(tokenAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
   const [host, setHost] = useState({});
   const [text, setText] = useState('');
@@ -40,7 +40,7 @@ export default function ProfileManagement() {
   }
 
   useEffect(() => {
-    token && myAxios(token,setToken).get(`/host/hostProfile`, {
+    token && myAxios(token, setToken).get(`/host/hostProfile`, {
       params: {
         hostId: user.hostId
       }
@@ -62,10 +62,10 @@ export default function ProfileManagement() {
       host.name !== initialHost.name ||
       host.email !== initialHost.email ||
       host.publicTel !== initialHost.publicTel ||
-      text !== (initialHost.intro || '');
+      (text.trim() !== (initialHost.intro || '').trim());  
 
     setIsUpdate(changed);
-  }, [host, text, initialHost])
+  }, [host, text, initialHost]);
 
   const params = {}
   params.hostId = user.hostId;
@@ -106,6 +106,8 @@ export default function ProfileManagement() {
     myAxios(token).post("/host/hostProfileUpdate", formData)
       .then(res => {
         console.log(res);
+        alert("변경사항을 저장하였습니다!")
+        setIsUpdate(false);
       })
       .catch(err => {
         console.log(err);
@@ -122,8 +124,8 @@ export default function ProfileManagement() {
             <label>프로필 사진</label>
             <img src={idImagePreview || `${url}/image?filename=${host.profile}` || ''} alt="프로필" className="KHJ-host-profile-image" name="profile" />
             <div className="KHJ-host-file-box">
-              <input type="file" placeholder="첨부파일" onChange={handleImageUpload} hidden name='profile' ref={fileInputRef}/>
-              <button type="button" onClick={()=>fileInputRef.current.click()}>파일 선택</button>
+              <input type="file" placeholder="첨부파일" onChange={handleImageUpload} hidden name='profile' ref={fileInputRef} />
+              <button type="button" onClick={() => fileInputRef.current.click()}>파일 선택</button>
             </div>
           </div>
 

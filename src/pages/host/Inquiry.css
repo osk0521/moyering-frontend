@@ -36,8 +36,7 @@
   min-width: 60px;
 }
 
-.KHJ-inquiry-input,
-.KHJ-inquiry-select {
+.KHJ-inquiry-input {
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -58,13 +57,14 @@
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  margin-left: auto;
 }
 
 .KHJ-inquiry-btn:hover {
   background-color: #ffa500;
 }
 
-/* 결과 컨테이너 */
+/* 카드형 레이아웃 */
 .KHJ-inquiry-result-container {
   background-color: #ffffff;
   padding: 20px;
@@ -74,102 +74,58 @@
   margin: 20px auto;
 }
 
-.KHJ-inquiry-result {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-.KHJ-inquiry-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.KHJ-inquiry-table th,
-.KHJ-inquiry-table td {
-  padding: 12px 16px;
-  font-size: 0.9rem;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.KHJ-inquiry-table th {
-  background-color: #f7f7f7;
-  font-weight: bold;
-  color: #333;
-}
-
-.KHJ-inquiry-summary-row:hover {
-  background-color: #f9f9f9;
-  cursor: pointer;
-}
-
-/* 드롭다운 영역 */
-.KHJ-inquiry-detail-row td {
-  padding: 0;
-}
-
-/* 초기 상태: 닫힌 상태 */
-.KHJ-inquiry-dropdown-wrapper {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: all 0.4s ease-in-out;
-  margin-top: 0;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background-color: #fff;
-}
-
-/* 열릴 때 스타일 */
-.KHJ-inquiry-dropdown-wrapper.open {
-  max-height: 600px; /* 적당히 넉넉한 높이 */
-  opacity: 1;
-  padding: 20px;
-  margin-top: 10px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-}
-
-.KHJ-inquiry-content-wrapper {
+.KHJ-inquiry-card {
   background-color: #f9f9f9;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 16px;
-  border: 1px solid #ddd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.KHJ-inquiry-content-box {
+.KHJ-inquiry-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.KHJ-inquiry-summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.KHJ-inquiry-summary p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.KHJ-inquiry-summary strong {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.KHJ-inquiry-summary span {
+  font-size: 0.9rem;
+  color: #888;
+  cursor: pointer;
+}
+
+.KHJ-inquiry-content-wrapper {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 12px;
 }
 
 .KHJ-inquiry-content {
-  flex: 1;
   font-size: 1rem;
   line-height: 1.5;
   color: #333;
   white-space: pre-wrap;
-  margin-right: 16px;
+  margin-bottom: 16px;
 }
 
-.KHJ-reply-button {
-  padding: 8px 16px;
-  background-color: #ffd700;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.KHJ-reply-button:hover {
-  background-color: #ffa500;
-}
-
-/* 답변 폼 */
 .KHJ-reply-form {
   display: flex;
   flex-direction: column;

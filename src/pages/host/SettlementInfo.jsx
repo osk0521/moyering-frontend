@@ -110,6 +110,8 @@ const SettlementInfo = () => {
     myAxios(token).post("/host/settlementInfoUpdate", formData)
       .then(res => {
         console.log(res);
+        alert("변경사항을 저장하였습니다!");
+        setIsUpdate(false);
       })
       .catch(err => {
         console.log(err);

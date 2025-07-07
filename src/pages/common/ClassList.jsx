@@ -111,8 +111,9 @@ const handleReset = () => {
     <>
     <Header/>
     <main className={styles.page}>
+      <h2 className={styles.sectionTitle}>클래스링</h2>
+      <p className={styles.sectionSub}>모여링의 모든 원데이 클래스를 모아 모아~</p>
       <div className={styles.searchFormContainer}>
-            <h4 className={styles.formTitle}>클래스링 검색</h4>
       
             <div className={styles.formGrid}>
               {/* 지역 */}
@@ -226,15 +227,14 @@ const handleReset = () => {
           </div>
 
       <section className={styles.sectionBlock}>
-        <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
-        <p className={styles.sectionSub}>모여링의 모든 원데이 클래스를 모아 모아~</p>
+
         <div className={styles.cardList}>
           {classList.length === 0 ? (
             <p>조건에 맞는 클래스가 없습니다.</p>
           ) : (
             classList.map((classInfo, idx) => (
             <ClassCard
-              key={idx}
+              key={classInfo.classId}
               classInfo={classInfo}
               onClick={() => navigate(`/class/classRingDetail/${classInfo.classId}`)}
             />

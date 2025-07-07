@@ -54,9 +54,7 @@ import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import Follower from './pages/user/socialRing/Follower.jsx';
-import Following from './pages/user/socialRing/Following.jsx';
-
-// import SettlementManagement from "./pages/admin/SettlementManagement";
+import Following from './pages/user/socialRing/Following.jsx'
 
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
@@ -89,6 +87,9 @@ import{fcmTokenAtom, alarmsAtom} from './atoms'
 import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 import PaymentSuccess from './pages/user/classRing/PaymentSuccess.jsx';
 import MyProfilePage from './pages/user/0myPage/common/MyProfilePage.jsx';
+import FindId from './pages/common/FindId.jsx';
+import FindPassword from './pages/common/FindPassword.jsx';
+import ResetPassword from './pages/common/ResetPassword.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -119,6 +120,9 @@ function App() {
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
+        <Route path="/findId" element={<FindId/>}/>
+        <Route path="/findPassword" element={<FindPassword/>}/>
+        <Route path="/resetPassword" element={<ResetPassword/>}/>
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
 <Route path="/feeds" element={<Test2 />} />
         

@@ -3,7 +3,6 @@ import styles from "./Main.module.css";
 import ClassCard from "../../components/ClassCard";
 import { recommendClassAtom,hotClassAtom ,recommendGatheringAtom,mainBannerList } from "../../atom/classAtom";
 import useRecommendClasses from "../../hooks/common/useRecommendClasses";
-import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 import { useAtomValue } from "jotai";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -16,7 +15,6 @@ import Slider from "react-slick";
 
 export default function Main() {
     useRecommendClasses(); // userId 없으면 null 넘기기
-  useFetchUserClassLikes();
 //슬라이더 
 const settings = {
   dots: true,
@@ -88,10 +86,10 @@ const items = [
         {/* 추천 클래스 */}
         <section className={styles.sectionBlock}>
           {classes.length === 0 ? <>
-          <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
+          <h2 className={styles.sectionTitle}>🎯당신의 취향 저격!</h2>
           <p className={styles.sectionSub}>수강일이 얼마 남지 않았아요</p></>
           : <>
-          <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
+          <h2 className={styles.sectionTitle}>🎯당신의 취향 저격!</h2>
           <p className={styles.sectionSub}>모여링이 추천해주는 맞춤 클래스</p></>}
           <div className={styles.cardList}>
             {classes.length === 0 ? (
@@ -109,7 +107,7 @@ const items = [
 
         {/* 추천 모임 */}
         <section className={styles.sectionBlock}>
-          <h2 className={styles.sectionTitle}>추천 모임 👍</h2>
+          <h2 className={styles.sectionTitle}>👍추천 모임</h2>
           <p className={styles.sectionSub}>모여링이 대표하는 알짜 모임들</p>
           <div className={styles.cardList}>
             {gathers.length === 0 ? (
@@ -127,7 +125,7 @@ const items = [
 
         {/* 인기 소셜링 */}
         <section className={styles.sectionBlock}>
-          <h2 className={styles.sectionTitle}>인기 클래스링</h2>
+          <h2 className={styles.sectionTitle}>🔥인기 클래스링</h2>
           <p className={styles.sectionSub}>
             따끈따끈한 원데이 클래스를 수강해보세요.
           </p>

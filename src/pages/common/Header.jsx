@@ -10,6 +10,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { tokenAtom, userAtom, alarmsAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
+import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 
 export default function Header() {
   const user = useAtomValue(userAtom);
@@ -18,7 +19,8 @@ export default function Header() {
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
-  
+  useFetchUserClassLikes();
+
   // Dropdown 상태 관리
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -275,9 +277,9 @@ export default function Header() {
             <span
               className="Header_nav-item_osk"
               onClick={() => 
-              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/classList")}}
+               navigate("/classList")}
             >
-              클래스잉
+              클래스링
             </span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/gatheringList`)}>게더링</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/feeds`)}>소셜링</span>

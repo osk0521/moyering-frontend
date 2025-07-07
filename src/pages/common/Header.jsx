@@ -112,7 +112,8 @@ export default function Header() {
                 <span>{user.nickName} 님</span>
               </span>
               
-              <Button className="Header_icon-button_osk Header_heart-button_osk">
+              <Button className="Header_icon-button_osk Header_heart-button_osk" 
+                onClick={() => navigate(`/user/mypage/myWishlist`)}>
                 <FaHeart className="Header_top-icon_osk login" />
               </Button>
 
@@ -224,7 +225,7 @@ export default function Header() {
                 <a href="/join">회원가입</a>
               </span>
               
-              <Button className="Header_icon-button_osk Header_heart-button_osk">
+              {/* <Button className="Header_icon-button_osk Header_heart-button_osk">
                 <FaHeart className="Header_top-icon_osk" />
               </Button>
               <Button className="Header_icon-button_osk">
@@ -232,7 +233,7 @@ export default function Header() {
               </Button>
               <Button className="Header_icon-button_osk">
                 <LuMessageCircleMore className="Header_top-icon_osk" />
-              </Button>
+              </Button> */}
             </>
           )}
         </div>

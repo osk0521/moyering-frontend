@@ -190,21 +190,33 @@ export default function GatherInquiry() {
       return "전체";
     };
   // 답변 등록
-  const handleReplySubmit = useCallback(async (inquiryId) => {
-    const reply = replyText[inquiryId];
-    if (!reply || !reply.trim()) {
-      alert("답변을 입력해주세요.");
-      return;
-    }
+ const handleReplySubmit = useCallback(async (inquiryId) => {
+  const reply = replyText[inquiryId];
+  if (!reply || !reply.trim()) {
+    alert("답변을 입력해주세요.");
+    return;
+  }
+
+  // currentInquiry 찾기 및 검증을 먼저 수행
+  const currentInquiry = receivedInquiryList.find(item => item.inquiryId === inquiryId);
+  if (!currentInquiry) {
+    alert("문의 정보를 찾을 수 없습니다.");
+    return;
+  }
+
   try {
     setLoading(true);
     const formData = new FormData();
     formData.append('inquiryId', inquiryId);
+    formData.append('gatheringId', currentInquiry.gatheringId); // 이제 안전하게 사용 가능
     formData.append('responseContent', reply.trim());
     formData.append('responseDate', new Date().toISOString().split('T')[0]);
+    
+    // FormData 내용 확인용 로그
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
+    
     const response = await myAxios(token, setToken).post(
       `/user/responseToGatheringInquiry`, 
       formData

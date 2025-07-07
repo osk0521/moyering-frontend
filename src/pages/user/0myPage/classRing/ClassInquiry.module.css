@@ -1,27 +1,25 @@
 .classInquiryLayout {
+  padding: 2rem 2rem 2rem 2rem;  
+  width: 1280px;
+  margin: auto;
   display: flex;
-  font-family: 'Pretendard', sans-serif;
+  justify-content: space-between;
+}
+
+.sidebarArea {
+  width: 240px;
 }
 
 .sidebar {
-  width: 220px;
-  background-color: #f9f9f9;
-  border-right: 1px solid #eee;
-}
-
-.sidebarBox {
-  background: white;
-  border-radius: 10px;
-  padding: 1.2rem;
-  margin: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  background: #fff4e6;
+  border-radius: 12px;
+  padding: 1.5rem;
   text-align: center;
-  font-weight: 500;
 }
 
 .classInquiryPage {
-  flex: 1;
-  padding: 2rem 3rem;
+  width: 78%;
+
 }
 
 .pageTitle {
@@ -41,6 +39,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 10px;
 }
 
 .datePickerInput {
@@ -156,3 +155,263 @@
   color: white;
 }
 
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tabButton {
+  background-color: #eee;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.tabButtonActive {
+  background-color: #FFB534;
+  color: white;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.dateInput {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.resetButton {
+  padding: 6px 12px;
+  background-color: #ddd;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.resetButton:hover {
+  background-color: #bbb;
+}
+
+.select {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.reviewBox {
+  background-color: white;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: 0.2s ease;
+}
+
+.reviewBoxDone {
+  border-left: 6px solid #e0e0e0;
+}
+
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.accordionBody {
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px dashed #ddd;
+}
+
+.textarea {
+  width: 100%;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.submitButton {
+  margin-top: 0.6rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #f58020;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.reviewContent {
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+}
+
+.teacherReply {
+  background-color: #f5f5f5;
+  border-left: 4px solid #f58020;
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pageButton {
+  border: none;
+  background: #eee;
+  padding: 0.5rem 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.pageButtonActive {
+  background-color: #f58020;
+  color: white;
+  font-weight: bold;
+}
+
+.starRating {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.star {
+  color: #fbc531;
+  transition: transform 0.2s;
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.starDisplay {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+.reviewUploadRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.fileInput {
+  border: 1px solid #ccc;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.imagePreview {
+  width: 150px;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+  resize: none;
+  box-sizing: border-box;
+}
+.contentForm {
+  display: flex;
+  gap: 1rem;
+}
+
+.mainImage {
+  width: 100px;
+}
+.reviewDone {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.pagination {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.pageBtn {
+  border: none;
+  padding: 0.5rem 0.9rem;
+  background-color: #eee;
+  border-radius: 80%;
+  cursor: pointer;
+}
+
+.pageBtnActive {
+  background-color: #FFB534;
+  color: white;
+  font-weight: bold;
+  border-radius: 80%;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 8px 14px;
+  border: none;
+  background-color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.noneCoupon{
+  display: flex;
+  justify-content: center; /* 가로 중앙 */
+  align-items: center;   
+}
+.classNone {
+    text-align: center;
+    color: #666;
+}
+.classH4 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 600;
+    line-height: 1.2;
+}
+.noneDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 0px 20px;
+}
+.tabDiv {
+  display: flex;
+  justify-content: space-between;
+}

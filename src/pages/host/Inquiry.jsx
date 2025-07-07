@@ -96,6 +96,10 @@ const Inquiry = () => {
   }, [replyStatus, searchQuery, startDate, endDate])
 
   const submit = () => {
+    if (!selectedInquiryId) {
+      alert('문의가 선택되지 않았음')
+      return
+    }
     token && myAxios(token, setToken).post("/host/inquiryReply", null, {
       params: {
         hostId: user.hostId,
@@ -243,6 +247,7 @@ const Inquiry = () => {
                               placeholder={item.iqResContent}
                               name='iqResContent'
                               value={iqResContent}
+                              onClick={() => handleReplyClick(index, item.inquiryId)}
                               onChange={(e) => setIqResContent(() => e.target.value)}
                             /> :
                               <textarea
@@ -250,6 +255,7 @@ const Inquiry = () => {
                                 placeholder="답변을 입력하세요"
                                 name='iqResContent'
                                 value={iqResContent}
+                                onClick={() => handleReplyClick(index, item.inquiryId)}
                                 onChange={(e) => setIqResContent(() => e.target.value)}
                               />
                             }

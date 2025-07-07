@@ -111,9 +111,9 @@ const handleReset = () => {
     <>
     <Header/>
     <main className={styles.page}>
+      <h2 className={styles.sectionTitle}>게더링</h2>
+      <p className={styles.sectionSub}>지금 당장 게더링~</p>
       <div className={styles.searchFormContainer}>
-            <h4 className={styles.formTitle}>게더링 검색</h4>
-      
             <div className={styles.formGrid}>
               {/* 지역 */}
               <div className={styles.formGroup}>
@@ -226,8 +226,6 @@ const handleReset = () => {
           </div>
 
       <section className={styles.sectionBlock}>
-        <h2 className={styles.sectionTitle}>당신의 취향 저격!</h2>
-        <p className={styles.sectionSub}>지금 당장 게더링~</p>
         <div className={styles.cardList}>
           {gatheringList.length === 0 ? (
             <p>조건에 맞는 게더링이 없습니다.</p>

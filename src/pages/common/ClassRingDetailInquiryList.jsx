@@ -90,7 +90,6 @@ export default function ClassRingDetailInquiryList({classId}) {
         );
 
         if (response.status === 200 && typeof response.data === "number") {
-        alert("문의가 정상적으로 등록되었습니다.");
         toggleQuestionModal(); // 모달 닫기
         setQuestionContent(""); // 입력 초기화
                 setCurrentPage(1);
@@ -163,10 +162,9 @@ export default function ClassRingDetailInquiryList({classId}) {
                     &gt;
                 </button>
                 </div>
-                : <div>질문이 존재하지 않습니다.</div>
+                : <div className={styles.noneInq}>질문이 존재하지 않습니다.</div>
                 }
             <div className={styles.questionButtonWrap}>
-                <button className={styles.questionButton} onClick={toggleQuestionModal}>질문하기</button>
                 </div>
         
         {/* 질문 모달 */}

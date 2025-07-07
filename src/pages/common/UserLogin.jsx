@@ -66,7 +66,13 @@ const Login = () => {
             value={login.password}
             onChange={edit}
           />
-          <a className='KHJ-join-btn' onClick={()=>navigate('/join')}>회원가입</a>
+          <div>
+          <a className='KHJ-join-btn' onClick={()=>navigate('/join')}>회원가입</a>&nbsp;
+          <span className='KHJ-join-btn'>/</span>&nbsp;
+          <a className='KHJ-join-btn' onClick={()=>navigate('/findId')}>아이디 찾기</a>&nbsp;
+          <span className='KHJ-join-btn'>/</span>&nbsp;
+          <a className='KHJ-join-btn' onClick={()=>navigate('/findPassword')}>비밀번호 찾기</a>
+          </div>
           <button type="submit" className="KHJ-login-btn">로그인</button>
         </form>
         <a href={`${url}/oauth2/authorization/kakao`} className="KHJ-kakao-btn" >

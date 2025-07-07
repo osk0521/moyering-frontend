@@ -21,7 +21,7 @@ const MemberManagement = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [pageSize] = useState(10);
+  const [pageSize] = useState(20); // 한 페이지 당 20개씩 
 
   // 디바운스를 위한 타이머
   const [searchTimer, setSearchTimer] = useState(null);
@@ -168,6 +168,7 @@ const MemberManagement = () => {
         <h1>회원 관리</h1>
       </div>
 
+
       {/* 검색 및 필터 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">
@@ -194,7 +195,7 @@ const MemberManagement = () => {
             className="date-inputHY"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-          />
+          />          
           <button 
             onClick={handleDateReset}
             className="date-reset-btn"
@@ -235,9 +236,6 @@ const MemberManagement = () => {
       {/* 필터된 결과 수 */}
       <div className="result-countHY">
         총 <strong>{memberData.length}</strong>건
-        {totalElements > 0 && (
-          <span> (전체 {totalElements}건 중)</span>
-        )}
       </div>
 
       {/* 회원 테이블 */}
@@ -272,27 +270,27 @@ const MemberManagement = () => {
                   <td>{member.tel}</td>
                   <td>{formatDate(member.regDate)}</td>
                   <td>
-                    <div className="action-buttonsHY">
-                      {/* 모든 사용자에게 결제내역 버튼 표시 */}
+                    <button
+                      className="action-btnHY payment-btnHY"
+                      onClick={() => handlePaymentHistory(member)}
+                      title="결제내역 보기"
+                    >
+                      결제내역
+                    </button>
+                  </td>
+                  <td>
+                    {/* 강사인 경우에만 정산내역 버튼 표시 */}
+                    {member.userType === '강사' ? (
                       <button 
-                        className="action-btnHY payment-btnHY"
-                        onClick={() => handlePaymentHistory(member)}
-                        title="결제내역 보기"
+                        className="action-btnHY settlement-btnHY"
+                        onClick={() => handleSettlementHistory(member)}
+                        title="정산내역 보기"
                       >
-                        결제내역
+                        정산내역
                       </button>
-                      
-                      {/* 강사인 경우에만 정산내역 버튼 표시 */}
-                      {member.userType === '강사' && (
-                        <button 
-                          className="action-btnHY settlement-btnHY"
-                          onClick={() => handleSettlementHistory(member)}
-                          title="정산내역 보기"
-                        >
-                          정산내역
-                        </button>
-                      )}
-                    </div>
+                    ) : (
+                      <span className="no-settlement">-</span>
+                    )}
                   </td>
                 </tr>
               ))

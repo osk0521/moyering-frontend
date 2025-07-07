@@ -10,6 +10,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { tokenAtom, userAtom, alarmsAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
+import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 
 export default function Header() {
   const user = useAtomValue(userAtom);
@@ -18,7 +19,8 @@ export default function Header() {
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
-  
+  useFetchUserClassLikes();
+
   // Dropdown 상태 관리
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -75,18 +77,18 @@ export default function Header() {
     }
   }, [token, setAlarms]);
 
-    useEffect(() => {
-      console.log(user);
-      if (user&&token) {
-        myAxios(token,setToken).post('/user/alarms')
-          .then(response=> {
-            console.log(response.data)
-            setAlarms([...response.data])
-          })
-          .catch(err=> {
-            console.log(err)
-          })
-      } 
+  useEffect(() => {
+    console.log(user);
+    if (user&&token) {
+      myAxios(token,setToken).post('/user/alarms')
+        .then(response=> {
+          console.log(response.data)
+          setAlarms([...response.data])
+        })
+        .catch(err=> {
+          console.log(err)
+        })
+    } 
   }, [user]);
 
   return (
@@ -123,8 +125,11 @@ export default function Header() {
                   tag="button"
                   className="Header_notification-button_osk"
                 >
-                  {alarms.length > 0 ? (
-                    <FaBell className="Header_top-icon_osk Header_notification-active_osk" />
+                  {alarms.length > 0 ? (  
+                    <>
+                      <FaBell className="Header_top-icon_osk Header_notification-active_osk" />
+                      <span className="Header_notification-badge_osk alarm-count">{alarms.length > 9 ? '9+' : alarms.length}</span>
+                    </>
                   ) : (
                     <FaRegBell className="Header_top-icon_osk" />
                   )}
@@ -272,13 +277,13 @@ export default function Header() {
             <span
               className="Header_nav-item_osk"
               onClick={() => 
-              {user.userType==="ROLE_HT" ? navigate("/host/hostMyPage") : navigate("/classList")}}
+               navigate("/classList")}
             >
-              클래스잉
+              클래스링
             </span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/gatheringList`)}>게더링</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/feeds`)}>소셜링</span>
-            <span className="Header_nav-item_osk" onClick={() => navigate(`/`)}>공지사항</span>
+            <span className="Header_nav-item_osk" onClick={() => navigate(`/noticeList`)}>공지사항</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/`)}>고객센터</span>
           </div>
         </div>

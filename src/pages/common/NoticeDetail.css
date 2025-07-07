@@ -1,0 +1,174 @@
+/* NoticeDetail.css */
+.NoticeDetail_container_osk {
+  width: 1920px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.NoticeDetail_main_osk {
+  flex: 1;
+  padding: 80px 0 120px;
+  background-color: #ffffff;
+}
+
+.NoticeDetail_content_osk {
+  width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.NoticeDetail_header_osk {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.NoticeDetail_title_osk {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333333;
+  margin: 0 0 20px 0;
+}
+
+.NoticeDetail_date_osk {
+  font-size: 16px;
+  color: #666666;
+  margin: 0;
+}
+
+.NoticeDetail_notice_card_osk {
+  background: linear-gradient(180deg, #f8f4f0 0%, #f0e8d8 100%);
+  border-radius: 12px;
+  padding: 60px 40px;
+  margin-bottom: 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.NoticeDetail_notice_card_osk::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 40px;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(180deg, #d4b896 0%, #c4a882 100%);
+  border-radius: 10px;
+}
+
+.NoticeDetail_notice_card_osk::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 40px;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(180deg, #d4b896 0%, #c4a882 100%);
+  border-radius: 10px;
+}
+
+.NoticeDetail_card_header_osk {
+  margin-bottom: 40px;
+}
+
+.NoticeDetail_brand_osk {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 10px;
+}
+
+.NoticeDetail_main_title_osk {
+  font-size: 48px;
+  font-weight: 800;
+  color: #333333;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+
+.NoticeDetail_subtitle_osk {
+  font-size: 20px;
+  font-weight: 500;
+  color: #666666;
+  line-height: 1.4;
+}
+
+.NoticeDetail_icon_container_osk {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.NoticeDetail_phone_icon_osk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.NoticeDetail_message_osk {
+  margin-top: 30px;
+}
+
+.NoticeDetail_message_main_osk {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+.NoticeDetail_message_sub_osk {
+  font-size: 16px;
+  color: #666666;
+  font-weight: 400;
+}
+
+.NoticeDetail_info_box_osk {
+  background-color: #fff8f0;
+  border: 2px solid #ff6b35;
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 60px;
+}
+
+.NoticeDetail_info_text_osk {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333333;
+}
+
+.NoticeDetail_info_text_osk > div {
+  margin-bottom: 8px;
+}
+
+.NoticeDetail_info_text_osk > div:last-child {
+  margin-bottom: 0;
+}
+
+.NoticeDetail_button_container_osk {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.NoticeDetail_back_button_osk {
+  background-color: #ff6b35;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
+}
+
+.NoticeDetail_back_button_osk:hover {
+  background-color: #ff5722;
+}
+
+.NoticeDetail_back_button_osk:active {
+  transform: translateY(1px);
+}

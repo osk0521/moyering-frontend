@@ -277,7 +277,6 @@
 .filter-btnHY:focus,
 .btn-visibilityHY:focus,
 .page-btnHY:focus {
-  outline: 2px solid #007bff;
   outline-offset: 2px;
 }
 

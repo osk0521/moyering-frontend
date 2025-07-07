@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { myAxios } from "/src/config";
 import Layout from "./Layout";
-import './UnsettlementManagement.css';
+import './SettlementManagement.css';
 import { useAtomValue } from 'jotai';
 import { tokenAtom } from '../../atoms';
 
@@ -45,7 +45,7 @@ const SettlementManagement = () => {
     setError(null);
     
     try {
-      let endpoint = '';
+      let endpoint = '/api/settlement';
       const params = {
         page: currentPage,
         size: pageSize,
@@ -65,22 +65,34 @@ const SettlementManagement = () => {
         params.endDate = endDate;
       }
 
-      
-
       console.log('API 호출 - endpoint:', endpoint, 'params:', params);
 
       const response = await myAxios(token).get(endpoint, { params });
       
       if (response.data) {
         const { content, totalPages, totalElements, number } = response.data;
-        setSettlementData(content || []);
+        
+        // 중복 제거 및 정렬 (백엔드 보완용)
+        const uniqueContent = [];
+        const seenIds = new Set();
+        
+        (content || []).forEach(item => {
+          if (!seenIds.has(item.settlementId)) {
+            seenIds.add(item.settlementId);
+            uniqueContent.push(item);
+          }
+        });
+        
+        // ✅ 백엔드에서 이미 정렬했으니 프론트에서는 그대로 사용
+        // 백엔드 정렬: RQ(0) > WP(1) > CP(2) 순서로 이미 처리됨
+        setSettlementData(uniqueContent);
         setTotalPages(totalPages || 0);
         setTotalElements(totalElements || 0);
         setCurrentPage(number || 0);
       }
     } catch (err) {
-      console.error('미정산 목록 조회 실패:', err);
-      setError('미정산 목록을 불러오는데 실패했습니다.');
+      console.error('정산 목록 조회 실패:', err);
+      setError('정산 목록을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -118,6 +130,7 @@ const SettlementManagement = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentPage(0);
+      fetchSettlementData();
     }, 500);
 
     return () => clearTimeout(timer);
@@ -126,18 +139,19 @@ const SettlementManagement = () => {
   // 필터 변경 시
   useEffect(() => {
     setCurrentPage(0);
-  }, [activeTab, startDate, endDate]);
+    fetchSettlementData();
+  }, [startDate, endDate]);
 
   // ===== 헬퍼 함수들 =====
   // 금액 포맷팅
   const formatAmount = (amount) => {
-    if (!amount) return '0';
+    if (!amount || amount === 0) return '0';
     return amount.toLocaleString('ko-KR');
   };
 
   // 날짜 포맷팅
   const formatDate = (date) => {
-    if (!date) return '';
+    if (!date) return '-';
     return new Date(date).toLocaleDateString('ko-KR');
   };
 
@@ -145,11 +159,13 @@ const SettlementManagement = () => {
   const getStatusClass = (status) => {
     switch (status) {
       case 'PENDING':
+      case 'WT':
+      case 'WP':  // ✅ 정산대기 추가
+      case 'RQ':  // ✅ 정산요청 추가
         return 'status-pendingHY';
       case 'COMPLETED':
+      case 'CP':
         return 'status-completedHY';
-      case 'CANCELLED':
-        return 'status-cancelledHY';
       default:
         return '';
     }
@@ -159,11 +175,14 @@ const SettlementManagement = () => {
   const getStatusText = (status) => {
     switch (status) {
       case 'PENDING':
+      case 'WT':
+      case 'WP':
         return '정산대기';
+      case 'RQ':
+        return '정산요청';
       case 'COMPLETED':
+      case 'CP':
         return '정산완료';
-      case 'CANCELLED':
-        return '정산취소';
       default:
         return status;
     }
@@ -209,7 +228,6 @@ const SettlementManagement = () => {
         )}
       </div>
 
-
       {/* 검색 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">
@@ -251,7 +269,6 @@ const SettlementManagement = () => {
         </div>
       </div>
 
-
       {/* 결과 수 표시 */}
       <div className="result-countHY">
         총 <strong>{totalElements}</strong>건
@@ -269,17 +286,22 @@ const SettlementManagement = () => {
         <table className="tableHY">
           <thead>
             <tr>
-              <th>No</th>
+              <th>NO</th>
               <th>정산 ID</th>
-              <th>강사 ID</th>
               <th>클래스 일정 ID</th>
+              <th>강사 ID</th>
+              <th>강사명</th>
+              <th>클래스명</th>
+              <th>정산 금액</th>
               <th>정산 예정일</th>
-              <th>정산 예정금액</th>
+              <th>정산 확정 금액</th>
+              <th>정산 완료일</th>
+          
               <th>은행</th>
               <th>계좌번호</th>
               <th>상태</th>
-              {activeTab === 'unsettled' && <th>액션</th>}
-              {activeTab === 'settled' && <th>지급일</th>}
+            
+              <th>액션</th>
             </tr>
           </thead>
           <tbody>
@@ -290,47 +312,57 @@ const SettlementManagement = () => {
                     {(currentPage * pageSize) + index + 1}
                   </td>
                   <td className="settlement-idHY">{item.settlementId}</td>
-                  <td className="host-idHY">{item.hostId}</td>
                   <td className="calendar-idHY">{item.calendarId}</td>
-                  <td>{formatDate(item.settlementDate)}</td>
-                  <td className="amountHY">
+                  <td className="host-idHY">{item.username}</td>
+                  <td className="host-nameHY">{item.hostName}</td>
+                  <td className="class-nameHY">{item.className}</td>
+                  <td className="expected-amountHY">
                     {formatAmount(item.settleAmountToDo)}원
                   </td>
-                  <td>{item.bankName || '-'}</td>
-                  <td>{item.accNum || '-'}</td>
-                  <td>
+                  <td className="settlement-dateHY">{formatDate(item.settlementDate)}</td>
+                  <td className="settlement-amountHY">
+                    {formatAmount(item.settlementAmount)}원
+                  </td>
+                  <td className="settled-dateHY">{formatDate(item.settledAt)}</td>
+                         
+            
+             
+                  <td className="bank-nameHY">{item.bankName || '-'}</td>
+                  <td className="account-numHY">{item.accNum || '-'}</td>
+                  <td className="statusHY">
                     <span className={`status-badgeHY ${getStatusClass(item.settlementStatus)}`}>
                       {getStatusText(item.settlementStatus)}
                     </span>
                   </td>
-                  {activeTab === 'unsettled' && (
-                    <td>
-                      {item.settlementStatus === 'PENDING' ? (
-                        <button 
-                          className="btn-settlementHY"
-                          onClick={() => handleSettlement(item.settlementId)}
-                          disabled={loading}
-                        >
-                          정산하기
-                        </button>
-                      ) : (
-                        <span className="action-disabledHY">처리완료</span>
-                      )}
-                    </td>
-                  )}
-                  {activeTab === 'settled' && (
-                    <td>{formatDate(item.settledAt)}</td>
-                  )}
+       
+                  <td className="actionHY">
+                    {(item.settlementStatus === 'PENDING' || 
+                      item.settlementStatus === 'WT' || 
+                      item.settlementStatus === 'WP' || 
+                      item.settlementStatus === 'RQ') ? (
+                      <button 
+                        className="btn-settlementHY"
+                        onClick={() => handleSettlement(item.settlementId)}
+                        disabled={loading}
+                      >
+                        정산하기
+                      </button>
+                    ) : (
+                      <span className="action-disabledHY">
+                        {(item.settlementStatus === 'COMPLETED' || item.settlementStatus === 'CP') ? '정산완료' : '처리완료'}
+                      </span>
+                    )}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={activeTab === 'unsettled' ? "10" : "10"} style={{ textAlign: 'center', padding: '20px' }}>
+                <td colSpan="14" style={{ textAlign: 'center', padding: '20px' }}>
                   {loading ? '데이터를 불러오는 중...' : 
                    error ? '데이터를 불러올 수 없습니다.' :
                    userInfo ? 
-                    `${userInfo.username}님의 ${activeTab === 'unsettled' ? '미정산' : '정산완료'} 내역이 없습니다.` : 
-                    `${activeTab === 'unsettled' ? '미정산' : '정산완료'} 내역이 없습니다.`
+                    `${userInfo.username}님의 정산 내역이 없습니다.` : 
+                    '정산 내역이 없습니다.'
                   }
                 </td>
               </tr>

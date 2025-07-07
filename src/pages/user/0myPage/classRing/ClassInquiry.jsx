@@ -55,7 +55,7 @@ export default function ClassInquiry() {
         }
 
       } catch (err) {
-        console.error('질문 불러오기 실패:', err);
+        console.error('문의 불러오기 실패:', err);
       }
     };
 
@@ -86,7 +86,7 @@ export default function ClassInquiry() {
           </aside>
 
         <section className={styles.classInquiryPage}>
-          <h2 className={styles.pageTitle}>클래스 질문내역</h2>
+          <h2 className={styles.pageTitle}>클래스 문의내역</h2>
           <div className={styles.tabDiv}>
             <div className={styles.tabs}>
             <button
@@ -96,7 +96,7 @@ export default function ClassInquiry() {
                 setPendingPage(1);
               }}
             >
-              답변 대기 중인 질문
+              답변 대기 중인 문의
             </button>
             <button
               className={`${styles.tabButton} ${activeTab === 'completed' ? styles.tabButtonActive : ''}`}
@@ -105,12 +105,12 @@ export default function ClassInquiry() {
                 setCompletedPage(1);
               }}
             >
-              답변된 질문
+              답변된 문의
             </button>
           </div>
             <div className={styles.datepickerWrap}>
               
-            <label className={styles.label}>시작일:</label>
+            <label className={styles.label}>문의일</label>
             <input
               type="date"
               value={minDate || ''}
@@ -121,7 +121,7 @@ export default function ClassInquiry() {
               }}
               className={styles.dateInput}
             />
-            <label className={styles.label}>종료일:</label>
+            <label className={styles.label}>~</label>
             <input
               type="date"
               value={maxDate||''}
@@ -150,8 +150,8 @@ export default function ClassInquiry() {
                 {data.length === 0 && 
                 <div className={styles.noneDiv}>
                   <div className={styles.classNone}>
-                    <h4 className={styles.classH4}>조회된 목록이 없습니다</h4>
-                    <p>검색 조건을 변경하거나 새로운 질문을 남겨보세요.</p>
+                    <h4 className={styles.classH4}>조회된 문의가 없습니다</h4>
+                    <p>검색 조건을 변경하거나 새로운 문의을 남겨보세요.</p>
                   </div>
                 </div>                }
                 {data.map((item) => (

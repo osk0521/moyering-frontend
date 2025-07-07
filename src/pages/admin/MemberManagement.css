@@ -43,9 +43,13 @@
   color: white;
   justify-content: center;
 }
-
+.tableHY td button {
+  display: block;        /* inline-block이 아니라 block이면 margin auto가 먹힘 */
+  margin: 0 auto;        /* 수평 중앙 정렬 */
+}
 .payment-btnHY:hover {
   background-color: #0056b3;
+  
 }
 
 /* 정산내역 버튼 스타일 */
@@ -55,6 +59,17 @@
 }
 
 .settlement-btnHY:hover {
+  background-color: #1e7e34;
+}
+
+
+/* 검색 버튼 스타일 */
+.search-btnHY {
+  background-color: #28a745;
+  color: white;
+}
+
+.search-btnHY:hover {
   background-color: #1e7e34;
 }
 

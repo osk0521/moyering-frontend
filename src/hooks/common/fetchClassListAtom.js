@@ -22,6 +22,8 @@ export const fetchClassListAtom = atom(null, async (get, set) => {
   };
 
   try {
+    console.log("보내는 요청 바디", body);
+
     const res = await myAxios().post("/classList", body); 
     set(classListAtom, res.data.content || []);
     set(totalPagesAtom, res.data.totalPages || 1);

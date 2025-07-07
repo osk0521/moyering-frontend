@@ -80,7 +80,7 @@
 .cardList {
   display: flex;
   gap: 1rem;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 
 .quickLinkBox {

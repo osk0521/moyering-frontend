@@ -3,7 +3,7 @@ import ClassCard from '../../components/ClassCard';
 import styles from './ClassList.module.css';
 import DatePicker from 'react-datepicker';
 import Header from './Header';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation  } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   classListAtom,
@@ -16,11 +16,14 @@ import {fetchClassListAtom} from '../../hooks/common/fetchClassListAtom';
 import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom';
 
 export default function ClassList() {
-    const [selectedDate1, setSelectedDate1] = useState(null);
+  const location = useLocation();
+  const initCategory1 = location.state?.category1 || '';
+  const initCategory2 = location.state?.category2 || '';
+  const [selectedDate1, setSelectedDate1] = useState(null);
   const [selectedDate2, setSelectedDate2] = useState(null);
   const [selectedSido, setSelectedSido] = useState("");
-  const [selectedCategory1, setSelectedCategory1] = useState('');
-  const [selectedCategory2, setSelectedCategory2] = useState('');
+  const [selectedCategory1, setSelectedCategory1] = useState(initCategory1);
+  const [selectedCategory2, setSelectedCategory2] = useState(initCategory2);
   const [selectedPriceMin, setSelectedPriceMin] = useState('');
   const [selectedPriceMax, setSelectedPriceMax] = useState('');
   const [selectedName, setSelectedName] = useState('');
@@ -37,6 +40,7 @@ export default function ClassList() {
   const categoryList = useAtomValue(categoryListAtom);
   const fetchCategories = useSetAtom(fetchCategoryListAtom);
 
+
   //처음에 클래스 끌고오기
   const filters = useAtomValue(classFilterAtom);
   console.log(categoryList);
@@ -44,9 +48,18 @@ export default function ClassList() {
   // useEffect로 최초 1회 호출
   useEffect(() => {
     fetchCategories();
-    fetchClassList();
-  }, [currentPage, filters]);
-
+  }, []);
+// 그 다음 초기 필터 적용
+useEffect(() => {
+  // 초기 진입 시 항상 fetchClassList 호출되도록 조건 제거
+  setFilter((prev) => ({
+    ...prev,
+    category1: initCategory1,
+    category2: initCategory2,
+  }));
+  setCurrentPage(1);
+  fetchClassList();
+}, []);
   const firstCategoryList = Array.from(
     new Map(categoryList.map(item => [item.categoryId, item.categoryName])).entries()
   ).map(([id, name]) => ({ id, name }));
@@ -81,6 +94,7 @@ setCurrentPage(1); // 페이지 초기화
 const handlePageChange = (page) => {
   setCurrentPage(page);
   fetchClassList(); // 새 페이지로 서버 요청
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 //초기화
 const handleReset = () => {
@@ -105,6 +119,7 @@ const handleReset = () => {
   });
   fetchClassList();
 };
+
 
 
   return (

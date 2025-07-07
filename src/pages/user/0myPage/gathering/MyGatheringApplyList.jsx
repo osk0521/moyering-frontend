@@ -234,7 +234,8 @@ export default function MyGatheringApplyList() {
                   }
                 }}
               />
-              <CiSearch className="MyGatheringApplyList_search-icon_osk" />
+              <CiSearch className="MyGatheringApplyList_search-icon_osk"  onClick={handleSearch}
+                style={{ cursor: "pointer" }} />
             </div>
           </div>
 

@@ -26,6 +26,7 @@ export default function HostFeedPage() {
             if (category) params.append('category', category);
             const endpoint = `/feedHost?${params.toString()}`;
             const res = await myAxios().get(endpoint);
+            console.log("===================="+res.data)
             return res.data;
         }
     });
@@ -38,6 +39,25 @@ export default function HostFeedPage() {
             <Header />
             <div className="KYM-host-container">
                 <h2>강사 홍보</h2>
+                {/* 글쓰기 버튼 */}
+    {user?.hostId && (
+      <div style={{ textAlign: "right", margin: "10px 0" }}>
+        <button
+          style={{
+            background: "#FFB22C",
+            color: "white",
+            border: "none",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            cursor: "pointer",
+            fontSize: "1rem"
+          }}
+          onClick={() => navigate("/host/createFeed")}
+        >
+          + 글쓰기
+        </button>
+      </div>
+    )}
 
                 <div className="KYM-host-filters">
                     {['', '스포츠', '음식', '공예 / DIY', '뷰티', '문화예술', '심리 / 상담', '자유모임'].map(cat => (
@@ -71,7 +91,7 @@ export default function HostFeedPage() {
                                                 {feed.hostName}
                                             </span>
                                         </div>
-                                        <div className="KYM-host-category">{feed.category}</div>
+                                        {/* <div className="KYM-host-category">{feed.category}</div> */}
                                         <img
                                             src={moreIcon}
                                             alt="더보기"
@@ -81,12 +101,14 @@ export default function HostFeedPage() {
                                                 setMenuOpenId(menuOpenId === feed.feedId ? null : feed.feedId);
                                             }}
                                         />
+                                        {console.log('menuOpenId:', menuOpenId, 'feed.feedId:', feed.feedId)}
                                         {menuOpenId === feed.feedId && (
                                             <ul ref={menuRef} className="KYM-host-menu open">
-                                                {user?.id === feed.writerUserId && (
+                                                {console.log('user?.id:', feed.hostId, 'feed.writerUserId:', feed.hostId)}
+                                                {user?.hostId === feed.hostId && (
                                                     <>
                                                         <li onClick={() => {
-                                                            navigate(`/edit/${feed.feedId}`);
+                                                            navigate(`/host/feedEdit/${feed.feedId}`);
                                                             setMenuOpenId(null);
                                                         }}>수정하기</li>
                                                         <li onClick={async () => {
@@ -102,7 +124,7 @@ export default function HostFeedPage() {
                                                             setMenuOpenId(null);
                                                         }}>삭제하기</li>
                                                     </>
-                                                )}
+                                                 )} 
                                             </ul>
                                         )}
                                     </div>

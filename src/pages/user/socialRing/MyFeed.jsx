@@ -230,7 +230,7 @@ export default function MyFeed() {
                     <button className={`KYM-myfeed-like-btn${feed.likedByUser ? ' active' : ''}`}
                       onClick={() => toggleLike(feed)}>
                       <img src={feed.likedByUser ? heartFilled : heartOutline} alt="좋아요" className="KYM-myfeed-icon" />
-                      <span>{feed.likesCount}</span>
+                      <span>{feed.likeCount}</span>
                     </button>
                     <button className="KYM-comment-button" onClick={() => navigate(`/feed/${feed.feedId}`)}>
                       💬 {feed.commentsCount}

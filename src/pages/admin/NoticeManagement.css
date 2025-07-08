@@ -77,12 +77,6 @@
   color: white;
 }
 
-/* 검색 섹션 */
-.search-sectionHY {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
 
 .search-boxHY {
   position: relative;
@@ -479,11 +473,7 @@
     padding: 16px;
   }
   
-  .search-sectionHY {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
+ 
   .filter-sectionHY {
     justify-content: center;
   }

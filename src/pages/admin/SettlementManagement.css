@@ -400,9 +400,7 @@
   }
   
   .tab-navigationHY,
-  .search-sectionHY {
-    display: none;
-  }
+
   
   .table-wrapperHY {
     box-shadow: none;
@@ -432,4 +430,3 @@
   display: inline-block;
 }
 
-.tooltipHY:hover::after {

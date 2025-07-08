@@ -2,15 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { myAxios } from "/src/config";
 import Layout from "./Layout";
-
-// import SettlementModal from './SettlementModal'; // 모달 컴포넌트 import
-import './SettlementManagement.css';
 import { useAtomValue } from 'jotai';
 import { tokenAtom } from '../../atoms';
+import SettlementModal from './SettlementModal'; 
+import './SettlementManagement.css';
 
 const SettlementManagement = () => {
   const location = useLocation();
-  const userInfo = location.state; // MemberManagement에서 전달받은 사용자 정보
+  const userInfo = location.state; 
   const token = useAtomValue(tokenAtom);
   
 
@@ -32,7 +31,7 @@ const SettlementManagement = () => {
   
   // 모달 관련 상태
   const [showModal, setShowModal] = useState(false);
-  const [selectedClass, setSelectedClass] = useState(null);
+  const [selectedSettlement, setSelectedSettlement] = useState(null); // 이름 변경
 
   // 사용자 정보가 있으면 검색어를 자동으로 설정
   useEffect(() => {
@@ -99,16 +98,24 @@ const SettlementManagement = () => {
     }
   }, [currentPage, pageSize, searchTerm, startDate, endDate, token, loading]);
 
-  // 정산 처리 API
-  const handleSettlement = async (settlementId) => {
-    if (!window.confirm('정산을 진행하시겠습니까?')) return;
-    
+  // 정산하기 버튼 클릭 핸들러 - 모달 열기
+  const handleSettlement = (settlementItem) => {
+    setSelectedSettlement(settlementItem);
+    setShowModal(true);
+  };
+
+  // 정산 확정 처리 - 모달에서 호출됨
+  const handleConfirmSettlement = async (settlementId, stats) => {
     try {
-      const response = await myAxios(token).put(`/api/settlement/${settlementId}/complete`);
+      const response = await myAxios(token).put(`/api/settlement/${settlementId}/complete`, {
+        totalSettlementAmount: stats.totalSettlementAmount,
+        totalPayments: stats.totalPayments
+      });
       
       if (response.status === 200) {
         alert('정산이 완료되었습니다.');
         fetchSettlementData(); // 목록 새로고침
+        handleCloseModal(); // 모달 닫기
       }
     } catch (err) {
       console.error('정산 처리 실패:', err);
@@ -127,16 +134,16 @@ const SettlementManagement = () => {
     }
   };
 
-  // 클래스명 클릭 핸들러
+  // 클래스명 클릭 핸들러 (수강생 조회용)
   const handleClassNameClick = (classInfo) => {
-    setSelectedClass(classInfo);
+    setSelectedSettlement(classInfo);
     setShowModal(true);
   };
 
   // 모달 닫기 핸들러
   const handleCloseModal = () => {
     setShowModal(false);
-    setSelectedClass(null);
+    setSelectedSettlement(null);
   };
 
   // ===== useEffect 훅들 =====
@@ -212,14 +219,6 @@ const SettlementManagement = () => {
   };
 
   // ===== 이벤트 핸들러들 =====
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    setCurrentPage(0);
-    setSearchTerm(userInfo?.username || '');
-    setStartDate('');
-    setEndDate('');
-  };
-
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -367,14 +366,14 @@ const SettlementManagement = () => {
                       item.settlementStatus === 'RQ') ? (
                       <button 
                         className="btn-settlementHY"
-                        onClick={() => handleSettlement(item.settlementId)}
+                        onClick={() => handleSettlement(item)} // 전체 item 객체 전달
                         disabled={loading}
                       >
                         정산하기
                       </button>
                     ) : (
                       <span className="action-disabledHY">
-                        {(item.settlementStatus === 'COMPLETED' || item.settlementStatus === 'CP') ? '정산완료' : '처리완료'}
+                        {(item.settlementStatus === 'CP') ? '정산완료' : '처리완료'}
                       </span>
                     )}
                   </td>
@@ -435,13 +434,13 @@ const SettlementManagement = () => {
         </div>
       )}
 
-      {/* 수강생 결제 내역 모달 */}
-      {/* <SettlementModal
+      {/* 정산 확인 모달 */}
+      <SettlementModal
         isOpen={showModal}
         onClose={handleCloseModal}
-        classInfo={selectedClass}
-        onFetchStudents={fetchStudentList} // 실제 API 연동 시 사용
-      /> */}
+        settlementInfo={selectedSettlement} // prop 이름 통일
+        onConfirmSettlement={handleConfirmSettlement} // 정산 확정 함수 전달
+      />
     </Layout>
   );
 };

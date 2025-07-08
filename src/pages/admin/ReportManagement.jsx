@@ -330,7 +330,6 @@ const ReportManagement = () => {
         {/* 검색 박스 */}
         <div className="search-sectionHY">
           <div className="search-boxHY">
-            <span className="search-iconHY">🔍</span>
             <input
               type="text"
               placeholder="신고 제목, 내용, 신고자, 처리자로 검색"

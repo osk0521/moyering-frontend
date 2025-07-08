@@ -143,9 +143,8 @@ const PaymentManagement = () => {
             onChange={handleSearch}
             className="search-inputHY"
           />
-              
+  
         </div>
-        <div className = "date-filter-group">
         <label className="date-labelHY">결제 기간</label>
         <input
           type="date"
@@ -160,7 +159,8 @@ const PaymentManagement = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-      </div>
+
+
       </div>
       </div>
 

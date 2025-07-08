@@ -417,13 +417,10 @@ body {
 
 /* 날짜 필터 그룹 */
 .date-filter-group {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 8px 16px !important;
-  border: 1px solid #e2e8f0 !important;
-  margin-bottom: 16px !important;
-  border-radius: 6px !important;
+  display: flex;
+  align-items: center ;
+  gap: 12px ;
+  padding: 16px 16px ;
 }
 
 .date-labelHY {
@@ -454,28 +451,12 @@ body {
   margin: 0 !important;
 }
 
-.date-reset-btn {
-  padding: 8px 16px !important;
-  border: 1px solid #d1d5db !important;
-  background-color: white !important;
-  color: #6b7280 !important;
-  border-radius: 6px !important;
-  font-size: 13px !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  white-space: nowrap !important;
-}
 
-.date-reset-btn:hover {
-  background-color: #f3f4f6 !important;
-  border-color: #9ca3af !important;
-  color: #374151 !important;
-}
 
 /* 검색 섹션 */
 .search-sectionHY {
   display: flex !important;
-  align-items: center !important;
+  /* align-items: center !important; */
   margin-bottom: 16px !important;
   gap: 16px !important;
 }
@@ -625,7 +606,6 @@ body {
   
   .date-filter-group {
     flex-wrap: wrap !important;
-    justify-content: center !important;
   }
 }
 

@@ -30,6 +30,12 @@ const MemberManagement = () => {
     fetchMembers(0); // 첫 페이지부터 조회
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchClick();
+    }
+  }
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -144,6 +150,7 @@ const MemberManagement = () => {
             placeholder="회원 아이디, 이메일 검색"
             value={searchTerm}
             onChange={handleSearch}
+            onKeyDown = {handleKeyDown}
             className="search-inputHY"
             
           />

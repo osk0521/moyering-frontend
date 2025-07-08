@@ -89,14 +89,8 @@ export default function HostFeedDetail() {
               <p>카테고리: {category}</p>
             </div>
 
-            <div className="KYM-actions">
-              <button className="KYM-action-icon">🤍</button>
-              <button className="KYM-action-icon">💬</button>
-              <button className="KYM-action-icon2">📤</button>
-              <div className="KYM-action-spacer" />
-            </div>
+            
             <div className="KYM-like-info">
-              <span className="KYM-like-count">좋아요 0개</span>
               <span className="KYM-detail-date">{new Date().toLocaleDateString()}</span>
             </div>
           </div>

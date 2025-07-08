@@ -243,7 +243,7 @@ export default function GatheringDetail() {
           tags: parsedTags,
           createDate: gathering.createDate,
           category: gathering.categoryName,
-          categoryId:gathering.categoryId,
+          categoryId: gathering.categoryId,
           subCategoryId: gathering.subCategoryId,
           subCategory: gathering.subCategoryName,
           latitude: gathering.latitude,
@@ -269,6 +269,7 @@ export default function GatheringDetail() {
           followers: organizer.followers || 0, // followers가 객체가 아닌 숫자값으로 설정
           intro: organizer.intro || "",
           tags: organizerCategories,
+          userBadgeImg: organizer.userBadgeImg || "badge_moyainssa.png",
         });
 
         setMembers(
@@ -281,6 +282,7 @@ export default function GatheringDetail() {
             aspiration: m.aspiration,
             isApprove: m.isApprove,
             userId: m.userId,
+            userBadgeImg: m.userBadgeImg || "badge_moyainssa.png",
           }))
         );
 
@@ -457,7 +459,7 @@ export default function GatheringDetail() {
   };
 
   const isMaxAttendeesReached = () => {
-    return members.length >= gatheringData.maxAttendees;
+    return gatheringData.maxAttendees !== null && members.length >= gatheringData.maxAttendees;
   };
 
   const canApplyToGathering = () => {
@@ -507,7 +509,7 @@ export default function GatheringDetail() {
             <div className="GatheringDetail_image-section_osk">
               <img
                 src={`${url}/image?filename=${gatheringData.thumbnailFileName}`}
-                alt="모임 이미지"
+                alt={`${gatheringData.title}`}
                 className="GatheringDetail_main-image_osk"
               />
             </div>
@@ -531,8 +533,8 @@ export default function GatheringDetail() {
                 </button>
                 <button
                   className={`GatheringDetail_tab_osk ${activeTab === "questions"
-                      ? "GatheringDetail_active_osk"
-                      : ""
+                    ? "GatheringDetail_active_osk"
+                    : ""
                     }`}
                   onClick={() => handleTabClick("questions")}
                 >
@@ -547,8 +549,8 @@ export default function GatheringDetail() {
                 </button>
                 <button
                   className={`GatheringDetail_tab_osk ${activeTab === "recommendations"
-                      ? "GatheringDetail_active_osk"
-                      : ""
+                    ? "GatheringDetail_active_osk"
+                    : ""
                     }`}
                   onClick={() => handleTabClick("recommendations")}
                 >
@@ -663,7 +665,8 @@ export default function GatheringDetail() {
                     />
                   </div>
                   <div className="GatheringDetail_organizer-details_osk">
-                    <h4>{organizerData.nickname}</h4>
+                    <h4>{organizerData.nickname} <img
+                      src={`/public/${organizerData.userBadgeImg}`} /></h4>
                     <div className="GatheringDetail_organizer-stats_osk">
                       팔로워 {organizerData.followers}명
                     </div>
@@ -737,9 +740,9 @@ export default function GatheringDetail() {
                             </div>
                             <div className="GatheringDetail_member-info_osk">
                               <h4 className="GatheringDetail_member-name_osk">
-                                {member.name}
-                                <span className="GatheringDetail_verified_osk">
-                                  ○
+                                <span className="GatheringDetail_verified_osk">  {member.name}
+                                  <img className="GatheringDetail_member-userBadgeImg_osk" src={`/public/${member.userBadgeImg}`} />
+
                                 </span>
                               </h4>
                               <p className="GatheringDetail_member-description_osk">
@@ -765,46 +768,46 @@ export default function GatheringDetail() {
                 <h3 className="GatheringDetail_section-title_osk">
                   함께하면 좋을 모임을 찾아드려요
                   {recommendations.length > 2 && (<span className="GatheringDetail_section-more_osk" onClick={() =>
-                      navigate("/gatheringList", {
-                        state: {
-                          category1: gatheringData?.categoryId,
-                          category2: gatheringData?.subCategoryId,
-                        }
-                      })
-                    }> 더보기</span>)}
+                    navigate("/gatheringList", {
+                      state: {
+                        category1: gatheringData?.categoryId,
+                        category2: gatheringData?.subCategoryId,
+                      }
+                    })
+                  }> 더보기</span>)}
                 </h3>
               </div>
               <div className="GatheringDetail_recommendations_osk">
-                  {recommendations.length === 0 ? (
-                    <div className="GatheringDetail_no-members_osk">
-                      <p>조회된 게더링이 없습니다.</p>
-                    </div>
-                  ) : (
-                    recommendations.map((recommendation) => (
-                      <div
-                        key={recommendation.gatheringId}
-                        className="GatheringDetail_recommendation-card_osk"
-                        onClick={() => navigate(`/gatheringDetail/${recommendation.gatheringId}`)}
-                      >
-                        <img
-                          src={`${url}/image?filename=${recommendation.thumbnailFileName}`}
-                          alt={recommendation.title}
-                          className="GatheringDetail_card-image_osk"
-                        />
-                        <div className="GatheringDetail_card-content_osk">
-                          <div className="GatheringDetail_card-category_osk">
-                            {recommendation.category}
-                          </div>
-                          <div className="GatheringDetail_card-title_osk">
-                            {recommendation.title}
-                          </div>
-                          <div className="GatheringDetail_card-info_osk">
-                            <CiCalendar /> {recommendation.meetingDate}
-                          </div>
+                {recommendations.length === 0 ? (
+                  <div className="GatheringDetail_no-members_osk">
+                    <p>조회된 게더링이 없습니다.</p>
+                  </div>
+                ) : (
+                  recommendations.map((recommendation) => (
+                    <div
+                      key={recommendation.gatheringId}
+                      className="GatheringDetail_recommendation-card_osk"
+                      onClick={() => navigate(`/gatheringDetail/${recommendation.gatheringId}`)}
+                    >
+                      <img
+                        src={`${url}/image?filename=${recommendation.thumbnailFileName}`}
+                        alt={recommendation.title}
+                        className="GatheringDetail_card-image_osk"
+                      />
+                      <div className="GatheringDetail_card-content_osk">
+                        <div className="GatheringDetail_card-category_osk">
+                          {recommendation.category}
+                        </div>
+                        <div className="GatheringDetail_card-title_osk">
+                          {recommendation.title}
+                        </div>
+                        <div className="GatheringDetail_card-info_osk">
+                          <CiCalendar /> {recommendation.meetingDate}
                         </div>
                       </div>
-                    ))
-                  )}
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </main>

@@ -82,10 +82,12 @@
 }
 
 .GatheringChat_chat-tabs_osk {
-  display: flex;
-  border-bottom: 1px solid #e9ecef;
-  padding: 15px;
-  position: relative;
+    display: flex;
+    border-bottom: 1px solid #e9ecef;
+    padding: 15px;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .GatheringChat_tab_osk {
@@ -227,16 +229,16 @@
 
 .GatheringChat_user-message_osk {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   margin: 10px 0;
 }
 
-.GatheringChat_message-avatar_osk {
+.GatheringChat_message-avatar-img_osk {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #ddd;
+  background: none;
 }
 
 .GatheringChat_message-content_osk {

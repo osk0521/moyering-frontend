@@ -330,6 +330,18 @@ button.GatheringDetail_more_osk {
   margin-bottom: 4px;
   color: #333;
 }
+.GatheringDetail_organizer-details_osk img {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.GatheringDetail_member-userBadgeImg_osk{
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
 
 .GatheringDetail_organizer-stats_osk {
   font-size: 12px;

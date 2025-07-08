@@ -1,15 +1,28 @@
 /* ─── 최상위 부모 클래스 ─── */
-.KYM-myfeed-container {
-  max-width: 1200px;
+.KYM-myfeed-wrapper{
+  width: 69%;
   margin: 0 auto;
   padding: 20px;
+   display: flex;
+  gap: 30px; /* 사이 간격 */
+}
+
+.KYM-myfeed-sidebar{
+  margin-top: -20px;
+}
+
+.KYM-myfeed-container {
+  max-width: 1200px;
+  
+
 }
 
 /* 제목 */
 .KYM-myfeed-container .KYM-myfeed-title {
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
+  color:#333;
+  margin: 15px 0 20px 5px;
 }
 
 /* 2열 그리드 */

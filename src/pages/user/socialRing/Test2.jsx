@@ -153,7 +153,20 @@ export default function FeedPage2() {
         }, 5000);
         return () => clearInterval(interval);
     }, [totalPages]);
+const menuRef = useRef(null);
 
+useEffect(() => {
+    const handleClickOutside = (event) => {
+        // 메뉴가 열려있고, 메뉴 영역(menuRef.current) 밖을 클릭하면 닫기
+        if (menuOpenId && menuRef.current && !menuRef.current.contains(event.target)) {
+            setMenuOpenId(null);
+        }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, [menuOpenId]);
 
     return (
         <>
@@ -206,7 +219,7 @@ export default function FeedPage2() {
                                             onClick={() => setMenuOpenId(menuOpenId === feed.feedId ? null : feed.feedId)}
                                         />
                                         {menuOpenId === feed.feedId && (
-                                            <ul className="KYM-post-menu open">
+                                            <ul ref={menuRef} className="KYM-post-menu open">
                                                 {user?.id === feed.writerUserId && (
                                                     <li onClick={async () => {
                                                         try {
@@ -253,18 +266,24 @@ export default function FeedPage2() {
                                         )}
                                     </div>
 
-                                    <div className="KYM-image-slider">
+                                    <div className="KYM-image-slider" onClick={() => navigate(`/feed/${feed.feedId}`)} style={{ cursor: "pointer" }}>
                                         <img src={`${url}/iupload/${images[currentIdx]}`} alt="피드" className="KYM-post-image" />
                                         {images.length > 1 && (
                                             <>
                                                 <button className="KYM-image-nav left"
-                                                    onClick={() => setImageIndexes(prev => ({
-                                                        ...prev, [feed.feedId]: (currentIdx - 1 + images.length) % images.length
-                                                    }))}>◀</button>
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // ← 중요: 이미지 슬라이더만 동작
+                                                        setImageIndexes(prev => ({
+                                                            ...prev, [feed.feedId]: (currentIdx - 1 + images.length) % images.length
+                                                        }));
+                                                    }}>◀</button>
                                                 <button className="KYM-image-nav right"
-                                                    onClick={() => setImageIndexes(prev => ({
-                                                        ...prev, [feed.feedId]: (currentIdx + 1) % images.length
-                                                    }))}>▶</button>
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setImageIndexes(prev => ({
+                                                            ...prev, [feed.feedId]: (currentIdx + 1) % images.length
+                                                        }));
+                                                    }}>▶</button>
                                             </>
                                         )}
                                     </div>

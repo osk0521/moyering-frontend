@@ -61,6 +61,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /* width: 300px; */
 }
 
 /* 포스트 헤더 */

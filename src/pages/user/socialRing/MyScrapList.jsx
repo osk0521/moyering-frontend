@@ -101,9 +101,9 @@ export default function MyScrapPage() {
                 <div key={feed.feedId} className="KYM-post-card">
                   <div className="KYM-post-header">
                     <div className="KYM-user-info">
-                      <img src={`${url}/profile/${feed.writerProfile}`} alt="프로필" className="KYM-avatar" />
+                      <img src={`${url}/iupload/${feed.writerProfile}`} alt="프로필" className="KYM-avatar" />
                       <span className="KYM-nickname">{feed.writerNickName}</span>
-                      <img src={badgeIcon} alt="배지" className="KYM-badge-icon" />
+                      <img src={`${url}/iupload/${feed.writerProfile}`} alt="배지" className="KYM-badge-icon" />
                     </div>
                     <div className="KYM-more-container">
                       <img

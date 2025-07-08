@@ -20,7 +20,7 @@ export default function HostFeedCreate() {
     const [category, setCategory] = useState('');
     const fileInputRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const [feedId,setFeedId] = useState('');
     // 취소
     const handleCancel = () => navigate(-1);
 
@@ -83,9 +83,11 @@ export default function HostFeedCreate() {
             );
             imageFiles.forEach(file => formData.append('images', file));
 console.log("🟢 myAxios token=", token);
-            await myAxios(token, setToken).post(`/host/createFeedHost`, formData);
+            const res = await myAxios(token, setToken).post(`/host/createFeedHost`, formData);
+            setFeedId(res.data);
+            console.log(res)
             alert("강사 홍보 피드가 작성되었습니다.");
-            navigate(`/hostFeed`);
+            navigate(`/hostFeed/${res.data}`);
         } catch (err) {
             console.error('강사 피드 등록 실패:', err);
             alert('강사 피드 작성에 실패했습니다.');

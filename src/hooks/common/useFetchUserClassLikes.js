@@ -11,9 +11,9 @@ export default function useFetchUserClassLikes() {
     const classLikes = useAtomValue(classLikesAtom); // 현재 상태 확인용
 
     useEffect(() => {
-        if (classLikes.length > 0) {
-            return; 
-        }
+        // if (classLikes.length > 0) {
+        //     return; 
+        // }
     token && myAxios(token,setToken)
         .get(`/user/class-like-list`)
         .then((res) => {

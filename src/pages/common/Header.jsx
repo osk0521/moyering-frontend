@@ -11,6 +11,7 @@ import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { tokenAtom, userAtom, alarmsAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
 import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
+import useFetchUserGatherLikes from "../../hooks/common/useFetchUserGatherLikes";
 
 export default function Header() {
   const user = useAtomValue(userAtom);
@@ -21,7 +22,7 @@ export default function Header() {
   const [alarms, setAlarms] = useAtom(alarmsAtom);
   const [query,setQuery] = useState('');
   useFetchUserClassLikes();
-
+  useFetchUserGatherLikes();
   const handleSearch = (e) => {
     e.preventDefault();
     if(!query.trim()) return;

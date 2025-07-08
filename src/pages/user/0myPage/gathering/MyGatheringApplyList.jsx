@@ -252,7 +252,7 @@ export default function MyGatheringApplyList() {
           </div>
 
           <div className="MyGatheringApplyList_gathering-list_osk">
-            {allCnt <= 0 ? (
+            {applyList.length === 0 ? (
               <div className="MyGatheringList_empty-state_osk">
                 <div className="MyGatheringList_empty-content_osk">
                   <h4>조회된 목록이 없습니다</h4>

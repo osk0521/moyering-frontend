@@ -83,6 +83,8 @@ export default function GatheringDetail() {
     acceptedCount: 0,
     category: "",
     subCategory: "",
+    categoryId: 0,
+    subCategoryId: 0,
     latitude: 0,
     longitude: 0,
     intrOnln: "",
@@ -241,6 +243,8 @@ export default function GatheringDetail() {
           tags: parsedTags,
           createDate: gathering.createDate,
           category: gathering.categoryName,
+          categoryId:gathering.categoryId,
+          subCategoryId: gathering.subCategoryId,
           subCategory: gathering.subCategoryName,
           latitude: gathering.latitude,
           longitude: gathering.longitude,
@@ -741,7 +745,7 @@ export default function GatheringDetail() {
                               <p className="GatheringDetail_member-description_osk">
                                 {member.introduction}
                               </p>
-                              <span className="GatheringDetail_more-text_osk">
+                              <span className="GatheringDetail_more-text_osk" onClick={() => navigate(`/userFeed/${member.id}`)}>
                                 더보기
                                 <BiChevronRight />
                               </span>
@@ -760,7 +764,14 @@ export default function GatheringDetail() {
               >
                 <h3 className="GatheringDetail_section-title_osk">
                   함께하면 좋을 모임을 찾아드려요
-                  {recommendations.length > 2 && (<span onClick={() => navigate('/gatheringList')}> 더보기</span>)}
+                  {recommendations.length > 2 && (<span className="GatheringDetail_section-more_osk" onClick={() =>
+                      navigate("/gatheringList", {
+                        state: {
+                          category1: gatheringData?.categoryId,
+                          category2: gatheringData?.subCategoryId,
+                        }
+                      })
+                    }> 더보기</span>)}
                 </h3>
               </div>
               <div className="GatheringDetail_recommendations_osk">

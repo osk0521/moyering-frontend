@@ -80,7 +80,7 @@ import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
 import MyGatherInquiryList from "./pages/user/0myPage/gathering/MyGatherInquiryList.jsx";
-import GatheringChat from './pages/user/gathering/GatheringChat';
+import GatheringChat from './pages/user/gathering/GatheringChatRoomList.jsx';
 import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
 

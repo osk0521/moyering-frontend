@@ -79,12 +79,10 @@ export default function GatherInquiry() {
       }
       return;
     }
-
     if (!token) {
       console.log('토큰이 없습니다. 로딩을 건너뜁니다.');
       return;
     }
-
     setLoading(true);
     setError(null);
 
@@ -206,19 +204,16 @@ export default function GatherInquiry() {
 
 try {
     setLoading(true);
-    
     const requestData = {
         inquiryId: inquiryId,
         gatheringId: currentInquiry.gatheringId,
         responseContent: reply.trim(),
         responseDate: new Date().toISOString().split('T')[0]
     };
-    
     const response = await myAxios(token, setToken).post(
         `/user/responseToGatheringInquiry`, 
         requestData 
     );
-    alert("답변이 등록되었습니다.");
     setReplyText(prev => ({ ...prev, [inquiryId]: "" }));
     setOpenId(null); // 아코디언 닫기
     loadInquiryData(); // 데이터 재로딩
@@ -403,7 +398,11 @@ try {
                         <span className="MyGatherInquiryList_username_osk">
                           {item.nickName}
                         </span>
-                        <span className={`MyGatherInquiryList_status_osk status-${item.responseState}`}>
+                        <span className={`MyGatherInquiryList_status_osk ${
+                            item.responseState == '답변대기' ? 'MyGatherInquiryList_status-waiting_osk' : 
+                            item.responseState == '답변완료' ? 'MyGatherInquiryList_status-completed_osk' : 
+                            `status-${item.responseState}`
+                          }`}>
                           {item.responseState}
                         </span>
                       </div>
@@ -464,7 +463,6 @@ try {
               ))
             )}
           </div>
-
           {pageInfo.allPage > 1 && (
             <div className="MyGatherInquiryList_pagination_osk">
               {pageInfo.curPage > 1 && (

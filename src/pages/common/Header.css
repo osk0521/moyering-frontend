@@ -39,6 +39,7 @@
   color: #374151;
 }
 
+
 .Header_top-menu-link_osk {
   font-size: 13px;
   color: #6b7280;
@@ -61,7 +62,7 @@
 }
 
 .Header_top-icon_osk {
-  font-size: 16px;
+  font-size: 20px;
   color: #6b7280;
   cursor: pointer;
   transition: color 0.2s;
@@ -244,6 +245,9 @@
   line-height: 1.2;
   z-index: 1;
 }
+.alarm-count{
+
+}
 
 /* 활성화된 알림 아이콘 (새 알림이 있을 때) */
 .Header_notification-active_osk {
@@ -404,9 +408,8 @@
 /* 알림 배지 */
 .Header_notification-badge_osk {
   position: absolute !important;
-  top: -2px;
+  /* top: -2px; */
   right: -2px;
-  font-size: 0.7rem;
   min-width: 18px;
   height: 18px;
   display: flex;
@@ -513,13 +516,12 @@
 
 .Header_notification-badge_osk {
   position: absolute;
-  top: -8px;
+  /* top: -8px; */
   right: -8px;
   background-color: #ff4757;
   color: white;
   border-radius: 50%;
   padding: 2px 6px;
-  font-size: 12px;
   font-weight: bold;
   min-width: 18px;
   text-align: center;

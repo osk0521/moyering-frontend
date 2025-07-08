@@ -118,6 +118,7 @@ form.append("tag5", tags[4] || "");
 // }
 for (let i = 0; i < 5; i++) {
   if (imageFiles[i]) {
+     console.log(`img${i+1}:`, imageFiles[i]);
     form.append(`img${i + 1}`, imageFiles[i]); // 새 파일만 보냄
   }
 }
@@ -230,8 +231,14 @@ for (let i = 0; i < 5; i++) {
               type="text"
               value={tagInput}
               onChange={e => setTagInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAddTag()}
-              placeholder="Enter로 추가"
+              // onKeyDown={e => e.key === 'Enter' && handleAddTag()}
+              // placeholder="Enter로 추가"
+              onKeyDown={e => {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // 엔터로 줄바꿈 방지
+    handleAddTag();
+  }
+}}
             />
             <div className="KYM-FeedEdit-tag-list">
               {tags.map(t => (

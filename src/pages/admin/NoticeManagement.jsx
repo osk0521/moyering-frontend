@@ -321,11 +321,11 @@ const showNotice = async (noticeId) => {
       <div className="page-titleHY">
         <h1>공지사항 관리</h1>
       </div>
+      <br />
 
       {/* 검색 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">
-          <span className="search-iconHY">🔍</span>
           <input
             type="text"
             placeholder="제목, 내용으로 검색"

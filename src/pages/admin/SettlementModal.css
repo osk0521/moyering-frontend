@@ -1,518 +1,161 @@
 /* 모달 오버레이 */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 20px;
+.modal-overlayHY {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* 높은 z-index 값 */
+}
+
+/* 모달 컨텐츠 */
+.modal-contentHY {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+/* 모달 헤더 */
+.modal-contentHY h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* 모달 정보 텍스트 */
+.modal-contentHY p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.modal-contentHY p strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* 수강생 테이블 */
+.student-tableHY {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.student-tableHY th {
+  background-color: #f8f9fa;
+  padding: 12px 8px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+  font-weight: 600;
+  color: #333;
+}
+
+.student-tableHY td {
+  padding: 10px 8px;
+  border: 1px solid #e0e0e0;
+  color: #555;
+}
+
+.student-tableHY tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.student-tableHY tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* 모달 액션 버튼 영역 */
+.modal-actionsHY {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* 모달 버튼 스타일 */
+.modal-actionsHY button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+/* 취소 버튼 */
+.modal-actionsHY button:first-child {
+  background-color: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.modal-actionsHY button:first-child:hover {
+  background-color: #e8e8e8;
+  color: #555;
+}
+
+/* 확정 버튼 */
+.modal-actionsHY button:last-child {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-actionsHY button:last-child:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.modal-actionsHY button:disabled {
+  background-color: #cccccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* 로딩 메시지 */
+.modal-contentHY p:contains("불러오는 중") {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 20px 0;
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+  .modal-contentHY {
+    width: 95%;
+    padding: 16px;
+    margin: 20px;
   }
   
-  /* 모달 컨텐츠 */
-  .modal-content {
-    background: white;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 1400px;
-    max-height: 90vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-  
-  /* 모달 헤더 */
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 24px;
-    border-bottom: 1px solid #e5e7eb;
-    background-color: #f9fafb;
-  }
-  
-  .modal-title-section h2 {
-    margin: 0 0 12px 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #111827;
-  }
-  
-  .class-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .class-info p {
-    margin: 0;
-    font-size: 14px;
-    color: #6b7280;
-  }
-  
-  .class-info strong {
-    color: #374151;
-    font-weight: 500;
-  }
-  
-  .modal-close-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #6b7280;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-  }
-  
-  .modal-close-btn:hover {
-    background-color: #f3f4f6;
-    color: #374151;
-  }
-  
-  /* 통계 요약 */
-  .stats-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 16px;
-    padding: 20px 24px;
-    background-color: #f8fafc;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .stat-label {
-    font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 4px;
-    font-weight: 500;
-  }
-  
-  .stat-value {
-    font-size: 18px;
-    font-weight: 600;
-    color: #111827;
-  }
-  
-  .stat-value.completed {
-    color: #059669;
-  }
-  
-  .stat-value.pending {
-    color: #d97706;
-  }
-  
-  .stat-value.refunded {
-    color: #dc2626;
-  }
-  
-  .stat-value.attended {
-    color: #7c3aed;
-  }
-  
-  /* 필터 영역 */
-  .modal-filters {
-    display: flex;
-    gap: 16px;
-    padding: 20px 24px;
-    border-bottom: 1px solid #e5e7eb;
-    background-color: white;
-  }
-  
-  .search-box {
-    flex: 1;
-    position: relative;
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 10px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 14px;
-    background-color: white;
-    transition: border-color 0.2s ease;
-  }
-  
-  .search-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-  
-  .status-filter {
-    min-width: 140px;
-  }
-  
-  .status-select {
-    width: 100%;
-    padding: 10px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 14px;
-    background-color: white;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-  
-  .status-select:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-  
-  /* 테이블 컨테이너 */
-  .modal-table-container {
-    flex: 1;
-    overflow: auto;
-    padding: 0 24px;
-  }
-  
-  /* 수강생 테이블 */
-  .student-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    margin-bottom: 20px;
-  }
-  
-  .student-table thead {
-    background-color: #f9fafb;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  
-  .student-table th {
-    padding: 12px 8px;
-    text-align: left;
-    font-size: 12px;
-    font-weight: 600;
-    color: #374151;
-    border-bottom: 2px solid #e5e7eb;
-    white-space: nowrap;
-  }
-  
-  .student-table td {
-    padding: 12px 8px;
-    color: #111827;
-    border-bottom: 1px solid #e5e7eb;
-    vertical-align: top;
-  }
-  
-  .student-table tbody tr:hover {
-    background-color: #f9fafb;
-  }
-  
-  /* 특정 컬럼 스타일 */
-  .student-id {
-    color: #3b82f6 !important;
-    font-weight: 500;
-  }
-  
-  .student-name {
-    font-weight: 500;
-    color: #111827;
-  }
-  
-  .student-phone {
-    font-family: monospace;
-    color: #6b7280;
-  }
-  
-  .payment-id {
-    color: #7c3aed;
-    font-weight: 500;
-    font-family: monospace;
-  }
-  
-  .payment-amount {
-    text-align: right;
-    font-weight: 600;
-    color: #059669;
-  }
-  
-  .payment-date,
-  .enrollment-date {
-    color: #6b7280;
+  .student-tableHY {
     font-size: 12px;
   }
   
-  .payment-method-info {
-    display: flex;
+  .student-tableHY th,
+  .student-tableHY td {
+    padding: 8px 6px;
+  }
+  
+  .modal-actionsHY {
     flex-direction: column;
-    gap: 2px;
   }
   
-  .payment-detail {
-    font-size: 11px;
-    color: #9ca3af;
+  .modal-actionsHY button {
+    width: 100%;
   }
-  
-  /* 상태 배지 */
-  .status-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    text-align: center;
-    white-space: nowrap;
-  }
-  
-  /* 결제 상태 */
-  .payment-completed {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1px solid #10b981;
-  }
-  
-  .payment-pending {
-    background-color: #fef3c7;
-    color: #92400e;
-    border: 1px solid #f59e0b;
-  }
-  
-  .payment-failed {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #ef4444;
-  }
-  
-  .payment-refunded {
-    background-color: #fce7f3;
-    color: #be185d;
-    border: 1px solid #ec4899;
-  }
-  
-  .payment-cancelled {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: 1px solid #9ca3af;
-  }
-  
-  /* 출석 상태 */
-  .attendance-attended {
-    background-color: #ede9fe;
-    color: #5b21b6;
-    border: 1px solid #8b5cf6;
-  }
-  
-  .attendance-no-show {
-    background-color: #fef2f2;
-    color: #991b1b;
-    border: 1px solid #f87171;
-  }
-  
-  .attendance-cancelled {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: 1px solid #9ca3af;
-  }
-  
-  /* 로딩 상태 */
-  .loading-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    color: #6b7280;
-    font-size: 14px;
-  }
-  
-  .loading-spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #e5e7eb;
-    border-top: 2px solid #3b82f6;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-right: 8px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* 데이터 없음 */
-  .no-data {
-    text-align: center;
-    padding: 40px 20px;
-    color: #6b7280;
-    font-style: italic;
-  }
-  
-  /* 모달 푸터 */
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    padding: 20px 24px;
-    border-top: 1px solid #e5e7eb;
-    background-color: #f9fafb;
-  }
-  
-  .btn-close {
-    background-color: #6b7280;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .btn-close:hover {
-    background-color: #4b5563;
-  }
-  
-  /* 반응형 디자인 */
-  @media (max-width: 1200px) {
-    .modal-content {
-      max-width: 95%;
-      margin: 10px;
-    }
-    
-    .stats-summary {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      padding: 16px 20px;
-    }
-    
-    .student-table {
-      font-size: 12px;
-    }
-    
-    .student-table th,
-    .student-table td {
-      padding: 10px 6px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .modal-overlay {
-      padding: 10px;
-    }
-    
-    .modal-content {
-      max-height: 95vh;
-    }
-    
-    .modal-header {
-      padding: 16px;
-    }
-    
-    .modal-title-section h2 {
-      font-size: 18px;
-    }
-    
-    .class-info {
-      font-size: 13px;
-    }
-    
-    .stats-summary {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      padding: 12px 16px;
-    }
-    
-    .stat-value {
-      font-size: 16px;
-    }
-    
-    .modal-filters {
-      flex-direction: column;
-      gap: 12px;
-      padding: 16px;
-    }
-    
-    .modal-table-container {
-      padding: 0 16px;
-    }
-    
-    .student-table {
-      font-size: 11px;
-    }
-    
-    .student-table th,
-    .student-table td {
-      padding: 8px 4px;
-    }
-    
-    .status-badge {
-      padding: 3px 6px;
-      font-size: 10px;
-    }
-    
-    .modal-footer {
-      padding: 16px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .stats-summary {
-      grid-template-columns: 1fr;
-    }
-    
-    .student-table th,
-    .student-table td {
-      padding: 6px 3px;
-    }
-    
-    .payment-method-info {
-      font-size: 10px;
-    }
-  }
-  
-  /* 스크롤바 스타일 */
-  .modal-table-container::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  .modal-table-container::-webkit-scrollbar-track {
-    background-color: #f1f5f9;
-  }
-  
-  .modal-table-container::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
-    border-radius: 4px;
-  }
-  
-  .modal-table-container::-webkit-scrollbar-thumb:hover {
-    background-color: #94a3b8;
-  }
-  
-  /* 포커스 스타일 */
-  .search-input:focus,
-  .status-select:focus,
-  .btn-close:focus {
-    outline-offset: 2px;
-  }
-  
-  /* 클릭 가능한 클래스명 스타일 */
-  .class-name-clickable {
-    color: #3b82f6;
-    text-decoration: underline;
-    cursor: pointer;
-    transition: color 0.2s ease;
-  }
-  
-  .class-name-clickable:hover {
-    color: #1d4ed8;
-    text-decoration: underline;
-  }
+}

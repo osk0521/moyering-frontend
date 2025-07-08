@@ -243,6 +243,60 @@ export default function ClassRingDetail() {
     return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
   }
 
+    };
+    // 문의하기 모달 관련 함수들
+        const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+        const [questionContent, setQuestionContent] = useState("");
+        const toggleQuestionModal = () => {
+        if (!user || !token) {
+            if (
+            confirm(
+                "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
+            )
+            ) {
+            navigate("/userlogin");
+            } else {
+            return;
+            }
+        } else {
+            setIsQuestionModalOpen(!isQuestionModalOpen);
+            if (isQuestionModalOpen) {
+            setQuestionContent("");
+            }
+        }
+        };
+    
+        const submit = async (e) => {
+        e.preventDefault();
+    
+        if (!questionContent.trim()) {
+            alert("문의 내용을 입력해주세요.");
+            return;
+        }
+    
+        const formDataToSend = {
+            calendarId: selectedCalendarId,
+            content: questionContent.trim(),
+        };
+    
+        try {
+            console.log(token);
+            const response = await myAxios(token,setToken).post(
+            `/user/writeClassInquiry`,
+            formDataToSend
+            );
+    
+            if (response.status === 200 && typeof response.data === "number") {
+            toggleQuestionModal(); // 모달 닫기
+            setQuestionContent(""); // 입력 초기화
+            } else {
+            alert("문의 등록에 실패했습니다. 다시 시도해주세요.");
+            }
+        } catch (error) {
+            console.error("문의 등록 중 오류 발생:", error);
+            alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        }
+        };
   return (
     <>
       <Header />
@@ -258,7 +312,7 @@ export default function ClassRingDetail() {
               { id: "location", label: "위치" },
               { id: "instructor", label: "강사소개" },
               { id: "reviews", label: "강사 후기" },
-              { id: "questions", label: "질문" },
+              { id: "questions", label: "문의" },
               { id: "recommend", label: "추천" }
             ].map(({ id, label }) => (
               <button
@@ -389,7 +443,7 @@ export default function ClassRingDetail() {
               </button>
             )}
           </section>
-          {/* 질문 */}
+          {/* 문의 */}
           <section className={styles.section} id="questions">
             <ClassRingDetailInquiryList classId={classId} />
           </section>
@@ -572,7 +626,7 @@ export default function ClassRingDetail() {
                   </>
                 )}
               </button>
-              <button className={styles.questionButton} onClick={toggleQuestionModal}>질문하기</button>
+              <button className={styles.questionButton} onClick={toggleQuestionModal}>문의하기</button> 
               {registeds.some(r => r.calendarId === selectedCalendarId) ? (
                 <button className={styles.applyBtnDis} disabled>
                   신청 완료
@@ -580,8 +634,16 @@ export default function ClassRingDetail() {
               ) : (
                 <button
                   className={styles.applyBtn}
-                  onClick={() =>
+                  onClick={() => 
+                  {     
+                    if ( !user || !token ) {
+                      if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
+                        navigate("/userlogin");
+                      }
+                    } else {
                     navigate(`/user/classPayment/${classId}/${selectedCalendarId}`)
+                    }
+                    }
                   }
                 >
                   신청하기
@@ -592,8 +654,9 @@ export default function ClassRingDetail() {
           </div>
         </aside>
       </div>
-      {/* 질문 모달 */}
-      {isQuestionModalOpen && (
+     
+      {/* 문의 모달 */}
+        {isQuestionModalOpen && (
         <form>
           <Modal
             isOpen={isQuestionModalOpen}
@@ -626,7 +689,7 @@ export default function ClassRingDetail() {
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
                     <span>
-                      질문 수업일 : {selectedCalendar?.startDate ?? "-"}<br />
+                        문의 수업일 : {selectedCalendar?.startDate ?? "-"}<br />
                     </span>
                   </div>
                   <div className="GatheringDetail_gathering-info-item_osk">

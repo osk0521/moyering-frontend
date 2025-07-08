@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import {registerServiceWorker, firebaseReqPermission } from "./firebaseconfig";
+import { registerServiceWorker, firebaseReqPermission } from "./firebaseconfig";
 import UserLogin from './pages/common/UserLogin';
 import UserJoin from './pages/common/UserJoin';
 import UserJoinCategory from './pages/common/UserJoinCategory';
@@ -51,13 +51,13 @@ import SettlementManagement  from "./pages/admin/SettlementManagement";
 // import SettlementModal  from "./pages/admin/SettlementModal.jsx"; 
 
 
-
-
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
 import Follower from './pages/user/socialRing/Follower.jsx';
 import Following from './pages/user/socialRing/Following.jsx'
+import HostFeedPage from './pages/user/socialRing/HostFeedPage.jsx';
+import HostFeedCreate from './pages/user/socialRing/FeedHostCreate.jsx';
 
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
@@ -85,32 +85,34 @@ import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
 
 import Token from './components/Token';
-import{useSetAtom, useAtom} from 'jotai'
-import{fcmTokenAtom, alarmsAtom} from './atoms'
+import { useSetAtom, useAtom } from 'jotai'
+import { fcmTokenAtom, alarmsAtom } from './atoms'
 import ClassUpdatePage from './pages/host/ClassUpdate/ClassUpdatePage.jsx';
 import PaymentSuccess from './pages/user/classRing/PaymentSuccess.jsx';
 import MyProfilePage from './pages/user/0myPage/common/MyProfilePage.jsx';
 import FindId from './pages/common/FindId.jsx';
 import FindPassword from './pages/common/FindPassword.jsx';
 import ResetPassword from './pages/common/ResetPassword.jsx';
+import HostFeedDetail from './pages/user/socialRing/HostFeedDetail.jsx';
 import MainSearch from './pages/common/MinSearch.jsx';
+
 
 function App() {
   const [alarm, setAlarm] = useState({});
-  const setFcmToken = useSetAtom(fcmTokenAtom);  
+  const setFcmToken = useSetAtom(fcmTokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
 
-  useEffect(()=> {
+  useEffect(() => {
     registerServiceWorker();
-    navigator.serviceWorker.ready.then(()=> {
+    navigator.serviceWorker.ready.then(() => {
       firebaseReqPermission(setFcmToken, setAlarm);
     })
-  },[])
+  }, [])
 
   useEffect(() => {
     JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
   }, [alarm]);
-  
+
   return (
     <Router>
       <Routes>
@@ -125,15 +127,18 @@ function App() {
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
-        <Route path="/findId" element={<FindId/>}/>
-        <Route path="/findPassword" element={<FindPassword/>}/>
-        <Route path="/resetPassword" element={<ResetPassword/>}/>
+        <Route path="/findId" element={<FindId />} />
+        <Route path="/findPassword" element={<FindPassword />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
         {/* <Route path="/sidebar" element={<Sidebar />} /> */}
-<Route path="/feeds" element={<Test2 />} />
-        
-        
+        <Route path="/feeds" element={<Test2 />} />
+        <Route path="/hostFeeds" element={<HostFeedPage />} />
+        <Route path="/host/createFeed" element={<HostFeedCreate />} />
+        <Route path="/hostFeed/:feedId" element={<HostFeedDetail />} />
+
+
         <Route path="/scrapList" element={<ScrapList />} />
-        
+
         <Route path="/join" element={<UserJoin />} />
         <Route path="/joinCategory" element={<UserJoinCategory />} />
         <Route path="/joinSuccess" element={<UserJoinSuccess />} />
@@ -141,13 +146,13 @@ function App() {
         <Route path="/classRingReviewList/:hostId" element={<ClassRingReviewList />} />
         <Route path="/noticeList" element={<NoticeList />} />
         <Route path="/notice/:noticeId" element={<NoticeDetail />} />
-        
+
         {/* 로그인한 유저 /user/~~~ */}
         <Route path="/user/classPayment/:classId/:selectedCalendarId" element={<ClassPayment />} />
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
-        <Route path="/user/logout"/>
-        <Route exact path="/user/chat" element={<GatheringChat />}/>
+        <Route path="/user/logout" />
+        <Route exact path="/user/chat" element={<GatheringChat />} />
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
@@ -167,7 +172,7 @@ function App() {
         <Route path="/user/mypage/myFeed" element={<MyFeed />} />
         <Route path="/user/mypage/myProfile" element={<MyProfilePage />} />
         <Route path="/user/mypage/myScraps" element={<MyScrapList />} />
-        
+
 
 
         {/* 강사 /host/~~~~~ */}
@@ -186,7 +191,7 @@ function App() {
           <Route path="/host/detail/:classId/:calendarId" element={<ClassDetail />} />
           <Route path="/host/classReview" element={<ClassReview />} />
           <Route path="/host/classSettlement" element={<ClassSettlement />} />
-          <Route path="/host/classUpdate/:classId/:calendarId" element={<ClassUpdatePage/>}/>
+          <Route path="/host/classUpdate/:classId/:calendarId" element={<ClassUpdatePage />} />
         </Route>
 
         {/* 1차 로그인 화면  */}

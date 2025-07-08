@@ -16,6 +16,7 @@
 }
 
 .KYM-detail-container .KYM-detail-image {
+  position: relative;
   width: 60%;
   background: #000;
   display: flex;
@@ -34,19 +35,34 @@
 .KYM-detail-container .KYM-image-nav {
   position: absolute;
   top: 50%;
-  background: rgba(255, 255, 255, 0.6);
-  border: none;
-  font-size: 24px;
+  transform: translateY(-50%);
+  background: #fff;
+  border: 1px solid #FFB22C;
+  color: #FFB22C;
+  font-size: 20px;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 8px 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background 0.2s, color 0.2s;
+  opacity: 0;
+  pointer-events: none;
+}
+.KYM-detail-container .KYM-detail-image:hover .KYM-image-nav {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .KYM-detail-container .KYM-image-nav.left {
-  left: 8px;
+  left: 12px;
 }
 
 .KYM-detail-container .KYM-image-nav.right {
-  right: 8px;
+  right: 12px;
+}
+.KYM-detail-container .KYM-image-nav:hover {
+  background: #FFB22C;
+  color: #fff;
 }
 
 .KYM-detail-container .KYM-image-dots {
@@ -63,7 +79,7 @@
 }
 
 .KYM-detail-container .dot.active {
-  color: #fff;
+  color: #FFB22C;
 }
 
 .KYM-detail-container .KYM-detail-side {

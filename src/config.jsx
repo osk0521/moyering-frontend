@@ -15,7 +15,7 @@ export const myAxios = (token,setToken) => {
 
    instance.interceptors.response.use(
       (response)=>{ 
-         console.log(response)
+         // console.log(response)
          if(response.headers.authorization){
             setToken(response.headers.authorization)
          }

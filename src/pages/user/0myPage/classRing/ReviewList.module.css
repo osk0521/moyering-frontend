@@ -187,7 +187,6 @@
 .starDisplay {
   display: flex;
   gap: 0.3rem;
-  font-size: 1.6rem;
   margin-bottom: 0.5rem;
 }
 .reviewUploadRow {
@@ -264,4 +263,8 @@
   display: flex;
   justify-content: center; /* 가로 중앙 */
   align-items: center;   
+}
+.tabDiv {
+    display: flex;
+    justify-content: space-between;
 }

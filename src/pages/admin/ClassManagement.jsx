@@ -147,7 +147,6 @@ const ClassManagement = () => {
       {/* 검색 및 필터 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">
-          <span className="search-iconHY">🔍</span>
           <input
             type="text"
             placeholder="클래스명, 강사명, 강사 ID 검색"
@@ -204,6 +203,7 @@ const ClassManagement = () => {
               <th>등록 최대 인원</th>
               <th>개설일</th>
               <th>상태</th>
+              <th>액션</th>
             </tr>
           </thead>
           <tbody>
@@ -226,6 +226,11 @@ const ClassManagement = () => {
                 <td>
                   <span className={`status-badgeHY ${getStatusClass(item.processStatus)}`}>{item.processStatus}</span>
                 </td>
+                {/* <td className = "actionHY">
+                  {(item.status)} */}
+
+
+                {/* </td> */}
               </tr>
             ))}
           </tbody>

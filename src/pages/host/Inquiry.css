@@ -42,14 +42,12 @@
   border-radius: 4px;
   font-size: 0.95rem;
   background-color: #f9f9f9;
-}
-
-.KHJ-inquiry-input {
   width: 250px;
+
 }
 
 .KHJ-inquiry-btn {
-  padding: 8px 16px;
+  padding: 8px 30px;
   background-color: #ffbf00;
   color: white;
   border: none;
@@ -131,7 +129,7 @@
   flex-direction: column;
   gap: 12px;
   margin-top: 10px;
-  width: 100%;
+  width: 90%;
 }
 
 .KHJ-reply-textarea {
@@ -153,7 +151,7 @@
 }
 
 .KHJ-reply-form button {
-  width: 100%;
+  width: 15%;
   align-self: flex-end;
   background-color: #ffbf00;
   color: white;

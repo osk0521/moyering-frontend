@@ -122,6 +122,29 @@ const ClassReview = () => {
     }
   };
 
+  const handleStartDateChange = (e) => {
+    const newStart = e.target.value;
+    if (endDate && newStart > endDate) {
+      alert("시작 날짜는 종료 날짜보다 늦을 수 없습니다.");
+      return;
+    }
+    setStartDate(newStart);
+  };
+
+  const handleEndDateChange = (e) => {
+    const newEnd = e.target.value;
+    if (startDate && newEnd < startDate) {
+      alert("종료 날짜는 시작 날짜보다 빠를 수 없습니다.");
+      return;
+    }
+    setEndDate(newEnd);
+  };
+
+
+  useEffect(() => {
+    handleSearch();
+  }, [replyStatus, searchQuery, startDate, endDate])
+
   return (
     <div className="KHJ-review-class-container">
       <div className="KHJ-review-class-search-area">
@@ -140,9 +163,9 @@ const ClassReview = () => {
 
         <div className="KHJ-review-class-form-row">
           <label className="KHJ-review-class-label">날짜</label>
-          <input className="KHJ-review-date" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          <input className="KHJ-review-date" type="date" value={startDate} onChange={handleStartDateChange} />
           <span className="KHJ-review-class-date-separator">~</span>
-          <input className="KHJ-review-date" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          <input className="KHJ-review-date" type="date" value={endDate} onChange={handleEndDateChange} />
         </div>
         <div className="KHJ-form-row">
           <label>답변 상태</label>
@@ -161,8 +184,8 @@ const ClassReview = () => {
               type="radio"
               name="status"
               value="답변대기"
-              checked={replyStatus === '답변대기'}
-              onChange={() => setReplyStatus('답변대기')}
+              checked={replyStatus === '0'}
+              onChange={() => setReplyStatus('0')}
             />
             답변대기
           </label>
@@ -171,8 +194,8 @@ const ClassReview = () => {
               type="radio"
               name="status"
               value="답변완료"
-              checked={replyStatus === '답변완료'}
-              onChange={() => setReplyStatus('답변완료')}
+              checked={replyStatus === '1'}
+              onChange={() => setReplyStatus('1')}
             />
             답변완료
           </label>
@@ -199,6 +222,7 @@ const ClassReview = () => {
 
             {/* 리뷰 내용 */}
             <div className="KHJ-review-content-wrapper">
+              <div style={{ float: 'left', padding: "0 2px 2px 2px", marginRight: "20px", color: "gray" }}>문의 <span style={{ color: "lightGray" }}>&nbsp;|</span></div>
               <div className="KHJ-review-content">
                 <p>{review.content}</p>
               </div>
@@ -207,15 +231,18 @@ const ClassReview = () => {
             {/* 답변 폼 */}
             {expandedIndex === index && (
               <div className="KHJ-reply-dropdown">
-                <form className="KHJ-review-reply-form" onSubmit={(e) => { e.preventDefault(); submit(); }}>
-                  <textarea
-                    className="KHJ-review-textarea"
-                    placeholder={review.revRegCotnent || "답변을 입력하세요"}
-                    value={revRegContent}
-                    onChange={handleReplyChange}
-                  />
-                  <button type="submit">{review.state === 0 ? '답변 저장' : '답변 수정'}</button>
-                </form>
+                <div className="KHJ-inquiry-content-wrapper">
+                  <div style={{ float: 'left', padding: "2px", marginRight: "20px", color: "gray" }}>답변 <span style={{ color: "lightGray" }}>&nbsp;|</span></div>
+                  <form className="KHJ-review-reply-form" onSubmit={(e) => { e.preventDefault(); submit(); }}>
+                    <textarea
+                      className="KHJ-review-textarea"
+                      placeholder={review.revRegCotnent || "답변을 입력하세요"}
+                      value={revRegContent}
+                      onChange={handleReplyChange}
+                    />
+                    <button type="submit">{review.state === 0 ? '답변 저장' : '답변 수정'}</button>
+                  </form>
+                </div>
               </div>
             )}
           </div>

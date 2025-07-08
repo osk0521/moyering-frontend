@@ -154,7 +154,7 @@
   flex-direction: column;
   gap: 12px;
   margin-top: 10px;
-  width: 100%;
+  width: 90%;
 }
 
 .KHJ-review-textarea {
@@ -176,7 +176,7 @@
 }
 
 .KHJ-review-reply-form button {
-  width: 100%;
+  width: 15%;
   align-self: flex-end;
   background-color: #ffbf00;
   color: white;
@@ -210,7 +210,7 @@
 }
 
 .KHJ-review-class-reset-btn {
-  padding: 8px 16px;
+  padding: 8px 30px;
   background-color: #ffbf00;
   color: white;
   border: none;

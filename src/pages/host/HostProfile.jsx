@@ -11,9 +11,9 @@ export default function ProfileManagement() {
   const [host, setHost] = useState({});
   const [text, setText] = useState('');
   const [initialHost, setInitialHost] = useState({});
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [idImage, setIdImage] = useState(null);
-  const [idImagePreview, setIdImagePreview] = useState('');
+  const [isUpdateProfile, setIsUpdateProfile] = useState(false);
+  const [profile, setProfile] = useState(initialHost.profile);
+  const [profilePreview, setProfilePreview] = useState('');
   const fileInputRef = useRef(null);
 
   const handleInputChange = (e) => {
@@ -22,21 +22,29 @@ export default function ProfileManagement() {
       ...prev,
       [name]: value
     }));
-    setIsUpdate(true);
+    const locHost = {...host, [name]:value}
+    setIsUpdateProfile(isUpdate(locHost));
   }
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setIdImage(file);
-      setIdImagePreview(URL.createObjectURL(file));
+      setProfile(file);
+      setProfilePreview(URL.createObjectURL(file));
       setHost((prev) => ({
         ...prev,
         profile: file.name
       }));
 
-      setIsUpdate(true);
+      const locHost = {...host, profile: file.name}
+      setIsUpdateProfile(isUpdate(locHost));
     }
+  }
+
+  const isUpdate = (locHost)=> {
+    console.log()
+    if(JSON.stringify(locHost)=== JSON.stringify(initialHost)) return false;
+    return true;
   }
 
   useEffect(() => {
@@ -50,22 +58,15 @@ export default function ProfileManagement() {
         setHost(res.data);
         setInitialHost(res.data);
         setText(res.data.intro || '');
+        //setIsUpdateProfile(false);
+        // console.log(isUpdateProfile);
+        // console.log("업데이트")
       })
       .catch(err => {
         console.log(err);
       })
   }, [token])
 
-  useEffect(() => {
-    const changed =
-      idImage !== initialHost.profile ||
-      host.name !== initialHost.name ||
-      host.email !== initialHost.email ||
-      host.publicTel !== initialHost.publicTel ||
-      (text.trim() !== (initialHost.intro || '').trim());  
-
-    setIsUpdate(changed);
-  }, [host, text, initialHost]);
 
   const params = {}
   params.hostId = user.hostId;
@@ -85,29 +86,29 @@ export default function ProfileManagement() {
     params.intro = text;
   }
 
-  const submit = () => {
+  const submitProfile = () => {
     const formData = new FormData();
     formData.append("hostId", user.hostId);
-    if (initialHost.profile != host.profile) {
-      formData.append("profile", idImage)
+    if (initialHost.profile !== host.profile) {
+      formData.append("profile", profile)
     }
-    if (initialHost.name != host.name) {
+    if (initialHost.name !== host.name) {
       formData.append("name", host.name)
     }
-    if (initialHost.publicTel != host.publicTel) {
+    if (initialHost.publicTel !== host.publicTel) {
       formData.append("publicTel", host.publicTel)
     }
-    if (initialHost.email != host.email) {
+    if (initialHost.email !== host.email) {
       formData.append("email", host.email)
     }
-    if (initialHost.intro != text) {
+    if (initialHost.intro !== text) {
       formData.append("intro", text)
     }
     myAxios(token).post("/host/hostProfileUpdate", formData)
       .then(res => {
         console.log(res);
         alert("변경사항을 저장하였습니다!")
-        setIsUpdate(false);
+        setIsUpdateProfile(false);
       })
       .catch(err => {
         console.log(err);
@@ -122,7 +123,11 @@ export default function ProfileManagement() {
         <form className="KHJ-host-profile-form">
           <div className="KHJ-host-profile-group KHJ-host-image-upload">
             <label>프로필 사진</label>
-            <img src={idImagePreview || `${url}/image?filename=${host.profile}` || ''} alt="프로필" className="KHJ-host-profile-image" name="profile" />
+            {host.profile == initialHost.profile?
+                <img src={`${url}/image?filename=${host.profile}` || ''} alt="프로필" className="KHJ-host-profile-image" name="profile" />:
+                <img src={profilePreview || ''} alt="프로필" className="KHJ-host-profile-image" name="profile" />
+             }
+            
             <div className="KHJ-host-file-box">
               <input type="file" placeholder="첨부파일" onChange={handleImageUpload} hidden name='profile' ref={fileInputRef} />
               <button type="button" onClick={() => fileInputRef.current.click()}>파일 선택</button>
@@ -132,7 +137,7 @@ export default function ProfileManagement() {
           <div className="KHJ-host-profile-group">
             <label>전화번호</label>
             <div className="KHJ-host-inline-input">
-              <input type="text" placeholder={host.tel} />
+              <input type="text" value={host.tel || ''} name="tel" onChange={handleInputChange}/>
             </div>
             <p className="KHJ-host-desc">
               실제 클래스를 운영하는 본인 연락처를 입력하세요.<br />
@@ -177,7 +182,7 @@ export default function ProfileManagement() {
           </div>
         </form>
       </div>
-      <ProfileFooter isUpdate={isUpdate} submit={submit} />
+      <ProfileFooter isUpdateProfile={isUpdateProfile} submitProfile={submitProfile} activeTab={'profile'} />
     </>
   );
 }

@@ -10,7 +10,7 @@ const SettlementInfo = () => {
   const user = useAtomValue(userAtom);
   const [host, setHost] = useState([]);
   const [initialHost, setInitialHost] = useState([]);
-  const [isUpdate, setIsUpdate] = useState(false);
+  const [isUpdateSettle, setIsUpdateSettle] = useState(false);
   const [idImage, setIdImage] = useState(null);
   const [idImagePreview, setIdImagePreview] = useState('');
   const fileInputRef = useRef(null);
@@ -21,7 +21,7 @@ const SettlementInfo = () => {
       ...prev,
       [name]: value
     }));
-    setIsUpdate(true);
+    setIsUpdateSettle(true);
   }
 
   const handleImageUpload = (e) => {
@@ -34,7 +34,7 @@ const SettlementInfo = () => {
         idCard: file.name
       }));
 
-      setIsUpdate(true);
+      setIsUpdateSettle(true);
     }
   }
 
@@ -45,7 +45,7 @@ const SettlementInfo = () => {
       ...prev,
       idCard: '',
     }))
-    setIsUpdate(true);
+    setIsUpdateSettle(true);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
@@ -75,7 +75,7 @@ const SettlementInfo = () => {
       host.accName !== initialHost.accName ||
       host.accNum !== initialHost.accNum ||
       (idImage !== null);
-    setIsUpdate(changed);
+    setIsUpdateSettle(changed);
   }, [host, initialHost])
 
 
@@ -85,19 +85,19 @@ const SettlementInfo = () => {
   // if (host.accNum) formData.append("accNum", host.accNum);
   // if (idImage) formData.append("idCard", idImage); // 파일 첨부
 
-  const submit = () => {
+  const submitAccount = () => {
     const formData = new FormData();
     formData.append("hostId", user.hostId);
-    if (initialHost.bankName != host.bankName) {
+    if (initialHost.bankName !== host.bankName) {
       formData.append("bankName", host.bankName);
     }
-    if (initialHost.accName != host.accName) {
+    if (initialHost.accName !== host.accName) {
       formData.append("accName", host.accName);
     }
-    if (initialHost.accNum != host.accNum) {
+    if (initialHost.accNum !== host.accNum) {
       formData.append("accNum", host.accNum);
     }
-    if (initialHost.idCard != idImage) {
+    if (initialHost.idCard !== idImage) {
       formData.append("idCard", idImage); // 파일
     }
     // if (host.bankName)
@@ -111,7 +111,7 @@ const SettlementInfo = () => {
       .then(res => {
         console.log(res);
         alert("변경사항을 저장하였습니다!");
-        setIsUpdate(false);
+        setIsUpdateSettle(false);
       })
       .catch(err => {
         console.log(err);
@@ -190,7 +190,7 @@ const SettlementInfo = () => {
           </p>
         </div>
       </div>
-      <ProfileFooter isUpdate={isUpdate} submit={submit} />
+      <ProfileFooter isUpdateSettle={isUpdateSettle} submitAccount={submitAccount} activeTab={'account'} />
     </div>
   );
 };

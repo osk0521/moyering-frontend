@@ -83,6 +83,24 @@ const ClassList = () => {
     fetchClassListWithDates(formattedStart, formattedEnd, 1);
   };
 
+  const handleStartDateChange = (e) => {
+    const newStart = e.target.value;
+    if (endDate && newStart > endDate) {
+      alert("시작일은 종료일보다 빠르거나 같아야 합니다.");
+      return;
+    }
+    setStartDate(newStart);
+  };
+
+  const handleEndDateChange = (e) => {
+    const newEnd = e.target.value;
+    if (startDate && newEnd < startDate) {
+      alert("종료일은 시작일보다 늦거나 같아야 합니다.");
+      return;
+    }
+    setEndDate(newEnd);
+  };
+
   const handleSearch = () => fetchClassList(1);
 
   const handleReset = () => {
@@ -114,9 +132,9 @@ const ClassList = () => {
           <div className="KHJ-date-range-wrapper">
             {/* <label>기간</label> */}
             <div className="KHJ-date-range" style={{ flexDirection: 'row' }} >
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+              <input type="date" value={startDate} onChange={handleStartDateChange } />
               <span className="KHJ-date-tilde">~</span>
-              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              <input type="date" value={endDate} onChange={handleEndDateChange } />
             </div>
           </div>
           <div className="KHJ-date-buttons">

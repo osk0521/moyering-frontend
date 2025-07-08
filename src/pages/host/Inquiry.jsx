@@ -63,7 +63,7 @@ const Inquiry = () => {
       .catch(err => console.error(err));
   };
 
-  const toggleExpand = (index,inquiryId) => {
+  const toggleExpand = (index, inquiryId) => {
     setExpandedIndex(expandedIndex === index ? null : index);
     setSelectedInquiryId(inquiryId);
   };
@@ -114,6 +114,25 @@ const Inquiry = () => {
     setReplyStatus('');
   };
 
+  const handleStartDateChange = (e) => {
+    const newStart = e.target.value;
+    if (endDate && newStart > endDate) {
+      alert("시작 날짜는 종료 날짜보다 늦을 수 없습니다.");
+      return;
+    }
+    setStartDate(newStart);
+  };
+
+  const handleEndDateChange = (e) => {
+    const newEnd = e.target.value;
+    if (startDate && newEnd < startDate) {
+      alert("종료 날짜는 시작 날짜보다 빠를 수 없습니다.");
+      return;
+    }
+    setEndDate(newEnd);
+  };
+
+
   useEffect(() => {
     handleSearch();
   }, [replyStatus, searchQuery, startDate, endDate]);
@@ -139,14 +158,14 @@ const Inquiry = () => {
           <input
             type="date"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            onChange={handleStartDateChange}
             className="KHJ-inquiry-input"
           />
           <span>~</span>
           <input
             type="date"
             value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            onChange={handleEndDateChange}
             className="KHJ-inquiry-input"
           />
         </div>
@@ -169,7 +188,7 @@ const Inquiry = () => {
               name="status"
               value="답변대기"
               checked={replyStatus === '0'}
-              onChange={() => setReplyStatus('답변대기')}
+              onChange={() => setReplyStatus('0')}
             />
             답변대기
           </label>
@@ -179,7 +198,7 @@ const Inquiry = () => {
               name="status"
               value="답변완료"
               checked={replyStatus === '1'}
-              onChange={() => setReplyStatus('답변완료')}
+              onChange={() => setReplyStatus('1')}
             />
             답변완료
           </label>
@@ -199,13 +218,14 @@ const Inquiry = () => {
 
         {inquiry.map((item, index) => (
           <div key={item.inquiryId} className="KHJ-inquiry-card">
-            <div className="KHJ-inquiry-summary" onClick={() => toggleExpand(index,item.inquiryId)}>
+            <div className="KHJ-inquiry-summary" onClick={() => toggleExpand(index, item.inquiryId)}>
               <p><strong>{item.className}</strong> | 수강생: {item.studentName} | 클래스명: {item.className} | 문의일: {item.inquiryDate}</p>
               <span>{item.state === 1 ? '답변완료' : '답변대기'}</span>
             </div>
 
             {/* 문의 내용 */}
             <div className="KHJ-inquiry-content-wrapper">
+              <div style={{ float: 'left', padding: "0 2px 2px 2px", marginRight: "20px", color: "gray" }}>문의 <span style={{ color: "lightGray" }}>&nbsp;|</span></div>
               <div className="KHJ-inquiry-content">
                 <p>{item.content}</p>
               </div>
@@ -214,16 +234,19 @@ const Inquiry = () => {
             {/* 답변 폼 */}
             {expandedIndex === index && (
               <div className="KHJ-reply-dropdown">
-                <form className="KHJ-reply-form" onSubmit={(e) => { e.preventDefault(); handleReplySubmit(); }}>
-                  <textarea
-                    className="KHJ-reply-textarea"
-                    placeholder={item.iqResContent || "답변을 입력하세요"}
-                    name="iqResContent"
-                    value={iqResContent}
-                    onChange={(e) => setIqResContent(e.target.value)}
-                  />
-                  <button type="submit">{item.state ? '답변수정' : '답변저장'}</button>
-                </form>
+                <div className="KHJ-inquiry-content-wrapper">
+                  <div style={{ float: 'left', padding: "2px", marginRight: "20px", color: "gray" }}>답변 <span style={{ color: "lightGray" }}>&nbsp;|</span></div>
+                  <form className="KHJ-reply-form" onSubmit={(e) => { e.preventDefault(); handleReplySubmit(); }} >
+                    <textarea
+                      className="KHJ-reply-textarea"
+                      placeholder={item.iqResContent || "답변을 입력하세요"}
+                      name="iqResContent"
+                      value={iqResContent}
+                      onChange={(e) => setIqResContent(e.target.value)}
+                    />
+                    <button type="submit">{item.state ? '수정' : '저장'}</button>
+                  </form>
+                </div>
               </div>
             )}
           </div>

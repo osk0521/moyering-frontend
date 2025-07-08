@@ -1,4 +1,4 @@
-/* StudentSearch.css */
+/* 전체 컨테이너 */
 .KHJ-class-search-container {
   background-color: #fff;
   padding: 20px;
@@ -9,21 +9,7 @@
   margin: 0 auto;
 }
 
-.KHJ-class-result-container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 900px;
-  margin: 20px auto;
-}
-
-.KHJ-class-results h4 {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
-
+/* 검색 영역 */
 .KHJ-search-section {
   margin-bottom: 20px;
 }
@@ -61,75 +47,72 @@
   background-color: #e0a800;
 }
 
-.KHJ-student-item {
-  background-color: #f9f9f9;
+/* 수강생 결과 영역 */
+.KHJ-class-result-container {
+  background-color: #fff;
   padding: 20px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.KHJ-student-info {
-  cursor: pointer;
-}
-
-.KHJ-student-details {
-  display: flex;
-  gap: 20px;
-  font-size: 0.9rem;
-  color: #777;
-}
-
-.KHJ-student-name {
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.KHJ-dropdown-classes {
-  background-color: #fafafa;
-  padding: 15px;
-  margin-top: 10px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
 }
 
-.KHJ-class-item {
-  background-color: white;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.KHJ-class-info {
-  font-size: 0.9rem;
-  color: #333;
-}
-
-.KHJ-attendance-button {
-  background-color: #28a745;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.KHJ-attendance-button:hover {
-  background-color: #218838;
-}
-
-.KHJ-subclass-table {
+/* 테이블 스타일 */
+.KHJ-inquiry-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
 }
 
+.KHJ-inquiry-table th,
+.KHJ-inquiry-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.KHJ-inquiry-table th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+}
+
+.KHJ-inquiry-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.KHJ-inquiry-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.KHJ-inquiry-summary-row td {
+  cursor: pointer;
+}
+
+.KHJ-inquiry-detail-row {
+  background-color: #fafafa;
+}
+
+.KHJ-inquiry-content-box {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.KHJ-inquiry-content-box table {
+  width: 100%;
+  margin-top: 10px;
+}
+
 .KHJ-subclass-table th,
 .KHJ-subclass-table td {
-  padding: 10px;
+  padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
+  font-size: 0.9rem;
 }
 
 .KHJ-subclass-table th {
@@ -138,6 +121,29 @@
   color: #333;
 }
 
-.KHJ-subclass-table tr:nth-child(even) {
-  background-color: #fafafa;
+/* 페이지네이션 스타일 */
+.KHJ-pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.KHJ-page-button {
+  padding: 6px 12px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.KHJ-page-button.active {
+  background-color: #ffbf00;
+  color: white;
+  border: none;
+}
+
+.KHJ-page-button:hover:not(.active) {
+  background-color: #f0f0f0;
 }

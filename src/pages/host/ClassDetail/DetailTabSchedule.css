@@ -21,11 +21,9 @@
   }
 }
 
-.KHJ-schedule-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 24px;
-  color: #333;
+.KHJ-coupon-title{
+  font-weight: bold !important;
+  margin-bottom: 12px !important;
 }
 
 .KHJ-schedule-section {

@@ -19,8 +19,6 @@ const DetailTabExtraInfo = ({ scheduleDetails, classData, registerValidator, isE
 
   return (
     <div className="KHJ-extra-info-container">
-      <h2 className="KHJ-section-title">클래스 부가정보</h2>
-
       {/* 스케줄 정보 */}
       {scheduleDetails.length > 0 ? (
         <section className="KHJ-schedule-block">

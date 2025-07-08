@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './MyWishlist.module.css';
 import { CiCalendar, CiLocationOn } from 'react-icons/ci';
-import { GoPeople } from 'react-icons/go';
-import { FaHeart } from 'react-icons/fa';
 import Header from "../../../common/Header";
 import Footer from "../../../../components/Footer";
 import Sidebar from '../common/Sidebar';
@@ -11,6 +9,7 @@ import { useSetAtom, useAtomValue, useAtom } from "jotai";
 import { myAxios,url } from "../../../../config";
 import { IoTimeOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import { GoHeart,GoHeartFill  } from "react-icons/go";
 
 
 export default function MyWishlist() {
@@ -71,6 +70,25 @@ export default function MyWishlist() {
     setPage(0);
     fetchWishlist();
   };
+
+  const handleHeart = async (e, item) => {
+    e.stopPropagation(); // 카드 클릭 막기
+
+    try {
+      if (item.type === 'class') {
+        await myAxios(token, setToken).post("/user/toggle-like", { classId: item.typeId });
+      } else if (item.type === 'gathering') {
+        await myAxios(token, setToken).post("/user/gather-toggle-like", { gatheringId: item.typeId });
+      }
+
+      // 프론트에서 해당 아이템 제거
+      setItems(prev => prev.filter(i => i.id !== item.id));
+    } catch (err) {
+      console.error("찜 해제 실패", err);
+      alert(err.response?.data?.message || "찜 해제 중 오류 발생");
+    }
+  };
+
   return (
     <>
       <Header />
@@ -134,7 +152,7 @@ export default function MyWishlist() {
                     <div className={styles.header}>
                       <h3 className={styles.title}>{item.title}</h3>
                     </div>
-                    { items.type === "classRing" ? (
+                    { item.type === "class" ? (
                       <>
                         <div className={styles.info}>
                         <CiCalendar /> [가장 빠른 수업일]  {item.date}
@@ -166,7 +184,10 @@ export default function MyWishlist() {
                     
                   </div>
                   <div className={styles.heart}>
-                    <FaHeart color="#f87171" size={25} />
+                    <GoHeartFill
+                      color="#ff5c5c" size={25}
+                      onClick={(e) => handleHeart(e, item)}
+                    />
                   </div>
                 </div>
               ))}

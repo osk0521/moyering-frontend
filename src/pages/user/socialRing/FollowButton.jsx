@@ -12,7 +12,7 @@ export default function FollowButton({ targetUserId, className, style }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    console.log('▶ FollowButton targetUserId:', targetUserId);
+    // console.log('▶ FollowButton targetUserId:', targetUserId);
 
     useEffect(() => {
         if (!token || !targetUserId) return;

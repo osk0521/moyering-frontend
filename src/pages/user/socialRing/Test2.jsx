@@ -25,13 +25,14 @@ export default function FeedPage2() {
     const [menuOpenId, setMenuOpenId] = useState(null);
     const [imageIndexes, setImageIndexes] = useState({});
     const [showCreateModal, setShowCreateModal] = useState(false);
-
+    const user = useAtomValue(userAtom)
 
     // 👉 피드
     const { data: feeds = [] } = useQuery({
         queryKey: ['feeds', sortType, token],
         queryFn: async () => {
             const res = await myAxios().get(`/socialing/feeds?sort=${sortType}`);
+            console.log(res.data)
             return res.data;
         },
         // enabled: !!token
@@ -41,7 +42,7 @@ export default function FeedPage2() {
     const { data: popularFeeds = [] } = useQuery({
         queryKey: ['popular'],
         queryFn: async () => {
-            const res = await myAxios().get(`/socialing/popular?size=10`);
+            const res = await myAxios().get(`/socialing/popular?size=12`);
             return res.data;
         }
     });
@@ -183,11 +184,13 @@ export default function FeedPage2() {
                                 <div className="KYM-post-card" key={feed.feedId}>
                                     <div className="KYM-post-header">
                                         <div className="KYM-user-info">
-                                            <img src={feed.writerProfile} alt="프로필" className="KYM-avatar" 
-                                            onClick={()=> navigate(`/userFeed/${feed.writerId}`)} style={{cursor: "pointer"}}/>
+                                            <img src={`${url}/iupload/${feed.writerProfile}`} alt="프로필" className="KYM-avatar"
+                                                onClick={() => navigate(`/userFeed/${feed.writerId}`)} style={{ cursor: "pointer" }} />
                                             <span className="KYM-nickname"
-                                            onClick={()=> navigate(`/userFeed/${feed.writerId}`)} style={{cursor: "pointer"}} >{feed.writerId}</span>
-                                            {feed.writerBadge && <span className="KYM-detail-badge">🏅</span>}
+                                                onClick={() => navigate(`/userFeed/${feed.writerId}`)} style={{ cursor: "pointer" }} >{feed.writerId}</span>
+                                            {feed.writerBadge &&
+                                                <img src={feed.writerBadgeImg} alt="대표 배지" className="KYM-detail-badge-img" />
+                                            }
 
                                             {/* 👍 팔로우 버튼 */}
                                             <FollowButton
@@ -204,6 +207,21 @@ export default function FeedPage2() {
                                         />
                                         {menuOpenId === feed.feedId && (
                                             <ul className="KYM-post-menu open">
+                                                {user?.id === feed.writerUserId && (
+                                                    <li onClick={async () => {
+                                                        try {
+                                                            await token && myAxios(token, setToken).delete(`/user/${feed.feedId}`);
+                                                            alert("삭제 완료!");
+                                                            queryClient.setQueryData(['feeds', sortType, token], oldData =>
+                                                                oldData?.filter(f => f.feedId !== feed.feedId)
+                                                            );
+                                                        } catch (e) {
+                                                            console.error(e);
+                                                            alert("삭제 실패");
+                                                        }
+                                                        setMenuOpenId(null);
+                                                    }}>삭제하기</li>
+                                                )}
                                                 <li onClick={() => {
                                                     console.log(`신고: ${feed.feedId}`);
                                                     setMenuOpenId(null);

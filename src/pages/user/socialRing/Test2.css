@@ -740,3 +740,9 @@
     transform: scale(1);
   }
 }
+.KYM-detail-badge-img {
+  width: 25px;
+  /* height: 20px; */
+  margin-left: 6px;
+  vertical-align: middle;
+}

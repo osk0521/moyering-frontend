@@ -1,16 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './ClassCard.module.css';
 import { MdCalendarMonth } from "react-icons/md";
-import { url } from '../config';
-import { useAtomValue } from "jotai";
+import { url,myAxios  } from '../config';
+import { useAtomValue ,useAtom,useSetAtom } from "jotai";
 import { classLikesAtom } from "../atom/classAtom";
-import { FaRegHeart } from "react-icons/fa";
 import { GoHeart,GoHeartFill  } from "react-icons/go";
+import { tokenAtom } from "../atoms";
+
 
 export default function ClassCard({ classInfo, onClick  }) {
-    const classLikes = useAtomValue(classLikesAtom);
+  if (!classInfo) return null;
+  const classLikes = useAtomValue(classLikesAtom);
+  const [token,setToken] = useAtom(tokenAtom);
+  const classId = classInfo.classId;
 
-    if (!classInfo) return null;
+  //찜하기
+  const [isLiked, setIsLiked] = useState(false);
+  useEffect(() => {
+    
+    const liked = classLikes.some((like) => like.classId ===  Number(classId));
+    setIsLiked(liked);
+  }, [classLikes, classId]);
+
+  const handleHeart = async (e) => {
+    e.stopPropagation(); // 카드 클릭 이벤트 막기
+
+    try {
+      await myAxios(token, setToken).post("/user/toggle-like", { classId });
+
+      // 찜 상태 토글
+      setIsLiked(prev => !prev);
+
+    } catch (err) {
+      console.error("좋아요 실패", err);
+      alert(err.response?.data?.message || "찜하기 처리 중 오류 발생");
+    }
+  };
   return (
     <div className={styles.card} onClick={onClick}>
       <div
@@ -21,10 +46,16 @@ export default function ClassCard({ classInfo, onClick  }) {
               backgroundPosition: "center",
             }}
       >        
-        {classLikes.some(like => like.classId === classInfo.classId) ? (
-          <GoHeartFill  className={styles.likeIcon1} />
+        {isLiked ? (
+          <GoHeartFill
+            className={styles.likeIcon1}
+            onClick={handleHeart}
+          />
         ) : (
-          <GoHeart  className={styles.likeIcon2} />
+          <GoHeart
+            className={styles.likeIcon2}
+            onClick={handleHeart}
+          />
         )}
       </div>
       <div className={styles.cardContent}>

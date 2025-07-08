@@ -35,7 +35,7 @@ const ClassRegisterPage = () => {
       // hostId:user.hostId,
       category1: '',
       category2: '',
-      subCategoryId:'',
+      subCategoryId: '',
       name: '',
       locName: '',
       addr: '',
@@ -141,10 +141,10 @@ const ClassRegisterPage = () => {
     let formData = new FormData();
     formData.append("hostId", user.hostId)
     formData.append("addr", reqData.addr)
-    formData.append("detailAddr",reqData.detailAddr)
+    formData.append("detailAddr", reqData.detailAddr)
     formData.append("category1", reqData.category1)
     formData.append("category2", reqData.category2)
-    formData.append("subCategoryId",parseInt(reqData.subCategoryId))
+    formData.append("subCategoryId", parseInt(reqData.subCategoryId))
     formData.append("caution", reqData.caution)
     console.log("formData price" + reqData.price);
     formData.append("price", reqData.price);
@@ -188,6 +188,7 @@ const ClassRegisterPage = () => {
         console.log(err);
       })
   }
+
 
   // const filterFilledFields = (data) => {
   //   const result = {};

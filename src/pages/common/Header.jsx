@@ -11,6 +11,7 @@ import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { tokenAtom, userAtom, alarmsAtom } from "../../atoms";
 import { myAxios, url } from "../../config";
 import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
+import useFetchUserGatherLikes from "../../hooks/common/useFetchUserGatherLikes";
 
 export default function Header() {
   const user = useAtomValue(userAtom);
@@ -19,7 +20,14 @@ export default function Header() {
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
+  const [query,setQuery] = useState('');
   useFetchUserClassLikes();
+  useFetchUserGatherLikes();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if(!query.trim()) return;
+    navigate(`/mainSearch?query=${encodeURIComponent(query)}`);
+  }
 
   // Dropdown 상태 관리
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
@@ -263,10 +271,12 @@ export default function Header() {
               <div className="Header_search-container_osk">
                 <Input
                   type="text"
+                  value={query}
+                  onChange={(e)=>setQuery(e.target.value)}
                   placeholder="다양한 컨텐츠를 찾아보세요!"
                   className="Header_search-input_osk"
                 />
-                <Button className="Header_search-button_osk">
+                <Button className="Header_search-button_osk" onClick={handleSearch}>
                   <CiSearch size={20} />
                 </Button>
               </div>

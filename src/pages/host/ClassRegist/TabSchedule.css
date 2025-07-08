@@ -242,6 +242,7 @@ hr {
 }
 
 .add-entry {
+  width: 15%;
   margin-top: 10px;
   cursor: pointer;
   color: #007bff;

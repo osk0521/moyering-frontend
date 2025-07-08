@@ -10,7 +10,7 @@ import {
   MdPeople, 
   MdSchool, 
   MdPayment, 
-  MdAccountBalance, 
+  MdAccountBalance,  
   MdLocalOffer, 
   MdEmojiEvents, 
   MdImage, 

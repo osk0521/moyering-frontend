@@ -1,36 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './ClassSettlement.css'
 import React from 'react'; // 이 한 줄만 추가!
+import { tokenAtom, userAtom } from './../../atoms';
+import { useAtom, useAtomValue } from 'jotai';
+import { myAxios } from './../../config';
 
 const ClassSettlement = () => {
-     const [startDate, setStartDate] = useState('');
+  const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [dateFilter, setDateFilter] = useState('');
+  const [token, setToken] = useAtom(tokenAtom);
+  const user = useAtomValue(userAtom);
+  const [settlementList, setSettlementList] = useState([]);
+  const [pageInfo, setPageInfo] = useState([]);
 
-  const [settlements, setSettlements] = useState([
-    {
-      id: 1,
-      teacher: '홍길동',
-      content: '수강신청',
-      amount: 15000,
-      feeRate: 0.1,
-      date: '2025.05.05',
-      status: '정산완료',
-    },
-    {
-      id: 2,
-      teacher: '황보길동',
-      content: '수강신청',
-      amount: 15000,
-      feeRate: 0.1,
-      date: '2025.05.05',
-      status: '미정산',
-    },
-  ]);
-
-  const handleSearch = () => {
-    console.log('검색 실행', startDate, endDate);
-  };
+  useEffect(() => {
+    const params = {
+      hostId: user.hostId,
+      page: 0,
+      size: 10,
+    }
+    token && myAxios(token, setToken).post("/host/settlementList", params)
+      .then(res => {
+        console.log(res);
+        setSettlementList(res.data.content);
+        setPageInfo(res.data.pageInfo);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, [token])
 
   const handleDateFilterClick = (label) => {
     const today = new Date();
@@ -65,12 +64,33 @@ const ClassSettlement = () => {
     setDateFilter(label);
   };
 
-  const totalAmount = settlements
-    .filter((s) => s.status === '정산완료')
+  const totalAmount = settlementList
+    .filter((s) => s.settlementStatus === 'CP')
     .reduce((acc, cur) => acc + cur.amount, 0);
 
+
+  const handleSearch = () => {
+    const params = {
+      hostId: user.hostId,
+      startDate,
+      endDate,
+      page: 0,
+      size: 10,
+    }
+
+    console.log("전송데이터",JSON.stringify(params,null,2));
+    token && myAxios(token, setToken).post("/host/settlementList", params)
+    .then(res=>{
+      setSettlementList(res.data.content);
+      setPageInfo(res.data.pageInfo);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  };
+
   return (
-       <div className="KHJ-class-settlement-container">
+    <div className="KHJ-class-settlement-container">
       <div className="KHJ-settlement-search">
         <h3>정산 계획 조회</h3>
         <div className="KHJ-search-row">
@@ -95,7 +115,7 @@ const ClassSettlement = () => {
 
       <div className="KHJ-settlement-result">
         <div className="KHJ-settlement-header">
-          <h4>총 건수 : {settlements.length}</h4>
+          <h4>총 건수 : {settlementList.length}</h4>
           <span>총 정산된 금액 : {totalAmount.toLocaleString()}</span>
         </div>
 
@@ -103,8 +123,6 @@ const ClassSettlement = () => {
           <thead>
             <tr>
               <th>No.</th>
-              <th>수강생</th>
-              <th>정산 내용</th>
               <th>정산 금액</th>
               <th>수수료</th>
               <th>등록일</th>
@@ -113,20 +131,20 @@ const ClassSettlement = () => {
             </tr>
           </thead>
           <tbody>
-            {settlements.map((item, index) => (
+            {settlementList.map((item, index) => (
               <tr key={item.id}>
                 <td>{index + 1}</td>
-                <td>{item.teacher}</td>
-                <td>{item.content}</td>
-                <td>{item.amount.toLocaleString()}</td>
-                <td>{(item.feeRate * 100).toFixed(0)}%</td>
-                <td>{item.date}</td>
-                <td>{item.status}</td>
+                <td>{item.settlementAmount}</td>
+                <td>10%</td>
+                <td>{item.settlementDate}</td>
+                {item.settlementStatus === 'WT' ? <td>정산대기</td> :
+                  item.settlementStatus === 'RQ' ? <td>정산요청완료</td> :
+                    <td>정산완료</td>}
                 <td>
-                  {item.status === '미정산' ? (
+                  {item.settlementStatus === 'WT' ? (
                     <button className="KHJ-settle-btn">정산 요청</button>
                   ) : (
-                    <button className="KHJ-cancel-btn" disabled>정산 완료</button>
+                    <button className="KHJ-cancel-btn" disabled>정산 요청</button>
                   )}
                 </td>
               </tr>
@@ -139,6 +157,54 @@ const ClassSettlement = () => {
           정산은 매일 05:00시에 진행되며,<br />
           <strong>수업 7일 후에도 정산이 완료되지 않았다면 정산요청 버튼을 눌러주세요!</strong>
         </div>
+        {pageInfo.allPage > 1 && (
+          <div className="KHJ-pagination">
+            {(() => {
+              const totalPage = pageInfo.allPage;
+              const currentPage = pageInfo.curPage;
+              const maxButtons = 5;
+
+              let start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+              let end = start + maxButtons - 1;
+
+              if (end > totalPage) {
+                end = totalPage;
+                start = Math.max(1, end - maxButtons + 1);
+              }
+
+              const pages = [];
+
+              if (currentPage > 1) {
+                pages.push(
+                  <button key="prev" onClick={() => fetchClassList(currentPage - 1)} className="KHJ-page-button">
+                    ◀ 이전
+                  </button>
+                );
+              }
+
+              for (let i = start; i <= end; i++) {
+                pages.push(
+                  <button
+                    key={i}
+                    onClick={() => fetchClassList(i)}
+                    className={`KHJ-page-button ${i === currentPage ? 'active' : ''}`}
+                  >
+                    {i}
+                  </button>
+                );
+              }
+
+              if (currentPage < totalPage) {
+                pages.push(
+                  <button key="next" onClick={() => fetchClassList(currentPage + 1)} className="KHJ-page-button">
+                    다음 ▶
+                  </button>
+                );
+              }
+              return pages;
+            })()}
+          </div>
+        )}
       </div>
     </div>
   );

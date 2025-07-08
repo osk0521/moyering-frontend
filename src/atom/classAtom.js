@@ -56,3 +56,5 @@ export const allReviewListAtom = atom([]);
 
 //로그인한 사용자의 좋아요 리스트
 export const classLikesAtom  = atom([]);
+//게더링 좋아요 리스트
+export const gatheringLikesAtom  = atom([]);

@@ -3,6 +3,9 @@ import './Sidebar.css';
 // import badgeIcon from './icons/badge.jpg';
 // import avatarImg from '../icons/avatar.jpg'; // 기본 아바타 이미지
 import { useNavigate } from "react-router";
+import { tokenAtom, userAtom } from "../../../../atoms";
+import { myAxios ,url } from "../../../../config";
+import { useSetAtom, useAtomValue, useAtom } from "jotai";
 
 // 더미 유저 데이터
 const dummyUser = {
@@ -17,9 +20,10 @@ const dummyUser = {
 
 // user prop 예시:
 // { username: 'USER', avatarUrl: '...', stats: { posts:0, followers:0, following:0 } }
-export default function Sidebar({ user = dummyUser }) {
+export default function Sidebar() {
     const navigate = useNavigate();
-    
+    const [token,setToken] = useAtom(tokenAtom);
+    const user = useAtomValue(userAtom);
     return (
         <aside className="KYM-sidebar">
             {/* 회원정보 섹션 */}
@@ -28,7 +32,7 @@ export default function Sidebar({ user = dummyUser }) {
                 <div className="KYM-member-box">
                     <img
                         className="KYM-member-avatar"
-                        src={user.avatarUrl}
+                        src={`${url}/image?filename=${user?.profile}`}
                         alt="아바타"
                     />
                     <div className="KYM-member-text">
@@ -36,11 +40,11 @@ export default function Sidebar({ user = dummyUser }) {
                             <strong className="KYM-member-name">{user.username}</strong>
                             {/* <img className="KYM-member-badge" src={badgeIcon} alt="배지" /> */}
                         </div>
-                        <div className="KYM-member-stats">
+                        {/* <div className="KYM-member-stats">
                             <span>게시물 {user.stats.posts}</span>
                             <span>팔로워 {user.stats.followers}</span>
                             <span>팔로잉 {user.stats.following}</span>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="KYM-member-actions">
@@ -75,9 +79,7 @@ export default function Sidebar({ user = dummyUser }) {
                         <li><a href="/user/mypage/myWishlist">찜목록</a></li>
                         <li><a href="/user/mypage/myCouponList">마이 쿠폰</a></li>
                         <li><a href="/user/mypage/myAlarmList">알림 내역</a></li>
-                        <li><a href="#">포인트 내역</a></li>
                         <li><a href="/user/mypage/myProfile">내 정보 수정</a></li>
-                        <li><a href="#">고객센터</a></li>
                     </ul>
                 </nav>
             </section>

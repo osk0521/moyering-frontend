@@ -19,6 +19,7 @@ export default function MyFeed() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const menuRef = useRef(null);
+  const [likeCounts,setLikeCounts] = useState({})
 
   // 👉 좋아요한 feedId 리스트
   const { data: likedIds = [] } = useQuery({
@@ -50,6 +51,18 @@ export default function MyFeed() {
     enabled: !!token
   });
 
+  useEffect(()=>{
+    token&&myAxios(token,setToken).get(`/socialing/feeds/myFeedsLikeCount?userId=${user.id}`)
+    .then(res=>{
+      console.log("좋아요수")
+      console.log(res.data);
+      setLikeCounts(res.data);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  },[token])
+
   // 👉 좋아요 여부 Set
   const likedFeedIdSet = useMemo(() => new Set(likedIds), [likedIds]);
 
@@ -57,9 +70,10 @@ export default function MyFeed() {
   const feedsWithLikeStatus = useMemo(() => {
     return feedList.map(feed => ({
       ...feed,
-      likedByUser: likedFeedIdSet.has(Number(feed.feedId))
+      likedByUser: likedFeedIdSet.has(Number(feed.feedId)),
+      likeCount : likeCounts[feed.feedId] || 0,
     }));
-  }, [feedList, likedFeedIdSet]);
+  }, [feedList, likedFeedIdSet,likeCounts]);
 
   // 👉 좋아요 mutation
   const likeMutation = useMutation({
@@ -152,30 +166,34 @@ export default function MyFeed() {
                       <img src={`${url}/iupload/${user.profile}`} alt='프로필' className="KYM-myfeed-avatar" />
                       <span className="KYM-myfeed-nickname">{feed.writerId}</span>
                       {feed.writerBadgeImg &&
-                        <img src={feed.writerBadgeImg} alt="대표 배지" className="KYM-myfeed-badge" />
+                        <img src={ed.writerBadgeImg} alt="대표 배지" className="KYM-myfeed-badge" />
                       }
                       <span className="KYM-myfeed-date">{feed.createdAt}</span>
                     </div>
-                    <img src={moreIcon} alt="더보기" className="KYM-more-icon"
-                      onClick={() => setMenuOpenId(menuOpenId === feed.feedId ? null : feed.feedId)}
-                      style={{ cursor: "pointer" }}
-                    />
-                    {menuOpenId === feed.feedId && (
-                      <ul ref={menuRef} className="KYM-post-menu open">
-                        <li onClick={() => { handleDelete(feed.feedId); setMenuOpenId(null); }}>삭제하기</li>
-                        <li onClick={() => { console.log(`신고: ${feed.feedId}`); setMenuOpenId(null); }}>신고하기</li>
-                        <li onClick={() => { toggleScrap(feed); setMenuOpenId(null); }}>
-                          {feed.scrapped ? '스크랩 해제' : '스크랩하기'}
-                        </li>
-                        <li onClick={() => { navigate(`/feed/${feed.feedId}`); setMenuOpenId(null); }}>게시물로 이동</li>
-                        <li onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.origin}/feed/${feed.feedId}`);
-                          alert("링크 복사됨");
-                          setMenuOpenId(null);
-                        }}>링크복사</li>
-                        <li onClick={() => { handleShare(feed); setMenuOpenId(null); }}>공유하기</li>
-                      </ul>
-                    )}
+                    <div className="KYM-post-wrapper">
+                      <img
+                        src={moreIcon}
+                        alt="더보기"
+                        className="KYM-more-icon"
+                        onClick={() => setMenuOpenId(menuOpenId === feed.feedId ? null : feed.feedId)}
+                      />
+                      {menuOpenId === feed.feedId && (
+                        <ul ref={menuRef} className="KYM-post-menu open">
+                          <li onClick={() => { handleDelete(feed.feedId); setMenuOpenId(null); }}>삭제하기</li>
+                          <li onClick={() => { console.log(`신고: ${feed.feedId}`); setMenuOpenId(null); }}>신고하기</li>
+                          <li onClick={() => { toggleScrap(feed); setMenuOpenId(null); }}>
+                            {feed.scrapped ? '스크랩 해제' : '스크랩하기'}
+                          </li>
+                          <li onClick={() => { navigate(`/feed/${feed.feedId}`); setMenuOpenId(null); }}>게시물로 이동</li>
+                          <li onClick={() => {
+                            navigator.clipboard.writeText(`${window.location.origin}/feed/${feed.feedId}`);
+                            alert("링크 복사됨");
+                            setMenuOpenId(null);
+                          }}>링크복사</li>
+                          <li onClick={() => { handleShare(feed); setMenuOpenId(null); }}>공유하기</li>
+                        </ul>
+                      )}
+                    </div>
                   </div>
 
                   <div className="KYM-myfeed-image-wrapper"

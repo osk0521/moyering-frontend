@@ -8,7 +8,9 @@
   font-family: Arial, sans-serif;
 }
 
-
+.KYM-scrap-sidebar{
+    margin-top: -40px;
+}
 
 /* ─── 제목 ─── */
 .KYM-feed-container .KYM-feed-title h2 {
@@ -439,18 +441,20 @@
   z-index: 1000;
 }
 
-/* FeedPage.css 맨 아래에 추가 */
-.KYM-feed-container .KYM-feed-main {
+.KYM-feed-main {
   display: flex;
-  /* 기존 flex 유지 */
-  width: fit-content;
-  /* 콘텐츠(그리드+사이드바) 너비만큼만 */
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px; /* 사이드바와 게시물 사이 간격 */
+  max-width: 1200px;
   margin: 0 auto;
-  /* 부모 안에서 블록 중앙 정렬 */
-  gap: 20px;
-  /* 기존 간격 유지 */
+  padding: 20px;
 }
 
+.KYM-feed-container {
+  flex: 1; /* 남는 공간 모두 차지 */
+  padding: 0;
+}
 /* 기본 ul/KYM-popular-list 스타일 유지 */
 
 /* enter */

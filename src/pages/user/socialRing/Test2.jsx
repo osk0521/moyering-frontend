@@ -25,13 +25,14 @@ export default function FeedPage2() {
     const [menuOpenId, setMenuOpenId] = useState(null);
     const [imageIndexes, setImageIndexes] = useState({});
     const [showCreateModal, setShowCreateModal] = useState(false);
-
+    const user = useAtomValue(userAtom)
 
     // 👉 피드
     const { data: feeds = [] } = useQuery({
         queryKey: ['feeds', sortType, token],
         queryFn: async () => {
             const res = await myAxios().get(`/socialing/feeds?sort=${sortType}`);
+            console.log(res.data)
             return res.data;
         },
         // enabled: !!token
@@ -41,7 +42,7 @@ export default function FeedPage2() {
     const { data: popularFeeds = [] } = useQuery({
         queryKey: ['popular'],
         queryFn: async () => {
-            const res = await myAxios().get(`/socialing/popular?size=10`);
+            const res = await myAxios().get(`/socialing/popular?size=12`);
             return res.data;
         }
     });
@@ -152,13 +153,26 @@ export default function FeedPage2() {
         }, 5000);
         return () => clearInterval(interval);
     }, [totalPages]);
+const menuRef = useRef(null);
 
+useEffect(() => {
+    const handleClickOutside = (event) => {
+        // 메뉴가 열려있고, 메뉴 영역(menuRef.current) 밖을 클릭하면 닫기
+        if (menuOpenId && menuRef.current && !menuRef.current.contains(event.target)) {
+            setMenuOpenId(null);
+        }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, [menuOpenId]);
 
     return (
         <>
             <Header />
             <div className="KYM-feed-container">
-                <div className="KYM-feed-title"><h2>커뮤니티 피드</h2></div>
+                <div className="KYM-feed-title"><h2>소셜링</h2></div>
 
                 <div className="KYM-feed-filters">
                     {['전체', '좋아요순', '댓글순', '팔로워'].map((txt, idx) => {
@@ -183,11 +197,13 @@ export default function FeedPage2() {
                                 <div className="KYM-post-card" key={feed.feedId}>
                                     <div className="KYM-post-header">
                                         <div className="KYM-user-info">
-                                            <img src={feed.writerProfile} alt="프로필" className="KYM-avatar" 
-                                            onClick={()=> navigate(`/userFeed/${feed.writerId}`)} style={{cursor: "pointer"}}/>
+                                            <img src={`${url}/iupload/${feed.writerProfile}`} alt="프로필" className="KYM-avatar"
+                                                onClick={() => navigate(`/userFeed/${feed.writerId}`)} style={{ cursor: "pointer" }} />
                                             <span className="KYM-nickname"
-                                            onClick={()=> navigate(`/userFeed/${feed.writerId}`)} style={{cursor: "pointer"}} >{feed.writerId}</span>
-                                            {feed.writerBadge && <span className="KYM-detail-badge">🏅</span>}
+                                                onClick={() => navigate(`/userFeed/${feed.writerId}`)} style={{ cursor: "pointer" }} >{feed.writerId}</span>
+                                            {feed.writerBadge &&
+                                                <img src={feed.writerBadgeImg} alt="대표 배지" className="KYM-detail-badge-img" />
+                                            }
 
                                             {/* 👍 팔로우 버튼 */}
                                             <FollowButton
@@ -203,7 +219,22 @@ export default function FeedPage2() {
                                             onClick={() => setMenuOpenId(menuOpenId === feed.feedId ? null : feed.feedId)}
                                         />
                                         {menuOpenId === feed.feedId && (
-                                            <ul className="KYM-post-menu open">
+                                            <ul ref={menuRef} className="KYM-post-menu open">
+                                                {user?.id === feed.writerUserId && (
+                                                    <li onClick={async () => {
+                                                        try {
+                                                            await token && myAxios(token, setToken).delete(`/user/${feed.feedId}`);
+                                                            alert("삭제 완료!");
+                                                            queryClient.setQueryData(['feeds', sortType, token], oldData =>
+                                                                oldData?.filter(f => f.feedId !== feed.feedId)
+                                                            );
+                                                        } catch (e) {
+                                                            console.error(e);
+                                                            alert("삭제 실패");
+                                                        }
+                                                        setMenuOpenId(null);
+                                                    }}>삭제하기</li>
+                                                )}
                                                 <li onClick={() => {
                                                     console.log(`신고: ${feed.feedId}`);
                                                     setMenuOpenId(null);
@@ -235,18 +266,24 @@ export default function FeedPage2() {
                                         )}
                                     </div>
 
-                                    <div className="KYM-image-slider">
+                                    <div className="KYM-image-slider" onClick={() => navigate(`/feed/${feed.feedId}`)} style={{ cursor: "pointer" }}>
                                         <img src={`${url}/iupload/${images[currentIdx]}`} alt="피드" className="KYM-post-image" />
                                         {images.length > 1 && (
                                             <>
                                                 <button className="KYM-image-nav left"
-                                                    onClick={() => setImageIndexes(prev => ({
-                                                        ...prev, [feed.feedId]: (currentIdx - 1 + images.length) % images.length
-                                                    }))}>◀</button>
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // ← 중요: 이미지 슬라이더만 동작
+                                                        setImageIndexes(prev => ({
+                                                            ...prev, [feed.feedId]: (currentIdx - 1 + images.length) % images.length
+                                                        }));
+                                                    }}>◀</button>
                                                 <button className="KYM-image-nav right"
-                                                    onClick={() => setImageIndexes(prev => ({
-                                                        ...prev, [feed.feedId]: (currentIdx + 1) % images.length
-                                                    }))}>▶</button>
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setImageIndexes(prev => ({
+                                                            ...prev, [feed.feedId]: (currentIdx + 1) % images.length
+                                                        }));
+                                                    }}>▶</button>
                                             </>
                                         )}
                                     </div>

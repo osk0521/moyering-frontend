@@ -197,7 +197,6 @@ const CouponManagement = () => {
       {/* 검색 및 필터 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">
-          <span className="search-iconHY">🔍</span>
           <input
             type="text"
             placeholder="쿠폰코드 검색"

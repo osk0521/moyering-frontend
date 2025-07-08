@@ -18,7 +18,9 @@
   color: #2ac084;
 }
 
-
+.tableHY tr> th:first-child{
+  width: 55px;
+}
 
 /* 액션 버튼 기본 스타일 */
 .action-btnHY {

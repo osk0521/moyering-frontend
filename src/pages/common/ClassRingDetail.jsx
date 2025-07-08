@@ -183,7 +183,7 @@ export default function ClassRingDetail() {
         alert(err.response?.data?.message || "쿠폰 좋아요 중 오류 발생");
       }
     };
-    // 질문하기 모달 관련 함수들
+    // 문의하기 모달 관련 함수들
         const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
         const [questionContent, setQuestionContent] = useState("");
         const toggleQuestionModal = () => {
@@ -251,7 +251,7 @@ export default function ClassRingDetail() {
               { id: "location", label: "위치" },
               { id: "instructor", label: "강사소개" },
               { id: "reviews", label: "강사 후기" },
-              { id: "questions", label: "질문" },
+              { id: "questions", label: "문의" },
               { id: "recommend", label: "추천" }
             ].map(({ id, label }) => (
               <button
@@ -373,7 +373,7 @@ export default function ClassRingDetail() {
               </button>
             )}
           </section>
-          {/* 질문 */}
+          {/* 문의 */}
           <section className={styles.section} id="questions">
             <ClassRingDetailInquiryList classId={classId} />
           </section>
@@ -555,7 +555,7 @@ export default function ClassRingDetail() {
                 </>
               )}
               </button>
-              <button className={styles.questionButton} onClick={toggleQuestionModal}>질문하기</button> 
+              <button className={styles.questionButton} onClick={toggleQuestionModal}>문의하기</button> 
               {registeds.some(r => r.calendarId === selectedCalendarId) ? (
                 <button className={styles.applyBtnDis} disabled>
                   신청 완료
@@ -563,8 +563,16 @@ export default function ClassRingDetail() {
               ) : (
                 <button
                   className={styles.applyBtn}
-                  onClick={() =>
+                  onClick={() => 
+                  {     
+                    if ( !user || !token ) {
+                      if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
+                        navigate("/userlogin");
+                      }
+                    } else {
                     navigate(`/user/classPayment/${classId}/${selectedCalendarId}`)
+                    }
+                    }
                   }
                 >
                   신청하기
@@ -575,7 +583,7 @@ export default function ClassRingDetail() {
           </div>
         </aside>
       </div>
-      {/* 질문 모달 */}
+      {/* 문의 모달 */}
         {isQuestionModalOpen && (
         <form>
             <Modal
@@ -609,7 +617,7 @@ export default function ClassRingDetail() {
                     <div className="GatheringDetail_gathering-info-item_osk">
                     <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
                     <span>
-                        질문 수업일 : {selectedCalendar?.startDate ?? "-"}<br />
+                        문의 수업일 : {selectedCalendar?.startDate ?? "-"}<br />
                     </span>
                     </div>
                     <div className="GatheringDetail_gathering-info-item_osk">

@@ -56,7 +56,7 @@ export default function ReviewList() {
         }
 
       } catch (err) {
-        console.error('리뷰 불러오기 실패:', err);
+        console.error('후기 불러오기 실패:', err);
       }
     };
 
@@ -99,7 +99,7 @@ export default function ReviewList() {
     }
   };
 
-  // 리뷰등록 (사진과 함께~)
+  // 후기등록 (사진과 함께~)
   const handleSubmitReview = async(item) => {
     const formData = new FormData();
     formData.append("content", contents[item.calendarId] || "");
@@ -119,7 +119,7 @@ export default function ReviewList() {
       setActiveTab("done");
       setDonePage(1);
       } catch (err) {
-        console.error("리뷰 등록 실패:", err);
+        console.error("후기 등록 실패:", err);
       }
     };
     
@@ -135,7 +135,7 @@ export default function ReviewList() {
         </aside>
         <section className={styles.section}>
           <h2 className={styles.title}>클래스 후기</h2>
-
+          <div className={styles.tabDiv}>
           <div className={styles.tabs}>
             <button
               className={`${styles.tabButton} ${activeTab === 'writable' ? styles.tabButtonActive : ''}`}
@@ -144,7 +144,7 @@ export default function ReviewList() {
                 setWritablePage(1);
               }}
             >
-              작성 가능한 리뷰
+              작성 가능한 후기
             </button>
             <button
               className={`${styles.tabButton} ${activeTab === 'done' ? styles.tabButtonActive : ''}`}
@@ -153,12 +153,12 @@ export default function ReviewList() {
                 setDonePage(1);
               }}
             >
-              작성 완료한 리뷰
+              작성 완료한 후기
             </button>
           </div>
 
           <div className={styles.filterRow}>
-            <label className={styles.label}>시작일:</label>
+            <label className={styles.label}>수강일</label>
             <input
               type="date"
               value={minDate}
@@ -169,7 +169,7 @@ export default function ReviewList() {
               }}
               className={styles.dateInput}
             />
-            <label className={styles.label}>종료일:</label>
+            <label className={styles.label}>~</label>
             <input
               type="date"
               value={maxDate}
@@ -192,10 +192,10 @@ export default function ReviewList() {
               초기화
             </button>
           </div>
-
+          </div>
 
           <div>
-            {data.length === 0 && <p className={styles.noneCoupon}>리뷰 내역이 없습니다.</p>}
+            {data.length === 0 && <p className={styles.noneCoupon}>후기 내역이 없습니다.</p>}
             {data.map((item) => (
               <div
                 key={item.reviewId || item.calendarId}
@@ -211,7 +211,7 @@ export default function ReviewList() {
                     {item.teacherReply && (<span>{openReviewId === (item.reviewId || item.calendarId) ? '▲' : '▼'}</span>)}
                   </div>
                   <div className={styles.reviewDone}>
-                    <img src={`${url}/image?filename=${encodeURIComponent(item.reviewImgName)}`} alt="리뷰 이미지" className={styles.mainImage} />
+                    <img src={`${url}/image?filename=${encodeURIComponent(item.reviewImgName)}`} alt="후기 이미지" className={styles.mainImage} />
                     <div className={styles.reviewBB}>
                       <div className={styles.starDisplay}>
                         {[...Array(5)].map((_, i) =>
@@ -248,7 +248,7 @@ export default function ReviewList() {
                           />
                         )}
                       <textarea
-                        placeholder="이 클래스는 어땠나요? 리뷰를 남겨주세요 😊"
+                        placeholder="이 클래스는 어땠나요? 후기를 남겨주세요 😊"
                         className={styles.textarea}
                         required
                         value={contents[item.calendarId] || ""}

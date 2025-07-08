@@ -58,7 +58,7 @@ export default function ClassPayment() {
         ? selectedCouponObj.discount
         : Math.round((selectedCouponObj.discount / 100) * basePrice)
       : 0;
-  const finalPrice = basePrice - discount;
+  const finalPrice = Math.max(basePrice - discount, 0);
 
   const handleApplyCoupon = () => {
     if (selectedCoupon) setCouponApplied(true);
@@ -130,6 +130,10 @@ export default function ClassPayment() {
     }
     if (!paymentInstance) {
       alert('결제 모듈이 아직 준비되지 않았습니다.');
+      return;
+    }
+    if (finalPrice <= 0) {
+      alert("쿠폰으로 인해 결제 금액이 0원이 되어 결제가 필요하지 않습니다.");
       return;
     }
 

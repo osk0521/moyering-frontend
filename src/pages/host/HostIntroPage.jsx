@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from 'react-router';
 import { userAtom } from '../../atoms';
 import './HostIntroPage.css';
 import React from 'react'; // 이 한 줄만 추가!
+import LoginHeader from './../common/LoginHeaders';
 
 const HostIntroPage = () => {
   const user = useAtomValue(userAtom);
@@ -11,18 +12,22 @@ const HostIntroPage = () => {
   //     return <Navigate to="/userLogin"/>
   // }
 
-  const handleNavigation = (path)=>{
+  const handleNavigation = (path) => {
     navigate(path)
   }
 
   const validUser = () => {
-    if(user.hostId!=null||user.hostId==''){
+    if (user.hostId != null || user.hostId == '') {
       handleNavigation('/host/hostMyPage/')
-    }else{
+    } else {
       handleNavigation('/host/regist')
     }
   }
-  return (
+  return (<>
+    <LoginHeader />
+    <br></br>
+      <img src='/hostIntro.jpg' className="KHJ-host-intro-img"></img>
+      <div className="KHJ-host-intro-text">당신의 재능을 마음껏 펼쳐보아요!<br/>수익은 모여링이 만들게요!</div>
     <div className="KHJ-host-intro-container">
       <section className="KHJ-intro-section">
         <h2>수익이 궁금해요</h2>
@@ -67,6 +72,7 @@ const HostIntroPage = () => {
 
       <button className="KHJ-start-btn" onClick={validUser}>5분만에 호스트 시작하기 &gt;</button>
     </div>
+  </>
   );
 };
 

@@ -244,11 +244,13 @@ export default function UserFeed() {
                           nextImage(post.id, images.length);
                         }}
                       >›</button>
-                      <div className="KYM-image-dots">
+                      <div className="KYM-image-dots" 
+>
                         {images.map((_, i) => (
                           <span
                             key={i}
                             className={i === currentIdx ? 'KYM-dot active' : 'KYM-dot'}
+                            
                             onClick={(e) => e.stopPropagation()}
                           >●</span>
                         ))}

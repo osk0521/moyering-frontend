@@ -230,3 +230,7 @@
 .KHJ-page-button:hover:not(.active) {
   background-color: #f0f0f0;
 }
+
+.KHJ-radio-buttons{
+  margin-top: 10px;
+}

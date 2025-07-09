@@ -143,7 +143,6 @@ const Inquiry = () => {
         <h3>문의 관리</h3>
 
         <div className="KHJ-form-row">
-          <label>검색어</label>
           <input
             type="text"
             placeholder="검색어를 입력하세요."
@@ -154,7 +153,6 @@ const Inquiry = () => {
         </div>
 
         <div className="KHJ-form-row">
-          <label>날짜</label>
           <input
             type="date"
             value={startDate}
@@ -171,37 +169,20 @@ const Inquiry = () => {
         </div>
 
         <div className="KHJ-form-row">
-          <label>답변 상태</label>
-          <label>
-            <input
-              type="radio"
-              name="status"
-              value=""
-              checked={replyStatus === ''}
-              onChange={() => setReplyStatus('')}
-            />
-            전체
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="status"
-              value="답변대기"
-              checked={replyStatus === '0'}
-              onChange={() => setReplyStatus('0')}
-            />
-            답변대기
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="status"
-              value="답변완료"
-              checked={replyStatus === '1'}
-              onChange={() => setReplyStatus('1')}
-            />
-            답변완료
-          </label>
+          <div className="KHJ-radio-buttons">
+            {['전체', '답변대기', '답변완료'].map(key => (
+              <label key={key} className={`KHJ-radio-button ${replyStatus === key ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="replyStatus"
+                  value={key}
+                  checked={replyStatus === key}
+                  onChange={() => setReplyStatus(key)}
+                />
+                <span>{key}</span>
+              </label>
+            ))}
+          </div>
           <button className="KHJ-inquiry-btn reset" onClick={handleReset}>초기화</button>
         </div>
       </div>

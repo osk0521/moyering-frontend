@@ -132,32 +132,34 @@ const ClassList = () => {
           <div className="KHJ-date-range-wrapper">
             {/* <label>기간</label> */}
             <div className="KHJ-date-range" style={{ flexDirection: 'row' }} >
-              <input type="date" value={startDate} onChange={handleStartDateChange } />
+              <input type="date" value={startDate} onChange={handleStartDateChange} />
               <span className="KHJ-date-tilde">~</span>
-              <input type="date" value={endDate} onChange={handleEndDateChange } />
+              <input type="date" value={endDate} onChange={handleEndDateChange} />
             </div>
           </div>
           <div className="KHJ-date-buttons">
-            {['오늘', '1개월', '3개월', '6개월', '1년', '전체'].map(label => (
+            {['전체','오늘', '1개월', '3개월', '6개월', '1년'].map(label => (
               <button key={label} onClick={() => handleDateFilterClick(label)} className={dateFilter === label ? 'active' : ''}>{label}</button>
             ))}
           </div>
         </div>
 
         <div className="KHJ-status-section">
-          <div className="KHJ-checkbox-group">
-            {['전체', '검수중', '모집중', '모집완료', '수강중', '수강완료', '폐강'].map(key => (
-              <label key={key}>
-                <input
-                  type="radio"
-                  name="classStatus"
-                  value={key}
-                  checked={classStatus === key}
-                  onChange={() => setClassStatus(key)}
-                />
-                {key}
-              </label>
-            ))}
+          <div className="KHJ-status-section">
+            <div className="KHJ-radio-buttons">
+              {['전체', '승인대기', '모집중', '모집마감', '반려', '폐강'].map(key => (
+                <label key={key} className={`KHJ-radio-button ${classStatus === key ? 'active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="classStatus"
+                    value={key}
+                    checked={classStatus === key}
+                    onChange={() => setClassStatus(key)}
+                  />
+                  <span>{key}</span>
+                </label>
+              ))}
+            </div>
           </div>
           <div className="KHJ-reset-wrapper">
             <button className="KHJ-search-input-container-button" onClick={handleReset}>초기화</button>

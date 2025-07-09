@@ -151,7 +151,6 @@ const ClassReview = () => {
         <h3 className="KHJ-review-class-title">리뷰조회</h3>
 
         <div className="KHJ-review-class-form-row">
-          <label className="KHJ-review-class-label">검색어</label>
           <input
             type="text"
             placeholder="검색어를 입력하세요."
@@ -162,43 +161,25 @@ const ClassReview = () => {
         </div>
 
         <div className="KHJ-review-class-form-row">
-          <label className="KHJ-review-class-label">날짜</label>
           <input className="KHJ-review-date" type="date" value={startDate} onChange={handleStartDateChange} />
           <span className="KHJ-review-class-date-separator">~</span>
           <input className="KHJ-review-date" type="date" value={endDate} onChange={handleEndDateChange} />
         </div>
         <div className="KHJ-form-row">
-          <label>답변 상태</label>
-          <label>
-            <input
-              type="radio"
-              name="status"
-              value=""
-              checked={replyStatus === ''}
-              onChange={() => setReplyStatus('')}
-            />
-            전체
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="status"
-              value="답변대기"
-              checked={replyStatus === '0'}
-              onChange={() => setReplyStatus('0')}
-            />
-            답변대기
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="status"
-              value="답변완료"
-              checked={replyStatus === '1'}
-              onChange={() => setReplyStatus('1')}
-            />
-            답변완료
-          </label>
+          <div className="KHJ-radio-buttons">
+            {['전체', '답변대기', '답변완료'].map(key => (
+              <label key={key} className={`KHJ-radio-button ${replyStatus === key ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="replyStatus"
+                  value={key}
+                  checked={replyStatus === key}
+                  onChange={() => setReplyStatus(key)}
+                />
+                <span>{key}</span>
+              </label>
+            ))}
+          </div>
           <button className="KHJ-review-class-reset-btn" onClick={handleReset}>초기화</button>
         </div>
       </div>

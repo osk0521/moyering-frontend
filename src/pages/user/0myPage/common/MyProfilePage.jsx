@@ -149,79 +149,60 @@ export default function MyProfilePage() {
     return (
         <>
             <Header />
+            <div className="KYM-myprofile-container">
+                <aside className="KYM-sidebar-area">
             <Sidebar />
+            </aside>
             <div className="KYM-profile-wrap">
-                <table className="KYM-profile-table">
-                    <tbody>
-                        <tr>
-                            <td className="KYM-photo-cell">
-                                <div className="KYM-photo-title">프로필 사진</div>
-                                <div className="KYM-photo-cell-content">
-                                    {/* <img src={`${url}/image?filename=${user.profile}&t=${new Date().getTime()}`} alt="프로필" className="KYM-photo-img" /> */}
-                                    <img
-                                        src={profileUrl
-                                            ? profileUrl
-                                            : `${url}/image?filename=${user.profile}&t=${new Date().getTime()}`}
-                                        alt="프로필"
-                                        className="KYM-photo-img"
-                                    />
-                                    <button onClick={() => document.getElementById("fileInput").click()}>프로필 변경</button>
-                                    <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
-                                </div>
-                            </td>
-                            <td className="KYM-badge-cell">
-                                <div className="KYM-badge-top">
-                                    <span className="KYM-badge-title">배지</span>
-                                    <div className="KYM-active-wrap">
-                                        <span className="KYM-active-score">활동점수 : {activeScore}점</span>
-                                        <button className="KYM-help-btn">?</button>
-                                    </div>
-                                </div>
-                                <div className="KYM-badge-cell-content">
-                                    <img src={`/${firstBadgeImg}`} alt="뱃지" className="KYM-badge-img" />
-                                    <button onClick={() => {
-                                        setIsBadgeModalOpen(true);
-                                        token && myAxios(token, setToken).get("/user/badges")
-                                            .then(res => setBadgeList(res.data))
-                                            .catch(console.error);
-                                    }}>
-                                        뱃지 변경
-                                    </button>
-                                    {isBadgeModalOpen && (
-                                        <div className="modal-overlay" onClick={() => setIsBadgeModalOpen(false)}>
-                                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                                                <h3>보유 배지 목록 (대표 배지 선택)</h3>
-                                                <div className="modal-badge-list">
-                                                    {badgeList.map((badge) => (
-                                                        <div key={badge.userBadgeId}
-                                                            className={`badge-item ${badge.isRepresentative ? 'selected' : ''}`}
-                                                            onClick={() => handleBadgeSelect(badge.userBadgeId, badge.badgeImg)}>
-                                                            <img src={`/${badge.badgeImg}`} alt="배지" />
-                                                            {/* <span>배지 ID : {badge.name}</span> */}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                <button className="close-btn" onClick={() => setIsBadgeModalOpen(false)}>닫기</button>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><div className="KYM-td-flex"><label>아이디</label><input disabled value={name} /></div></td>
-                            <td><div className="KYM-td-flex"><label>비밀번호</label><input type="password" value="********" disabled /></div></td>
-                        </tr>
-                        <tr>
-                            <td><div className="KYM-td-flex"><label>이름</label><input value={name} onChange={e => setName(e.target.value)} /></div></td>
-                            <td><div className="KYM-td-flex"><label>전화번호</label><input value={tel} onChange={e => setTel(e.target.value)} /></div></td>
-                        </tr>
-                        <tr>
-                            <td><div className="KYM-td-flex"><label>이메일</label><input value={email} onChange={e => setEmail(e.target.value)} /></div></td>
-                            <td><div className="KYM-td-flex"><label>생년월일</label><input type="date" value={birthday} onChange={e => setBirthday(e.target.value)} /></div></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h3>내 정보 수정</h3>
+                <div className="KYM-profile-table">
+  <div className="KYM-profile-row">
+    <div className="KYM-profile-cell">
+      <div className="KYM-photo-title">프로필 사진</div>
+      <div className="KYM-photo-cell-content">
+        <img
+          src={profileUrl ? profileUrl : `${url}/image?filename=${user.profile}&t=${new Date().getTime()}`}
+          alt="프로필"
+          className="KYM-photo-img"
+        />
+        <button onClick={() => document.getElementById("fileInput").click()}>프로필 변경</button>
+        <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
+      </div>
+    </div>
+
+    <div className="KYM-profile-cell">
+      <div className="KYM-badge-top">
+        <span className="KYM-badge-title">배지</span>
+        <div className="KYM-active-wrap">
+          <span className="KYM-active-score">활동점수 : {activeScore}점</span>
+          <button className="KYM-help-btn">?</button>
+        </div>
+      </div>
+      <div className="KYM-badge-cell-content">
+        <img src={`/${firstBadgeImg}`} alt="뱃지" className="KYM-badge-img" />
+        <button onClick={() => {
+          setIsBadgeModalOpen(true);
+          token && myAxios(token, setToken).get("/user/badges")
+            .then(res => setBadgeList(res.data))
+            .catch(console.error);
+        }}>뱃지 변경</button>
+      </div>
+    </div>
+  </div>
+
+  <div className="KYM-profile-row">
+    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>아이디</label><input disabled value={name} /></div></div>
+    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>비밀번호</label><input type="password" value="********" disabled /></div></div>
+  </div>
+  <div className="KYM-profile-row">
+    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>이름</label><input value={name} onChange={e => setName(e.target.value)} /></div></div>
+    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>전화번호</label><input value={tel} onChange={e => setTel(e.target.value)} /></div></div>
+  </div>
+  <div className="KYM-profile-row">
+    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>이메일</label><input value={email} onChange={e => setEmail(e.target.value)} /></div></div>
+    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>생년월일</label><input type="date" value={birthday} onChange={e => setBirthday(e.target.value)} /></div></div>
+  </div>
+</div>
 
                 <div className="KYM-address-box">
                         <label>주소</label>
@@ -286,6 +267,7 @@ export default function MyProfilePage() {
                     <button onClick={handleSubmit}>수정하기</button>
                     <button onClick={() => navigate("/mypage/password")}>비밀번호 변경</button>
                 </div>
+            </div>
             </div>
         </>
     );

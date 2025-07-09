@@ -96,18 +96,34 @@ export default function FeedDetail() {
   const formatDate = s => new Date(s).toLocaleDateString();
 
   const toggleMenu = () => {
-  console.log("더보기 클릭됨");
-  setShowMenu(v => !v);
-};
+    console.log("더보기 클릭됨");
+    setShowMenu(v => !v);
+  };
   const openReport = () => { setShowMenu(false); setShowReport(true); };
   const closeReport = () => setShowReport(false);
   console.log("▶ mine :", mine);
-  const onToggleReplies = (commentId) => {
-    setShowReplies(prev => ({
-      ...prev,
-      [commentId]: !prev[commentId]
-    }));
-  };
+  // const onToggleReplies = (commentId) => {
+  //   setShowReplies(prev => ({
+  //     ...prev,
+  //     [commentId]: !prev[commentId]
+  //   }));
+  // };
+
+ const onToggleReplies = (commentId, replies) => {
+  setShowReplies(prev => {
+    const newReplies = { ...prev, [commentId]: !prev[commentId] };
+    const openChild = (children) => {
+      children.forEach(c => {
+        newReplies[c.commentId] = true;
+        if (c.replies) openChild(c.replies);
+      });
+    };
+    if (replies) {
+      openChild(replies);
+    }
+    return newReplies;
+  });
+};
 
   const postComment = async () => {
     if (!commentText.trim()) return;
@@ -186,7 +202,7 @@ export default function FeedDetail() {
   // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
   useEffect(() => {
     let mounted = true;
-    token&&myAxios(token, setToken).get(`user/socialing/scrap/${feedId}`)
+    token && myAxios(token, setToken).get(`user/socialing/scrap/${feedId}`)
       .then(res => {
         if (mounted) setScrapped(res.data);
       })
@@ -240,6 +256,7 @@ export default function FeedDetail() {
   };
 
   const renderComment = (c, level = 0) => (
+    
     <div key={c.commentId} className="KYM-comment-block" style={{ marginLeft: `${level * 20}px` }}>
       <img className="KYM-comment-avatar" src={c.userProfile || null} alt="" />
       <div className="KYM-comment-body">
@@ -255,7 +272,7 @@ export default function FeedDetail() {
           {c.replies && c.replies.length > 0 && (
             <button
               className="KYM-reply-toggle"
-              onClick={() => onToggleReplies(c.commentId)}
+              onClick={() => onToggleReplies(c.commentId,c.replies)}
             >
               {showReplies[c.commentId] ? '답글 숨기기' : '답글 보기'}
             </button>
@@ -413,8 +430,8 @@ export default function FeedDetail() {
                   <ul className="KYM-detail-menu">
                     {isMyFeed && (
                       <>
-                      <li onClick={() => navigate(`/user/feedEdit/${feed.feedId}`)}>수정하기</li>
-                      <li onClick={handleDelete}>삭제하기</li>
+                        <li onClick={() => navigate(`/user/feedEdit/${feed.feedId}`)}>수정하기</li>
+                        <li onClick={handleDelete}>삭제하기</li>
                       </>
                     )}
                     <li onClick={openReport}>신고하기</li>
@@ -443,8 +460,10 @@ export default function FeedDetail() {
             <div className="KYM-detail-date">{formatDate(createdAt)}</div>
 
             {/* comments */}
+            
             <div className="KYM-detail-comments">
               {comment.map(c => renderComment(c))}
+              {console.log("▶ showReplies:", showReplies)}
             </div>
 
             {/* 액션 + stats */}

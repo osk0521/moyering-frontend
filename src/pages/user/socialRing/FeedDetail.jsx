@@ -65,6 +65,7 @@ export default function FeedDetail() {
     myAxios().get(`/socialing/feed?feedId=${feedId}`)
       .then(res => {
         const data = res.data;
+        console.log(res.data)
         setFeed(data);
         setComment(data.comments);
         setLikes(data.likesCount || 0);
@@ -320,6 +321,19 @@ export default function FeedDetail() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      await myAxios(token, setToken).delete(`/user/${feedId}`);
+      alert("삭제 완료");
+      navigate("/feeds"); // 또는 원하는 경로
+    } catch (e) {
+      console.error(e);
+      alert("삭제 실패");
+    }
+  };
+
+
   return (
     <>
       <Header />
@@ -369,9 +383,11 @@ export default function FeedDetail() {
             {/* header */}
             <div className="KYM-detail-header">
               <div className="KYM-left-info">
-                <img className="KYM-detail-avatar" src={writerProfile} alt="" />
+                <img className="KYM-detail-avatar" src={`${url}/iupload/${writerProfile}`} alt="" />
                 <span className="KYM-detail-nickname">{writerId}</span>
-                {writerBadge && <span className="KYM-detail-badge">🏅</span>}
+                {feed.writerBadge &&
+                  <img src={`/${feed.writerBadgeImg}`} alt="대표 배지" className="KYM-detail-badge-img" />
+                }
                 {!mine
                   ? <FollowButton
                     targetUserId={feed.writerUserId}
@@ -389,12 +405,10 @@ export default function FeedDetail() {
                 {showMenu && (
                   <ul className="KYM-detail-menu">
                     {isMyFeed && (
-                      <li
-                        
-                        onClick={() => navigate(`/user/feedEdit/${feed.feedId}`)}
-                      >
-                        수정
-                      </li>
+                      <>
+                      <li onClick={() => navigate(`/user/feedEdit/${feed.feedId}`)}>수정하기</li>
+                      <li onClick={handleDelete}>삭제하기</li>
+                      </>
                     )}
                     <li onClick={openReport}>신고하기</li>
                     <li onClick={() => navigator.clipboard.writeText(window.location.href)}>링크복사</li>

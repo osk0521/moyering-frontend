@@ -39,8 +39,14 @@
 }
 
 .KHJ-search-section,
-.KHJ-date-section,
+.KHJ-date-section {
+  margin-bottom: 20px;
+}
+
 .KHJ-status-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -60,10 +66,12 @@
 }
 
 .KHJ-search-input-container input {
-  width: 300px;
-  padding: 8px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 0.95rem;
+  background-color: #f9f9f9;
+  width: 250px !important;
 }
 
 .KHJ-search-filter {
@@ -73,14 +81,22 @@
   width: 120px;
 }
 
-.KHJ-search-input-container button {
+.KHJ-search-input-container-button {
   padding: 8px 16px;
   border: none;
   background-color: #ffbf00;
   color: white;
   cursor: pointer;
   border-radius: 4px;
+  white-space: nowrap;
 }
+
+.KHJ-reset-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
 
 .KHJ-search-input-container button:hover {
   background-color: #e0a800;
@@ -103,26 +119,24 @@
   display: flex;
   align-items: center;
   /* 세로 정렬도 이쁘게 */
-  gap: 8px;
-  width: 50%;
-  
-}
-
-.KHJ-date-range input[type="date"] {
-  flex: 1;
-  /* 동일한 너비로 설정 */
-  min-width: 150px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+  gap: 10px;
+  width: 100%;
 
 }
+
+
 
 .KHJ-date-section input[type="date"] {
-  padding: 8px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 0.95rem;
+  background-color: #f9f9f9;
+  width: 250px;
+}
+
+.KHJ-date-buttons{
+  margin-top: 10px;
 }
 
 .KHJ-date-buttons button {
@@ -141,7 +155,7 @@
   background-color: #e0a800;
 }
 
-.KHJ-date-buttons .KHJ-active {
+.KHJ-date-buttons button.active {
   background-color: #ffbf00;
   color: white;
 }
@@ -149,6 +163,7 @@
 .KHJ-checkbox-group {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap
 }
 
 .KHJ-checkbox-group label {
@@ -302,5 +317,55 @@
   background-color: #ffbf00;
   color: white;
   font-weight: bold;
+  border-color: #ffbf00;
+}
+.KHJ-radio-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.KHJ-radio-button {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0px 3px;
+  background-color: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  display: inline-flex;
+  justify-content: center;
+  color: white;
+  align-items: center;
+}
+
+.KHJ-radio-button input[type="radio"] {
+  display: none; /* 기본 라디오 버튼 숨기기 */
+}
+
+.KHJ-radio-button span {
+  display: inline-block;
+  padding: 6px 12px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.KHJ-radio-button:hover {
+  background-color: #e0a800; /* hover 시 배경색 */
+  color: white;
+  border-color: #e0a800; /* hover 시 테두리 색상 */
+}
+
+.KHJ-radio-button.active {
+  background-color: #ffbf00; /* active 상태에서 배경색 */
+  color: white;
+  border-color: #ffbf00; /* active 상태에서 테두리 색상 */
+}
+
+/* 선택된 라디오 버튼의 span */
+.KHJ-radio-button input[type="radio"]:checked + span {
+  background-color: #ffbf00;
+  color: white;
   border-color: #ffbf00;
 }

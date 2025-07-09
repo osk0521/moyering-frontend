@@ -15,7 +15,7 @@ export const myAxios = (token,setToken) => {
 
    instance.interceptors.response.use(
       (response)=>{ 
-         console.log(response)
+         // console.log(response)
          if(response.headers.authorization){
             setToken(response.headers.authorization)
          }
@@ -23,15 +23,15 @@ export const myAxios = (token,setToken) => {
       }
       ,
       (error)=>{
-         //  if (error.response && error.response.status) {
-         //    switch (error.response.status) {
-         //       case 401:
-         //       case 403:
-         //          window.location.href = `${reactUrl}/userLogin`; break;
-         //       default:
-         //          return Promise.reject(error);
-         //    }
-         // }
+          if (error.response && error.response.status) {
+            switch (error.response.status) {
+               case 401:
+               case 403:
+                  window.location.href = `${reactUrl}/userLogin`; break;
+               default:
+                  return Promise.reject(error);
+            }
+         }
          return Promise.reject(error);
       }
    );

@@ -7,7 +7,7 @@ const DetailTabSchedule = ({couponList}) => {
   return (
     <div className="KHJ-schedule-tab-container">
        <div className="KHJ-coupon-table-container">
-          <h4>📋 적용된 쿠폰 목록</h4>
+          <h4 className="KHJ-coupon-title">📋 적용된 쿠폰 목록</h4>
           <table className="KHJ-coupon-table">
             <thead>
               <tr>

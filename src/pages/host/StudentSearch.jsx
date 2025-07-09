@@ -90,11 +90,10 @@ const StudentSearch = () => {
       <div className="KHJ-class-search-container">
         <h3>수강생 조회</h3>
         <div className="KHJ-search-section">
-          <label>검색어</label>
           <div className="KHJ-search-input-container">
             <input
               type="text"
-              placeholder="이름을 입력하세요."
+              placeholder="수강생 이름을 입력하세요."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -104,7 +103,6 @@ const StudentSearch = () => {
       </div>
 
       <div className="KHJ-class-result-container">
-        <h4 className="KHJ-inquiry-result">검색 결과 : {students.length}건</h4>
         <table className="KHJ-inquiry-table">
           <thead>
             <tr>
@@ -127,8 +125,6 @@ const StudentSearch = () => {
                 {expandedIndex === index && (
                   <tr className="KHJ-inquiry-detail-row">
                     <td colSpan="4">
-                      <div className="KHJ-inquiry-dropdown-wrapper open">
-                        <div className="KHJ-inquiry-content-wrapper">
                           <div className="KHJ-inquiry-content-box">
                             {enrolledClasses?.length > 0 ? (
                               <table className="KHJ-subclass-table">
@@ -151,8 +147,6 @@ const StudentSearch = () => {
                               <p>수강 중인 클래스가 없습니다.</p>
                             )}
                           </div>
-                        </div>
-                      </div>
                     </td>
                   </tr>
                 )}

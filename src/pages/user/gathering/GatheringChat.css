@@ -209,8 +209,9 @@
   padding: 20px;
   overflow-y: auto;
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .GatheringChat_date-divider_osk {
@@ -270,7 +271,6 @@
   padding: 8px 12px;
   border-radius: 12px;
   font-size: 14px;
-  max-width: 70%;
 }
 
 .GatheringChat_chat-input-container_osk {
@@ -314,4 +314,187 @@
   font-size: 24px;
   color: #666;
   cursor: pointer;
+}
+/* GatheringChat.css 파일에 추가할 스타일 */
+
+.GatheringChat_filter-dropdown_osk {
+  margin-left: auto;
+}
+
+.GatheringChat_filter-toggle_osk {
+  background: none !important;
+  border: none !important;
+  padding: 8px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.GatheringChat_filter-toggle_osk:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.GatheringChat_filter-toggle_osk:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px #f57c00 !important;
+}
+
+/* Dropdown 메뉴 스타일링 */
+.GatheringChat_filter-dropdown_osk .dropdown-menu {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  padding: 4px 0;
+}
+
+.GatheringChat_filter-dropdown_osk .dropdown-item {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.GatheringChat_filter-dropdown_osk .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.GatheringChat_filter-dropdown_osk .dropdown-item.active {
+  background-color: #f57c00;
+  color: white;
+}
+
+.GatheringChat_filter-dropdown_osk .dropdown-header {
+  font-weight: 600;
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 16px 4px 16px;
+}
+
+/* 탭 영역 레이아웃 조정 */
+.GatheringChat_chat-tabs_osk {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.GatheringChat_filter-dropdown_osk {
+  margin-left: auto;
+}
+
+.GatheringChat_filter-toggle_osk {
+  background: none !important;
+  border: none !important;
+  padding: 8px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.GatheringChat_filter-toggle_osk:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.GatheringChat_filter-toggle_osk:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+}
+
+/* Dropdown 메뉴 스타일링 */
+.GatheringChat_filter-dropdown_osk .dropdown-menu {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  padding: 4px 0;
+}
+
+.GatheringChat_filter-dropdown_osk .dropdown-item {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.GatheringChat_filter-dropdown_osk .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+.GatheringChat_filter-dropdown_osk .dropdown-header {
+  font-weight: 600;
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 16px 4px 16px;
+}
+
+/* 탭 영역 레이아웃 조정 */
+.GatheringChat_chat-tabs_osk {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* 상태 배지 스타일링 */
+.GatheringChat_room-status_osk {
+  margin-top: 4px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background-color: #f57c00;
+  color: white;
+}
+
+.status-badge.inactive {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* 상태 배지 스타일링 */
+.GatheringChat_room-status_osk {
+  margin-top: 4px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background-color: #f57c00;
+  color: white;
+}
+
+.status-badge.inactive {
+  background-color: #6c757d;
+  color: white;
 }

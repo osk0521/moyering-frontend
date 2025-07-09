@@ -11,17 +11,38 @@ import { useNavigate } from "react-router-dom";
 import { url, myAxios } from "../../../config";
 import GatheringChatRoom from "./GatheringChatRoom";
 import { IoFilter } from "react-icons/io5";
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,} from 'reactstrap';
 
 export default function GatheringChatRoomList() {
-
   const user = useAtomValue(userAtom);
   const [token, setToken] = useAtom(tokenAtom)
   const userId = user.id;
   const navigate = useNavigate();
 
-  const [chatRooms, setChatRooms] = useState([]);
+  const [availableRooms, setAvailableRooms] = useState([]);
+  const [disableRooms, setDisableRooms] = useState([]);
   const [activeTab, setActiveTab] = useState('개더링');
   const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState('전체');
+  
+  const toggle = () => setFilterOpen((prevState) => !prevState);
+  const handleFilterSelect = (filter) => {
+    setSelectedFilter(filter);
+    setFilterOpen(false);
+    console.log('선택된 필터:', filter);
+  };
+  const getFilteredChatRooms = () => {
+    switch (selectedFilter) {
+      case '활성화':
+        return availableRooms;
+      case '비활성화':
+        return disableRooms;
+      case '전체':
+      default:
+        return [...availableRooms, ...disableRooms];
+    }
+  };
 
   // 초기 데이터 로드
   useEffect(() => {
@@ -30,47 +51,30 @@ export default function GatheringChatRoomList() {
     const loadChatRooms = async () => {
       try {
         const response = await myAxios(token, setToken).get('/user/messageRoomList');
-        if (response.data?.myMessageRoomList) {
-          const activeChatRooms = response.data.myMessageRoomList.filter(room =>
-            !room.hasLeft && room.gatheringState !== null
-          );
-          setChatRooms(activeChatRooms);
+        if (response.data) {
+          // 활성화된 채팅방 리스트
+          if (response.data.availableMessageRoomList) {
+            setAvailableRooms(response.data.availableMessageRoomList);
+          }
+          // 비활성화된 채팅방 리스트
+          if (response.data.disableMessageRoomList) {
+            setDisableRooms(response.data.disableMessageRoomList);
+          }
         }
       } catch (error) {
         console.error('채팅방 리스트 로드 실패:', error);
       }
     };
-
     loadChatRooms();
   }, [token, setToken]);
-
-  // // 30초마다 채팅방 리스트 새로고침
-  // useEffect(() => {
-  //   if (!token) return;
-
-  //   myAxios(token, setToken)
-  //     .get('/user/messageRoomList')
-  //     .then(response => {
-  //       if (response.data?.myMessageRoomList) {
-  //         const activeChatRooms = response.data.myMessageRoomList.filter(room =>
-  //           !room.hasLeft && room.gatheringState !== null
-  //         );
-  //         const sortedRooms = activeChatRooms.sort((a, b) =>
-  //           new Date(b.meetingDate) - new Date(a.meetingDate)
-  //         );
-  //         setChatRooms(sortedRooms);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.warn('채팅방 리스트 로드 실패:', error);
-  //     });
-  // }, [token, setToken]); // 의존성 배열에 token과 setToken만 유지
 
   const handleRoomClick = (gatheringId) => {
     setSelectedRoomId(gatheringId);
   };
 
-  const selectedRoom = chatRooms.find(room => room.gatheringId === selectedRoomId);
+  // 필터된 채팅방 리스트 가져오기
+  const filteredChatRooms = getFilteredChatRooms();
+  const selectedRoom = filteredChatRooms.find(room => room.gatheringId === selectedRoomId);
 
   return (
     <div>
@@ -83,17 +87,61 @@ export default function GatheringChatRoomList() {
                 className={`GatheringChat_tab_osk ${activeTab === '게더링' ? 'GatheringChat_active_osk' : ''}`}
                 onClick={() => setActiveTab('게더링')}
               >
-                게더링이
-              </button><button><IoFilter /></button>
-              {/* <button 
-              className={`GatheringChat_tab_osk ${activeTab === 'DM' ? 'GatheringChat_active_osk' : ''}`}
-              onClick={() => setActiveTab('DM')}
-            >
-              DM
-            </button> */}
+                게더링
+              </button>
+              
+              {/* 개선된 Dropdown */}
+              <Dropdown 
+                isOpen={filterOpen} 
+                toggle={toggle} 
+                direction={"down"} 
+                className="GatheringChat_filter-dropdown_osk"
+              >
+                <DropdownToggle 
+                  tag="button"
+                  className="GatheringChat_filter-toggle_osk"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: '8px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#f0f0f0'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                >
+                  <IoFilter size={20} color="#666" />
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem header>필터 옵션</DropdownItem>
+                  <DropdownItem 
+                    onClick={() => handleFilterSelect('전체')}
+                    className={selectedFilter === '전체' ? 'active' : ''}
+                  >
+                    전체
+                  </DropdownItem>
+                  <DropdownItem 
+                    onClick={() => handleFilterSelect('활성화')}
+                    className={selectedFilter === '활성화' ? 'active' : ''}
+                  >
+                    활성화
+                  </DropdownItem>
+                  <DropdownItem 
+                    onClick={() => handleFilterSelect('비활성화')}
+                    className={selectedFilter === '비활성화' ? 'active' : ''}
+                  >
+                    비활성화
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </div>
+            
             <div className="GatheringChat_chat-room-list_osk">
-              {chatRooms.map(room => (
+              {filteredChatRooms.map(room => (
                 <div
                   key={`room-${room.gatheringId}`}
                   className={`GatheringChat_chat-room-item_osk ${selectedRoomId === room.gatheringId ? ' GatheringChat_chat-room-selected-item_osk' : ''}`}
@@ -113,16 +161,25 @@ export default function GatheringChatRoomList() {
                     <div className="GatheringChat_room-last-message_osk">
                       모임일: {room.meetingDate}
                     </div>
+                    {/* 상태 표시 추가 (선택사항) */}
+                    <div className="GatheringChat_room-status_osk">
+                      <span className={`status-badge ${availableRooms.includes(room) ? 'active' : 'inactive'}`}>
+                        {availableRooms.includes(room) ? '활성화' : '비활성화'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </aside>
+          
           {/* Chat Area */}
           {selectedRoomId ? (
             <GatheringChatRoom
               gatheringId={selectedRoomId}
               roomTitle={selectedRoom?.gatheringTitle || '채팅방'}
+              roomStatus={availableRooms.includes(selectedRoom) ? '활성화' : '비활성화'}
+              ownerUserId={selectedRoom?.organizerUserId || null}
             />
           ) : (
             <main className="GatheringChat_chat-area_osk">

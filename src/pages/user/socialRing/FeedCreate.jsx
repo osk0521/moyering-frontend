@@ -8,7 +8,7 @@ import { myAxios, url } from '../../../config';
 
 export default function FeedCreate() {
     const user = useAtomValue(userAtom);
-    const [token,setToken] = useAtom(tokenAtom);
+    const [token, setToken] = useAtom(tokenAtom);
     const navigate = useNavigate();
 
     // 상태 관리
@@ -93,7 +93,7 @@ export default function FeedCreate() {
             imageFiles.forEach(file => {
                 formData.append('images', file);
             });
-            const res = await myAxios(token,setToken).post(
+            const res = await myAxios(token, setToken).post(
                 `${url}/user/socialing/feed`,
                 formData
             );
@@ -207,7 +207,12 @@ export default function FeedCreate() {
                                 type="text"
                                 value={tagInput}
                                 onChange={e => setTagInput(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleAddTag()}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault(); // 엔터로 form submit 막기
+                                        handleAddTag();
+                                    }
+                                }}
                                 placeholder="태그 입력 후 Enter"
                             />
                         </div>

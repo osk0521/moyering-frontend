@@ -5,8 +5,8 @@ import { myAxios, url } from '../../../config';
 import './HostFeedPage.css';
 import Header from '../../common/Header';
 import moreIcon from './icons/more.png';
-import { useAtomValue } from 'jotai';
-import { userAtom } from '../../../atoms';
+import { useAtom, useAtomValue } from 'jotai';
+import { tokenAtom, userAtom } from '../../../atoms';
 
 export default function HostFeedPage() {
     const navigate = useNavigate();
@@ -18,6 +18,8 @@ export default function HostFeedPage() {
     const [imageIndexes, setImageIndexes] = useState({});
     const user = useAtomValue(userAtom)
     const menuRef = useRef(null);
+    const [token, setToken] = useAtom(tokenAtom);
+
 
     const { data: feeds = [] } = useQuery({
         queryKey: ['hostFeeds', category, offset, size],
@@ -114,7 +116,7 @@ export default function HostFeedPage() {
                                                         <li onClick={async () => {
                                                             if (!window.confirm("정말 삭제하시겠습니까?")) return;
                                                             try {
-                                                                await myAxios().delete(`/user/${feed.feedId}`);
+                                                                token && await myAxios(token,setToken).delete(`/host/feedDelete/${feed.feedId}`);
                                                                 alert("삭제 완료!");
                                                                 queryClient.invalidateQueries(['hostFeeds']);
                                                             } catch (e) {

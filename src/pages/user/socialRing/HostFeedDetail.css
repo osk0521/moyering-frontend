@@ -33,11 +33,10 @@
   flex: 1;
 }
 
-.hostfeed-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.KYM-detail-header {
+  position: relative;
 }
+
 
 .hostfeed-avatar {
   width: 50px;
@@ -47,4 +46,45 @@
 
 .hostfeed-hostname {
   font-weight: bold;
+}
+
+.KYM-detail-container .KYM-detail-more-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.KYM-detail-header .KYM-detail-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 160px;
+  z-index: 1000;
+  padding: 8px 0;
+  list-style: none;
+  display: none;
+}
+
+.KYM-detail-header .KYM-detail-menu.open {
+  display: block;
+}
+
+.KYM-detail-header .KYM-detail-menu li {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.KYM-detail-header .KYM-detail-menu li:hover {
+  background: #f5f5f5;
+}
+
+.KYM-detail-header .KYM-detail-menu li+li {
+  border-top: 1px solid #eee;
 }

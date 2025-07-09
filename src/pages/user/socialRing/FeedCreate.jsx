@@ -169,10 +169,10 @@ export default function FeedCreate() {
                     className="KYM-FeedCreate-form"
                     onSubmit={handleSubmit}
                 >
-                    {/* 작성자 정보 */}
+                    {/* 작성자 정보
                     <div className="KYM-FeedCreate-author-info">
                         <img
-                            src={user.profile}
+                            src={`${url}/iupload/${user.profile}`}
                             alt={user.nickName}
                             className="KYM-FeedCreate-author-profile"
                         />
@@ -181,12 +181,12 @@ export default function FeedCreate() {
                                 {user.nickName}
                             </span>
                             <img
-                                src={`/badges/${user.userBadgeId}.png`}
+                                src={`${url}/iupload/${user.user}`}
                                 alt="배지"
                                 className="KYM-FeedCreate-author-badge"
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* 글 내용 */}
                     <textarea

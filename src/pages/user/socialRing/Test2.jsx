@@ -153,30 +153,30 @@ export default function FeedPage2() {
         }, 5000);
         return () => clearInterval(interval);
     }, [totalPages]);
-const menuRef = useRef(null);
+    const menuRef = useRef(null);
 
-useEffect(() => {
-    const handleClickOutside = (event) => {
-        // 메뉴가 열려있고, 메뉴 영역(menuRef.current) 밖을 클릭하면 닫기
-        if (menuOpenId && menuRef.current && !menuRef.current.contains(event.target)) {
-            setMenuOpenId(null);
-        }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-    };
-}, [menuOpenId]);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // 메뉴가 열려있고, 메뉴 영역(menuRef.current) 밖을 클릭하면 닫기
+            if (menuOpenId && menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuOpenId(null);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuOpenId]);
 
     return (
         <>
             <Header />
-            <div className="KYM-feed-container">
-                <div className="KYM-feed-title"><h2>소셜링</h2></div>
+            <div className="KYM-feed2-container">
+                <div className="KYM-feed-title"><h3>소셜링</h3></div>
 
-                <div className="KYM-feed-filters">
-                    {['전체', '좋아요순', '댓글순', '팔로워'].map((txt, idx) => {
-                        const key = ['all', 'likes', 'comments', 'follow'][idx];
+                <div className="KYM-feed2-filters">
+                    {['전체', '좋아요순', '댓글순'].map((txt, idx) => {
+                        const key = ['all', 'likes', 'comments'][idx];
                         return (
                             <button key={key}
                                 className={`KYM-filter-button${sortType === key ? ' active' : ''}`}
@@ -187,7 +187,7 @@ useEffect(() => {
                     })}
                 </div>
 
-                <div className="KYM-feed-main">
+                <div className="KYM-feed2-main">
                     <div className="KYM-posts-grid">
                         {feedsWithStatus.map(feed => {
                             const images = getFeedImages(feed);
@@ -220,7 +220,7 @@ useEffect(() => {
                                         />
                                         {menuOpenId === feed.feedId && (
                                             <ul ref={menuRef} className="KYM-post-menu open">
-                                                {user?.id === feed.writerUserId && (
+                                                {/* {user?.id === feed.writerUserId && (
                                                     <li onClick={async () => {
                                                         try {
                                                             await token && myAxios(token, setToken).delete(`/user/${feed.feedId}`);
@@ -234,7 +234,7 @@ useEffect(() => {
                                                         }
                                                         setMenuOpenId(null);
                                                     }}>삭제하기</li>
-                                                )}
+                                                )} */}
                                                 <li onClick={() => {
                                                     console.log(`신고: ${feed.feedId}`);
                                                     setMenuOpenId(null);
@@ -294,7 +294,12 @@ useEffect(() => {
                                     </div>
 
                                     <div className="KYM-post-content">
-                                        <p>{feed.content}</p>
+                                        <p className="clamp-3">{feed.content}</p>
+                                        {feed.content && feed.content.split('\n').length > 3 && (
+                                            <span className="more-button" onClick={() => navigate(`/feed/${feed.feedId}`)}>
+                                                ...더보기
+                                            </span>
+                                        )}
                                         <div className="KYM-hashtags">
                                             {[feed.tag1, feed.tag2, feed.tag3, feed.tag4, feed.tag5]
                                                 .filter(Boolean)
@@ -321,7 +326,7 @@ useEffect(() => {
                         })}
                     </div>
 
-                    <aside className="KYM-feed-sidebar">
+                    <aside className="KYM-feed2-sidebar">
                         <h3>인기 피드</h3>
                         <SwitchTransition mode="out-in">
                             <CSSTransition
@@ -367,7 +372,6 @@ useEffect(() => {
                         </button>
                     )}
                 </div>
-            </div>
             <Footer />
             {showCreateModal && (
                 <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
@@ -376,6 +380,7 @@ useEffect(() => {
                     </div>
                 </div>
             )}
+            </div>
         </>
     );
 }

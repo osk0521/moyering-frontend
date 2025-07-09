@@ -1,90 +1,186 @@
-.hostfeed-detail-container {
-  max-width: 1000px;
-  margin: 20px auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* Scoped under .KYM-hostdetail-container */
+.KYM-hostdetail-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
 }
 
-.hostfeed-main {
+.KYM-hostdetail-container .KYM-hostdetail-main {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.hostfeed-images {
-  flex: 1;
+.KYM-hostdetail-container .KYM-hostdetail-image {
   position: relative;
+  width: 60%;
+  min-height: 400px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  aspect-ratio: 4/3;
 }
 
-.hostfeed-main-img {
-  width: 100%;
+.KYM-hostdetail-container .KYM-hostdetail-image img {
+  max-width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
   border-radius: 8px;
 }
 
-.hostfeed-nav {
+.KYM-hostdetail-container .KYM-hostdetail-image-nav {
   position: absolute;
   top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border: 1px solid #FFB22C;
+  color: #FFB22C;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background 0.2s, color 0.2s;
+  opacity: 0;
+  pointer-events: none;
+}
+.KYM-hostdetail-container .KYM-hostdetail-image:hover .KYM-hostdetail-image-nav {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-image-nav.left {
+  left: 12px;
+}
+.KYM-hostdetail-container .KYM-hostdetail-image-nav.right {
+  right: 12px;
+}
+.KYM-hostdetail-container .KYM-hostdetail-image-nav:hover {
+  background: #FFB22C;
+  color: #fff;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-image-dots {
+  position: absolute;
+  bottom: 12px;
   width: 100%;
+  text-align: center;
+}
+
+.KYM-hostdetail-container .dot {
+  margin: 0 3px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+.KYM-hostdetail-container .dot.active {
+  color: #FFB22C;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-side {
+  width: 38%;
   display: flex;
+  flex-direction: column;
+  background: #fff;
+  height: 75vh;
+  overflow: visible;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-header {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-}
-
-.hostfeed-side {
-  flex: 1;
-}
-
-.KYM-detail-header {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
   position: relative;
 }
 
-
-.hostfeed-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+.KYM-hostdetail-container .KYM-left-info {
+  display: flex;
+  align-items: center;
 }
 
-.hostfeed-hostname {
+.KYM-hostdetail-container .KYM-hostdetail-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-nickname {
   font-weight: bold;
 }
 
-.KYM-detail-container .KYM-detail-more-icon {
+.KYM-hostdetail-container .KYM-hostdetail-more-icon {
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
 
-.KYM-detail-header .KYM-detail-menu {
+.KYM-hostdetail-container .KYM-hostdetail-menu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: 36px;
   right: 0;
   background: #fff;
-  border: 1px solid #eee;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 160px;
-  z-index: 1000;
-  padding: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  width: 140px;
   list-style: none;
-  display: none;
+  padding: 4px 0;
+  z-index: 999;
 }
 
-.KYM-detail-header .KYM-detail-menu.open {
-  display: block;
-}
-
-.KYM-detail-header .KYM-detail-menu li {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  color: #333;
+.KYM-hostdetail-container .KYM-hostdetail-menu li {
+  padding: 8px 12px;
+  font-size: 14px;
   cursor: pointer;
-  transition: background 0.2s;
 }
-
-.KYM-detail-header .KYM-detail-menu li:hover {
+.KYM-hostdetail-container .KYM-hostdetail-menu li:hover {
   background: #f5f5f5;
 }
 
-.KYM-detail-header .KYM-detail-menu li+li {
-  border-top: 1px solid #eee;
+.KYM-hostdetail-container .KYM-hostdetail-content {
+  padding: 16px 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #262626;
+  word-break: break-word;
+  flex-grow: 1;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-hashtags {
+  padding: 8px 16px;
+}
+.KYM-hostdetail-container .KYM-hostdetail-hashtag {
+  margin-right: 8px;
+  color: #00376b;
+  font-size: 14px;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-comments {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.KYM-hostdetail-container .KYM-hostdetail-like-info {
+  padding: 0 16px 12px;
+}
+.KYM-hostdetail-container .KYM-hostdetail-date {
+  font-size: 12px;
+  color: #8e8e8e;
+  margin-top: 4px;
+}
+
+/* 배지 이미지 */
+.KYM-hostdetail-badge-img {
+  width: 25px;
+  margin-left: 6px;
+  vertical-align: middle;
 }

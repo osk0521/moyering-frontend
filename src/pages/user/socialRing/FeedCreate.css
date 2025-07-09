@@ -195,7 +195,7 @@
 }
 .KYM-FeedCreate-carousel {
   position: relative;
-  width: 100%;
+  width: 50%;
   height: 0;
   padding-bottom: 75%; /* 원하는 비율로 조정 */
   background: #f5f5f5;

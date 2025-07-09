@@ -95,7 +95,10 @@ export default function FeedDetail() {
   const tags = [tag1, tag2, tag3, tag4, tag5].filter(Boolean);
   const formatDate = s => new Date(s).toLocaleDateString();
 
-  const toggleMenu = () => setShowMenu(v => !v);
+  const toggleMenu = () => {
+  console.log("더보기 클릭됨");
+  setShowMenu(v => !v);
+};
   const openReport = () => { setShowMenu(false); setShowReport(true); };
   const closeReport = () => setShowReport(false);
   console.log("▶ mine :", mine);
@@ -183,11 +186,15 @@ export default function FeedDetail() {
   // 1. 마운트 시 / feedId 변경 시 스크랩 여부 조회
   useEffect(() => {
     let mounted = true;
-    myAxios(token, setToken).get(`user/socialing/scrap/${feedId}`)
+    token&&myAxios(token, setToken).get(`user/socialing/scrap/${feedId}`)
       .then(res => {
         if (mounted) setScrapped(res.data);
       })
-      .catch(console.error);
+      .catch(err => {
+        console.error("피드 상세 조회 실패:", err);
+        alert("피드를 불러오지 못했습니다.");
+        navigate(-1);
+      });
     return () => { mounted = false; };
   }, [token, feedId]);
 
@@ -459,7 +466,7 @@ export default function FeedDetail() {
             </div>
             <div className="KYM-like-info">
               <span className="KYM-like-count">좋아요 {likes}개</span>
-              <span className="KYM-detail-date">{formatDate(createdAt)}</span>
+              {/* <span className="KYM-detail-date">{formatDate(createdAt)}</span> */}
             </div>
 
             {/* 댓글 입력창 */}

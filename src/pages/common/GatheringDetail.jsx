@@ -275,7 +275,7 @@ export default function GatheringDetail() {
         setMembers(
           member.map((m) => ({
             id: m.gatheringApplyId,
-            name: m.name,
+            nickName: m.nickName,
             profileImage: m.profile,
             introduction: m.intro,
             applyDate: m.applyDate,
@@ -734,13 +734,13 @@ export default function GatheringDetail() {
                             <div className="GatheringDetail_member-avatar_osk">
                               <img
                                 src={`${url}/image?filename=${member.profileImage}`}
-                                alt={`${member.name} 프로필`}
+                                alt={`${member.nickName} 프로필`}
                                 className="GatheringDetail_member-profile-image_osk"
                               />
                             </div>
                             <div className="GatheringDetail_member-info_osk">
                               <h4 className="GatheringDetail_member-name_osk">
-                                <span className="GatheringDetail_verified_osk">  {member.name}
+                                <span className="GatheringDetail_verified_osk">  {member.nickName}
                                   <img className="GatheringDetail_member-userBadgeImg_osk" src={`/public/${member.userBadgeImg}`} />
 
                                 </span>
@@ -918,7 +918,7 @@ export default function GatheringDetail() {
                 )}
 
                 {userId === gatheringData.userId && !canModifyGathering() && (
-                  <button className="GatheringDetail_status-message_osk">
+                  <button className="GatheringDetail_btn_osk GatheringDetail_status-message_osk">
                     모임 날짜가 지나 수정할 수 없습니다.
                   </button>
                 )}

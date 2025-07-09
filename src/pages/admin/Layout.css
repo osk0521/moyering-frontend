@@ -251,6 +251,7 @@ body {
   border-right: 1px solid #e9ecef !important;
   font-size: 13px !important;
   white-space: nowrap !important;
+  width: 187
 }
 
 .tableHY thead th:last-child {

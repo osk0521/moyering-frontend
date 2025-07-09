@@ -326,3 +326,34 @@
 .table-containerHY::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* 페이지네이션 스타일 */
+.pagination-containerHY {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-btn:hover {
+  background: #f5f5f5;
+}
+
+.pagination-btn.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}

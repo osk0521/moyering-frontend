@@ -45,7 +45,7 @@ import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
-import ReportManagement from "./pages/admin/ReportManagement";
+// import ReportManagement from "./pages/admin/ReportManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import SettlementManagement  from "./pages/admin/SettlementManagement"; 
 // import SettlementModal  from "./pages/admin/SettlementModal.jsx"; 
@@ -213,7 +213,7 @@ function App() {
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
         <Route path="/admin/notice/edit/:noticeId" element={<NoticeEdit />} />     {/* 공지사항 수정 페이지  */}
         <Route path="/admin/coupon" element={<CouponManagement />} />     {/* 쿠폰 관리 페이지  */}
-        <Route path="/admin/report" element={<ReportManagement />} />       {/* 신고관리 페이지  */}
+        {/* <Route path="/admin/report" element={<ReportManagement />} />       신고관리 페이지  */}
         <Route path="/admin/banner" element={<BannerManagement />} />    {/* 배너관리 페이지  */}
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}

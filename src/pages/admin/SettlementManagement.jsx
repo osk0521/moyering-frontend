@@ -253,7 +253,6 @@ const SettlementManagement = () => {
       {/* 검색 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">
-          <span className="search-iconHY">🔍</span>
           <input
             type="text"
             placeholder="강사 ID, 클래스명 검색"
@@ -263,8 +262,8 @@ const SettlementManagement = () => {
           />
         </div>
         
-        <div className="date-filter-groupHY">
-          <label className="date-labelHY">정산 예정일 기간</label>
+        <div className="date-filter-group">
+          <label className="date-labelHY">정산 기간</label>
           <input
             type="date"
             className="date-inputHY"

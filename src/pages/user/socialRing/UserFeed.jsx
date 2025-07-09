@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, data } from 'react-router-dom';
-import { useAtom } from 'jotai';
-import { tokenAtom } from '../../../atoms';
+import { useAtom, useAtomValue } from 'jotai';
+import { tokenAtom, userAtom } from '../../../atoms';
 import { myAxios, url } from '../../../config';
 import axios from 'axios';
 
@@ -16,10 +16,14 @@ export default function UserFeed() {
   const { nickname } = useParams();
   const navigate = useNavigate();
   const [token, setToken] = useAtom(tokenAtom);
-
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [currentImage, setCurrentImage] = useState({});
+  const [follow, setFollow] = useState('');
+  const [follower, setFollower] = useState('');
+  const [feedCount, setFeedCount] = useState('');
+  const [followCount,setFollowCount] = useState('');
+  const [followingCount,setFollowingCount] = useState('');
 
   // 1) 프로필 정보 조회
   useEffect(() => {
@@ -31,8 +35,9 @@ export default function UserFeed() {
           : axios.create({ baseURL: url });
 
         const { data: u } = await api.get(`/socialing/feedUser/${nickname}`);
-        console.log(u)
+
         setUser({
+          userId: u.userId,
           profile: u.profile,
           nickname: u.nickName || u.username,
           badgeUrl: `${url}/iupload/${u.userBadgeId}.png`,
@@ -135,8 +140,29 @@ export default function UserFeed() {
     }));
   };
 
-  if (!user) return <div className="KYM-loading">로딩 중…</div>;
+  useEffect(() => {
+    if (user) {
+      token && myAxios(token, setToken)
+        .get(`/socialing/subCount`,{
+          params:{
+            userId:user.userId,
+          }}
+        )
+        .then((res) => {
+          console.log("결과")
+          console.log(res);
+          setFeedCount(res.data.feedCount);
+          setFollowCount(res.data.followCount);
+          setFollowingCount(res.data.followingCount);
+        })
+        .catch((err) => {
+          console.log(user.userId);
+          console.log(err);
+        });
+    }
+  }, [token,user]);  // user.userId가 변경될 때마다 실행
 
+  if (!user) return <div className="KYM-loading">로딩 중…</div>;
   return (
     <>
       <Header />
@@ -170,9 +196,9 @@ export default function UserFeed() {
               <button className="KYM-btn KYM-message">메시지</button>
             </div>
             <ul className="KYM-stat-list">
-              <li><strong>{user.stats.posts}</strong><span>게시물</span></li>
-              <li><strong>{user.stats.followers}</strong><span>팔로워</span></li>
-              <li><strong>{user.stats.following}</strong><span>팔로잉</span></li>
+              <li><strong>{feedCount}</strong><span>게시물</span></li>
+              <li><strong>{followCount}</strong><span>팔로워</span></li>
+              <li><strong>{followingCount}</strong><span>팔로잉</span></li>
             </ul>
           </div>
         </div>

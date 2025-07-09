@@ -224,9 +224,10 @@ export default function MyProfilePage() {
                 </table>
 
                 <div className="KYM-address-box">
+                        <label>주소</label>
                     <div className="KYM-post-row">
                         <input type="text" value={addr} readOnly onClick={() => setIsPostcodeOpen(true)} style={{ cursor: 'pointer' }} />
-                        <button onClick={() => setIsPostcodeOpen(true)}>주소 검색</button>
+                        <button className="KYM-address-btn" onClick={() => setIsPostcodeOpen(true)}>주소 검색</button>
                     </div>
                     <input id="detailAddrInput" value={detailAddr} onChange={e => setDetailAddr(e.target.value)} placeholder="상세주소" />
                 </div>

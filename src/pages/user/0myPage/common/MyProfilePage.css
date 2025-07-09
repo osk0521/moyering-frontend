@@ -261,3 +261,13 @@
     width: 60px;
     height: 60px;
 }
+.KYM-profile-wrap .KYM-address-btn {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: #FFB22C;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  width: 100px;
+}

@@ -372,7 +372,6 @@ export default function FeedPage2() {
                         </button>
                     )}
                 </div>
-            <Footer />
             {showCreateModal && (
                 <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -381,6 +380,7 @@ export default function FeedPage2() {
                 </div>
             )}
             </div>
+            <Footer />
         </>
     );
 }

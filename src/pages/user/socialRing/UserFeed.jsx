@@ -11,6 +11,7 @@ import moreIcon from './icons/more.png';
 import heartOutline from './icons/heart-outline.png';
 import heartFilled from './icons/heart-filled.png';
 import commentIcon from './icons/comment.svg';
+import FollowButton from './FollowButton';
 
 export default function UserFeed() {
   const { nickname } = useParams();
@@ -22,8 +23,8 @@ export default function UserFeed() {
   const [follow, setFollow] = useState('');
   const [follower, setFollower] = useState('');
   const [feedCount, setFeedCount] = useState('');
-  const [followCount,setFollowCount] = useState('');
-  const [followingCount,setFollowingCount] = useState('');
+  const [followCount, setFollowCount] = useState('');
+  const [followingCount, setFollowingCount] = useState('');
 
   // 1) 프로필 정보 조회
   useEffect(() => {
@@ -143,10 +144,11 @@ export default function UserFeed() {
   useEffect(() => {
     if (user) {
       token && myAxios(token, setToken)
-        .get(`/socialing/subCount`,{
-          params:{
-            userId:user.userId,
-          }}
+        .get(`/socialing/subCount`, {
+          params: {
+            userId: user.userId,
+          }
+        }
         )
         .then((res) => {
           console.log("결과")
@@ -160,7 +162,7 @@ export default function UserFeed() {
           console.log(err);
         });
     }
-  }, [token,user]);  // user.userId가 변경될 때마다 실행
+  }, [token, user]);  // user.userId가 변경될 때마다 실행
 
   if (!user) return <div className="KYM-loading">로딩 중…</div>;
   return (
@@ -192,7 +194,11 @@ export default function UserFeed() {
               ))}
             </p>
             <div className="KYM-action-buttons">
-              <button className="KYM-btn KYM-follow">팔로우</button>
+              <FollowButton
+                targetUserId={user.userId}
+                className="KYM-follow-btn"
+                style={{ marginLeft: '8px' }}
+              />
               <button className="KYM-btn KYM-message">메시지</button>
             </div>
             <ul className="KYM-stat-list">

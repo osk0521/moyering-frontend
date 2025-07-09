@@ -197,3 +197,14 @@
     align-items: center;
     gap: 4px;
 }
+.KYM-profile-container .KYM-follow-btn,
+.KYM-profile-container .KYM-edit-btn {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: #FFB22C;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  width: 100px;
+}

@@ -30,6 +30,7 @@ export default function MainSearch() {
         myAxios()
             .post('/searchAll', params)
             .then(res => {
+                console.log(res.data);
                 setFeedList(res.data.feedList);
                 setHostClassList(res.data.hostClassList);
                 setGatheringList(res.data.gatheringList);
@@ -129,7 +130,6 @@ export default function MainSearch() {
                                     )}
                                     <div className="card-date">{item.date}</div>
                                 </div>
-                                {index !== currentItems.length - 1 && <div className="custom-divider" />}
                             </div>
                         ))
                     )}

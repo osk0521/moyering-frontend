@@ -22,8 +22,8 @@ export default function UserFeed() {
   const [follow, setFollow] = useState('');
   const [follower, setFollower] = useState('');
   const [feedCount, setFeedCount] = useState('');
-  const [followCount,setFollowCount] = useState('');
-  const [followingCount,setFollowingCount] = useState('');
+  const [followCount, setFollowCount] = useState('');
+  const [followingCount, setFollowingCount] = useState('');
 
   // 1) 프로필 정보 조회
   useEffect(() => {
@@ -143,10 +143,11 @@ export default function UserFeed() {
   useEffect(() => {
     if (user) {
       token && myAxios(token, setToken)
-        .get(`/socialing/subCount`,{
-          params:{
-            userId:user.userId,
-          }}
+        .get(`/socialing/subCount`, {
+          params: {
+            userId: user.userId,
+          }
+        }
         )
         .then((res) => {
           console.log("결과")
@@ -160,7 +161,9 @@ export default function UserFeed() {
           console.log(err);
         });
     }
-  }, [token,user]);  // user.userId가 변경될 때마다 실행
+  }, [token, user]);  // user.userId가 변경될 때마다 실행
+
+
 
   if (!user) return <div className="KYM-loading">로딩 중…</div>;
   return (
@@ -238,11 +241,13 @@ export default function UserFeed() {
                           nextImage(post.id, images.length);
                         }}
                       >›</button>
-                      <div className="KYM-image-dots">
+                      <div className="KYM-image-dots" 
+>
                         {images.map((_, i) => (
                           <span
                             key={i}
                             className={i === currentIdx ? 'KYM-dot active' : 'KYM-dot'}
+                            
                             onClick={(e) => e.stopPropagation()}
                           >●</span>
                         ))}

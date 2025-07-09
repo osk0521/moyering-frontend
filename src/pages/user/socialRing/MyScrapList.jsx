@@ -97,6 +97,9 @@ export default function MyScrapPage() {
             </div>
 
             <div className="KYM-feed-main">
+              {scraps.length === 0 && (
+                <div className='KYM-no-scraps'>스크랩목록이 없습니다.</div>
+              )}
               <div className="KYM-posts-grid">
                 {scraps.map(feed => {
                   const images = getFeedImages(feed);

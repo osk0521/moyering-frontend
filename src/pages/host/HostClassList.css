@@ -135,6 +135,10 @@
   width: 250px;
 }
 
+.KHJ-date-buttons{
+  margin-top: 10px;
+}
+
 .KHJ-date-buttons button {
   background-color: #ccc;
   color: white;
@@ -313,5 +317,55 @@
   background-color: #ffbf00;
   color: white;
   font-weight: bold;
+  border-color: #ffbf00;
+}
+.KHJ-radio-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.KHJ-radio-button {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0px 3px;
+  background-color: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  display: inline-flex;
+  justify-content: center;
+  color: white;
+  align-items: center;
+}
+
+.KHJ-radio-button input[type="radio"] {
+  display: none; /* 기본 라디오 버튼 숨기기 */
+}
+
+.KHJ-radio-button span {
+  display: inline-block;
+  padding: 6px 12px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.KHJ-radio-button:hover {
+  background-color: #e0a800; /* hover 시 배경색 */
+  color: white;
+  border-color: #e0a800; /* hover 시 테두리 색상 */
+}
+
+.KHJ-radio-button.active {
+  background-color: #ffbf00; /* active 상태에서 배경색 */
+  color: white;
+  border-color: #ffbf00; /* active 상태에서 테두리 색상 */
+}
+
+/* 선택된 라디오 버튼의 span */
+.KHJ-radio-button input[type="radio"]:checked + span {
+  background-color: #ffbf00;
+  color: white;
   border-color: #ffbf00;
 }

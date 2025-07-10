@@ -9,7 +9,7 @@ import logoImage from "/logo.png";
 import React, { useEffect, useState, useCallback } from "react";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import { tokenAtom, userAtom, alarmsAtom } from "../../atoms";
-import { myAxios, url } from "../../config";
+import { KAKAO_JavaScript_API_KEY, myAxios, url } from "../../config";
 import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 import useFetchUserGatherLikes from "../../hooks/common/useFetchUserGatherLikes";
 
@@ -20,12 +20,15 @@ export default function Header() {
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
-  const [query,setQuery] = useState('');
+  const [query, setQuery] = useState('');
+
+  const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+
   useFetchUserClassLikes();
   useFetchUserGatherLikes();
   const handleSearch = (e) => {
     e.preventDefault();
-    if(!query.trim()) return;
+    if (!query.trim()) return;
     navigate(`/mainSearch?query=${encodeURIComponent(query)}`);
   }
 
@@ -48,7 +51,7 @@ export default function Header() {
   }, [notificationDropdownOpen]);
 
   // 모든 알림을 읽음으로 처리
- const handleMarkAllAsRead = useCallback(async (e) => {
+  const handleMarkAllAsRead = useCallback(async (e) => {
     e.stopPropagation(); // 드롭다운이 닫히지 않도록
     if (!Array.isArray(alarms) || alarms.length === 0) {
       console.log('알림이 없어서 함수 종료');
@@ -66,12 +69,12 @@ export default function Header() {
   }, [alarms, token, setAlarms]);
 
   // 알림 클릭 처리
- const handleNotificationClick = useCallback(async (notification, e) => {
+  const handleNotificationClick = useCallback(async (notification, e) => {
     e.stopPropagation(); // 드롭다운이 닫히지 않도록
-    
+
     try {
       const response = await myAxios(token).post(`/confirm/${notification.alarmId}`);
-      
+
       if (response.data === true) {
         // 확인된 알림을 목록에서 제거
         setAlarms(prevAlarms => prevAlarms.filter(alarm => alarm.alarmId !== notification.alarmId));
@@ -87,17 +90,35 @@ export default function Header() {
 
   useEffect(() => {
     console.log(user);
-    if (user&&token) {
-      myAxios(token,setToken).post('/user/alarms')
-        .then(response=> {
+    if (user && token) {
+      myAxios(token, setToken).post('/user/alarms')
+        .then(response => {
           console.log(response.data)
           setAlarms([...response.data])
         })
-        .catch(err=> {
+        .catch(err => {
           console.log(err)
         })
-    } 
+    }
   }, [user]);
+
+  useEffect(() => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(KAKAO_REST_API_KEY); // 🔑 Kakao Developers에서 확인
+      console.log('Kakao SDK initialized!');
+    }
+  }, []);
+
+  const openKakaoChat = () => {
+    if (window.Kakao && window.Kakao.Channel) {
+      window.Kakao.Channel.chat({
+        channelPublicId: '_ZFxfSn' // 너의 카카오 채널 ID
+      });
+    } else {
+      alert("Kakao SDK가 아직 로드되지 않았습니다.");
+    }
+  };
+
 
   return (
     <div className="Header_header-container_osk">
@@ -109,9 +130,9 @@ export default function Header() {
                 <img
                   src={
                     user.profile
-                      ? user.profile.startsWith("http") 
+                      ? user.profile.startsWith("http")
                         ? user.profile
-                        : `${url}/image?filename=${user.profile}` 
+                        : `${url}/image?filename=${user.profile}`
                       : '/profile.png'
                   }
                   alt={`${user.nickName}`}
@@ -119,14 +140,14 @@ export default function Header() {
                 />
                 <span>{user.nickName} 님</span>
               </span>
-              
-              <Button className="Header_icon-button_osk Header_heart-button_osk" 
+
+              <Button className="Header_icon-button_osk Header_heart-button_osk"
                 onClick={() => navigate(`/user/mypage/myWishlist`)}>
                 <FaHeart className="Header_top-icon_osk login" />
               </Button>
 
-              <Dropdown 
-                isOpen={notificationDropdownOpen} 
+              <Dropdown
+                isOpen={notificationDropdownOpen}
                 toggle={toggleNotificationDropdown}
                 className="Header_notification-dropdown-container_osk"
               >
@@ -134,7 +155,7 @@ export default function Header() {
                   tag="button"
                   className="Header_notification-button_osk"
                 >
-                  {alarms.length > 0 ? (  
+                  {alarms.length > 0 ? (
                     <>
                       <FaBell className="Header_top-icon_osk Header_notification-active_osk" />
                       <span className="Header_notification-badge_osk alarm-count">{alarms.length > 9 ? '9+' : alarms.length}</span>
@@ -144,25 +165,25 @@ export default function Header() {
                   )}
 
                   {alarms.length > 0 && (
-                    <Badge 
-                      color="danger" 
-                      pill 
+                    <Badge
+                      color="danger"
+                      pill
                       className="Header_notification-badge_osk"
                     >
                     </Badge>
                   )}
                 </DropdownToggle>
 
-                <DropdownMenu 
-                  end 
+                <DropdownMenu
+                  end
                   className="Header_notification-dropdown-menu_osk"
                 >
                   <div className="Header_notification-header_osk">
                     <h6 className="Header_notification-title_osk">알림</h6>
                     {Array.isArray(alarms) && alarms.length > 0 && (
-                      <Button 
-                        size="sm" 
-                        color="link" 
+                      <Button
+                        size="sm"
+                        color="link"
                         className="Header_mark-all-read-btn_osk"
                         onClick={handleMarkAllAsRead}
                       >
@@ -180,12 +201,12 @@ export default function Header() {
                     </DropdownItem>
                   ) : (
                     <>
-                      
+
                       {alarms.map((alarms, index) => (
                         <DropdownItem
                           key={alarms?.num || index}
                           className="Header_notification-item_osk"
-                          
+
                         >
                           <div className="Header_notification-content_osk">
                             <div className="Header_notification-main_osk">
@@ -204,7 +225,7 @@ export default function Header() {
                             <span className="Header_notification-confirm_osk" onClick={(e) => handleNotificationClick(alarms, e)}>확인</span>
                           </div>
                         </DropdownItem>
-                      ))}        
+                      ))}
                     </>
                   )}
                 </DropdownMenu>
@@ -218,7 +239,7 @@ export default function Header() {
                 <a href="/user/mypage/mySchedule">마이페이지</a>
               </span>
               <span className="Header_top-menu-link_osk">
-                {user.userType==="ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : <a href="/host/intro">호스트페이지</a>}
+                {user.userType === "ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : <a href="/host/intro">호스트페이지</a>}
               </span>
               <span className="Header_top-menu-link_osk">
                 <button className="Header_top-menu-logout" onClick={logout}>로그아웃</button>
@@ -232,7 +253,7 @@ export default function Header() {
               <span className="Header_top-menu-link_osk">
                 <a href="/join">회원가입</a>
               </span>
-              
+
               {/* <Button className="Header_icon-button_osk Header_heart-button_osk">
                 <FaHeart className="Header_top-icon_osk" />
               </Button>
@@ -272,7 +293,7 @@ export default function Header() {
                 <Input
                   type="text"
                   value={query}
-                  onChange={(e)=>setQuery(e.target.value)}
+                  onChange={(e) => setQuery(e.target.value)}
                   placeholder="다양한 컨텐츠를 찾아보세요!"
                   className="Header_search-input_osk"
                 />
@@ -287,15 +308,20 @@ export default function Header() {
           <div className="Header_nav-section_osk">
             <span
               className="Header_nav-item_osk"
-              onClick={() => 
-               navigate("/classList")}
+              onClick={() =>
+                navigate("/classList")}
             >
               클래스링
             </span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/gatheringList`)}>게더링</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/feeds`)}>소셜링</span>
             <span className="Header_nav-item_osk" onClick={() => navigate(`/noticeList`)}>공지사항</span>
-            <span className="Header_nav-item_osk" onClick={() => navigate(`/`)}>고객센터</span>
+            <span
+              className="Header_nav-item_osk"
+              onClick={openKakaoChat}
+            >
+              고객센터
+            </span>
           </div>
         </div>
       </div>

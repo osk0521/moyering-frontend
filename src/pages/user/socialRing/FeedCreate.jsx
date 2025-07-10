@@ -8,7 +8,7 @@ import { myAxios, url } from '../../../config';
 
 export default function FeedCreate() {
     const user = useAtomValue(userAtom);
-    const [token,setToken] = useAtom(tokenAtom);
+    const [token, setToken] = useAtom(tokenAtom);
     const navigate = useNavigate();
 
     // 상태 관리
@@ -21,7 +21,7 @@ export default function FeedCreate() {
     const [currentIndex, setCurrentIndex] = useState(0);  // 슬라이드 인덱스
 
     // 취소
-    const handleCancel = () => navigate(-1);
+    const handleCancel = () => navigate(0);
 
     // 이미지 선택
     const openFileDialog = () => fileInputRef.current.click();
@@ -93,7 +93,7 @@ export default function FeedCreate() {
             imageFiles.forEach(file => {
                 formData.append('images', file);
             });
-            const res = await myAxios(token,setToken).post(
+            const res = await myAxios(token, setToken).post(
                 `${url}/user/socialing/feed`,
                 formData
             );
@@ -115,11 +115,11 @@ export default function FeedCreate() {
                     취소
                 </button>
                 <div className="KYM-FeedCreate-title">
-                    <img
+                    {/* <img
                         src={plusIcon}
                         className="KYM-FeedCreate-icon-plus"
                         alt="플러스 아이콘"
-                    />
+                    /> */}
                     새 피드 작성
                 </div>
                 <button
@@ -169,10 +169,10 @@ export default function FeedCreate() {
                     className="KYM-FeedCreate-form"
                     onSubmit={handleSubmit}
                 >
-                    {/* 작성자 정보 */}
+                    {/* 작성자 정보
                     <div className="KYM-FeedCreate-author-info">
                         <img
-                            src={user.profile}
+                            src={`${url}/iupload/${user.profile}`}
                             alt={user.nickName}
                             className="KYM-FeedCreate-author-profile"
                         />
@@ -181,12 +181,12 @@ export default function FeedCreate() {
                                 {user.nickName}
                             </span>
                             <img
-                                src={`/badges/${user.userBadgeId}.png`}
+                                src={`${url}/iupload/${user.user}`}
                                 alt="배지"
                                 className="KYM-FeedCreate-author-badge"
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* 글 내용 */}
                     <textarea
@@ -207,7 +207,12 @@ export default function FeedCreate() {
                                 type="text"
                                 value={tagInput}
                                 onChange={e => setTagInput(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleAddTag()}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault(); // 엔터로 form submit 막기
+                                        handleAddTag();
+                                    }
+                                }}
                                 placeholder="태그 입력 후 Enter"
                             />
                         </div>

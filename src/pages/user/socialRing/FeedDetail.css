@@ -18,16 +18,18 @@
 .KYM-detail-container .KYM-detail-image {
   position: relative;
   width: 60%;
+   min-height: 400px;
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  aspect-ratio: 4/3;
 }
 
 .KYM-detail-container .KYM-detail-image img {
   max-width: 100%;
-  max-height: 80vh;
+  max-height: 75vh;
   object-fit: contain;
   border-radius: 8px;
 }
@@ -87,14 +89,18 @@
   display: flex;
   flex-direction: column;
   background: #fff;
-  height: 70vh;
+  height: 75vh;
+  overflow: visible;
 }
 
 .KYM-detail-container .KYM-detail-header {
   display: flex;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
+  /* padding: 16px;
+  border-bottom: 1px solid #eee; */
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 }
 
 .KYM-detail-container .KYM-detail-avatar {
@@ -106,6 +112,11 @@
 
 .KYM-detail-container .KYM-detail-nickname {
   font-weight: bold;
+  max-width: none;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
 }
 
 .KYM-detail-container .KYM-detail-badge {
@@ -121,10 +132,13 @@
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
+  /* width: 120px; */
+  margin-left: 8px;
+  flex-shrink: 0;
 }
 
 .KYM-detail-container .KYM-more-wrapper {
-  position: relative;
+   margin-left: auto;
 }
 
 .KYM-detail-container .KYM-detail-more {
@@ -144,6 +158,8 @@
 .KYM-detail-container .KYM-left-info {
   display: flex;
   align-items: center;
+    flex: 1 1 auto;
+  min-width: 0; 
 }
 
 .KYM-detail-container .KYM-detail-menu {
@@ -157,7 +173,7 @@
   width: 140px;
   list-style: none;
   padding: 4px 0;
-  z-index: 10;
+  z-index: 999;
 }
 
 .KYM-detail-container .KYM-detail-menu li {
@@ -220,6 +236,7 @@
   line-height: 1.6;
   color: #262626;
   word-break: break-word;
+  flex-grow: 1;
 }
 
 .KYM-detail-container .KYM-hashtags {
@@ -356,4 +373,12 @@
   bottom: 48px;
   left: 40px;
   z-index: 1000;
+}
+
+.KYM-detail-badge-img {
+  width: 25px;
+  /* height: 20px; */
+  margin-left: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
 }

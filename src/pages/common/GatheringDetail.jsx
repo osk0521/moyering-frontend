@@ -405,11 +405,8 @@ export default function GatheringDetail() {
 
       // 날짜 부분만 추출 (YYYY-MM-DD 형식)
       const dateOnly = date.toISOString().split("T")[0];
-
       // 시간 부분만 추출 (HH:mm 형식)
       const timeOnly = date.toTimeString().slice(0, 5);
-
-      // 기존 함수들 활용
       const formattedDate = formatDate(dateOnly);
       const formattedTime = formatTime(timeOnly);
 
@@ -748,7 +745,7 @@ export default function GatheringDetail() {
                               <p className="GatheringDetail_member-description_osk">
                                 {member.introduction}
                               </p>
-                              <span className="GatheringDetail_more-text_osk" onClick={() => navigate(`/userFeed/${member.id}`)}>
+                              <span className="GatheringDetail_more-text_osk" onClick={() => navigate(`/userFeed/${member.nickName}`)}>
                                 더보기
                                 <BiChevronRight />
                               </span>
@@ -870,13 +867,11 @@ export default function GatheringDetail() {
                 >
                   {isLiked ? (
                     <>
-                      <FaHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />{" "}
-                      찜해제
+                      <FaHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />
                     </>
                   ) : (
                     <>
-                      <CiHeart className="GatheringDetail_top-icon_osk" />{" "}
-                      찜하기
+                      <CiHeart className="GatheringDetail_top-icon_osk" />
                     </>
                   )}
                 </button>

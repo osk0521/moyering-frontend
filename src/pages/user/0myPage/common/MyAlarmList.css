@@ -110,13 +110,13 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  background: #ff6b35;
+  background: #FFB534;
   color: white;
   height: 38px;
 }
 
 .MyAlarmList_search_action_button_osk:hover {
-  background: #e55a2b;
+  background: #FFB534;
 }
 
 .MyAlarmList_table_container_osk {
@@ -157,7 +157,9 @@
   vertical-align: middle;
   border: 1px solid #dee2e6;
 }
-
+.MyAlarmList_table_cell_osk:nth-child(4) {
+  width: 400px;
+}
 .MyAlarmList_checkbox_osk {
   width: 16px;
   height: 16px;
@@ -229,6 +231,8 @@
   border-radius: 4px;
   transition: all 0.2s;
   min-width: 32px;
+  width: 40px;
+  height: 40px;
 }
 
 .MyAlarmList_pagination_button_osk:hover {
@@ -236,7 +240,7 @@
 }
 
 .MyAlarmList_pagination_active_osk {
-  background: #ff6b35;
+  background: #FFB534;
   color: white;
-  border-color: #ff6b35;
+  border-color: #FFB534;
 }

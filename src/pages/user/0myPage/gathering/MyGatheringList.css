@@ -276,11 +276,10 @@
   background: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 16px;
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   font-weight: 500;
 }
-
 .MyGatheringList_gathering-actions_osk {
   flex-shrink: 0;
   display: flex;
@@ -346,13 +345,14 @@
 }
 
 .MyGatheringList_badge_osk.MyGatheringList_red_osk {
-  background: #ff6b6b;
-  color: white;
+  /* background: #ff6b6b; */
+  background: #FEF3E2;
+  color: #FFB22C;
 }
 
 .MyGatheringList_badge_osk.MyGatheringList_blue_osk {
-  background: #4A90E2;
-  color: white;
+  background: #A8F1FF;
+  color: #0E8EA7;
 }
 
 .MyGatheringList_meta_osk {
@@ -371,12 +371,20 @@
 }
 
 .MyGatheringList_meta-icon_osk {
-  width: 16px;
+  width: 25px;
+  height: 25px;
   text-align: center;
 }
-
-.MyGatheringList_description_osk {
+.MyGatheringList_meta-icon_osk svg {
+  width: inherit;
+  height: inherit;
+  fill: #FFB22C;
+}
+.MyGatheringList_meta-row-info_osk {
   font-size: 14px;
+}
+.MyGatheringList_description_osk {
+  font-size: 15px;
   color: #666;
   line-height: 1.4;
   margin: 8px 0;
@@ -471,7 +479,7 @@
   font-size: 14px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 4px;
+  margin: 0 0 12px 12px;
 }
 
 .MyGatheringList_applicant-intro_osk {
@@ -533,9 +541,10 @@
 .MyGatheringList_pagination_osk button {
   width: 40px;
   height: 40px;
-  border: 1px solid #e9ecef;
-  background: white;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -544,14 +553,14 @@
 }
 
 .MyGatheringList_pagination_osk button:hover {
-  background: #f8f9fa;
+  background-color: #f8f9fa;
   border-color: #ddd;
 }
 
 .MyGatheringList_pagination_osk button.MyGatheringList_active_osk {
-  color: #ffc107;
-  font-weight: 600;
-  background-color: white;
+  background-color: #FFB534;
+  color: white;
+  border-color: #FFB534;
 }
 
 .MyGatheringList_info_applicant-profile_osk{

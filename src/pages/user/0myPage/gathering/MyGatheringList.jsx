@@ -317,7 +317,9 @@ export default function MyGatheringList() {
     <div>
       <Header />
       <div className="MyGatherPage_container MyGatheringList_mypage-wrapper_osk">
-        <Sidebar />
+       <aside>
+          <Sidebar />
+        </aside>
         <section className="MyGatheringList_gathering-main_osk">
           <div className="MyGatheringList_gathering-header_osk">
             <h3>게더링 목록</h3>
@@ -410,25 +412,25 @@ export default function MyGatheringList() {
                                 <span className="MyGatheringList_meta-icon_osk">
                                   <CiCalendar />
                                 </span>
-                                <span>신청 마감: {item.applyDeadline}까지</span>
+                                <span className="MyGatheringList_meta-row-info_osk">신청 마감: {item.applyDeadline}까지</span>
                               </div>
                               <div className="MyGatheringList_meta-row_osk">
                                 <span className="MyGatheringList_meta-icon_osk">
                                   <CiClock1 />
                                 </span>
-                                <span>모임 시간: {item.meetingTime}</span>
+                                <span className="MyGatheringList_meta-row-info_osk">모임 시간: {item.meetingTime}</span>
                               </div>
                               <div className="MyGatheringList_meta-row_osk">
                                 <span className="MyGatheringList_meta-icon_osk">
                                   <GoPeople />
                                 </span>
-                                <span>참석 인원: {item.participants}, 지원자 총 {item.appliedCount} 명, {item.acceptedCount} 명 참여 중</span>
+                                <span className="MyGatheringList_meta-row-info_osk">참석 인원: {item.participants}, 지원자 총 {item.appliedCount} 명, {item.acceptedCount} 명 참여 중</span>
                               </div>
                               <div className="MyGatheringList_meta-row_osk">
                                 <span className="MyGatheringList_meta-icon_osk">
                                   <CiLocationOn />
                                 </span>
-                                <span>{item.location}</span>
+                                <span className="MyGatheringList_meta-row-info_osk">{item.location}</span>
                               </div>
                             </div>
                             {item.description && (
@@ -442,8 +444,8 @@ export default function MyGatheringList() {
                                   <span
                                     key={idx}
                                     className="MyGatheringList_tag_osk"
-                                  >
-                                    {tag}
+                                  > 
+                                  {`#${tag}`}
                                   </span>
                                 ))}
                             </div>
@@ -489,7 +491,7 @@ export default function MyGatheringList() {
                                   <div className="MyGatheringList_applicant-tags_osk">
                                     {applicant.tags.map((t, idx) => (
                                       <span className="MyGatheringList_tag_osk" key={idx}>
-                                        {t}
+                                         {`#${t}`}
                                       </span>
                                     ))}
                                   </div>
@@ -569,6 +571,15 @@ export default function MyGatheringList() {
           )}
           {pageInfo.allPage > 1 && (
             <div className="MyGatheringList_pagination_osk">
+               {pageInfo.curPage > 1 && (
+                <button
+                  onClick={() =>
+                    setSearch((prev) => ({ ...prev, page: pageInfo.curPage - 1 }))
+                  }
+                >
+              〈
+                </button>
+              )}
               {pageNums.map((pageNum) => (
                 <button
                   key={pageNum}
@@ -584,6 +595,15 @@ export default function MyGatheringList() {
                   {pageNum}
                 </button>
               ))}
+              {pageInfo.curPage < pageInfo.allPage && (
+                <button
+                  onClick={() =>
+                    setSearch((prev) => ({ ...prev, page: pageInfo.curPage + 1 }))
+                  }
+                >
+                  〉
+                </button>
+              )}
             </div>
           )}
         </section>

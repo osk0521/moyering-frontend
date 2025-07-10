@@ -62,10 +62,10 @@ export default function GatherInquiry() {
     }
     if (startDate) {
       requestBody.startDate = startDate.toISOString().split('T')[0];
-    }  
+    }
     if (endDate) {
       requestBody.endDate = endDate.toISOString().split('T')[0];
-    } 
+    }
     return requestBody;
   }, [search, startDate, endDate]);
 
@@ -79,12 +79,10 @@ export default function GatherInquiry() {
       }
       return;
     }
-
     if (!token) {
       console.log('토큰이 없습니다. 로딩을 건너뜁니다.');
       return;
     }
-
     setLoading(true);
     setError(null);
 
@@ -97,7 +95,7 @@ export default function GatherInquiry() {
 
       console.log("API 요청:", { endpoint, requestBody });
 
-      const response = await myAxios(token, setToken).post(endpoint, requestBody );
+      const response = await myAxios(token, setToken).post(endpoint, requestBody);
       const { data } = response;
 
       console.log("API 응답:", data);
@@ -159,86 +157,83 @@ export default function GatherInquiry() {
 
   // 상태 변경
   const handleStatusChange = useCallback((statusValue) => {
-  let booleanStatus = null;
-  switch(statusValue) {
-    case "전체":
-      booleanStatus = null;
-      break;
-    case "답변대기":
-      booleanStatus = false;
-      break;
-    case "답변완료":
-      booleanStatus = true;
-      break;
-    default:
-      booleanStatus = null;
-  }
-  
-  console.log("변환된 Boolean 값:", booleanStatus);
-  
-  setSelectedStatus(booleanStatus);
-  setSearch(prev => ({ 
-    ...prev, 
-    isAnswered: booleanStatus, 
-    page: 1 
-  }));
-}, []);
+    let booleanStatus = null;
+    switch (statusValue) {
+      case "전체":
+        booleanStatus = null;
+        break;
+      case "답변대기":
+        booleanStatus = false;
+        break;
+      case "답변완료":
+        booleanStatus = true;
+        break;
+      default:
+        booleanStatus = null;
+    }
+
+    console.log("변환된 Boolean 값:", booleanStatus);
+
+    setSelectedStatus(booleanStatus);
+    setSearch(prev => ({
+      ...prev,
+      isAnswered: booleanStatus,
+      page: 1
+    }));
+  }, []);
   const getStatusDisplayText = (booleanStatus) => {
-      if (booleanStatus === null) return "전체";
-      if (booleanStatus === true) return "답변완료";
-      if (booleanStatus === false) return "답변대기";
-      return "전체";
-    };
+    if (booleanStatus === null) return "전체";
+    if (booleanStatus === true) return "답변완료";
+    if (booleanStatus === false) return "답변대기";
+    return "전체";
+  };
   // 답변 등록
- const handleReplySubmit = useCallback(async (inquiryId) => {
-  const reply = replyText[inquiryId];
-  if (!reply || !reply.trim()) {
-    alert("답변을 입력해주세요.");
-    return;
-  }
+  const handleReplySubmit = useCallback(async (inquiryId) => {
+    const reply = replyText[inquiryId];
+    if (!reply || !reply.trim()) {
+      alert("답변을 입력해주세요.");
+      return;
+    }
 
-  // currentInquiry 찾기 및 검증을 먼저 수행
-  const currentInquiry = receivedInquiryList.find(item => item.inquiryId === inquiryId);
-  if (!currentInquiry) {
-    alert("문의 정보를 찾을 수 없습니다.");
-    return;
-  }
+    // currentInquiry 찾기 및 검증을 먼저 수행
+    const currentInquiry = receivedInquiryList.find(item => item.inquiryId === inquiryId);
+    if (!currentInquiry) {
+      alert("문의 정보를 찾을 수 없습니다.");
+      return;
+    }
 
-try {
-    setLoading(true);
-    
-    const requestData = {
+    try {
+      setLoading(true);
+      const requestData = {
         inquiryId: inquiryId,
         gatheringId: currentInquiry.gatheringId,
         responseContent: reply.trim(),
         responseDate: new Date().toISOString().split('T')[0]
-    };
-    
-    const response = await myAxios(token, setToken).post(
-        `/user/responseToGatheringInquiry`, 
-        requestData 
-    );
-    alert("답변이 등록되었습니다.");
-    setReplyText(prev => ({ ...prev, [inquiryId]: "" }));
-    setOpenId(null); // 아코디언 닫기
-    loadInquiryData(); // 데이터 재로딩
-  } catch (err) {
-    console.error("답변 등록 오류:", err);
-    if (err.response?.status === 401) {
-      setError("인증이 만료되었습니다. 다시 로그인해주세요.");
-      setToken('');
-      if (window.confirm("로그인이 만료되었습니다. 로그인 페이지로 이동하시겠습니까?")) {
-        navigate("/userlogin");
+      };
+      const response = await myAxios(token, setToken).post(
+        `/user/responseToGatheringInquiry`,
+        requestData
+      );
+      setReplyText(prev => ({ ...prev, [inquiryId]: "" }));
+      setOpenId(null); // 아코디언 닫기
+      loadInquiryData(); // 데이터 재로딩
+    } catch (err) {
+      console.error("답변 등록 오류:", err);
+      if (err.response?.status === 401) {
+        setError("인증이 만료되었습니다. 다시 로그인해주세요.");
+        setToken('');
+        if (window.confirm("로그인이 만료되었습니다. 로그인 페이지로 이동하시겠습니까?")) {
+          navigate("/userlogin");
+        }
+      } else if (err.response?.status === 400) {
+        alert("잘못된 요청입니다. 입력 내용을 확인해주세요.");
+      } else {
+        alert("답변 등록 중 오류가 발생했습니다.");
       }
-    } else if (err.response?.status === 400) {
-      alert("잘못된 요청입니다. 입력 내용을 확인해주세요.");
-    } else {
-      alert("답변 등록 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-}, [replyText, token, setToken, loadInquiryData, navigate, setError, setToken]);
+  }, [replyText, token, setToken, loadInquiryData, navigate, setError, setToken]);
 
   // 데이터 로딩 useEffect
   useEffect(() => {
@@ -305,7 +300,9 @@ try {
     <div>
       <Header />
       <main className="MyGatherPage_container MyGatherInquiryList_gather-inquiry-page_osk">
-        <Sidebar />
+        <aside>
+          <Sidebar />
+        </aside>
         <section className="MyGatherInquiryList_inquiry-section_osk">
           <div className="MyGatherInquiryList_inquiry-header_osk">
             <h2 className="MyGatherInquiryList_inquiry-title_osk">문의내역</h2>
@@ -323,9 +320,9 @@ try {
                   className="MyGatherInquiryList_date-picker_osk"
                   dateFormat="yyyy.MM.dd"
                   isClearable={false}
-                  locale={ko} 
-                  maxDate={new Date()} 
-                  shouldCloseOnSelect={false} 
+                  locale={ko}
+                  maxDate={new Date()}
+                  shouldCloseOnSelect={false}
                 />
                 {(startDate || endDate) && (
                   <button
@@ -341,13 +338,13 @@ try {
 
               <span className="MyGatherInquiryList_date-label_osk">상태</span>
               <select
-                value={getStatusDisplayText(selectedStatus)} 
+                value={getStatusDisplayText(selectedStatus)}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 className="MyGatherInquiryList_status-select_osk"
               >
                 <option value="전체">전체</option>
-                <option value="답변대기">답변대기</option>    
-                <option value="답변완료">답변완료</option>   
+                <option value="답변대기">답변대기</option>
+                <option value="답변완료">답변완료</option>
               </select>
             </div>
           </div>
@@ -403,7 +400,10 @@ try {
                         <span className="MyGatherInquiryList_username_osk">
                           {item.nickName}
                         </span>
-                        <span className={`MyGatherInquiryList_status_osk status-${item.responseState}`}>
+                        <span className={`MyGatherInquiryList_status_osk ${item.responseState == '답변대기' ? 'MyGatherInquiryList_status-waiting_osk' :
+                            item.responseState == '답변완료' ? 'MyGatherInquiryList_status-completed_osk' :
+                              `status-${item.responseState}`
+                          }`}>
                           {item.responseState}
                         </span>
                       </div>
@@ -464,7 +464,6 @@ try {
               ))
             )}
           </div>
-
           {pageInfo.allPage > 1 && (
             <div className="MyGatherInquiryList_pagination_osk">
               {pageInfo.curPage > 1 && (

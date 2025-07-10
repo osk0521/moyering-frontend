@@ -1,9 +1,35 @@
+.KYM-profile-container {
+  width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  gap: 30px; /* 사이드바와 프로필 간격 */
+}
+
+.KYM-sidebar-area {
+  width: 240px;
+  margin-left: 300px;
+}
+
 .KYM-profile-wrap {
+  flex: 1; 
+  background: #fff;
+  max-width: 900px;
+  min-width: 0;
+  padding: 30px;
+  margin-left: 570px;
+}
+.KYM-profile-wrap h3{
+     font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+/* .KYM-profile-wrap {
     max-width: 900px;
     margin: 30px auto;
     padding: 30px;
     background: #fff;
-}
+} */
 
 .KYM-profile-wrap .KYM-photo-cell,
 .KYM-profile-wrap .KYM-badge-cell {
@@ -24,14 +50,33 @@
 
 .KYM-profile-wrap .KYM-profile-table {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+    /* max-width: 100%; */
+    
+    /* border-collapse: collapse;
+    margin-bottom: 20px; */
+    /* table-layout: fixed; */
+    flex-direction: column;
+    gap: 20px;
+}
+.KYM-profile-row {
+  display: flex;
+  gap: 20px;
+}
+.KYM-profile-cell {
+  flex: 1;
+  border-top: 1px solid #eee;
+  padding: 15px;
+}
+.KYM-profile-table .KYM-profile-row:first-child .KYM-profile-cell {
+  border-top: none;
 }
 
 .KYM-profile-wrap .KYM-profile-table td {
-    border-top: 1px solid #eee;
+    /* border-top: 1px solid #eee;
     padding: 15px;
-    vertical-align: top;
+    vertical-align: top; */
+      overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .KYM-profile-wrap .KYM-photo-title {
@@ -260,4 +305,14 @@
 .KYM-profile-wrap .badge-item img {
     width: 60px;
     height: 60px;
+}
+.KYM-profile-wrap .KYM-address-btn {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: #FFB22C;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  width: 100px;
 }

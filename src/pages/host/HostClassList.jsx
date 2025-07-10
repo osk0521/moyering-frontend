@@ -147,7 +147,7 @@ const ClassList = () => {
         <div className="KHJ-status-section">
           <div className="KHJ-status-section">
             <div className="KHJ-radio-buttons">
-              {['전체', '승인대기', '모집중', '모집마감', '반려', '폐강'].map(key => (
+              {['전체', '승인대기', '모집중', '모집마감', '종료','반려', '폐강'].map(key => (
                 <label key={key} className={`KHJ-radio-button ${classStatus === key ? 'active' : ''}`}>
                   <input
                     type="radio"

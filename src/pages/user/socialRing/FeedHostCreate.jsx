@@ -8,7 +8,7 @@ import { myAxios, url } from '../../../config';
 
 export default function HostFeedCreate() {
     const user = useAtomValue(userAtom);
-    const [token,setToken] = useAtom(tokenAtom);
+    const [token, setToken] = useAtom(tokenAtom);
     const navigate = useNavigate();
 
     // 상태 관리
@@ -20,7 +20,7 @@ export default function HostFeedCreate() {
     const [category, setCategory] = useState('');
     const fileInputRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [feedId,setFeedId] = useState('');
+    const [feedId, setFeedId] = useState('');
     // 취소
     const handleCancel = () => navigate(-1);
 
@@ -66,6 +66,10 @@ export default function HostFeedCreate() {
     // 제출
     const handleSubmit = async e => {
         e.preventDefault();
+        if (!category) {
+            alert("카테고리를 선택해주세요.");
+            return;
+        }
         try {
             const feedDto = {
                 content: text,
@@ -82,7 +86,7 @@ export default function HostFeedCreate() {
                 new Blob([JSON.stringify(feedDto)], { type: 'application/json' })
             );
             imageFiles.forEach(file => formData.append('images', file));
-console.log("🟢 myAxios token=", token);
+            console.log("🟢 myAxios token=", token);
             const res = await myAxios(token, setToken).post(`/host/createFeedHost`, formData);
             setFeedId(res.data);
             console.log(res)
@@ -162,8 +166,13 @@ console.log("🟢 myAxios token=", token);
                                 type="text"
                                 value={tagInput}
                                 onChange={e => setTagInput(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleAddTag()}
-                                placeholder="태그 입력 후 Enter"
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault(); // 엔터로 form submit 막기
+                                        handleAddTag();
+                                    }
+                                }}
+                            placeholder="태그 입력 후 Enter"
                             />
                         </div>
                         <div className="KYM-FeedCreate-tag-list">

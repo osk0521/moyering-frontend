@@ -1,7 +1,7 @@
-/* src/components/UserFeed.css -- 부모 클래스 스코프 추가, KYM- 접두어 유지 */
+/* src/components/UserFeed.css -- 부모 클래스 스코프 추가, KYM-userfeed 접두어 유지 */
 
 /* 전체 */
-.KYM-profile-container {
+.KYM-userfeed-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -10,13 +10,13 @@
 }
 
 /* 헤더 */
-.KYM-profile-container .KYM-profile-header {
+.KYM-userfeed-container .KYM-userfeed-header {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-.KYM-profile-container .KYM-avatar {
+.KYM-userfeed-container .KYM-userfeed-avatar {
     border-radius: 50%;
     object-fit: cover;
     margin-left: 50px;
@@ -25,29 +25,29 @@
 }
 
 /* 정보 전체 래퍼 */
-.KYM-profile-container .KYM-profile-info {
+.KYM-userfeed-container .KYM-userfeed-info {
     flex: 1;
     margin-left: 30px;
 }
 
 /* 닉네임/배지/더보기 한 줄 */
-.KYM-profile-container .KYM-name-line {
+.KYM-userfeed-container .KYM-userfeed-name-line {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.KYM-profile-container .KYM-nickname {
+.KYM-userfeed-container .KYM-userfeed-nickname {
     font-size: 1.5rem;
     margin: 0;
 }
 
-.KYM-profile-container .KYM-badge {
+.KYM-userfeed-container .KYM-userfeed-badge {
     width: 24px;
     height: 24px;
 }
 
-.KYM-profile-container .KYM-more-icon {
+.KYM-userfeed-container .KYM-userfeed-more-icon {
     width: 20px;
     height: 20px;
     margin-left: auto;
@@ -55,20 +55,21 @@
 }
 
 /* 자기소개 */
-.KYM-profile-container .KYM-intro {
+.KYM-userfeed-container .KYM-userfeed-intro {
     margin: 8px 0 12px;
     color: #555;
     line-height: 1.4;
 }
 
 /* 액션 버튼 */
-.KYM-profile-container .KYM-action-buttons {
+.KYM-userfeed-container .KYM-userfeed-action-buttons {
     display: flex;
     gap: 12px;
     margin-bottom: 16px;
+    margin-right: 393px;
 }
 
-.KYM-profile-container .KYM-btn {
+.KYM-userfeed-container .KYM-userfeed-btn {
     background: #fff;
     border: 1px solid #FFB22C;
     color: #FFB22C;
@@ -79,13 +80,13 @@
     font-size: 0.8rem;
 }
 
-.KYM-profile-container .KYM-btn:hover {
+.KYM-userfeed-container .KYM-userfeed-btn:hover {
     background: #FFB22C;
     color: #fff;
 }
 
 /* 통계 */
-.KYM-profile-container .KYM-stat-list {
+.KYM-userfeed-container .KYM-userfeed-stat-list {
     display: inline-flex;
     gap: 16px;
     list-style: none;
@@ -93,7 +94,7 @@
     padding: 0;
 }
 
-.KYM-profile-container .KYM-stat-list li {
+.KYM-userfeed-container .KYM-userfeed-stat-list li {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -101,32 +102,32 @@
     color: #333;
 }
 
-.KYM-profile-container .KYM-stat-list strong {
+.KYM-userfeed-container .KYM-userfeed-stat-list strong {
     display: block;
     font-size: 1rem;
     color: #333;
 }
 
-.KYM-profile-container .KYM-stat-list span {
+.KYM-userfeed-container .KYM-userfeed-stat-list span {
     font-size: 0.8rem;
     color: #777;
 }
 
 /* 구분선 */
-.KYM-profile-container .KYM-divider {
+.KYM-userfeed-container .KYM-userfeed-divider {
     border: none;
     border-top: 1px solid #eee;
     margin: 20px 0;
 }
 
 /* 게시물 그리드 */
-.KYM-profile-container .KYM-posts-grid {
+.KYM-userfeed-container .KYM-userfeed-posts-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
 
-.KYM-profile-container .KYM-post-card {
+.KYM-userfeed-container .KYM-userfeed-post-card {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -135,7 +136,7 @@
     overflow: hidden;
 }
 
-.KYM-profile-container .KYM-post-img {
+.KYM-userfeed-container .KYM-userfeed-post-img {
     width: 100%;
     height: 200px;
     object-fit: contain;
@@ -143,13 +144,13 @@
     background: #8a8a8a;
 }
 
-.KYM-profile-container .KYM-post-content {
+.KYM-userfeed-container .KYM-userfeed-post-content {
     padding: 8px;
     flex: 1;
     color: #333;
 }
 
-.KYM-profile-container .KYM-post-footer {
+.KYM-userfeed-container .KYM-userfeed-post-footer {
     display: flex;
     justify-content: flex-start;
     padding: 6px 8px;
@@ -157,43 +158,131 @@
 }
 
 /* stats 컨테이너 */
-.KYM-profile-container .KYM-stats {
+.KYM-userfeed-container .KYM-userfeed-stats {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
 /* 아이콘 */
-.KYM-profile-container .KYM-icon {
+.KYM-userfeed-container .KYM-userfeed-icon {
     width: 16px;
     height: 16px;
     margin-right: 4px;
 }
 
 /* 좋아요 버튼 */
-.KYM-profile-container .KYM-like-button {
+.KYM-userfeed-container .KYM-userfeed-like-button {
     background: transparent;
     border: none;
     padding: 0;
     margin-right: 4px;
 }
 
-.KYM-profile-container .KYM-like-button:hover,
-.KYM-profile-container .KYM-like-button.KYM-active {
+.KYM-userfeed-container .KYM-userfeed-like-button:hover,
+.KYM-userfeed-container .KYM-userfeed-like-button.KYM-userfeed-active {
     background: transparent !important;
     border: none !important;
     color: inherit !important;
 }
 
-.KYM-profile-container .KYM-like-button .KYM-icon {
+.KYM-userfeed-container .KYM-userfeed-like-button .KYM-userfeed-icon {
     width: 16px;
     height: 16px;
     margin-right: 4px;
 }
 
 /* 댓글 수 */
-.KYM-profile-container .KYM-comment-count {
+.KYM-userfeed-container .KYM-userfeed-comment-count {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+}
+
+.KYM-userfeed-container .KYM-userfeed-follow-btn,
+.KYM-userfeed-container .KYM-userfeed-edit-btn {
+    margin-left: auto;
+    padding: 4px 8px;
+    background: #FFB22C;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    width: 100px;
+}
+
+/* 슬라이더 */
+.KYM-userfeed-image-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.KYM-userfeed-image-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.KYM-userfeed-image-nav.left {
+    left: 10px;
+}
+
+.KYM-userfeed-image-nav.right {
+    right: 10px;
+}
+
+.KYM-userfeed-image-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.KYM-userfeed-dot {
+    margin: 0;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    border: 2px solid #FFB22C;
+    border-radius: 50%;
+    color: transparent;
+    background-color: transparent;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.KYM-userfeed-dot.active {
+    opacity: 1;
+    background-color: transparent;
+    color: transparent;
+    border: none;
+    color: #FFB22C;
+}
+
+.KYM-userfeed-image-slider:hover .KYM-userfeed-image-nav,
+.KYM-userfeed-image-slider:hover .KYM-userfeed-image-dots {
+    display: flex;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.KYM-userfeed-image-slider:hover .KYM-userfeed-dot {
+    opacity: 1;
 }

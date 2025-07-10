@@ -26,8 +26,6 @@ const DetailTabDescription = ({ classData, registerValidator, isEditMode }) => {
 
   return (
     <div className="KHJ-description-tab-container">
-      <h2 className="KHJ-description-section-title">클래스 설명</h2>
-
       {/* 대표 이미지 */}
       <div className="KHJ-description-image-section">
         <div className="KHJ-description-image-label">대표 이미지</div>

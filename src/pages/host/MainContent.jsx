@@ -9,6 +9,7 @@ export default function MainContent() {
   const [token,setToken] = useAtom(tokenAtom)
   const [noticeList,setNoticeList] = useState([]);
   const [noticeDate,setNoticeDate] = useState([]);
+  
   const stats = [
     { label: '전체 판매금액', value: '100,000,000' },
     { label: '이번달 판매금액', value: '250,000' },
@@ -51,7 +52,7 @@ export default function MainContent() {
       </section>
 
       <section className="KHJ-main__notice-board">
-        <h2>공지사항</h2>
+        <h3 className="KHJ-main-title">공지사항</h3>
         {noticeList.map((item, i) => (
           <div className="KHJ-main__notice" key={i}>
             <span className="KHJ-main__badge">공지</span>

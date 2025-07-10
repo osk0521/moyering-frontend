@@ -87,57 +87,64 @@ export default function Follower() {
     return (
         <>
             <Header />
-            <Sidebar />
-            <div className="KYM-follower-container">
-                <h2 className="KYM-follower-header">팔로워 목록</h2>
+            <div className="KYM-follower-main">
+                <Sidebar />
+                <div className="KYM-follower-container">
+                    <h2 className="KYM-follower-header">팔로워 목록</h2>
 
-                <div className="KYM-follower-controls">
-                    <span className="KYM-follower-count">
-                        팔로워 수: {followers.length}
-                    </span>
-                    <div className="KYM-follower-search">
-                        <input
-                            type="text"
-                            placeholder="팔로워 검색"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                        />
-                        <img src={searchIcon} alt="검색" />
+                    <div className="KYM-follower-controls">
+                        <span className="KYM-follower-count">
+                            팔로워 수: {followers.length}
+                        </span>
+                        <div className="KYM-follower-search">
+                            <input
+                                type="text"
+                                placeholder="팔로워 검색"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                            <img src={searchIcon} alt="검색" />
+                        </div>
                     </div>
-                </div>
 
-                {!loading && followers.length === 0 && (
-                    <div className="KYM-no-followers">팔로워가 없습니다.</div>
-                )}
+                    {!loading && followers.length === 0 && (
+                        <div className="KYM-no-followers">팔로워가 없습니다.</div>
+                    )}
 
-                <ul className="KYM-follower-list">
-                    {followers.map((user, idx) => {
-                        const isLast = idx === followers.length - 1;
-                        return (
-                            <li
-                                key={user.id}
-                                ref={isLast ? lastFollowerRef : null}
-                                className="KYM-follower-item"
-                            >
-                                <div className="KYM-follower-user">
-                                    <img src={`${url}/iupload/${user.profile}`} alt="" className="KYM-follower-avatar" />
-                                    
-                                    <span className="KYM-follower-nickname">{user.nickName}</span>
-                                </div>
-                                <button
-                                    className="KYM-follower-button"
-                                    onClick={() => window.location.href = `/userfeed/${user.nickName}`}
+                    <ul className="KYM-follower-list">
+                        {followers.map((user, idx) => {
+                            const isLast = idx === followers.length - 1;
+                            return (
+                                <li
+                                    key={user.id}
+                                    ref={isLast ? lastFollowerRef : null}
+                                    className="KYM-follower-item"
                                 >
-                                    피드로 가기 &gt;
-                                </button>
-                            </li>
-                        );
-                    })}
-                </ul>
+                                    <div className="KYM-follower-user">
+                                        <img
+                                            src={`${url}/iupload/${user.profile}`}
+                                            alt=""
+                                            className="KYM-follower-avatar"
+                                        />
+                                        <span className="KYM-follower-nickname">{user.nickName}</span>
+                                    </div>
+                                    <button
+                                        className="KYM-follower-button"
+                                        onClick={() =>
+                                            (window.location.href = `/userfeed/${user.nickName}`)
+                                        }
+                                    >
+                                        피드로 가기 &gt;
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
 
-                {loading && <div className="loading">로딩 중...</div>}
-                {/* {!hasMore && <div className="end">마지막 페이지입니다.</div>} */}
+                    {loading && <div className="loading">로딩 중...</div>}
+                </div>
             </div>
         </>
+
     );
 }

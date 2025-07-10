@@ -83,16 +83,34 @@ const ClassList = () => {
     fetchClassListWithDates(formattedStart, formattedEnd, 1);
   };
 
+  const handleStartDateChange = (e) => {
+    const newStart = e.target.value;
+    if (endDate && newStart > endDate) {
+      alert("시작일은 종료일보다 빠르거나 같아야 합니다.");
+      return;
+    }
+    setStartDate(newStart);
+  };
+
+  const handleEndDateChange = (e) => {
+    const newEnd = e.target.value;
+    if (startDate && newEnd < startDate) {
+      alert("종료일은 시작일보다 늦거나 같아야 합니다.");
+      return;
+    }
+    setEndDate(newEnd);
+  };
+
   const handleSearch = () => fetchClassList(1);
 
-const handleReset = () => {
-  setSearchQuery('');
-  setStartDate('');
-  setEndDate('');
-  setClassStatus('전체'); // ✅ 이 부분!
-  setDateFilter('');
-  fetchClassList(1);
-};
+  const handleReset = () => {
+    setSearchQuery('');
+    setStartDate('');
+    setEndDate('');
+    setClassStatus('전체'); // ✅ 이 부분!
+    setDateFilter('');
+    fetchClassList(1);
+  };
 
   const toggleDropdown = (index) => setDropdownIndex(dropdownIndex === index ? null : index);
   const handleNavigate = (path) => navigate(path);
@@ -102,53 +120,55 @@ const handleReset = () => {
       <div className="KHJ-class-search-container">
         <h3>클래스 조회</h3>
         <div className="KHJ-search-section">
-          <label>검색어</label>
           <div className="KHJ-search-input-container">
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="클래스명을 입력하세요." />
-            
+            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="검색어를 입력하세요." />
+
             {/* <button onClick={handleSearch}>검색</button> */}
-            <button onClick={handleReset}>초기화</button>
+
           </div>
         </div>
 
         <div className="KHJ-date-section">
           <div className="KHJ-date-range-wrapper">
-            <label>클래스 기간</label>
-            <div className="KHJ-date-range" style={{flexDirection : 'row'}} >
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            {/* <label>기간</label> */}
+            <div className="KHJ-date-range" style={{ flexDirection: 'row' }} >
+              <input type="date" value={startDate} onChange={handleStartDateChange} />
               <span className="KHJ-date-tilde">~</span>
-              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              <input type="date" value={endDate} onChange={handleEndDateChange} />
             </div>
           </div>
           <div className="KHJ-date-buttons">
-            {['오늘', '1개월', '3개월', '6개월', '1년', '전체'].map(label => (
+            {['전체','오늘', '1개월', '3개월', '6개월', '1년'].map(label => (
               <button key={label} onClick={() => handleDateFilterClick(label)} className={dateFilter === label ? 'active' : ''}>{label}</button>
             ))}
           </div>
         </div>
 
         <div className="KHJ-status-section">
-          <label>클래스 상태</label>
-          <div className="KHJ-checkbox-group">
-            {['전체', '검수중', '모집중', '모집완료', '수강중', '수강완료', '폐강'].map(key => (
-              <label key={key}>
-                <input
-                  type="radio"
-                  name="classStatus"
-                  value={key}
-                  checked={classStatus === key}
-                  onChange={() => setClassStatus(key)}
-                />
-                {key}
-              </label>
-            ))}
+          <div className="KHJ-status-section">
+            <div className="KHJ-radio-buttons">
+              {['전체', '승인대기', '모집중', '모집마감', '반려', '폐강'].map(key => (
+                <label key={key} className={`KHJ-radio-button ${classStatus === key ? 'active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="classStatus"
+                    value={key}
+                    checked={classStatus === key}
+                    onChange={() => setClassStatus(key)}
+                  />
+                  <span>{key}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="KHJ-reset-wrapper">
+            <button className="KHJ-search-input-container-button" onClick={handleReset}>초기화</button>
           </div>
         </div>
       </div>
 
       <div className="KHJ-class-result-container">
         <div className="KHJ-result-section">
-          <h4>검색 결과: {classData.length} 건 / 총 {pageInfo.allPage} 페이지</h4>
           {classData.map((result, index) => (
             <div key={index} className="KHJ-result-item">
               <div className="KHJ-result-image">

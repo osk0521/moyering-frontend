@@ -1,7 +1,6 @@
-// ClassRingDetail.jsx
 import React, { useState, useEffect } from "react";
-import {  CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
-import { GoHeart,GoHeartFill  } from "react-icons/go";
+import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 import { GoPeople } from "react-icons/go";
 import { BiChevronDown } from "react-icons/bi";
 import styles from "./ClassRingDetail.module.css";
@@ -43,16 +42,16 @@ export default function ClassRingDetail() {
   const navigate = useNavigate();
 
   const { classId } = useParams();
-  const [token,setToken] = useAtom(tokenAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
   const setCalendarList = useSetAtom(calendarListAtom);
   const setClassDetailAtom = useSetAtom(classDetailAtom);
   const setCurrListAtom = useSetAtom(currListAtom);
   const setHostAtom = useSetAtom(hostAtom);
   const setReviewListAtom = useSetAtom(reviewListAtom);
-  const [detailDtos,setDetailDtos] = useState([]);
-  const [recommends,setRecommends] = useState([]);
-  const [registeds,setRegisteds] = useState([]);
+  const [detailDtos, setDetailDtos] = useState([]);
+  const [recommends, setRecommends] = useState([]);
+  const [registeds, setRegisteds] = useState([]);
 
   const calendarList = useAtomValue(calendarListAtom);
   const classDetail = useAtomValue(classDetailAtom);
@@ -64,9 +63,7 @@ export default function ClassRingDetail() {
   const previewText = description.length > PREVIEW_LENGTH ? description.slice(0, PREVIEW_LENGTH) + "..." : description;
   const shouldShowMore = description.length > PREVIEW_LENGTH;
 
-  //쿠폰관련
   const [coupons, setCoupons] = useState([]);
-  //유저가 소유한 쿠폰
   const [myCoupons, setMyCoupons] = useState([]);
 
   const handleExpandClick = () => setIsExpanded(true);
@@ -91,158 +88,152 @@ export default function ClassRingDetail() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-    useEffect(() => {
-        myAxios(token,setToken)
-          .get(`/class/classRingDetail/${classId}`)
-          .then((res) => {
-            setCalendarList(res.data.calendarList);
-            setClassDetailAtom(res.data.hostClass);
-            setCurrListAtom(res.data.currList);
-            setHostAtom(res.data.host);
-            setReviewListAtom(res.data.reviews);
-            setCoupons(res.data.coupons);
-            setMyCoupons(res.data.userCoupons || []);
-            setDetailDtos(res.data.detailDtos || []);
-            setRecommends(res.data.recommends || []);
-            setRegisteds(res.data.registeds || []);
-            console.log(res.data);
-          })
-          .catch((err) => console.error("클래스 추천 데이터 로딩 실패", err));
-  }, [token,classId]);
+  useEffect(() => {
+    myAxios(token, setToken)
+      .get(`/class/classRingDetail/${classId}`)
+      .then((res) => {
+        setCalendarList(res.data.calendarList);
+        setClassDetailAtom(res.data.hostClass);
+        setCurrListAtom(res.data.currList);
+        setHostAtom(res.data.host);
+        setReviewListAtom(res.data.reviews);
+        setCoupons(res.data.coupons);
+        setMyCoupons(res.data.userCoupons || []);
+        setDetailDtos(res.data.detailDtos || []);
+        setRecommends(res.data.recommends || []);
+        setRegisteds(res.data.registeds || []);
+        console.log(res.data);
+      })
+      .catch((err) => console.error("클래스 추천 데이터 로딩 실패", err));
+  }, [token, classId]);
 
-  //날짜에 따른 값 제어
   const [selectedCalendarId, setSelectedCalendarId] = useState('');
   const selectedCalendar = calendarList.find(c => c.calendarId == selectedCalendarId);
 
   useEffect(() => {
-  if (calendarList.length > 0) {
-    setSelectedCalendarId(calendarList[0].calendarId);
-  }
+    if (calendarList.length > 0) {
+      setSelectedCalendarId(calendarList[0].calendarId);
+    }
   }, [classId, calendarList]);
 
-  //쿠폰 데이터
-  // 쿠폰 상태 바뀔 때마다 실행됨
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
+  const [downloadedIds, setDownloadedIds] = useState([]);
+
+  const handleDownload = async (classCouponId) => {
+    if (!user || !token) {
+      if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
+        navigate("/userlogin");
+      }
+      return;
+    }
+    try {
+      token && await myAxios(token, setToken).post("/user/classCoupons/download", {
+        classCouponId,
+      });
+
+      setCoupons(prev =>
+        prev.map(c =>
+          c.classCouponId === classCouponId
+            ? { ...c, usedCnt: c.usedCnt + 1 }
+            : c
+        )
+      );
+
+      setMyCoupons(prev => [
+        ...prev,
+        { classCouponId },
+      ]);
+      setDownloadedIds(prev => [...prev, classCouponId]);
+
+    } catch (err) {
+      console.error("쿠폰 다운로드 실패", err);
+      alert(err.response?.data?.message || "쿠폰 다운로드 중 오류 발생");
+    }
+  };
+
+  const [isLiked, setIsLiked] = useState(false);
   useEffect(() => {
-  }, [coupons]);
+    const liked = classLikes.some((like) => like.classId === Number(classId));
+    setIsLiked(liked);
+  }, [classLikes, classId]);
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedCoupon, setSelectedCoupon] = useState(null);
-    const [downloadedIds, setDownloadedIds] = useState([]);
+  const handleHeart = async (classId) => {
+    try {
+      const res = token && await myAxios(token, setToken).post("/user/toggle-like", {
+        classId: classId
+      });
+      const updated = token && await myAxios(token, setToken).get(`/class/classRingDetail/${classId}`);
+      setIsLiked(!isLiked);
+    } catch (err) {
+      console.error("좋아요 실패", err);
+      alert(err.response?.data?.message || "쿠폰 좋아요 중 오류 발생");
+    }
+  };
 
-    const handleDownload = async (classCouponId) => {
-      if (!user || !token) {
-        if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
-          navigate("/userlogin");
-        }
+  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+  const [questionContent, setQuestionContent] = useState("");
+
+  const toggleQuestionModal = () => {
+    if (!user || !token) {
+      if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
+        navigate("/userlogin");
+      } else {
         return;
       }
-      try {
-        token && await myAxios(token,setToken).post("/user/classCoupons/download", {
-          classCouponId,
-        });
-
-        // 성공 후 쿠폰 리스트 갱신 or UI 업데이트
-        setCoupons(prev =>
-          prev.map(c =>
-            c.classCouponId === classCouponId
-              ? { ...c, usedCnt: c.usedCnt + 1 }
-              : c
-          )
-        );
-
-        setMyCoupons(prev => [
-          ...prev,
-          { classCouponId },
-        ]);
-        setDownloadedIds(prev => [...prev, classCouponId]);
-
-      } catch (err) {
-        console.error("쿠폰 다운로드 실패", err);
-        alert(err.response?.data?.message || "쿠폰 다운로드 중 오류 발생");
+    } else {
+      setIsQuestionModalOpen(!isQuestionModalOpen);
+      if (isQuestionModalOpen) {
+        setQuestionContent("");
       }
+    }
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    if (!questionContent.trim()) {
+      alert("문의 내용을 입력해주세요.");
+      return;
+    }
+
+    const formDataToSend = {
+      calendarId: selectedCalendarId,
+      content: questionContent.trim(),
     };
 
-    //찜하기
-    const [isLiked, setIsLiked] = useState(false);
-    useEffect(() => {
-      
-      const liked = classLikes.some((like) => like.classId ===  Number(classId));
-      setIsLiked(liked);
-    }, [classLikes, classId]);
+    try {
+      const response = await myAxios(token, setToken).post(
+        `/user/writeClassInquiry`,
+        formDataToSend
+      );
 
-    const handleHeart = async(classId) => {
-      try {
-        const res = token && await myAxios(token,setToken).post("/user/toggle-like", {
-          classId : classId
-        })
-        const updated = token && await myAxios(token,setToken).get(`/class/classRingDetail/${classId}`);
-        setIsLiked(!isLiked);
-
-      } catch (err) {
-        console.error("좋아요 실패", err);
-        alert(err.response?.data?.message || "쿠폰 좋아요 중 오류 발생");
+      if (response.status === 200 && typeof response.data === "number") {
+        toggleQuestionModal();
+        setQuestionContent("");
+      } else {
+        alert("문의 등록에 실패했습니다. 다시 시도해주세요.");
       }
-    };
-    // 문의하기 모달 관련 함수들
-        const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
-        const [questionContent, setQuestionContent] = useState("");
-        const toggleQuestionModal = () => {
-        if (!user || !token) {
-            if (
-            confirm(
-                "로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
-            )
-            ) {
-            navigate("/userlogin");
-            } else {
-            return;
-            }
-        } else {
-            setIsQuestionModalOpen(!isQuestionModalOpen);
-            if (isQuestionModalOpen) {
-            setQuestionContent("");
-            }
-        }
-        };
-    
-        const submit = async (e) => {
-        e.preventDefault();
-    
-        if (!questionContent.trim()) {
-            alert("문의 내용을 입력해주세요.");
-            return;
-        }
-    
-        const formDataToSend = {
-            calendarId: selectedCalendarId,
-            content: questionContent.trim(),
-        };
-    
-        try {
-            console.log(token);
-            const response = await myAxios(token,setToken).post(
-            `/user/writeClassInquiry`,
-            formDataToSend
-            );
-    
-            if (response.status === 200 && typeof response.data === "number") {
-            toggleQuestionModal(); // 모달 닫기
-            setQuestionContent(""); // 입력 초기화
-            } else {
-            alert("문의 등록에 실패했습니다. 다시 시도해주세요.");
-            }
-        } catch (error) {
-            console.error("문의 등록 중 오류 발생:", error);
-            alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-        }
-        };
+    } catch (error) {
+      console.error("문의 등록 중 오류 발생:", error);
+      alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
+  };
+
+  function truncateHtml(html, maxLength) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    const text = div.textContent || div.innerText || '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  }
+
   return (
     <>
       <Header />
       <div className={styles.detailWrapper}>
         <main className={styles.mainContent}>
           {classDetail?.imgName1 && (
-          <img src={`${url}/image?filename=${classDetail?.imgName1}`} alt="클래스 이미지" className={styles.mainImage} />
+            <img src={`${url}/image?filename=${classDetail?.imgName1}`} alt="클래스 이미지" className={styles.mainImage} />
           )}
           {/* 메뉴 */}
           <nav className={styles.tabs}>
@@ -266,9 +257,18 @@ export default function ClassRingDetail() {
           {/* 상세정보 */}
           <section className={styles.section} id="details">
             <h2>클래스 소개</h2>
-            <p>{isExpanded ? description : previewText}</p>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: isExpanded
+                  ? description
+                  : truncateHtml(description, 100)  // 미리보기
+              }}
+            />
+
             {shouldShowMore && !isExpanded && (
-              <button onClick={handleExpandClick} className={styles.moreBtn}>더보기 <BiChevronDown /></button>
+              <button onClick={handleExpandClick} className={styles.moreBtn}>
+                더보기 <BiChevronDown />
+              </button>
             )}
 
             {/* 준비물 섹션 */}
@@ -281,7 +281,7 @@ export default function ClassRingDetail() {
             <div className={styles.curriculum}><h3><CiClock1 className={styles.infoIcon} />커리큘럼</h3>
               <ul className={styles.curriculumList}>{detailDtos?.map((curr) => {
                 return (
-                  <li key={curr.scheduleId}  className={styles.curriculumItem}>
+                  <li key={curr.scheduleId} className={styles.curriculumItem}>
                     <span className={styles.curriculumTime}>        {curr.startTime} ~ {curr.endTime} </span>
                     <span className={styles.curriculumContent}>{curr.content} </span>
                   </li>
@@ -311,7 +311,7 @@ export default function ClassRingDetail() {
             <h2>강사소개</h2>
             <div className={styles.instructorCard}>
               {host?.profile && (
-              <img className={styles.instructorImage} src={`${url}/image?filename=${host?.profile}`} alt="강사 이미지" />
+                <img className={styles.instructorImage} src={`${url}/image?filename=${host?.profile}`} alt="강사 이미지" />
               )}
               <div className={styles.instructorInfo}>
                 <h3>{host?.name} ⭐ 5(138)</h3>
@@ -381,7 +381,7 @@ export default function ClassRingDetail() {
           <section className={styles.section} id="recommend">
             <div className={styles.recommendHeader}>
               <h2>같은 카테고리의 클래스링은 어때요</h2>
-              {recommends.length>0? 
+              {recommends.length > 0 ?
                 (
                   <button className={styles.recommendMoreBtn}
                     onClick={() =>
@@ -399,40 +399,41 @@ export default function ClassRingDetail() {
             </div>
             <p className={styles.subText}>비슷한 주제의 클래스링</p>
             <div className={styles.recommendGrid}>
-                {recommends.length===0? 
+              {recommends.length === 0 ?
                 (
                   <p className={styles.noneCoupon}>같은 카테고리의 클래스가 없습니다.</p>
                 ) : (<></>)}
               {recommends.map((classInfo) => (
-                  <div className={styles.card}  
-                  onClick={()=> { navigate(`/class/classRingDetail/${classInfo.classId}`);
-                  window.scrollTo({ top: 0, behavior: "auto" });
+                <div className={styles.card}
+                  onClick={() => {
+                    navigate(`/class/classRingDetail/${classInfo.classId}`);
+                    window.scrollTo({ top: 0, behavior: "auto" });
                   }}>
-                    <div
-                      className={styles.cardImage}
-                      style={{
-                            backgroundImage: `url(${url}/image?filename=${classInfo.imgName1})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
-                    >        
-                      {classLikes.some(like => like.classId === classInfo.classId) ? (
-                        <GoHeartFill  className={styles.likeIcon4} />
-                      ) : (
-                        <GoHeart  className={styles.likeIcon3} />
-                      )}
+                  <div
+                    className={styles.cardImage}
+                    style={{
+                      backgroundImage: `url(${url}/image?filename=${classInfo.imgName1})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    {classLikes.some(like => like.classId === classInfo.classId) ? (
+                      <GoHeartFill className={styles.likeIcon4} />
+                    ) : (
+                      <GoHeart className={styles.likeIcon3} />
+                    )}
+                  </div>
+                  <div className={styles.cardContent}>
+                    <div className={styles.cardTags}>
+                      <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}&gt;{classInfo.category2}</span>
+                      <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
                     </div>
-                    <div className={styles.cardContent}>
-                      <div className={styles.cardTags}>
-                        <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}&gt;{classInfo.category2}</span>
-                        <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
-                      </div>
-                      <div className={styles.cardEtc}>
-                        <span className={styles.cardTitle}>{classInfo.name}</span>
-                        <span className={styles.cardPrice}>{classInfo.price.toLocaleString()}원</span>
-                      </div>
+                    <div className={styles.cardEtc}>
+                      <span className={styles.cardTitle}>{classInfo.name}</span>
+                      <span className={styles.cardPrice}>{classInfo.price.toLocaleString()}원</span>
                     </div>
-                  </div>             
+                  </div>
+                </div>
               ))}
             </div>
           </section>
@@ -461,7 +462,7 @@ export default function ClassRingDetail() {
                       {calendar.startDate} ({dayName})
                     </option>
                   );
-                })}          
+                })}
               </select>
             </div>
             <div className={styles.row}><CiClock1 className={styles.infoIcon} /><span>오전 10:00 ~ 오후 1:00</span></div>
@@ -477,16 +478,16 @@ export default function ClassRingDetail() {
             <div className={styles.row}>
               {/* 쿠폰 */}
               <div className={styles.customDropdown}>
-                <div 
-                  className={styles.dropdownHeader} 
+                <div
+                  className={styles.dropdownHeader}
                   onClick={() => {
                     if (coupons.length > 0) setIsOpen(!isOpen);
                   }}
                 >
                   {coupons.length === 0
                     ? "사용 가능한 쿠폰이 없습니다"
-                    : selectedCoupon 
-                      ? selectedCoupon.couponName 
+                    : selectedCoupon
+                      ? selectedCoupon.couponName
                       : "사용 가능한 쿠폰을 선택하세요"}
                 </div>
 
@@ -539,23 +540,23 @@ export default function ClassRingDetail() {
               </div>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.outlineBtn} 
-              onClick={(e) => {
-                            e.stopPropagation();
-                            handleHeart(classId);
-                          }}
+              <button className={styles.outlineBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleHeart(classId);
+                }}
               >
                 {isLiked ? (
-                <>
-                  <GoHeartFill className={styles.likeIcon2} />{" "}
-                </>
-              ) : (
-                <>
-                  <GoHeart className={styles.likeIcon}/>{" "}
-                </>
-              )}
+                  <>
+                    <GoHeartFill className={styles.likeIcon2} />{" "}
+                  </>
+                ) : (
+                  <>
+                    <GoHeart className={styles.likeIcon} />{" "}
+                  </>
+                )}
               </button>
-              <button className={styles.questionButton} onClick={toggleQuestionModal}>문의하기</button> 
+              <button className={styles.questionButton} onClick={toggleQuestionModal}>문의하기</button>
               {registeds.some(r => r.calendarId === selectedCalendarId) ? (
                 <button className={styles.applyBtnDis} disabled>
                   신청 완료
@@ -563,16 +564,15 @@ export default function ClassRingDetail() {
               ) : (
                 <button
                   className={styles.applyBtn}
-                  onClick={() => 
-                  {     
-                    if ( !user || !token ) {
+                  onClick={() => {
+                    if (!user || !token) {
                       if (confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
                         navigate("/userlogin");
                       }
                     } else {
-                    navigate(`/user/classPayment/${classId}/${selectedCalendarId}`)
+                      navigate(`/user/classPayment/${classId}/${selectedCalendarId}`)
                     }
-                    }
+                  }
                   }
                 >
                   신청하기
@@ -583,83 +583,84 @@ export default function ClassRingDetail() {
           </div>
         </aside>
       </div>
+
       {/* 문의 모달 */}
-        {isQuestionModalOpen && (
+      {isQuestionModalOpen && (
         <form>
-            <Modal
+          <Modal
             isOpen={isQuestionModalOpen}
             toggle={toggleQuestionModal}
             className="GatheringDetail_question-modal_osk"
             size="lg"
             centered
-            >
+          >
             <ModalHeader
-                toggle={toggleQuestionModal}
-                className="GatheringDetail_modal-header_osk"
+              toggle={toggleQuestionModal}
+              className="GatheringDetail_modal-header_osk"
             >
-                <span className="GatheringDetail_modal-title_osk">
-                    {classDetail.name} 문의하기
-                </span>
+              <span className="GatheringDetail_modal-title_osk">
+                {classDetail.name} 문의하기
+              </span>
             </ModalHeader>
             <ModalBody className="GatheringDetail_modal-body_osk">
-                <div className="GatheringDetail_gathering-info_osk">
-                    <img
-                        src={`${url}/image?filename=${classDetail.imgName1}`}
-                        alt="클래스 이미지"
-                        className="GatheringDetail_gathering-image_osk"
-                    />
+              <div className="GatheringDetail_gathering-info_osk">
+                <img
+                  src={`${url}/image?filename=${classDetail.imgName1}`}
+                  alt="클래스 이미지"
+                  className="GatheringDetail_gathering-image_osk"
+                />
                 <div className="GatheringDetail_gathering-details_osk">
-                    <div className="GatheringDetail_gathering-info-item_osk">
+                  <div className="GatheringDetail_gathering-info-item_osk">
                     <span>
-                        {classDetail.name}<br />
+                      {classDetail.name}<br />
                     </span>
-                    </div>
-                    <div className="GatheringDetail_gathering-info-item_osk">
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
                     <CiCalendar className="GatheringDetail_gathering-info-icon_osk" />
                     <span>
-                        문의 수업일 : {selectedCalendar?.startDate ?? "-"}<br />
+                      문의 수업일 : {selectedCalendar?.startDate ?? "-"}<br />
                     </span>
-                    </div>
-                    <div className="GatheringDetail_gathering-info-item_osk">
+                  </div>
+                  <div className="GatheringDetail_gathering-info-item_osk">
                     <CiLocationOn className="GatheringDetail_gathering-info-icon_osk" />
                     <span>
-                        장소: {classDetail.addr} {classDetail.detailAddr} {classDetail.locName}
+                      장소: {classDetail.addr} {classDetail.detailAddr} {classDetail.locName}
                     </span>
-                    </div>
+                  </div>
                 </div>
-                </div>
+              </div>
 
-                <div className="GatheringDetail_input-section_osk">
+              <div className="GatheringDetail_input-section_osk">
                 <label className="GatheringDetail_input-label_osk">
-                    문의 사항
+                  문의 사항
                 </label>
                 <textarea
-                    value={questionContent}
-                    onChange={(e) => setQuestionContent(e.target.value)}
-                    placeholder="문의 사항에 대해 자세히 알려주세요"
-                    rows={6}
-                    className="GatheringDetail_textarea-field_osk"
+                  value={questionContent}
+                  onChange={(e) => setQuestionContent(e.target.value)}
+                  placeholder="문의 사항에 대해 자세히 알려주세요"
+                  rows={6}
+                  className="GatheringDetail_textarea-field_osk"
                 />
-                </div>
+              </div>
             </ModalBody>
             <ModalFooter className="GatheringDetail_modal-footer_osk">
-                <button
+              <button
                 className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-cancel_osk"
                 onClick={toggleQuestionModal}
-                >
+              >
                 취소
-                </button>
-                <input
+              </button>
+              <input
                 type="submit"
                 className="GatheringDetail_modal-btn_osk GatheringDetail_modal-btn-submit_osk"
                 onClick={submit}
                 value="문의하기"
-                />
+              />
             </ModalFooter>
-            </Modal>
+          </Modal>
         </form>
       )}
-      <Footer/>
+      <Footer />
     </>
   );
 }

@@ -95,6 +95,7 @@ import FindPassword from './pages/common/FindPassword.jsx';
 import ResetPassword from './pages/common/ResetPassword.jsx';
 import HostFeedDetail from './pages/user/socialRing/HostFeedDetail.jsx';
 import MainSearch from './pages/common/MinSearch.jsx';
+import HostFeedEdit from './pages/user/socialRing/HostFeedEdit.jsx';
 
 
 function App() {
@@ -135,6 +136,7 @@ function App() {
         <Route path="/hostFeeds" element={<HostFeedPage />} />
         <Route path="/host/createFeed" element={<HostFeedCreate />} />
         <Route path="/hostFeed/:feedId" element={<HostFeedDetail />} />
+        <Route path="/host/feedEdit/:feedId" element={<HostFeedEdit />} />
 
 
         <Route path="/scrapList" element={<ScrapList />} />

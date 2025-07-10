@@ -14,8 +14,8 @@ import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
 
 const tabs = [
-  '기본정보',
   '클래스 설명',
+  '장소',
   '클래스 부가정보',
   '쿠폰',
   '수강생 정보',
@@ -74,8 +74,8 @@ const ClassDetail = () => {
   const renderTabContent = () => {
     const props = { registerValidator, classData,scheduleDetails,couponList, isEditMode: true };
     switch (activeTab) {
-      case 0: return <DetailTabBasicInfo {...props} />;
-      case 1: return <DetailTabDescription {...props} />;
+      case 0: return <DetailTabDescription {...props} />;
+      case 1: return <DetailTabBasicInfo {...props} />;
       case 2: return <DetailTabExtraInfo {...props} />;
       case 3: return <DetailTabSchedule {...props}/>;
       case 4: return <DetailTabStudent {...props} />;
@@ -95,16 +95,16 @@ const ClassDetail = () => {
                 <div>{classData.name}</div>
               </div>
               <div>
-                <div className="KHJ-label">ID</div>
-                <div>{classData.classId}</div>
+                <div className="KHJ-label">카테고리</div>
+                <div>{classData.category1}</div>
               </div>
               <div>
-                <div className="KHJ-label">상태</div>
-                <div className="KHJ-status KHJ-current">{classData.status}</div>
+                <div className="KHJ-label">서브카테고리</div>
+                <div>{classData.category2}</div>
               </div>
               <div>
                 <div className="KHJ-label">검수상태</div>
-                <div className="KHJ-status KHJ-current">{classData.status !== "검수중" ? "모집중" : classData.status}</div>
+                <div className="KHJ-status KHJ-current">{classData.status}</div>
               </div>
             </div>
           </div>

@@ -1,27 +1,86 @@
 /* ─── 최상위 부모 클래스 ─── */
-.KYM-myfeed-wrapper{
+.KYM-myfeed-wrapper {
   width: 69%;
   margin: 0 auto;
   padding: 20px;
-   display: flex;
-  gap: 30px; /* 사이 간격 */
+  display: flex;
+  gap: 30px;
+  /* 사이 간격 */
 }
 
-.KYM-myfeed-sidebar{
+.KYM-myfeed-sidebar {
   margin-top: -20px;
 }
 
 .KYM-myfeed-container {
   max-width: 1200px;
-  
-
 }
+
+/* 더보기 아이콘 스타일 */
+.KYM-more-icon {
+  width: 20px;
+  cursor: pointer;
+}
+
+/* 더보기 메뉴 기본 스타일 */
+.KYM-post-menu {
+  position: absolute;
+  top: 30px;
+  /* 아이콘 바로 아래에 위치 */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  z-index: 1000;
+  width: 160px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 메뉴 활성화 시 */
+.KYM-post-menu.open {
+  display: block;
+}
+
+/* 메뉴 항목 스타일 */
+.KYM-post-menu li {
+  padding: 10px 16px;
+  list-style: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+  color: #333;
+  border-top: 1px solid #e0e0e0;
+  /* 회색 선 추가 */
+  margin-left: 8px;
+  /* 왼쪽 여백 */
+  margin-right: 8px;
+  /* 오른쪽 여백 */
+}
+
+/* 첫 번째 항목에는 선이 없도록 하기 */
+.KYM-post-menu li:first-child {
+  border-top: none;
+}
+
+/* 호버 효과 */
+.KYM-post-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+/* 부모에 position 필요 */
+.KYM-post-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 
 /* 제목 */
 .KYM-myfeed-container .KYM-myfeed-title {
   font-size: 24px;
   font-weight: bold;
-  color:#333;
+  color: #333;
   margin: 15px 0 20px 5px;
 }
 
@@ -36,7 +95,7 @@
 .KYM-myfeed-container .KYM-myfeed-card {
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -47,6 +106,10 @@
   padding: 12px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  /* ← 핵심! 양쪽 정렬 */
+  position: relative;
+  /* 더보기 메뉴 위치 기준 */
 }
 
 .KYM-myfeed-container .KYM-myfeed-user-info {

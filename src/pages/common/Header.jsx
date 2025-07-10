@@ -218,7 +218,7 @@ export default function Header() {
                 <a href="/user/mypage/mySchedule">마이페이지</a>
               </span>
               <span className="Header_top-menu-link_osk">
-                {user.userType==="ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : ''}
+                {user.userType==="ROLE_HT" ? <a href="/host/hostMyPage">호스트페이지</a> : <a href="/host/intro">호스트페이지</a>}
               </span>
               <span className="Header_top-menu-link_osk">
                 <button className="Header_top-menu-logout" onClick={logout}>로그아웃</button>

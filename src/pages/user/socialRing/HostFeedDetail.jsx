@@ -32,6 +32,18 @@ export default function HostFeedDetail() {
       });
   }, [feedId]);
 
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (menuOpenId && menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpenId(null);
+    }
+  };
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [menuOpenId]);
+
   if (!feed) return <div className="KYM-hostdetail-container">로딩 중...</div>;
 
   const {
@@ -44,6 +56,8 @@ export default function HostFeedDetail() {
 
   const images = [img1, img2, img3, img4, img5].filter(Boolean);
   const tags = [tag1, tag2, tag3, tag4, tag5].filter(Boolean);
+
+
 
   return (
     <>

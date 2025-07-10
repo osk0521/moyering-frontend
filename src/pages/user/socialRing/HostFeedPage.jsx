@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { myAxios, url } from '../../../config';
@@ -35,6 +35,18 @@ export default function HostFeedPage() {
 
     const getFeedImages = feed =>
         [feed.img1, feed.img2, feed.img3, feed.img4, feed.img5].filter(Boolean);
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (menuOpenId && menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpenId(null);
+    }
+  };
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [menuOpenId]);
 
     return (
         <>

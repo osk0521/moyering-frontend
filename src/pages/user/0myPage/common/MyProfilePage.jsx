@@ -12,6 +12,7 @@ export default function MyProfilePage() {
 
     const [token, setToken] = useAtom(tokenAtom)
     const navigate = useNavigate();
+    const [username,setUsername] = useState('');
     const [name, setName] = useState('');
     const [tel, setTel] = useState('');
     const [email, setEmail] = useState('');
@@ -41,6 +42,7 @@ export default function MyProfilePage() {
         token && myAxios(token, setToken).get(`/user/mypage/profile`)
             .then(res => {
                 const data = res.data;
+                setUsername(data.username || '');
                 setName(data.name || '');
                 setTel(data.tel || '');
                 setEmail(data.email || '');
@@ -52,7 +54,9 @@ export default function MyProfilePage() {
                 setActiveScore(data.activeScore || 0);
                 setUserBadgeId(data.userBadgeId || null);
                 // if (data.profile) setProfileUrl(`${url}/image?filename=${user.profile}` + data.profile);
-                if (data.profile && !profileUrl) {
+                if(!data.profile && !profileUrl){
+                    setProfileUrl("/profile.png")
+                }else if (data.profile && !profileUrl) {
                     setProfileUrl(`${url}/image?filename=${data.profile}&t=${new Date().getTime()}`);
                 }
             })
@@ -191,7 +195,7 @@ export default function MyProfilePage() {
   </div>
 
   <div className="KYM-profile-row">
-    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>아이디</label><input disabled value={name} /></div></div>
+    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>아이디</label><input disabled value={username} /></div></div>
     <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>비밀번호</label><input type="password" value="********" disabled /></div></div>
   </div>
   <div className="KYM-profile-row">
@@ -232,7 +236,7 @@ export default function MyProfilePage() {
                         ))}
                         {selectedCategories.length < 5 && (
                             <button className="modify-btn" onClick={() => setIsCategoryModalOpen(true)}>
-                                카테고리 수정하기
+                                +
                             </button>
                         )}
                     </div>

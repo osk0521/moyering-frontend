@@ -21,7 +21,7 @@ export default function FeedCreate() {
     const [currentIndex, setCurrentIndex] = useState(0);  // 슬라이드 인덱스
 
     // 취소
-    const handleCancel = () => navigate(-1);
+    const handleCancel = () => navigate(0);
 
     // 이미지 선택
     const openFileDialog = () => fileInputRef.current.click();
@@ -115,11 +115,11 @@ export default function FeedCreate() {
                     취소
                 </button>
                 <div className="KYM-FeedCreate-title">
-                    <img
+                    {/* <img
                         src={plusIcon}
                         className="KYM-FeedCreate-icon-plus"
                         alt="플러스 아이콘"
-                    />
+                    /> */}
                     새 피드 작성
                 </div>
                 <button

@@ -109,21 +109,44 @@ export default function FeedDetail() {
   //   }));
   // };
 
- const onToggleReplies = (commentId, replies) => {
-  setShowReplies(prev => {
-    const newReplies = { ...prev, [commentId]: !prev[commentId] };
-    const openChild = (children) => {
-      children.forEach(c => {
-        newReplies[c.commentId] = true;
-        if (c.replies) openChild(c.replies);
-      });
-    };
-    if (replies) {
-      openChild(replies);
-    }
-    return newReplies;
-  });
-};
+  //  const onToggleReplies = (commentId, replies) => {
+  //   setShowReplies(prev => {
+  //     const newReplies = { ...prev, [commentId]: !prev[commentId] };
+  //     const openChild = (children) => {
+  //       children.forEach(c => {
+  //         newReplies[c.commentId] = true;
+  //         if (c.replies) openChild(c.replies);
+  //       });
+  //     };
+  //     if (replies) {
+  //       openChild(replies);
+  //     }
+  //     return newReplies;
+  //   });
+  // };
+
+  const onToggleReplies = (commentId, replies) => {
+    console.log("▶ onToggleReplies 실행됨", commentId, replies);
+    setShowReplies(prev => {
+      const newReplies = { ...prev, [commentId]: !prev[commentId] };
+
+      const openAllChildren = (children) => {
+        if (!children) return;
+        children.forEach(child => {
+          newReplies[child.commentId] = true;
+          if (child.replies && child.replies.length > 0) {
+            openAllChildren(child.replies); // 재귀 호출로 계속 내려감
+          }
+        });
+      };
+
+      if (replies && newReplies[commentId]) {
+        openAllChildren(replies);
+      }
+      return newReplies;
+    });
+  };
+
 
   const postComment = async () => {
     if (!commentText.trim()) return;
@@ -256,7 +279,7 @@ export default function FeedDetail() {
   };
 
   const renderComment = (c, level = 0) => (
-    
+
     <div key={c.commentId} className="KYM-comment-block" style={{ marginLeft: `${level * 20}px` }}>
       <img className="KYM-comment-avatar" src={c.userProfile || null} alt="" />
       <div className="KYM-comment-body">
@@ -272,7 +295,7 @@ export default function FeedDetail() {
           {c.replies && c.replies.length > 0 && (
             <button
               className="KYM-reply-toggle"
-              onClick={() => onToggleReplies(c.commentId,c.replies)}
+              onClick={() => onToggleReplies(c.commentId, c.replies)}
             >
               {showReplies[c.commentId] ? '답글 숨기기' : '답글 보기'}
             </button>
@@ -326,7 +349,10 @@ export default function FeedDetail() {
           </div>
         )}
 
-        {showReplies[c.commentId] && c.replies?.map(r => renderComment(r, level + 1))}
+        <>
+          {console.log("▶ 내려갈 child replies:", c.commentId, c.replies)}
+          {c.replies?.map(r => renderComment(r, level + 1))}
+        </>
       </div>
     </div>
   );
@@ -357,7 +383,20 @@ export default function FeedDetail() {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showMenu && menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMenu]);
 
+
+  console.log("▶ 전체 comment 트리 구조", JSON.stringify(comment, null, 2));
   return (
     <>
       <Header />
@@ -460,7 +499,7 @@ export default function FeedDetail() {
             <div className="KYM-detail-date">{formatDate(createdAt)}</div>
 
             {/* comments */}
-            
+
             <div className="KYM-detail-comments">
               {comment.map(c => renderComment(c))}
               {console.log("▶ showReplies:", showReplies)}

@@ -96,8 +96,11 @@
 .KYM-detail-container .KYM-detail-header {
   display: flex;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
+  /* padding: 16px;
+  border-bottom: 1px solid #eee; */
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 }
 
 .KYM-detail-container .KYM-detail-avatar {
@@ -109,6 +112,11 @@
 
 .KYM-detail-container .KYM-detail-nickname {
   font-weight: bold;
+  max-width: none;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
 }
 
 .KYM-detail-container .KYM-detail-badge {
@@ -124,11 +132,13 @@
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
-  width: 100px;
+  /* width: 120px; */
+  margin-left: 8px;
+  flex-shrink: 0;
 }
 
 .KYM-detail-container .KYM-more-wrapper {
-  position: relative;
+   margin-left: auto;
 }
 
 .KYM-detail-container .KYM-detail-more {
@@ -148,6 +158,8 @@
 .KYM-detail-container .KYM-left-info {
   display: flex;
   align-items: center;
+    flex: 1 1 auto;
+  min-width: 0; 
 }
 
 .KYM-detail-container .KYM-detail-menu {
@@ -368,4 +380,5 @@
   /* height: 20px; */
   margin-left: 6px;
   vertical-align: middle;
+  flex-shrink: 0;
 }

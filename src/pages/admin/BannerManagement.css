@@ -13,24 +13,19 @@
 
 /* 등록 버튼 */
 .register-btnHY {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background-color: #FFB22C;
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 11px 20px;
   border-radius: 8px;
-  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  transition: background-color 0.2s;
 }
 
 .register-btnHY:hover {
-  background: linear-gradient(135deg, #d97706, #b45309);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  background-color: #dc2626 !important;
 }
-
 /* 검색 결과 수 */
 .result-countHY {
   font-size: 14px;
@@ -158,13 +153,19 @@
 }
 
 .btn-edit:hover {
-  background: linear-gradient(135deg, #d97706, #b45309);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  background-color: #FFB22C !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .btn-delete {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, #dc2626, #dc2626);
   color: white;
   border: none;
   padding: 8px 16px;

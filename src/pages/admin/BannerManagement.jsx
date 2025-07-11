@@ -20,6 +20,7 @@ const BannerManagement = () => {
     first: true,
     last: true
   });
+  const PAGE_SIZE = 20;
   const [searchKeyword, setSearchKeyword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,7 +37,7 @@ const BannerManagement = () => {
     try {
       const params = {
         page: currentPage,
-        size: 20,
+        size: PAGE_SIZE,
         sort: 'createdAt,desc'
       };
       
@@ -393,6 +394,7 @@ const BannerManagement = () => {
         <table className="tableHY banner-table">
           <thead>
             <tr>
+              <th>No.</th>
               <th>배너 ID</th>
               <th>배너 이미지</th>
               <th>제목</th>
@@ -417,6 +419,7 @@ const BannerManagement = () => {
                 
                 return (
                 <tr key={banner.bannerId || banner.id || index}>
+                       <td>{(currentPage * PAGE_SIZE ) + index + 1}</td>
                   <td className="banner-id">{banner.bannerId || banner.id}</td>
     
             <td className="banner-image">
@@ -478,7 +481,7 @@ const BannerManagement = () => {
         </table>
       </div>
 
-      {/* 새로운 페이지네이션 (쿠폰 관리와 동일한 스타일) */}
+      {/* 새로운 페이지네이션  */}
       {totalPages > 1 && (
         <div className="pagination-containerHY">
           <div className="pagination">

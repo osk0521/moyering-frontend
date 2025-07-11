@@ -12,10 +12,12 @@ const PaymentManagement = () => {
   const token = useAtomValue(tokenAtom);
   const location = useLocation();
   const userInfo = location.state; // MemberManagement에서 전달받은 사용자 정보
+  const pageSize = 20;
   
   // 상태 관리
   const [payments, setPayments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(''); 
   const [statusFilter, setStatusFilter] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -27,20 +29,31 @@ const PaymentManagement = () => {
   useEffect(() => {
     if (userInfo && userInfo.username) {
       setSearchTerm(userInfo.username);
+      setDebouncedSearchTerm(userInfo.username); // 이것도 같이 설정해야 함
     }
   }, [userInfo]);
 
-  // 데이터 로딩
+  // 디바운싱: 검색어 입력 후 500ms 대기
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setCurrentPage(0); // 새로운 검색시 첫 페이지로
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // 데이터 로딩 - debouncedSearchTerm 사용
   useEffect(() => {
     const fetchPayments = async () => {
       // AdminPaymentSearchCond에 맞게 파라미터 구성
       const params = {
         page: currentPage,
         size: 20,
-        keyword: searchTerm || undefined,
+        keyword: debouncedSearchTerm || undefined, // debouncedSearchTerm 사용!
         status: statusFilter || undefined,
-        startDate: startDate || undefined,
-        endDate: endDate || undefined,
+        fromDate: startDate || undefined,
+        toDate: endDate || undefined,
       };
 
       // 특정 사용자의 결제 내역을 조회하는 경우 userId 추가
@@ -63,7 +76,8 @@ const PaymentManagement = () => {
     };
 
     fetchPayments();
-  }, [token, searchTerm, statusFilter, startDate, endDate, currentPage, userInfo]);
+  }, [token, debouncedSearchTerm, statusFilter, startDate, endDate, currentPage, userInfo]);
+  // ↑ searchTerm이 아니라 debouncedSearchTerm을 의존성으로 사용
 
   const formatAmount = (amount) => {
     return amount != null ? amount.toLocaleString('ko-KR') : '0';
@@ -142,23 +156,22 @@ const PaymentManagement = () => {
             onChange={handleSearch}
             className="search-inputHY"
           />
-
         </div>
-        <div className = "date-filter-group">
-        <label className="date-labelHY">결제 기간</label>
-        <input
-          type="date"
-          className="date-inputHY"
-          value={startDate} 
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <span className="date-separatorHY">~</span>
-        <input
-          type="date"
-          className="date-inputHY"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+        <div className="date-filter-group">
+          <label className="date-labelHY">결제 기간</label>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={startDate} 
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <span className="date-separatorHY">~</span>
+          <input
+            type="date"
+            className="date-inputHY"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
         </div>
       </div>
 
@@ -175,15 +188,15 @@ const PaymentManagement = () => {
             </button>
           ))}
         </div>
-
       </div>
-        총 <strong>{totalElements}</strong>건
-        
+      
+      총 <strong>{totalElements}</strong>건
     
       <div className="table-wrapperHY">
         <table className="tableHY">
           <thead>
             <tr>
+              <th>No</th>
               <th>결제번호</th>
               <th>주문번호</th>
               <th>수강생 ID</th>
@@ -199,8 +212,9 @@ const PaymentManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {payments.map(p => (
+            {payments.map((p, idx) => (
               <tr key={p.paymentId}>
+                <td>{(currentPage * pageSize) + idx + 1}</td>
                 <td>{p.paymentId}</td>
                 <td>{p.orderNo}</td>
                 <td>{p.studentId}</td>

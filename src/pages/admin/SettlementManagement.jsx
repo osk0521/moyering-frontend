@@ -255,7 +255,7 @@ const SettlementManagement = () => {
         <div className="search-boxHY">
           <input
             type="text"
-            placeholder="강사 ID, 클래스명 검색"
+            placeholder="강사 ID, 강사명, 클래스명 검색"
             value={searchTerm}
             onChange={handleSearchChange}
             className="search-inputHY"

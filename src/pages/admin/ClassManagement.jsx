@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import Layout from "./Layout";
 import { myAxios } from "../../config";
 import { tokenAtom } from "../../atoms";
@@ -30,6 +30,7 @@ const PAGE_SIZE = 20;
 const ClassManagement = () => {
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
+  const setToken = useSetAtom(tokenAtom);
 
   // 상태 관리 - currentPage를 별도로 분리
   const [filters, setFilters] = useState({
@@ -70,7 +71,7 @@ const ClassManagement = () => {
 
       console.log('요청 파라미터:', params); // 디버깅용
 
-      const { data } = await myAxios(token).get("/api/class", { params });
+      const { data } = await myAxios(token, setToken).get("/api/class", { params });
       
       console.log('응답 데이터:', data); // 디버깅용
 
@@ -85,7 +86,7 @@ const ClassManagement = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, filters, currentPage]); // currentPage를 dependency에 추가
+  }, [token, setToken,filters, currentPage]); // currentPage를 dependency에 추가
 
   // 필터 업데이트 함수
   const updateFilter = useCallback((key, value) => {
@@ -230,10 +231,6 @@ const ClassManagement = () => {
 
       <div className="result-countHY">
         총 <strong>{classData.totalElements}</strong>건
-        {/* 디버깅 정보 */}
-        <span style={{marginLeft: '20px', fontSize: '12px', color: '#666'}}>
-          (현재 페이지: {currentPage + 1} / 전체 페이지: {classData.totalPages})
-        </span>
       </div>
 
       {/* 테이블 */}
@@ -267,7 +264,7 @@ const ClassManagement = () => {
             ) : (
               classData.list.map((item, idx) => (
                 <tr key={item.classId}>
-                  <td>{classData.totalElements - currentPage * PAGE_SIZE - idx}</td>
+                  <td>{(currentPage * PAGE_SIZE ) + idx + 1}</td>
                   <td>{item.firstCategory}</td>
                   <td>{item.secondCategory}</td>
                   <td className="instructor-idHY">{item.hostUserName}</td>

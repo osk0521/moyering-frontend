@@ -647,4 +647,30 @@ body {
     font-size: 10px !important;
     min-width: 35px !important;
   }
+
+/* 게시 버튼 */
+.publish-btnHY {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.publish-btnHY.published {
+  background-color: #D3D3D3;
+  color: #000000;
+}
+
+.publish-btnHY.unpublished {
+  background-color: #A8D8EA;
+  color: #000000;
+}
+
+.publish-btnHY:hover {
+  transform: scale(1.05);
+}
+
 }

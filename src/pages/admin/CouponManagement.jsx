@@ -62,6 +62,7 @@ const CouponManagement = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [couponType, setCouponType] = useState('전체'); // 발급주체 필터
+  const [pageSize] = useState(20);
   const [statusFilter, setStatusFilter] = useState('전체'); // 상태 필터
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [couponList, setCouponList] = useState([]); // 백엔드 연동 데이터
@@ -357,13 +358,14 @@ const CouponManagement = () => {
 
       {/* 검색 결과 수 */}
       <div className="result-countHY">
-        총 <strong>{pageInfo.totalElements}</strong>건 (페이지 {currentPage + 1} / {totalPages})
+        총 <strong>{pageInfo.totalElements}</strong>건
       </div>
 
       <div className="table-containerHY">
         <table className="tableHY">
           <thead>
             <tr>
+              <th>No</th>
               <th>쿠폰 ID</th>
               <th>쿠폰 구분</th>
               <th>유형</th>
@@ -383,6 +385,7 @@ const CouponManagement = () => {
             ) : filteredData.length > 0 ? (
               filteredData.map((coupon, idx) => (
                 <tr key={coupon.couponId || idx}>
+                  <td>{(currentPage * pageSize) + idx + 1}</td>
                   <td>{coupon.couponId}</td>
                   <td>
                     <span className={`type-badge ${coupon.couponType === 'MG' ? 'admin' : 'host'}`}>

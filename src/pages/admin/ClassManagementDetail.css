@@ -177,6 +177,13 @@
   color: #dc2626;
 }
 
+.status-endedHY {
+  background-color: #cbd9bd;
+  color: #1f4406;
+}
+
+
+
 /* 버튼 스타일 */
 .btn-secondaryHY {
   padding: 8px 16px;

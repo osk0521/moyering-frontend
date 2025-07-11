@@ -130,7 +130,9 @@ export default function UserFeed() {
             </p>
             <div className="KYM-userfeed-action-buttons">
               <FollowButton targetUserId={user.userId} className="KYM-userfeed-follow-btn" />
-              <button className="KYM-userfeed-btn">메시지</button>
+              <button className="KYM-userfeed-btn" onClick={() => navigate(`/user/chat?receiverId=${user.userId}`)}>
+                DM
+              </button>
             </div>
             <ul className="KYM-userfeed-stat-list">
               <li><strong>{feedCount}</strong><span>게시물</span></li>

@@ -194,6 +194,7 @@
   color: #666;
 } 
 .GatheringChat_chat-messages_osk {
+  height: 600px;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
@@ -302,4 +303,35 @@
   font-size: 24px;
   color: #666;
   cursor: pointer;
+}
+
+.GatheringChat_message-time_osk {
+  font-size: 10px;
+  color: #999;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.GatheringChat_date-divider_osk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  color: #999;
+  font-size: 12px;
+}
+
+.GatheringChat_date-divider_osk::before,
+.GatheringChat_date-divider_osk::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0 8px;
+}
+
+.GatheringChat_date-text_osk {
+  white-space: nowrap;
 }

@@ -215,7 +215,7 @@ function App() {
         <Route path="/admin/dashboard" element={<Dashboard />} />        {/* 대시보드 페이지 */}
         <Route path="/admin/member" element={<MemberManagement />} />   {/* 회원 관리 페이지 */}
         <Route path="/admin/class" element={<ClassManagement />} />   {/* 클래스 관리 페이지 */}
-        <Route path="/admin/class/detail" element={<ClassManagementDetail />} />   {/* 클래스 관리 상세 페이지 */}
+        <Route path="/admin/class/:classId" element={<ClassManagementDetail />} />   {/* 클래스 관리 상세 페이지 */}
         <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
         <Route path="/admin/notice/edit/:noticeId" element={<NoticeEdit />} />     {/* 공지사항 수정 페이지  */}

@@ -54,7 +54,11 @@ const SettlementModal = ({ isOpen, onClose, settlementInfo, onConfirmSettlement 
   // 모달이 열려있지 않으면 렌더링하지 않음
   if (!isOpen || !settlementInfo) return null;
 
-  const handleConfirm = () => {
+  // 🔧 이벤트 처리 수정
+  const handleConfirm = (e) => {
+    e.preventDefault(); // 폼 제출 방지
+    e.stopPropagation(); // 이벤트 버블링 방지
+    
     if (!window.confirm('정산을 확정하시겠습니까?')) return;
     
     // 백엔드 데이터 구조에 맞게 수정 (totalAmount 사용)
@@ -64,7 +68,16 @@ const SettlementModal = ({ isOpen, onClose, settlementInfo, onConfirmSettlement 
       totalPayments: payments.length
     };
 
+    console.log('정산 확정 데이터:', stats); // 디버깅용
+
     onConfirmSettlement(settlementInfo.settlementId, stats);
+  };
+
+  // 🔧 취소 버튼도 수정
+  const handleCancel = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
   };
 
   // 결제 방식 한글 변환
@@ -196,8 +209,12 @@ const SettlementModal = ({ isOpen, onClose, settlementInfo, onConfirmSettlement 
           )}
         </div>
 
+        {/* 🔧 버튼 이벤트 핸들러 수정 */}
         <div className="modal-actionsHY">
-          <button type="button" onClick={onClose}>
+          <button 
+            type="button" 
+            onClick={handleCancel}
+          >
             취소
           </button>
           <button 

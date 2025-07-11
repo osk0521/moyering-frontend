@@ -3,25 +3,29 @@ import styles from "./ClassRingReviewList.module.css";
 import { FaStar } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
 import { myAxios } from "../../config";
-import { useNavigate,useParams } from "react-router";
+import { useNavigate,useParams,useLocation } from "react-router";
 import { url } from '../../config';
-import { useSetAtom, useAtomValue } from "jotai";
+import { useSetAtom, useAtomValue  } from "jotai";
 import {
   allReviewListAtom,
 } from '../../atom/classAtom';
 export default function ClassRingReviewList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const { hostId } = useParams(); 
+  const { classId } = useParams(); 
   const navigate = useNavigate();
   const setAllReviewListAtom= useSetAtom(allReviewListAtom);
   const reviews = useAtomValue(allReviewListAtom);
   
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const className = params.get("className");
+
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         const res = await myAxios().get(
-          `/class/classRingReviewList/${hostId}?page=${currentPage - 1}&size=5`
+          `/class/classRingReviewList/${classId}?page=${currentPage - 1}&size=5`
         );
         setAllReviewListAtom(res.data.content);
         setTotalPages(res.data.totalPages);
@@ -35,21 +39,9 @@ export default function ClassRingReviewList() {
   return (
     <div className={styles.container}>
       <div style={{display:'flex'}}>
-      <button onClick={() => navigate(-1)} className={styles.backBtn}>
+      {/* <button onClick={() => navigate(-1)} className={styles.backBtn}>
         <FaArrowLeft style={{ marginRight: "6px" }} />
-      </button>
-      <h2 className={styles.pageTitle}>강사 평점 및 후기</h2>
-      </div>
-      <div className={styles.summaryBox}>
-        <div>
-          <img src={`${url}/image?filename=${reviews[0]?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
-          <strong>{reviews[0]?.hostName}</strong>
-          <div className={styles.starsRow}><FaStar color="#FFD700" /><span>5</span></div>
-        </div>
-        <div>
-          <span>진행한 클래스</span>
-          <div>138건</div>
-        </div>
+      </button> */}
       </div>
 
       <div className={styles.reviewList}>

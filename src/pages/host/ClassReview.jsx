@@ -189,7 +189,7 @@ const ClassReview = () => {
           <div className="noneDiv">
             <div className="classNone">
               <h4>조회된 목록이 없습니다</h4>
-              <p>검색 조건을 변경하거나 새로운 질문을 남겨보세요.</p>
+              <p>검색 조건을 변경하거나 새로운 문의를 남겨보세요.</p>
             </div>
           </div>
         )}

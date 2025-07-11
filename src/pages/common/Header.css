@@ -226,7 +226,7 @@
 }
 
 .Header_notification-button_osk:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
+  background-color: none !important;
 }
 
 /* 알림 뱃지 (읽지 않은 알림 개수) */
@@ -397,11 +397,11 @@
 }
 
 .Header_notification-button_osk:hover {
-  background-color: rgba(0, 123, 255, 0.1) !important;
+  background-color: none !important;
 }
 
 .Header_notification-button_osk:focus {
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+  box-shadow: 0 0 0 2px none!important;
   outline: none;
 }
 

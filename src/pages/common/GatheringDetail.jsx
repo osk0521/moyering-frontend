@@ -867,11 +867,11 @@ export default function GatheringDetail() {
                 >
                   {isLiked ? (
                     <>
-                      <FaHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />
+                      <FaHeart className="GatheringDetail_top-icon_osk GatheringDetail_liked_osk" />찜해제
                     </>
                   ) : (
                     <>
-                      <CiHeart className="GatheringDetail_top-icon_osk" />
+                      <CiHeart className="GatheringDetail_top-icon_osk" />찜하기
                     </>
                   )}
                 </button>

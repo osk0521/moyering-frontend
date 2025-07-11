@@ -81,15 +81,6 @@
   border: 1px solid #e9ecef;
 }
 
-.GatheringChat_chat-tabs_osk {
-    display: flex;
-    border-bottom: 1px solid #e9ecef;
-    padding: 15px;
-    position: relative;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .GatheringChat_tab_osk {
   background: none;
   border: none;
@@ -185,6 +176,7 @@
   justify-content: space-between;
   padding: 21px 20px;
   border: 1px solid #e9ecef;
+  height: 62px;
 }
 
 .GatheringChat_chat-header_osk h2 {
@@ -381,9 +373,12 @@
 .GatheringChat_chat-tabs_osk {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 12px 16px;
   border-bottom: 1px solid #e0e0e0;
+  /* padding: 12px 16px;
+    padding: 15px; */
+    position: relative;
 }
 
 .GatheringChat_filter-dropdown_osk {
@@ -440,14 +435,6 @@
   padding: 8px 16px 4px 16px;
 }
 
-/* 탭 영역 레이아웃 조정 */
-.GatheringChat_chat-tabs_osk {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid #e0e0e0;
-}
 
 /* 상태 배지 스타일링 */
 .GatheringChat_room-status_osk {

@@ -58,7 +58,7 @@ export default function ClassPayment() {
         ? selectedCouponObj.discount
         : Math.round((selectedCouponObj.discount / 100) * basePrice)
       : 0;
-  const finalPrice = Math.max(basePrice - discount, 0);
+  const finalPrice = Math.max(basePrice - discount, 1);
 
   const handleApplyCoupon = () => {
     if (selectedCoupon) setCouponApplied(true);
@@ -139,18 +139,20 @@ export default function ClassPayment() {
 
     const orderNo = `ORD-${user?.id}-${Date.now()}`;
     const userCouponId = selectedCouponObj?.ucId || '';
+    const classPrice = paymentInfo.hostClass.price;
 
     try {
-      // ✅ 서버에 결제정보 저장 (권장)
+      // 서버에 결제정보 저장 (권장)
       token && await myAxios(token, setToken).post("/user/payment/init", {
         orderNo,
         calendarId: selectedCalendarId,
         userCouponId,
         amount: finalPrice,
         paymentType: "카드",
+        classPrice :classPrice
       });
 
-      // ✅ Toss 결제창 실행
+      // Toss 결제창 실행
       token && await paymentInstance.requestPayment({
         method: "CARD",
         amount: { value: finalPrice, currency: "KRW" },

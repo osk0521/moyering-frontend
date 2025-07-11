@@ -12,6 +12,7 @@ import { url } from "../../config";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { format } from "date-fns"; 
 
 export default function Main() {
     useRecommendClasses(); // userId 없으면 null 넘기기
@@ -27,13 +28,29 @@ const settings = {
 };
 
   const navigate = useNavigate();
-
-const items = [
-  { title: "내 주변 클래스링", desc: "주변에 있는 클래스 찾기", icon: "❤️", link: "/classList" },
-  { title: "오늘 당장 게더링", desc: "주변에 있는 당일모임 찾기", icon: "🕒", link: "/gatheringList" },
-  { title: "강사 홍보 게시판", desc: "원하는 강사를 찾아보세요.", icon: "🗂️", link: "/hostFeeds" },
-  { title: "소셜링", desc: "사람들은 어떤 이야기를 나눌까?", icon: "💬", link: "/feeds" },
-];
+  const today = format(new Date(), "yyyy-MM-dd");
+  const items = [
+    { title: "내 주변 클래스링", desc: "주변에 있는 클래스 찾기", icon: "❤️", 
+      link: "/classList",
+      onClick: () =>
+        navigate("/classList", {
+          state: {
+            useLocationFilter: true
+          }
+        })
+    },
+    { title: "오늘 당장 게더링", desc: "주변에 있는 당일모임 찾기", icon: "🕒", 
+      link: "/gatheringList",
+      onClick: () =>
+        navigate("/gatheringList", {
+          state: {
+            today: today 
+          }
+        })
+    },
+    { title: "강사 홍보 게시판", desc: "원하는 강사를 찾아보세요.", icon: "🗂️", link: "/hostFeeds" },
+    { title: "소셜링", desc: "사람들은 어떤 이야기를 나눌까?", icon: "💬", link: "/feeds" },
+  ];
 
 
   const classes = useAtomValue(recommendClassAtom);
@@ -71,7 +88,13 @@ const items = [
             <div
               className={styles.quickLinkBox}
               key={idx}
-              onClick={() => navigate(item.link)}
+              onClick={() => {
+                    if (item.onClick) {
+                      item.onClick();  // 이게 있으면 우선 실행
+                    } else {
+                      navigate(item.link);
+                    }
+                  }}
             >                
                 <div className={styles.quickLinkIcon}>{item.icon}</div>
                 <div>

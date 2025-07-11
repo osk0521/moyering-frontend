@@ -309,7 +309,8 @@ export default function Header() {
             <span
               className="Header_nav-item_osk"
               onClick={() =>
-                navigate("/classList")}
+                navigate("/classList", { state: { reset: true } })
+              }
             >
               클래스링
             </span>

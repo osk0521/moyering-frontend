@@ -24,16 +24,11 @@ const TabTransaction = ({ registerValidator, classData, setClassData }) => {
   }
 
 
-  // 유효성 검사 함수 (필수 항목: 거래 정보, 환불 규정, 파일)
-  const validate = () => {
-    if (!transaction.caution.trim()) return false;
-    return true;
-  };
-
-  // 부모 컴포넌트에 유효성 검사 함수 등록
   useEffect(() => {
-    registerValidator(4, validate);
-  }, [transaction.caution]);
+    const { caution,price } = classData.transaction;
+    const isValid = caution && price;
+    registerValidator(4, () => isValid);
+  }, [classData.transaction, registerValidator]);
 
   return (
     <div className="KHJ-class-info-box">

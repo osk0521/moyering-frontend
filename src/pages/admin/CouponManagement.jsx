@@ -49,7 +49,6 @@ function CouponEditModal({ isOpen, coupon, onClose, onSubmit }) {
           )}
         </div>
         <div className="modal-footer">
-          <button className="cancel-btn" onClick={onClose}>취소</button>
           <button className="submit-btn" onClick={() => onSubmit(formData)}>저장</button>
         </div>
       </div>
@@ -136,7 +135,6 @@ const CouponManagement = () => {
     try {
       await axios.post(`${url}/api/coupon`, dto);
       setIsModalOpen(false);
-      alert('쿠폰이 성공적으로 생성되었습니다!');
       setCurrentPage(0); // 첫 페이지로 이동
       loadCouponList();
     } catch (error) {
@@ -210,7 +208,6 @@ const CouponManagement = () => {
       await axios.put(`${url}/api/coupon/${formData.couponId}`, formData);
       setEditModalOpen(false);
       setEditCoupon(null);
-      alert('쿠폰이 수정되었습니다.');
       loadCouponList();
     } catch (error) {
       alert('쿠폰 수정에 실패했습니다.');
@@ -223,7 +220,6 @@ const CouponManagement = () => {
     if (!window.confirm(`정말 삭제하시겠습니까? (쿠폰코드: ${coupon.couponCode})`)) return;
     try {
       await axios.delete(`${url}/api/coupon/${coupon.couponId}`, { data: coupon });
-      alert('쿠폰이 삭제되었습니다.');
       loadCouponList();
     } catch (error) {
       alert('쿠폰 삭제에 실패했습니다.');
@@ -410,7 +406,7 @@ const CouponManagement = () => {
                   <td>{formatDate(coupon.validUntil)}</td>
                   <td>{formatDate(coupon.createdAt)}</td>
                   <td>
-                    <span className={`status-badge ${coupon.status === 'ACTIVE' ? 'active' : coupon.status === 'EXPIRED' ? 'expired' : 'pending'}`}>
+                    <span className={`${coupon.status === 'ACTIVE' ? 'active' : coupon.status === 'EXPIRED' ? 'expired' : 'pending'}`}>
                       {coupon.status === 'SCHEDULED' ? '예정' : coupon.status === 'ACTIVE' ? '활성' : coupon.status === 'EXPIRED' ? '만료' : coupon.status}
                     </span>
                   </td>

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { url, myAxios } from "../../../config";
 import GatheringChatRoom from "./GatheringChatRoom";
 import { IoFilter } from "react-icons/io5";
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,} from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, } from 'reactstrap';
 
 export default function GatheringChatRoomList() {
   const user = useAtomValue(userAtom);
@@ -25,7 +25,7 @@ export default function GatheringChatRoomList() {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('전체');
-  
+
   const toggle = () => setFilterOpen((prevState) => !prevState);
   const handleFilterSelect = (filter) => {
     setSelectedFilter(filter);
@@ -89,57 +89,62 @@ export default function GatheringChatRoomList() {
               >
                 게더링
               </button>
-              
-              {/* 개선된 Dropdown */}
-              <Dropdown 
-                isOpen={filterOpen} 
-                toggle={toggle} 
-                direction={"down"} 
-                className="GatheringChat_filter-dropdown_osk"
+              <button className={`GatheringChat_tab_osk ${activeTab === 'DM' ? 'GatheringChat_active_osk' : ''}`}
+                onClick={() => setActiveTab('DM')}
               >
-                <DropdownToggle 
-                  tag="button"
-                  className="GatheringChat_filter-toggle_osk"
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: '8px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '4px',
-                    transition: 'background-color 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#f0f0f0'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                DM
+              </button>
+              {activeTab === '게더링' && (
+                <Dropdown
+                  isOpen={filterOpen}
+                  toggle={toggle}
+                  direction={"down"}
+                  className="GatheringChat_filter-dropdown_osk"
                 >
-                  <IoFilter size={20} color="#666" />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem header>필터 옵션</DropdownItem>
-                  <DropdownItem 
-                    onClick={() => handleFilterSelect('전체')}
-                    className={selectedFilter === '전체' ? 'active' : ''}
+                  <DropdownToggle
+                    tag="button"
+                    className="GatheringChat_filter-toggle_osk"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '4px',
+                      transition: 'background-color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#f0f0f0'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                   >
-                    전체
-                  </DropdownItem>
-                  <DropdownItem 
-                    onClick={() => handleFilterSelect('활성화')}
-                    className={selectedFilter === '활성화' ? 'active' : ''}
-                  >
-                    활성화
-                  </DropdownItem>
-                  <DropdownItem 
-                    onClick={() => handleFilterSelect('비활성화')}
-                    className={selectedFilter === '비활성화' ? 'active' : ''}
-                  >
-                    비활성화
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+                    <IoFilter size={20} color="#666" />
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem header>필터 옵션</DropdownItem>
+                    <DropdownItem
+                      onClick={() => handleFilterSelect('전체')}
+                      className={selectedFilter === '전체' ? 'active' : ''}
+                    >
+                      전체
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => handleFilterSelect('활성화')}
+                      className={selectedFilter === '활성화' ? 'active' : ''}
+                    >
+                      활성화
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => handleFilterSelect('비활성화')}
+                      className={selectedFilter === '비활성화' ? 'active' : ''}
+                    >
+                      비활성화
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
             </div>
-            
+
             <div className="GatheringChat_chat-room-list_osk">
               {filteredChatRooms.map(room => (
                 <div
@@ -172,7 +177,7 @@ export default function GatheringChatRoomList() {
               ))}
             </div>
           </aside>
-          
+
           {/* Chat Area */}
           {selectedRoomId ? (
             <GatheringChatRoom

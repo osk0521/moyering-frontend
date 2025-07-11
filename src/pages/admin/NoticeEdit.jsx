@@ -70,7 +70,6 @@ const NoticeCreate = () => {
       });
 
       if (response.status === 200) {
-        alert('공지사항이 수정되었습니다!');
         navigate('/admin/notice');
       }
     } catch (error) {

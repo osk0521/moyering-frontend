@@ -8,13 +8,13 @@ import { tokenAtom } from '../../../atoms';
 
 const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   const { extraInfo } = classData;
-  const [token,setToken] = useAtom(tokenAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const [couponList, setCouponList] = useState([]);
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
   const [selectedCoupons, setSelectedCoupons] = useState([]);
 
   useEffect(() => {
-    token && myAxios(token,setToken).get("/host/couponList")
+    token && myAxios(token, setToken).get("/host/couponList")
       .then(res => setCouponList(res.data))
       .catch(err => console.log("쿠폰 불러오기 실패", err));
   }, [token]);
@@ -101,17 +101,11 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
     }));
   };
 
-  const validate = () => {
-    const hasMaterial = extraInfo.material != null;
-    const hasIncluision = extraInfo.incluision?.split(',').filter(Boolean).length > 0;
-    const hasPreparation = extraInfo.preparation?.split(',').filter(Boolean).length > 0;
-    const hasKeywords = extraInfo.keywords?.split(',').filter(Boolean).length > 0;
-    return hasMaterial && hasIncluision && hasPreparation && hasKeywords;
-  };
-
   useEffect(() => {
-    registerValidator(3, validate);
-  }, [extraInfo]);
+    const { immaterialg1 } = classData.extraInfo;
+    const isValid = immaterialg1 !== null;
+    registerValidator(3, () => isValid);
+  }, [classData.extraInfo, registerValidator]);
 
   const TagInput = ({ label, keyName, placeholder }) => {
     const [input, setInput] = useState('');
@@ -165,7 +159,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
       <TagInput label="검색 키워드" keyName="keywords" placeholder="예: 베이킹, 원데이클래스" />
 
       <div className="KHJ-form-section">
-        <label className="KHJ-coupon-label"><span className="KHJ-required-text-dot">*</span>쿠폰 등록(선택)</label>
+        <label className="KHJ-coupon-label">쿠폰 등록(선택)</label>
         <div className="KHJ-coupon-input-container">
           <button className="KHJ-coupon-input-btn" onClick={() => setIsCouponModalOpen(true)}>쿠폰 선택</button>
         </div>

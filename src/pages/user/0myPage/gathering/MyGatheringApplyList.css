@@ -288,11 +288,16 @@
   transition: all 0.2s;
 }
 .MyGatheringApplyList_pagination_osk button.MyGatheringApplyList_active_osk {
-  color: #ffc107;
+   background-color: #ffc107;
   font-weight: 600;
-  background-color: white;
+ color: white;
 }
-
+.accordion-button:focus{
+  box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+.accordion-button:not(.collapsed){
+ background-color: white; 
+}
 /* 추가 스타일링 */
 .MyGatheringApplyList_gathering-list-item_osk {
   position: relative;

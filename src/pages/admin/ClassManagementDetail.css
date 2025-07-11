@@ -1,243 +1,133 @@
-/* ClassManagementDetail.css */
-
-.back-buttonHY {
-  background: none;
-  border: none;
-  color: #3b82f6;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 8px 0;
-  margin-right: 16px;
-  transition: color 0.2s;
-}
-
-.back-buttonHY:hover {
-  color: #2563eb;
-}
-
-.detail-containerHY {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.class-detail-container {
   padding: 24px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.action-buttons button {
+  margin-right: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-approve {
+  background-color: #22c55e;
+  color: white;
+}
+
+.btn-reject {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-link {
+  background-color: transparent;
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.btn-close {
+  background-color: #facc15;
+  color: #000;
+  font-weight: bold;
+}
+
+.download-links {
+  margin: 12px 0;
+  display: flex;
+  gap: 24px;
+}
+
+.class-summary {
+  margin: 16px 0;
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 12px;
+  background: #e5e7eb;
+  color: #111;
+}
+
+.badge.success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.info-table,
+.students-table,
+.extra-info-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
   margin-bottom: 24px;
 }
 
-.class-info-sectionHY {
-  margin-bottom: 32px;
+.info-table th,
+.info-table td,
+.students-table th,
+.students-table td,
+.extra-info-section table th,
+.extra-info-section table td {
+  border: 1px solid #e5e7eb;
+  padding: 8px;
+  text-align: center;
+  background-color: white;
 }
 
-.info-gridHY {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
+.description-box {
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  background-color: #fefefe;
+  border-radius: 4px;
+  margin-bottom: 24px;
 }
 
-.info-itemHY {
+.bottom-section {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
-.info-labelHY {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #6b7280;
+.schedule-section,
+.extra-info-section {
+  width: 48%;
 }
 
-.info-valueHY {
-  font-size: 1rem;
-  color: #1f2937;
-  font-weight: 500;
+.schedule-item {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 6px;
 }
 
-.info-valueHY.price {
-  color: #059669;
-  font-weight: 600;
-}
-
-.class-description-sectionHY {
-  margin-bottom: 32px;
-}
-
-.class-description-sectionHY h3 {
-  margin: 0 0 16px 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.description-contentHY {
+.note {
+  font-size: 12px;
+  color: #666;
+  margin-top: 16px;
   background-color: #f9fafb;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 8px;
   border-left: 4px solid #3b82f6;
 }
-
-.description-contentHY p {
-  margin: 0 0 12px 0;
-  line-height: 1.6;
-  color: #374151;
-  white-space: pre-wrap;
-}
-
-.description-contentHY p:last-child {
-  margin-bottom: 0;
-}
-
-.student-list-sectionHY h3 {
-  margin: 0 0 16px 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.student-table-containerHY {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 32px;
-}
-
-.student-tableHY {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.student-tableHY th {
-  background-color: #f9fafb;
-  padding: 12px;
-  text-align: left;
-  font-weight: 600;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 0.875rem;
-}
-
-.student-tableHY td {
-  padding: 12px;
-  border-bottom: 1px solid #f3f4f6;
-  color: #1f2937;
-  font-size: 0.875rem;
-}
-
-.student-tableHY tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.student-tableHY tbody tr:hover {
-  background-color: #f9fafb;
-}
-
-.no-dataHY {
-  text-align: center;
-  color: #6b7280;
-  font-style: italic;
-  padding: 32px !important;
-}
-
-
-/* 상태 배지 */
-.status-badgeHY {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-align: center;
-}
-
-.status-pendingHY {
-  background-color: #fef3c7;
-  color: #d97706;
-}
-
-.status-recruitingHY {
-  background-color: #dbeafe;
-  color: #2563eb;
-}
-
-.status-fullHY {
-  background-color: #fecaca;
-  color: #dc2626;
-}
-
-.status-completedHY {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-.status-cancelledHY {
-  background-color: #f3f4f6;
-  color: #6b7280;
-}
-
-.status-rejectedHY {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
-
-.status-endedHY {
-  background-color: #cbd9bd;
-  color: #1f4406;
-}
-
-
-
-/* 버튼 스타일 */
-.btn-secondaryHY {
-  padding: 8px 16px;
-  border: 1px solid #d1d5db;
-  background-color: white;
-  color: #374151;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn-secondaryHY:hover {
-  background-color: #f3f4f6;
-}
-
-.btn-primaryHY {
-  padding: 8px 16px;
-  border: none;
-  background-color: #3b82f6;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.btn-primaryHY:hover {
-  background-color: #2563eb;
-}
-
-.btn-dangerHY {
-  padding: 8px 16px;
-  border: none;
-  background-color: #ef4444;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.btn-dangerHY:hover {
-  background-color: #dc2626;
-}
-
-/* 거절 모달 */
-.modal-overlayHY {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0

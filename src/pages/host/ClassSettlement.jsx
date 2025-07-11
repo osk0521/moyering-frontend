@@ -141,7 +141,7 @@ const ClassSettlement = () => {
             ))}
           </tbody>
         </table>
-
+        {settlementList.length === 0 && <div className="KHJ-no-data">조회된 목록이 없습니다.</div>}
         <div className="KHJ-info-msg">
           강의 종료 후 7일째에 정산이 진행됩니다. <br />
           정산은 매일 05:00시에 진행되며,<br />

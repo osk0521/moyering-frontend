@@ -144,7 +144,6 @@ const BannerManagement = () => {
       const response = await axios.delete(`${url}/api/banner/${bannerId}`);
       
       if (response.status === 204 || response.status === 200) {
-        alert('배너가 삭제되었습니다.');
         loadBannerList();
       }
     } catch (error) {
@@ -178,7 +177,6 @@ const BannerManagement = () => {
       
       const response = await axios.patch(endpoint);
       if (response.status === 200) {
-        alert(`배너가 ${statusText} 처리되었습니다.`);
         await loadBannerList();
       }
     } catch (error) {
@@ -218,7 +216,6 @@ const BannerManagement = () => {
         });
         
         console.log('배너 수정 성공:', response.data);
-        alert('배너가 수정되었습니다.');
       } else {
         // 등록 모드: 기본적으로 숨김 상태로 등록 (나중에 선택적으로 보이기)
         formData.append('status', '0'); // 0 = 숨김 상태
@@ -235,7 +232,6 @@ const BannerManagement = () => {
         });
         
         console.log('배너 등록 성공:', response.data);
-        alert('배너가 등록되었습니다.');
         setCurrentPage(0); // 새 배너 등록 시 첫 페이지로 이동
       }
       
@@ -374,7 +370,7 @@ const BannerManagement = () => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
         <span className="result-countHY">
-          총 <strong>{pageInfo.totalElements}</strong>건 (페이지 {currentPage + 1} / {totalPages})
+          총 <strong>{pageInfo.totalElements}</strong>건 
         </span>
         <span style={{ 
           color: bannerList.filter(banner => 

@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
     { id: 'badge', label: '배지 관리', icon: <MdEmojiEvents />, path: '/admin/badge' },
     { id: 'banner', label: '배너 관리', icon: <MdImage />, path: '/admin/banner' },
     // { id: 'statistics', label: '통계 리포트', icon: <MdBarChart />, path: '/admin/statistics' },
-    { id: 'report', label: '신고 관리', icon: <MdReport />, path: '/admin/report' },
+    // { id: 'report', label: '신고 관리', icon: <MdReport />, path: '/admin/report' },
     { id: 'notice', label: '공지사항 관리', icon: <MdAnnouncement />, path: '/admin/notice' },
   ];
 

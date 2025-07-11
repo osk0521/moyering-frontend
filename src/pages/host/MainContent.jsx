@@ -1,25 +1,59 @@
 // MainContent.jsx
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { myAxios } from '../../config';
 import './MainContent.css';
 import React, { useEffect, useState } from 'react'; // 이 한 줄만 추가!
-import { tokenAtom } from '../../atoms';
+import { tokenAtom, userAtom } from '../../atoms';
 
 export default function MainContent() {
   const [token,setToken] = useAtom(tokenAtom)
   const [noticeList,setNoticeList] = useState([]);
   const [noticeDate,setNoticeDate] = useState([]);
+  const user = useAtomValue(userAtom);
+  const [inquiryRate,setInquiryRate] = useState('');
+  const [reviewRate,setReviewRate] = useState('');
+  const [starRate,setStarRate] = useState('');
+  const [calendarCount,setCalendarCount] = useState('');
+  const [cancleCount,setCancleCount] = useState('');
+  const [settleCount,setSettleCount] = useState('');
+  const [payCount,setPayCount] = useState('');
+  const [thisMonthSettle,setThisMonthSettle] = useState('');
+
+  useEffect(()=>{
+    token&&myAxios(token,setToken).get("/host/hostRateCount",{
+      params:{
+        hostId:user.hostId,
+      }
+    })
+    .then(res=>{
+      console.log("hi")
+      console.log(res);
+      setInquiryRate(res.data.inquiryRate);
+      setReviewRate(res.data.reviewRate);
+      setStarRate(res.data.starRate);
+      setCalendarCount(res.data.calendarCount);
+      setCancleCount(res.data.cancleCount);
+      setSettleCount(res.data.settleCount);
+      setPayCount(res.data.payCount);
+      setThisMonthSettle(res.data.thisMonthSettle);
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  },[token])
   
   const stats = [
-    { label: '전체 판매금액', value: '100,000,000' },
-    { label: '이번달 판매금액', value: '250,000' },
-    { label: '이번달 진행 클래스', value: '5' },
-    { label: '전체 결제 건수', value: '20' },
-    { label: '이번달 취소 건수', value: '1' },
-    { label: '전체 후기수', value: '34' },
-    { label: '평균 평점', value: '4.41' },
-    { label: '문의 응답률', value: '91.12%' },
+    { label: '전체 판매금액', value: settleCount+'원'},
+    { label: '이번달 판매금액', value: thisMonthSettle+'원' },
+    { label: '이번달 진행한 클래스', value: calendarCount+"건" },
+    { label: '전체 결제 건수', value: payCount+'건' },
+    { label: '이번달 취소 건수', value: cancleCount+'건' },
+    { label: '전체 후기수', value: reviewRate },
+    { label: '평균 평점', value: starRate+'점' },
+    { label: '문의 응답률', value: inquiryRate+"%" },
   ];
+
+  const randomNumber = (start,end)=>Math.floor(Math.random()*(end-start+1))+start;
 
   useEffect(()=>{
     token && myAxios(token,setToken).get("/host/notice")

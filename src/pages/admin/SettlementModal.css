@@ -158,4 +158,54 @@
   .modal-actionsHY button {
     width: 100%;
   }
+  /* SettlementModal.css에 추가 */
+.amount-cell {
+  text-align: right;
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.completed {
+  background-color: #e8f5e8;
+  color: #2e7d2e;
+}
+
+.status-badge.pending {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.student-tableHY th:first-child {
+  width: 140px; /* 주문번호 */
+}
+
+.student-tableHY th:nth-child(2) {
+  width: 100px; /* 수강생 ID */
+}
+
+.student-tableHY th:nth-child(3) {
+  width: 100px; /* 결제금액 */
+}
+
+.student-tableHY th:nth-child(4) {
+  width: 120px; /* 쿠폰할인 */
+}
+
+.student-tableHY th:nth-child(5) {
+  width: 80px; /* 결제방식 */
+}
+
+.student-tableHY th:nth-child(6) {
+  width: 100px; /* 결제일 */
+}
+
+.student-tableHY th:nth-child(7) {
+  width: 80px; /* 상태 */
+}
 }

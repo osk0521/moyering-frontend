@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './UserJoin.css';
 import { useNavigate } from 'react-router';
 import DaumPostcode from 'react-daum-postcode';
 import { myAxios } from '../../config';
 import LoginHeader from './LoginHeaders';
+import getLatLngFromAddress from '../../hooks/common/getLatLngFromAddress';
 
 const UserJoin = () => {
   const [user, setUser] = useState({
     userName: '', password: '', name: '', username: '', tel: '', email: '', birthday: '', addr: '', detailAddr: '',
-    category1: '', category2: '', category3: '', category4: '', category5: '', intro: '', userType: 'ROLE_MB'
+    category1: '', category2: '', category3: '', category4: '', category5: '', intro: '', userType: 'ROLE_MB', latitude: '', longitude: ''
   });
 
   const [verificationCode, setVerificationCode] = useState('');
@@ -23,6 +24,8 @@ const UserJoin = () => {
   const navigate = useNavigate();
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [coordLat, setCoordLat] = useState('');
+  const [coordLng, setCoordLng] = useState('');
 
   const checkFormValidity = () => {
     if (
@@ -96,6 +99,32 @@ const UserJoin = () => {
   const handlePasswordConfirmFocus = () => {
     setIsPasswordConfirmFocus(true);
   };
+
+  useEffect(() => {
+    if (!user.addr) return;
+
+    getLatLngFromAddress(user.addr)
+      .then(coords => {
+        if (!coords?.lat || !coords?.lng) {
+          console.warn('좌표값이 유효하지 않음', coords);
+          return;
+        }
+        console.log(coords.lat);
+        console.log(coords.lng);
+        setCoordLat(coords.lat);
+        setCoordLng(coords.lng);
+        setUser(prev => ({
+          ...prev,
+          latitude: coords.lat,
+          longitude: coords.lng
+        }));
+      })
+      .catch(err => {
+        console.error('좌표변환 실패', err);
+      })
+  }, [user.addr]);
+
+
 
   return (<>
     <LoginHeader />

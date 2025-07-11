@@ -91,6 +91,8 @@ const UserJoinCategory = () => {
     formData.append('detailAddr', user.detailAddr);
     formData.append('intro', user.intro);
     formData.append('userType', user.userType);
+    formData.append('latitude',user.latitude);
+    formData.append('longitude',user.longitude)
 
     // category1 ~ category5 도 포함 (selectedCategories에서 ID를 가져옴)
     formData.append('category1', selectedCategories[0] || '');

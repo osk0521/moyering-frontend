@@ -214,10 +214,10 @@
 /* 라인 차트 오버레이 */
 .line-chartHY {
   position: absolute;
-  top: 10px;
-  left: 8px;
-  right: 8px;
-  bottom: 30px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   pointer-events: none;
 }
 

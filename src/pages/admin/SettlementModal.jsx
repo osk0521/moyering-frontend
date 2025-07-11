@@ -19,13 +19,26 @@ const SettlementModal = ({ isOpen, onClose, settlementInfo, onConfirmSettlement 
     const fetchPayments = async () => {
       setLoading(true);
       try {
-        const response = await myAxios(token).get('/api/payment', {
+        console.log('결제 내역 요청:', {
+          settlementId: settlementInfo.settlementId,
+          calendarId: settlementInfo.calendarId,
+          size: 100
+        });
+
+        // URL 템플릿 문자열을 실제 값으로 치환
+        const response = await myAxios(token).get(`/api/settlement/${settlementInfo.settlementId}/payments`, {
           params: {
             calendarId: settlementInfo.calendarId,
             size: 100
           }
         });
-        setPayments(response.data.content || []);
+
+        console.log('결제 내역 응답:', response.data);
+        
+        // 백엔드에서 배열 형태로 오는 경우와 페이지네이션 형태로 오는 경우 모두 처리
+        const paymentData = response.data.content || response.data || [];
+        setPayments(paymentData);
+
       } catch (err) {
         console.error('결제 내역 로드 실패:', err);
         setPayments([]);
@@ -41,16 +54,75 @@ const SettlementModal = ({ isOpen, onClose, settlementInfo, onConfirmSettlement 
   // 모달이 열려있지 않으면 렌더링하지 않음
   if (!isOpen || !settlementInfo) return null;
 
-  const handleConfirm = () => {
+  // 🔧 이벤트 처리 수정
+  const handleConfirm = (e) => {
+    e.preventDefault(); // 폼 제출 방지
+    e.stopPropagation(); // 이벤트 버블링 방지
+    
     if (!window.confirm('정산을 확정하시겠습니까?')) return;
     
-    const totalAmount = payments.reduce((sum, p) => sum + (p.paymentAmount || 0), 0);
+    // 백엔드 데이터 구조에 맞게 수정 (totalAmount 사용)
+    const totalAmount = payments.reduce((sum, p) => sum + (p.totalAmount || 0), 0);
     const stats = {
       totalSettlementAmount: totalAmount,
       totalPayments: payments.length
     };
 
+    console.log('정산 확정 데이터:', stats); // 디버깅용
+
     onConfirmSettlement(settlementInfo.settlementId, stats);
+  };
+
+  // 🔧 취소 버튼도 수정
+  const handleCancel = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
+  };
+
+  // 결제 방식 한글 변환
+  const getPaymentTypeText = (paymentType) => {
+    const paymentTypes = {
+      'CARD': '카드',
+      'KAKAO_PAY': '카카오페이',
+      'NAVER_PAY': '네이버페이',
+      'TOSS_PAY': '토스페이',
+      'BANK_TRANSFER': '계좌이체',
+      'VIRTUAL_ACCOUNT': '가상계좌'
+    };
+    return paymentTypes[paymentType] || paymentType;
+  };
+
+  // 쿠폰 타입 한글 변환
+  const getCouponTypeText = (couponType) => {
+    const couponTypes = {
+      'MG': '관리자',
+      'HT': '호스트'
+    };
+    return couponTypes[couponType] || couponType;
+  };
+
+  // 할인 타입 한글 변환
+  const getDiscountTypeText = (discountType) => {
+    const discountTypes = {
+      'RT': '비율',
+      'AMT': '금액'
+    };
+    return discountTypes[discountType] || discountType;
+  };
+
+  // 할인 정보 표시
+  const getDiscountInfo = (payment) => {
+    if (!payment.couponType) return '-';
+    
+    const couponText = getCouponTypeText(payment.couponType);
+    const discountText = getDiscountTypeText(payment.discountType);
+    
+    if (payment.discountType === 'RT') {
+      return `${couponText} ${payment.discountAmount}%`;
+    } else {
+      return `${couponText} ${(payment.discountAmount || 0).toLocaleString()}원`;
+    }
   };
 
   // 오버레이 클릭 시 모달 닫기
@@ -80,28 +152,42 @@ const SettlementModal = ({ isOpen, onClose, settlementInfo, onConfirmSettlement 
               <table className="student-tableHY">
                 <thead>
                   <tr>
-                    <th>수강생 이름</th>
+                    <th>주문번호</th>
+                    <th>수강생 ID</th>
                     <th>결제금액</th>
+                    <th>쿠폰할인</th>
+                    <th>결제방식</th>
                     <th>결제일</th>
+                    <th>상태</th>
                   </tr>
                 </thead>
                 <tbody>
                   {payments.length > 0 ? (
-                    payments.map((p, index) => (
-                      <tr key={p.paymentId || index}>
-                        <td>{p.studentName || '-'}</td>
-                        <td>{(p.paymentAmount || 0).toLocaleString()}원</td>
+                    payments.map((payment, index) => (
+                      <tr key={payment.paymentId || index}>
+                        <td>{payment.orderNo || '-'}</td>
+                        <td>{payment.studentId || '-'}</td>
+                        <td className="amount-cell">
+                          {(payment.totalAmount || 0).toLocaleString()}원
+                        </td>
+                        <td>{getDiscountInfo(payment)}</td>
+                        <td>{getPaymentTypeText(payment.paymentType)}</td>
                         <td>
-                          {p.paidAt 
-                            ? new Date(p.paidAt).toLocaleDateString('ko-KR')
-                            : 'Invalid Date'
+                          {payment.payDate 
+                            ? new Date(payment.payDate).toLocaleDateString('ko-KR')
+                            : '-'
                           }
+                        </td>
+                        <td>
+                          <span className={`status-badge ${payment.status === '결제완료' ? 'completed' : 'pending'}`}>
+                            {payment.status || '-'}
+                          </span>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="3" style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
+                      <td colSpan="7" style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
                         결제 내역이 없습니다
                       </td>
                     </tr>
@@ -110,22 +196,31 @@ const SettlementModal = ({ isOpen, onClose, settlementInfo, onConfirmSettlement 
               </table>
               
               {payments.length > 0 && (
-                <div style={{ marginTop: '16px', textAlign: 'right', color: '#333', fontWeight: '600' }}>
-                  총 결제 금액: {payments.reduce((sum, p) => sum + (p.paymentAmount || 0), 0).toLocaleString()}원
+                <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ color: '#666' }}>총 {payments.length}건</span>
+                    <span style={{ color: '#333', fontWeight: '600', fontSize: '16px' }}>
+                      총 결제 금액: {payments.reduce((sum, p) => sum + (p.totalAmount || 0), 0).toLocaleString()}원
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
           )}
         </div>
 
+        {/* 🔧 버튼 이벤트 핸들러 수정 */}
         <div className="modal-actionsHY">
-          <button type="button" onClick={onClose}>
+          <button 
+            type="button" 
+            onClick={handleCancel}
+          >
             취소
           </button>
           <button 
             type="button" 
             onClick={handleConfirm} 
-            disabled={loading}
+            disabled={loading || payments.length === 0}
           >
             정산 확정
           </button>

@@ -423,7 +423,12 @@ button.GatheringDetail_more_osk {
   background: #f8f9fa;
   border-radius: 8px;
 }
-
+/* .GatheringDetail_answer-section_osk {
+  margin-left: 0;
+  margin-top: 0;
+  padding: 16px;
+  background: #f8f9fa;
+} */
 .GatheringDetail_answer-tag_osk {
   display: inline-block;
   padding: 2px 8px;
@@ -804,14 +809,14 @@ button.GatheringDetail_more_osk {
   background: #fff3e0;
   color: #f57c00;
 }
-#GatheringDetail_apply_osk, #GatheringDetail_modify_osk, .GatheringDetail_status-message_osk {
+#GatheringDetail_apply_osk, #GatheringDetail_modify_osk, .GatheringDetail_status-message_osk, .GatheringDetail_disabled_btn_osk {
   color: #fff3e0;
-  min-width:400px;
+  min-width:300px;
 }
 #GatheringDetail_apply_osk, #GatheringDetail_modify_osk{
   background: #f57c00;
 }
-.GatheringDetail_status-message_osk{
+.GatheringDetail_status-message_osk,.GatheringDetail_disabled_btn_osk {
   background: #b3b3b3;
 }
 .GatheringDetail_badge-location_osk {
@@ -1007,13 +1012,6 @@ button.GatheringDetail_more_osk {
   font-size: 12px;
   color: #999;
   text-align:center;
-}
-
-.GatheringDetail_answer-section_osk {
-  margin-left: 0;
-  margin-top: 0;
-  padding: 16px;
-  background: #f8f9fa;
 }
 
 .GatheringDetail_answer-header_osk {
@@ -1495,7 +1493,7 @@ svg.GatheringDetail_liked_osk{
 
 /* 답변 섹션 스타일 */
 .GatheringDetail_answer-section_osk {
-  padding: 16px 60px 16px 40px;
+  /* padding: 16px 60px 16px 40px; */
   background-color: #fff;
   border-bottom: 1px solid #eee;
 }
@@ -1509,7 +1507,7 @@ svg.GatheringDetail_liked_osk{
 
 .GatheringDetail_answer-badge_osk {
   display: inline-block;
-   color: #5cb85c;
+  color: #5cb85c;
   background-color:white;
   padding: 4px 8px;
   border-radius: 4px;

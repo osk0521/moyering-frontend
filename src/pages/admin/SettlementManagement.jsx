@@ -12,7 +12,6 @@ const SettlementManagement = () => {
   const userInfo = location.state; 
   const token = useAtomValue(tokenAtom);
   
-
   // 검색 상태
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -31,18 +30,14 @@ const SettlementManagement = () => {
   
   // 모달 관련 상태
   const [showModal, setShowModal] = useState(false);
-  const [selectedSettlement, setSelectedSettlement] = useState(null); // 이름 변경
+  const [selectedSettlement, setSelectedSettlement] = useState(null);
 
-  // 사용자 정보가 있으면 검색어를 자동으로 설정
-  useEffect(() => {
-    if (userInfo && userInfo.username) {
-      setSearchTerm(userInfo.username);
-    }
-  }, [userInfo]);
+  // 초기화 완료 상태
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // ===== API 호출 함수 =====
   const fetchSettlementData = useCallback(async () => {
-    if (loading) return; // 중복 호출 방지
+    if (loading) return;
     
     setLoading(true);
     setError(null);
@@ -96,7 +91,7 @@ const SettlementManagement = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, pageSize, searchTerm, startDate, endDate, token, loading]);
+  }, [currentPage, pageSize, searchTerm, startDate, endDate, token]);
 
   // 정산하기 버튼 클릭 핸들러 - 모달 열기
   const handleSettlement = (settlementItem) => {
@@ -105,24 +100,31 @@ const SettlementManagement = () => {
   };
 
   // 정산 확정 처리 - 모달에서 호출됨
-  const handleConfirmSettlement = async (settlementId, stats) => {
+const handleConfirmSettlement = async (settlementId, stats) => {
     try {
-      const response = await myAxios(token).put(`/api/settlement/${settlementId}/complete`, {
-        totalSettlementAmount: stats.totalSettlementAmount,
-        totalPayments: stats.totalPayments
-      });
-      
-      if (response.status === 200) {
-        alert('정산이 완료되었습니다.');
-        fetchSettlementData(); // 목록 새로고침
-        handleCloseModal(); // 모달 닫기
-      }
+        const response = await myAxios(token).put(
+            `/api/settlement/${settlementId}/complete`, 
+            {
+                totalSettlementAmount: stats.settleAmountToDo,
+                totalPayments: stats.totalPayments
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'  // 이 API 호출에서만 명시적 설정
+                }
+            }
+        );
+        
+        if (response.status === 200) {
+            alert('정산이 완료되었습니다.');
+            fetchSettlementData();
+            handleCloseModal();
+        }
     } catch (err) {
-      console.error('정산 처리 실패:', err);
-      alert('정산 처리에 실패했습니다.');
+        console.error('정산 처리 실패:', err);
+        alert('정산 처리에 실패했습니다.');
     }
-  };
-
+};
   // 수강생 목록 조회 API (실제 연동 시 사용)
   const fetchStudentList = async (classId) => {
     try {
@@ -147,30 +149,51 @@ const SettlementManagement = () => {
   };
 
   // ===== useEffect 훅들 =====
-  // 초기 로딩
+  // 초기 설정 - userInfo가 있으면 검색어 설정
   useEffect(() => {
-    fetchSettlementData();
-  }, []);
+    console.log('받은 userInfo:', userInfo);
+    if (userInfo && userInfo.username) {
+      console.log('검색어 설정:', userInfo.username);
+      setSearchTerm(userInfo.username);
+    }
+    setIsInitialized(true); // 초기화 완료
+  }, [userInfo]);
 
-  // 페이지 변경 시
+  // 초기화 완료 후 첫 데이터 로딩
   useEffect(() => {
-    fetchSettlementData();
-  }, [currentPage]);
+    if (isInitialized) {
+      console.log('초기 데이터 로딩 시작, searchTerm:', searchTerm);
+      fetchSettlementData();
+    }
+  }, [isInitialized, fetchSettlementData]);
 
-  // 검색어 디바운스 처리
+  // 페이지 변경 시 (초기화 완료 후에만)
   useEffect(() => {
+    if (isInitialized && currentPage > 0) { // currentPage가 0이 아닐 때만
+      fetchSettlementData();
+    }
+  }, [currentPage, isInitialized, fetchSettlementData]);
+
+  // 검색어 디바운스 처리 (초기화 완료 후에만)
+  useEffect(() => {
+    if (!isInitialized) return;
+    
     const timer = setTimeout(() => {
+      console.log('검색어 변경으로 인한 API 호출:', searchTerm);
       setCurrentPage(0);
       fetchSettlementData();
     }, 500);
     return () => clearTimeout(timer);
-  }, [searchTerm]);
+  }, [searchTerm, isInitialized]);
 
-  // 필터 변경 시
+  // 날짜 필터 변경 시 (초기화 완료 후에만)
   useEffect(() => {
+    if (!isInitialized) return;
+    
+    console.log('날짜 필터 변경으로 인한 API 호출');
     setCurrentPage(0);
     fetchSettlementData();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, isInitialized]);
 
   // ===== 헬퍼 함수들 =====
   // 금액 포맷팅
@@ -253,18 +276,17 @@ const SettlementManagement = () => {
       {/* 검색 영역 */}
       <div className="search-sectionHY">
         <div className="search-boxHY">
-          <span className="search-iconHY">🔍</span>
           <input
             type="text"
-            placeholder="강사 ID, 클래스명 검색"
+            placeholder="강사 ID, 강사명, 클래스명 검색"
             value={searchTerm}
             onChange={handleSearchChange}
             className="search-inputHY"
           />
         </div>
         
-        <div className="date-filter-groupHY">
-          <label className="date-labelHY">정산 예정일 기간</label>
+        <div className="date-filter-group">
+          <label className="date-labelHY">정산 기간</label>
           <input
             type="date"
             className="date-inputHY"
@@ -366,7 +388,7 @@ const SettlementManagement = () => {
                       item.settlementStatus === 'RQ') ? (
                       <button 
                         className="btn-settlementHY"
-                        onClick={() => handleSettlement(item)} // 전체 item 객체 전달
+                        onClick={() => handleSettlement(item)}
                         disabled={loading}
                       >
                         정산하기
@@ -438,8 +460,8 @@ const SettlementManagement = () => {
       <SettlementModal
         isOpen={showModal}
         onClose={handleCloseModal}
-        settlementInfo={selectedSettlement} // prop 이름 통일
-        onConfirmSettlement={handleConfirmSettlement} // 정산 확정 함수 전달
+        settlementInfo={selectedSettlement}
+        onConfirmSettlement={handleConfirmSettlement}
       />
     </Layout>
   );

@@ -274,27 +274,6 @@
     background: #3d5acc;
   }
   
-  /* 반응형 */
-  @media (max-width: 600px) {
-    .modal-content {
-      width: 95%;
-      margin: 20px;
-    }
-    
-    .radio-group {
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .date-row {
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .date-center-icon {
-      display: none;
-    }
-  }
 
 .usage-badge {
   padding: 4px 10px;
@@ -353,4 +332,40 @@
 .delete-btn:hover {
   background: #fee2e2;
   color: #b91c1c;
+
+}
+/* 페이지네이션 스타일 */
+.pagination-containerHY {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-btn:hover {
+  background: #f5f5f5;
+}
+
+.pagination-btn.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.result-countHY {
+  margin: 10px 0;
+  color: #666;
 }

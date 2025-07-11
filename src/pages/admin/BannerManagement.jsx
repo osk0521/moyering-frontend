@@ -9,6 +9,9 @@ import BannerCreateModal from './BannerCreateModal';
 const BannerManagement = () => {
   const navigate = useNavigate();
   const [bannerList, setBannerList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
   const [pageInfo, setPageInfo] = useState({
     number: 0,
     totalPages: 1,
@@ -17,29 +20,29 @@ const BannerManagement = () => {
     first: true,
     last: true
   });
-  const [search, setSearch] = useState({
-    page: 0,
-    keyword: ''
-  });
+  const PAGE_SIZE = 20;
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBanner, setEditingBanner] = useState(null);
 
   useEffect(() => {
+    console.log('useEffect 실행됨 - currentPage:', currentPage, 'searchKeyword:', searchKeyword);
     loadBannerList();
-  }, [search.page, search.keyword]);
+  }, [currentPage, searchKeyword]);
 
   const loadBannerList = async () => {
+    console.log('loadBannerList 실행됨 - currentPage:', currentPage, 'searchKeyword:', searchKeyword);
     setLoading(true);
     try {
       const params = {
-        page: search.page,
-        size: 20,
+        page: currentPage,
+        size: PAGE_SIZE,
         sort: 'createdAt,desc'
       };
       
-      if (search.keyword && search.keyword.trim()) {
-        params.keyword = search.keyword.trim();
+      if (searchKeyword && searchKeyword.trim()) {
+        params.keyword = searchKeyword.trim();
       }
 
       console.log('배너 목록 로드 요청:', params);
@@ -54,6 +57,8 @@ const BannerManagement = () => {
       }
       
       setBannerList(banners);
+      setTotalPages(response.data.totalPages || 1);
+      setTotalElements(response.data.totalElements || banners.length);
       setPageInfo({
         number: response.data.number || 0,
         totalPages: response.data.totalPages || 1,
@@ -65,7 +70,19 @@ const BannerManagement = () => {
       
     } catch (error) {
       console.error('배너 목록 로드 실패:', error);
+      console.error('에러 상세:', error.response?.data);
       alert('배너 목록을 불러오는데 실패했습니다.');
+      setBannerList([]);
+      setTotalPages(0);
+      setTotalElements(0);
+      setPageInfo({
+        number: 0,
+        totalPages: 1,
+        totalElements: 0,
+        size: 20,
+        first: true,
+        last: true
+      });
     } finally {
       setLoading(false);
     }
@@ -73,20 +90,27 @@ const BannerManagement = () => {
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    setSearch({...search, keyword: value, page: 0});
+    setSearchKeyword(value);
+    setCurrentPage(0); // 검색 시 첫 페이지로 이동
   };
 
   const handleSearchSubmit = (e) => {
     if (e.key === 'Enter' || e.type === 'click') {
-      setSearch({...search, page: 0});
+      setCurrentPage(0); // 검색 시 첫 페이지로 이동
       loadBannerList();
     }
   };
 
-  const changePage = (newPage) => {
-    if (newPage >= 0 && newPage < pageInfo.totalPages) {
-      setSearch({...search, page: newPage});
+  // 페이지 변경 핸들러
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setCurrentPage(newPage);
     }
+  };
+
+  // 구 함수와의 호환성을 위해 유지
+  const changePage = (newPage) => {
+    handlePageChange(newPage);
   };
 
   // 배너 등록 모달 열기
@@ -120,7 +144,6 @@ const BannerManagement = () => {
       const response = await axios.delete(`${url}/api/banner/${bannerId}`);
       
       if (response.status === 204 || response.status === 200) {
-        alert('배너가 삭제되었습니다.');
         loadBannerList();
       }
     } catch (error) {
@@ -154,7 +177,6 @@ const BannerManagement = () => {
       
       const response = await axios.patch(endpoint);
       if (response.status === 200) {
-        alert(`배너가 ${statusText} 처리되었습니다.`);
         await loadBannerList();
       }
     } catch (error) {
@@ -194,7 +216,6 @@ const BannerManagement = () => {
         });
         
         console.log('배너 수정 성공:', response.data);
-        alert('배너가 수정되었습니다.');
       } else {
         // 등록 모드: 기본적으로 숨김 상태로 등록 (나중에 선택적으로 보이기)
         formData.append('status', '0'); // 0 = 숨김 상태
@@ -211,7 +232,7 @@ const BannerManagement = () => {
         });
         
         console.log('배너 등록 성공:', response.data);
-        alert('배너가 등록되었습니다.');
+        setCurrentPage(0); // 새 배너 등록 시 첫 페이지로 이동
       }
       
       setIsModalOpen(false);
@@ -247,11 +268,65 @@ const BannerManagement = () => {
     console.log('이미지 URL:', imageUrl); // 디버깅용
     return imageUrl;
   };
-  
 
+  // 페이지네이션 렌더링 함수 (쿠폰 관리와 동일한 방식)
+  const renderPagination = () => {
+    const pageButtons = [];
+    const maxVisiblePages = 5;
+    
+    // 시작 페이지와 끝 페이지 계산
+    let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
+    
+    // 끝 페이지 기준으로 시작 페이지 재조정
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(0, endPage - maxVisiblePages + 1);
+    }
+
+    // 이전 페이지 버튼
+    if (currentPage > 0) {
+      pageButtons.push(
+        <button 
+          key="prev" 
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="pagination-btn"
+        >
+          이전
+        </button>
+      );
+    }
+
+    // 페이지 번호 버튼들
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`pagination-btn ${i === currentPage ? 'active' : ''}`}
+        >
+          {i + 1}
+        </button>
+      );
+    }
+
+    // 다음 페이지 버튼
+    if (currentPage < totalPages - 1) {
+      pageButtons.push(
+        <button 
+          key="next" 
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="pagination-btn"
+        >
+          다음
+        </button>
+      );
+    }
+
+    return pageButtons;
+  };
+
+  // 기존 getPageNumbers 함수와의 호환성을 위해 유지
   const getPageNumbers = () => {
-    const currentPage = pageInfo.number;
-    const totalPages = pageInfo.totalPages;
     const maxVisible = 5;
     
     let start = Math.max(0, currentPage - Math.floor(maxVisible / 2));
@@ -280,7 +355,7 @@ const BannerManagement = () => {
           <input
             type="text"
             placeholder="배너 제목, 내용 검색"
-            value={search.keyword}
+            value={searchKeyword}
             onChange={handleSearchChange}
             onKeyPress={handleSearchSubmit}
             className="search-inputHY"
@@ -295,7 +370,7 @@ const BannerManagement = () => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
         <span className="result-countHY">
-          총 <strong>{pageInfo.totalElements}</strong>건
+          총 <strong>{pageInfo.totalElements}</strong>건 
         </span>
         <span style={{ 
           color: bannerList.filter(banner => 
@@ -315,6 +390,7 @@ const BannerManagement = () => {
         <table className="tableHY banner-table">
           <thead>
             <tr>
+              <th>No.</th>
               <th>배너 ID</th>
               <th>배너 이미지</th>
               <th>제목</th>
@@ -339,6 +415,7 @@ const BannerManagement = () => {
                 
                 return (
                 <tr key={banner.bannerId || banner.id || index}>
+                       <td>{(currentPage * PAGE_SIZE ) + index + 1}</td>
                   <td className="banner-id">{banner.bannerId || banner.id}</td>
     
             <td className="banner-image">
@@ -400,7 +477,17 @@ const BannerManagement = () => {
         </table>
       </div>
 
-      {pageInfo.totalPages > 1 && (
+      {/* 새로운 페이지네이션  */}
+      {totalPages > 1 && (
+        <div className="pagination-containerHY">
+          <div className="pagination">
+            {renderPagination()}
+          </div>
+        </div>
+      )}
+
+      {/* 기존 페이지네이션 (백업용 - 필요시 제거 가능) */}
+      {false && pageInfo.totalPages > 1 && (
         <div className="paginationHY">
           <button 
             className="page-btnHY prev"

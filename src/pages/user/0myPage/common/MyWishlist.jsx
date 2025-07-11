@@ -140,7 +140,10 @@ export default function MyWishlist() {
             <div className={styles.wishlistList}>
               {items.map(item => (
                 <div key={item.id} className={styles.card}
-                              onClick={() => navigate(`/class/classRingDetail/${item.typeId}`)}>
+                  // onClick={ item.type === "class" ?
+                  //   () => navigate(`/class/classRingDetail/${item.typeId}`)
+                  //   }
+                  >
                   <div className={styles.cardLeft}>
                     <img
                       src={`${url}/image?filename=${item.imageUrl}`}

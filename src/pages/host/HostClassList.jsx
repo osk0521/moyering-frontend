@@ -138,7 +138,7 @@ const ClassList = () => {
             </div>
           </div>
           <div className="KHJ-date-buttons">
-            {['전체','오늘', '1개월', '3개월', '6개월', '1년'].map(label => (
+            {['전체', '오늘', '1개월', '3개월', '6개월', '1년'].map(label => (
               <button key={label} onClick={() => handleDateFilterClick(label)} className={dateFilter === label ? 'active' : ''}>{label}</button>
             ))}
           </div>
@@ -147,7 +147,7 @@ const ClassList = () => {
         <div className="KHJ-status-section">
           <div className="KHJ-status-section">
             <div className="KHJ-radio-buttons">
-              {['전체', '승인대기', '모집중', '모집마감', '반려', '폐강'].map(key => (
+              {['전체', '승인대기', '모집중', '모집마감', '종료', '반려', '폐강'].map(key => (
                 <label key={key} className={`KHJ-radio-button ${classStatus === key ? 'active' : ''}`}>
                   <input
                     type="radio"
@@ -169,26 +169,30 @@ const ClassList = () => {
 
       <div className="KHJ-class-result-container">
         <div className="KHJ-result-section">
-          {classData.map((result, index) => (
-            <div key={index} className="KHJ-result-item">
-              <div className="KHJ-result-image">
-                <img src={`${url}/iupload/${result.imgName1}`} alt={result.name} />
+          {classData.length === 0 ? (
+            <div className="KHJ-no-data">조회된 목록이 없습니다.</div>
+          ) : (
+            classData.map((result, index) => (
+              <div key={index} className="KHJ-result-item">
+                <div className="KHJ-result-image">
+                  <img src={`${url}/iupload/${result.imgName1}`} alt={result.name} />
+                </div>
+                <div className="KHJ-result-info">
+                  <h5>{result.name}</h5>
+                  <p><strong>클래스 시작일:</strong> {result.startDate}</p>
+                  <p><strong>카테고리:</strong> {result.category1}</p>
+                  <p><strong>상태:</strong> {result.status}</p>
+                </div>
+                <div className="KHJ-result-actions">
+                  <button onClick={() => handleNavigate(`/host/inquiry?classId=${result.classId}&calendarId=${result.calendarId}`)}>문의</button>
+                  <br />
+                  <button onClick={() => handleNavigate(`/host/classReview?calendarId=${result.calendarId}`)}>리뷰</button>
+                  <br />
+                  <button onClick={() => handleNavigate(`/host/detail/${result.classId}/${result.calendarId}`)}>상세</button>
+                </div>
               </div>
-              <div className="KHJ-result-info">
-                <h5>{result.name}</h5>
-                <p><strong>클래스 시작일:</strong> {result.startDate}</p>
-                <p><strong>카테고리:</strong> {result.category1}</p>
-                <p><strong>상태:</strong> {result.status}</p>
-              </div>
-              <div className="KHJ-result-actions">
-                <button onClick={() => handleNavigate(`/host/inquiry?classId=${result.classId}&calendarId=${result.calendarId}`)}>문의</button>
-                <br />
-                <button onClick={() => handleNavigate(`/host/classReview?calendarId=${result.calendarId}`)}>리뷰</button>
-                <br />
-                <button onClick={() => handleNavigate(`/host/detail/${result.classId}/${result.calendarId}`)}>상세</button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
 
           {pageInfo.allPage > 1 && (
             <div className="KHJ-pagination">

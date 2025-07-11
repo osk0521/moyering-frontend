@@ -161,10 +161,7 @@ const MemberManagement = () => {
           >
             검색
           </button>
-          
-
         </div>
-
       </div>
       
 

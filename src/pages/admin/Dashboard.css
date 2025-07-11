@@ -214,10 +214,10 @@
 /* 라인 차트 오버레이 */
 .line-chartHY {
   position: absolute;
-  top: 10px;
-  left: 8px;
-  right: 8px;
-  bottom: 30px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   pointer-events: none;
 }
 
@@ -595,6 +595,11 @@
   border: 1px solid #FECACA;
 }
 
+status-endedHY {
+  background-color: #E5E7EB;
+  color: #6B7280;
+  border: 1px solid #D1D5DB;
+}
 /* 반응형 디자인 */
 @media (max-width: 1200px) {
   .stats-gridHY {

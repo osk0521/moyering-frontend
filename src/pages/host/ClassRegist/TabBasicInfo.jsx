@@ -13,14 +13,14 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const [categories, setCategories] = useState([]); // 1차 카테고리 저장
   const [subCategories, setSubCategories] = useState([]); // 서브카테고리 저장
   const [category1, setCategory1] = useState(''); // 1차 카테고리
-  const [category2, setCategory2] = useState(''); // 2차 카테고리
+  const [category2, setCategory2] = useState(null); // 2차 카테고리
   const [category1Name, setCategory1Name] = useState(''); // 선택된 1차 카테고리 이름
   const [category2Name, setCategory2Name] = useState(''); // 선택된 2차 카테고리 이름
   const [subCategoryId, setSbuCategoryId] = useState(null);
   const [showLocation, setShowLocation] = useState(false);
   const [tempLocName, setTempLocName] = useState('');
   const [selectedAddress, setSelectedAddress] = useState('');
-  const [detailAddr,setDetailAddr] = useState('');
+  const [detailAddr, setDetailAddr] = useState('');
   const [coordLat, setCoordLat] = useState('');
   const [coordLng, setCoordLng] = useState('');
   const [token, setToken] = useAtom(tokenAtom);
@@ -80,7 +80,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
     const selectedSub = subCategories.find(subCat => subCat.subCategoryId === selectedSubId);
 
     if (selectedSub) {
-      setCategory2(selectedSub.subCategoryName);
+      setCategory2(selectedSubId);
       setCategory2Name(selectedSub.subCategoryName);
       setSbuCategoryId(selectedSub.subCategoryId);
 
@@ -109,7 +109,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   const handleAddressSelect = (data) => {
     console.log(detailAddr);
     const fullAddress = data.address;
-    const city = fullAddress.split(' ')[0]+fullAddress.split(' ')[1]; // 주소의 첫 번째 부분이 시 정보일 가능성이 높음
+    const city = fullAddress.split(' ')[0] + fullAddress.split(' ')[1]; // 주소의 첫 번째 부분이 시 정보일 가능성이 높음
     setSelectedAddress(city);
   };
 
@@ -149,7 +149,7 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
         ...prev.basicInfo,
         locName: '',
         addr: '',
-        detailAddr:'',
+        detailAddr: '',
         longitude: '',
         latitude: ''
       }
@@ -162,8 +162,8 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   };
 
   useEffect(() => {
-    const { category1, category2, name, addr } = classData.basicInfo;
-    const isValid = category1 && category2 && name.trim() && addr;
+    const { category1, category2, name, addr, detailAddr } = classData.basicInfo;
+    const isValid = category1 && category2 && name.trim() && addr && detailAddr;
     registerValidator(0, () => isValid);
   }, [classData.basicInfo, registerValidator]);
 
@@ -250,16 +250,16 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
                       name='detailAddr'
                       // value={basicInfo.detailAddr || ''}
                       value={detailAddr}
-                      onChange={(e) => setDetailAddr(e.target.value)} 
-                      // onChange={(e) =>
-                      //   setClassData(prev => ({
-                      //     ...prev,
-                      //     basicInfo: {
-                      //       ...prev.basicInfo,
-                      //       detailAddr: e.target.value
-                      //     }
-                      //   }))
-                      // }
+                      onChange={(e) => setDetailAddr(e.target.value)}
+                    // onChange={(e) =>
+                    //   setClassData(prev => ({
+                    //     ...prev,
+                    //     basicInfo: {
+                    //       ...prev.basicInfo,
+                    //       detailAddr: e.target.value
+                    //     }
+                    //   }))
+                    // }
                     />
                     <div className="KHJ-location-btn-row">
                       <button className="KHJ-location-confirm-btn" onClick={handleAddressConfirm}>장소 등록</button>

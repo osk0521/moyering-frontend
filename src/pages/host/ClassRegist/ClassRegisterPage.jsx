@@ -87,16 +87,16 @@ const ClassRegisterPage = () => {
   };
 
   const handleTabClick = async (nextTabIndex) => {
-    // if (nextTabIndex === activeTab) return;
+    if (nextTabIndex === activeTab) return;
 
-    // const validateCurrent = validators.current[activeTab];
-    // if (validateCurrent) {
-    //   const isValid = await validateCurrent();
-    //   if (!isValid) {
-    //     alert('현재 탭의 정보를 모두 입력해주세요.');
-    //     return;
-    //   }
-    // }
+    const validateCurrent = validators.current[activeTab];
+    if (validateCurrent) {
+      const isValid = await validateCurrent();
+      if (!isValid) {
+        alert('현재 탭의 정보를 모두 입력해주세요.');
+        return;
+      }
+    }
     setActiveTab(nextTabIndex);
   };
 
@@ -180,6 +180,7 @@ const ClassRegisterPage = () => {
         console.log(res);
         console.log(formData);
         let classId = res.data;
+        alert("검수요청을 완료했습니다!");
         navigate("/host/HostclassList");
       })
       .catch(err => {
@@ -311,13 +312,13 @@ const ClassRegisterPage = () => {
   return (
     <div className="KHJ-register-page">
       <div className="KHJ-class-info-box">
-        <h3>클래스 상세</h3>
-        <div className="KHJ-info-grid">
+        <h3>클래스 등록</h3>
+        {/* <div className="KHJ-info-grid">
           <div><div className="KHJ-label">클래스</div><div>-</div></div>
           <div><div className="KHJ-label">ID</div><div>1234</div></div>
           <div><div className="KHJ-label">상태</div><div className="KHJ-status current">현재</div></div>
           <div><div className="KHJ-label">검수상태</div><div className="KHJ-status current">현재</div></div>
-        </div>
+        </div> */}
       </div>
 
       <div className="KHJ-tab-menu">

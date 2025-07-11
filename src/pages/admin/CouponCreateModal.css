@@ -281,55 +281,7 @@
     gap: 12px;
   }
   
-  .cancel-btn,
-  .submit-btn {
-    background: #e9ecef;
-    color: #7f8c8d;
-    border: 2px solid #e1e8ed;
-    border-radius: 12px;
-    padding: 16px 24px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  /* .cancel-btn {
-    background: #e9ecef;
-    color: #7f8c8d;
-    border: 2px solid #e1e8ed;
-    border-radius: 12px;
-    padding: 16px 24px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  } */
-  
-  .cancel-btn:hover {
-    background: #f8f9fa;
-    border-color: #bdc3c7;
-    color: #2c3e50;
-  }
-  
-  .submit-btn {
-    background: linear-gradient(135deg, #4f75ff, #667eea);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 16px 32px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(79, 117, 255, 0.3);
-  }
-  
-  .submit-btn:hover {
-    background: linear-gradient(135deg, #3d5acc, #5a67d8);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(79, 117, 255, 0.4);
-  }
+
   
   /* 스크롤바 스타일링 */
   .modal-content::-webkit-scrollbar {
@@ -350,94 +302,18 @@
     background: #a8a8a8;
   }
   
-  /* 반응형 */
-  @media (max-width: 600px) {
-    .modal-content {
-      width: 95%;
-      margin: 10px;
-      max-height: 95vh;
-      min-width: auto;
-    }
-    
-    .modal-header,
-    .modal-body,
-    .modal-footer {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-    
-    .modal-header {
-      padding-top: 20px;
-      padding-bottom: 16px;
-    }
-    
-    .modal-body {
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
-    
-    .modal-footer {
-      padding-top: 16px;
-      padding-bottom: 20px;
-      flex-direction: column-reverse;
-    }
-    
-    .radio-group {
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .date-row {
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .date-center-icon {
-      display: none;
-    }
-    
-    .cancel-btn,
-    .submit-btn {
-      width: 100%;
-    }
-    
-    .input-with-button {
-      flex-direction: column;
-    }
-    
-    .generate-btn {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-  
-  /* 애니메이션 */
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
+
+
   
   .modal-content {
     animation: modalFadeIn 0.3s ease-out;
   }
-  
-  /* 포커스 상태 개선 */
-  .form-input:focus,
-  .generate-btn:focus,
-  .cancel-btn:focus,
-  .submit-btn:focus {
-    outline: 2px solid #4f75ff;
-    outline-offset: 2px;
-  }
+ 
   
   /* 라디오 버튼 체크 상태 스타일링 */
   .radio-item input[type="radio"]:checked + * {
     color: #4f75ff;
     font-weight: 600;
   }
+
+  

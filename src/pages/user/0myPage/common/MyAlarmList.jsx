@@ -287,7 +287,9 @@ export default function MyAlarmList() {
     <div>
       <Header />
       <main className="MyGatherPage_container">
-        <Sidebar />
+        <aside>
+          <Sidebar />
+        </aside>
         <section className='MyAlarmList_content_osk'>
           <h1 className="MyAlarmList_page_title_osk">알림 내역</h1>
 

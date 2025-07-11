@@ -1,141 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAtomValue, useSetAtom } from "jotai";
 import Layout from "./Layout";
-import './ClassManagementDetail.css';
-import './ClassManagement';
-
-import { useAtomValue } from 'jotai';
-import { tokenAtom } from '../../atoms';
-import { myAxios } from '../../config';
+import { tokenAtom } from "../../atoms";
+import "./ClassManagementDetail.css";
 
 const ClassManagementDetail = () => {
+  const { classId } = useParams();
   const navigate = useNavigate();
-  const { classId } = useParams(); // URL에서 classId 파라미터 가져오기
   const token = useAtomValue(tokenAtom);
-  
+  const setToken = useSetAtom(tokenAtom);
   const [classData, setClassData] = useState(null);
-  const [studentList, setStudentList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [rejectReason, setRejectReason] = useState('');
-  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // 클래스 상세 정보 fetch
+  const fetchClassDetail = async () => {
+    if (!classId) return;
+    setLoading(true);
+    try {
+      const dummy = {
+        classId: Number(classId),
+        className: "도자기 공예 원데이클래스",
+        hostName: "김도자",
+        processStatus: "등록요청",
+        currentCount: 0,
+        recruitMax: 20,
+        firstCategory: "DIY공예",
+        secondCategory: "도자기",
+        price: 150000,
+        startDate: "2024-05-12",
+        endDate: "2024-06-12",
+        location: "서울 강남구 논현로 123길 4-1",
+        description: "",
+        schedule: ["스케줄 1"],
+        extraInfo: [{ label: "베이킹비용", value: "앞치마" }],
+        keywords: ["베이킹"],
+        students: [
+          { id: 1, userId: "user1", name: "홍길동", phone: "010-1234-5678", email: "hong@example.com", regDate: "2023-04-25", status: "수강중" },
+          { id: 2, userId: "user1", name: "김철수", phone: "010-2345-6789", email: "kim@example.com", regDate: "2023-04-26", status: "수강중" },
+          { id: 3, userId: "user1", name: "이영희", phone: "010-3456-7890", email: "lee@example.com", regDate: "2023-04-27", status: "수강중" }
+        ]
+      };
+      setClassData(dummy);
+    } catch (error) {
+      console.error("클래스 상세 데이터 로딩 실패:", error);
+      alert("클래스 정보를 불러오는데 실패했습니다.");
+      navigate("/admin/class");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleApprove = () => alert("승인 버튼 클릭 (더미)");
+  const handleReject = () => alert("거절 버튼 클릭 (더미)");
+
   useEffect(() => {
-    if (!classId || !token) return;
-
-    const fetchClassDetail = async () => {
-      try {
-        setLoading(true);
-        // 클래스 상세 정보 API 호출
-        const classResponse = await myAxios(token).get(`/api/class/${classId}`);
-        setClassData(classResponse.data);
-
-        // 수강생 목록 API 호출 (클래스 상세에 포함되어 있을 수도 있음)
-        try {
-          const studentsResponse = await myAxios(token).get(`/api/class/${classId}/students`);
-          setStudentList(studentsResponse.data || []);
-        } catch (studentError) {
-          console.log('수강생 목록을 불러올 수 없습니다:', studentError);
-          setStudentList([]);
-        }
-      } catch (err) {
-        console.error('클래스 정보를 불러오는데 실패했습니다:', err);
-        setError('클래스 정보를 불러오는데 실패했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchClassDetail();
-  }, [classId, token]);
-
-  // 클래스 승인
-  const handleApprove = async () => {
-    if (!window.confirm('클래스를 승인하시겠습니까?')) return;
-
-    try {
-      await myAxios(token).put(`/api/class/${classId}/approve`);
-      setClassData({ ...classData, processStatus: '모집중' });
-      alert('클래스가 승인되었습니다.');
-    } catch (err) {
-      console.error('승인 처리 중 오류:', err);
-      alert('승인 처리 중 오류가 발생했습니다.');
-    }
-  };
-
-  // 클래스 거절
-  const handleReject = () => {
-    setShowRejectModal(true);
-  };
-
-  const handleRejectSubmit = async () => {
-    if (!rejectReason.trim()) {
-      alert('거절 사유를 입력해주세요.');
-      return;
-    }
-
-    try {
-      await myAxios(token).put(`/api/class/${classId}/reject`, {
-        reason: rejectReason
-      });
-      setClassData({ ...classData, processStatus: '거절' });
-      setShowRejectModal(false);
-      setRejectReason('');
-      alert('클래스가 거절되었습니다.');
-    } catch (err) {
-      console.error('거절 처리 중 오류:', err);
-      alert('거절 처리 중 오류가 발생했습니다.');
-    }
-  };
-
-  // 클래스 폐강
-  const handleClose = async () => {
-    if (!window.confirm('클래스를 폐강하시겠습니까?')) return;
-
-    try {
-      await myAxios(token).put(`/api/class/${classId}/close`);
-      setClassData({ ...classData, processStatus: '폐강' });
-      alert('클래스가 폐강되었습니다.');
-    } catch (err) {
-      console.error('폐강 처리 중 오류:', err);
-      alert('폐강 처리 중 오류가 발생했습니다.');
-    }
-  };
-
-  const getStatusClass = (status) => {
-    switch(status) {
-      case '모집중': return 'status-recruitingHY';
-      case '승인대기': return 'status-pendingHY';
-      case '거절': return 'status-rejectedHY';
-      case '모집마감': return 'status-fullHY';
-      case '폐강': return 'status-cancelledHY';
-      default: return '';
-    }
-  };
-
-  const handleBack = () => {
-    navigate('/admin/class');
-  };
+  }, [classId]);
 
   if (loading) {
     return (
       <Layout>
         <div className="loading-container">
-          <p>로딩 중...</p>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (error) {
-    return (
-      <Layout>
-        <div className="error-container">
-          <p>{error}</p>
-          <button onClick={handleBack} className="btn-secondaryHY">
-            목록으로 돌아가기
-          </button>
+          <div className="loading-spinner">데이터를 불러오는 중...</div>
         </div>
       </Layout>
     );
@@ -145,10 +71,7 @@ const ClassManagementDetail = () => {
     return (
       <Layout>
         <div className="error-container">
-          <p>클래스 정보를 찾을 수 없습니다.</p>
-          <button onClick={handleBack} className="btn-secondaryHY">
-            목록으로 돌아가기
-          </button>
+          <div className="error-message">클래스 정보를 찾을 수 없습니다.</div>
         </div>
       </Layout>
     );
@@ -156,158 +79,102 @@ const ClassManagementDetail = () => {
 
   return (
     <Layout>
-      <div className="page-titleHY">
-        <button onClick={handleBack} className="back-buttonHY">
-          ← 뒤로가기
-        </button>
-        <h1>클래스 상세 정보</h1>
-      </div>
-
-      <div className="detail-containerHY">
-        {/* 클래스 정보 섹션 */}
-        <div className="class-info-sectionHY">
-          <div className="info-gridHY">
-            <div className="info-itemHY">
-              <span className="info-labelHY">클래스명</span>
-              <span className="info-valueHY">{classData.className}</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">강사명</span>
-              <span className="info-valueHY">{classData.hostName}</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">강사 ID</span>
-              <span className="info-valueHY">{classData.hostUserName}</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">1차 카테고리</span>
-              <span className="info-valueHY">{classData.firstCategory}</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">2차 카테고리</span>
-              <span className="info-valueHY">{classData.secondCategory}</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">가격</span>
-              <span className="info-valueHY price">{classData.price?.toLocaleString()}원</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">최소 인원</span>
-              <span className="info-valueHY">{classData.recruitMin}명</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">최대 인원</span>
-              <span className="info-valueHY">{classData.recruitMax}명</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">개설일</span>
-              <span className="info-valueHY">{classData.regDate}</span>
-            </div>
-            <div className="info-itemHY">
-              <span className="info-labelHY">상태</span>
-              <span className={`status-badgeHY ${getStatusClass(classData.processStatus)}`}>
-                {classData.processStatus}
-              </span>
-            </div>
+      <div className="class-detail-container">
+        <div className="header">
+          <h2>{classData.hostName}께 땡기시죠?</h2>
+          <div className="action-buttons">
+            <button className="btn-approve" onClick={handleApprove}>승인</button>
+            <button className="btn-reject" onClick={handleReject}>거절</button>
+            <button className="btn-close" onClick={() => navigate("/admin/class")}>닫기</button>
           </div>
         </div>
 
-        {/* 클래스 설명 섹션 */}
-        {classData.description && (
-          <div className="class-description-sectionHY">
-            <h3>클래스 설명</h3>
-            <div className="description-contentHY">
-              <p>{classData.description}</p>
-            </div>
-          </div>
-        )}
+        <div className="download-links">
+          <div>포트폴리오 <a href="#">다운로드</a></div>
+          <div>강의자료 <a href="#">다운로드</a></div>
+        </div>
 
-        {/* 수강생 목록 섹션 */}
-        <div className="student-list-sectionHY">
-          <h3>수강생 목록 ({studentList.length}명)</h3>
-          <div className="student-table-containerHY">
-            <table className="student-tableHY">
-              <thead>
-                <tr>
-                  <th>NO</th>
-                  <th>학생 ID</th>
-                  <th>학생명</th>
-                  <th>이메일</th>
-                  <th>신청일</th>
-                  <th>상태</th>
-                </tr>
-              </thead>
+        <div className="class-summary">
+          <div><strong>카테고리:</strong> {classData.firstCategory} &gt; {classData.secondCategory}</div>
+          <div><strong>가격:</strong> {classData.price.toLocaleString()} 원</div>
+          <div><strong>클래스 일자:</strong> {classData.startDate} ~ {classData.endDate}</div>
+          <div><strong>장소:</strong> {classData.location}</div>
+          <div><strong>인원:</strong> {classData.currentCount} / {classData.recruitMax}</div>
+          <div><strong>상태:</strong> <span className="badge">{classData.processStatus}</span></div>
+        </div>
+
+        <h3>&lt; 클래스 정보 &gt;</h3>
+        <table className="info-table">
+          <thead>
+            <tr><th>카테고리</th><th>클래스명</th><th>장소명</th><th>주소</th><th>시작일</th><th>종료일</th><th>대표 이미지</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{classData.firstCategory}&gt;{classData.secondCategory}</td>
+              <td>{classData.className}</td>
+              <td>장소명</td>
+              <td>{classData.location}</td>
+              <td>{classData.startDate}</td>
+              <td>{classData.endDate}</td>
+              <td>{classData.currentCount}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>&lt; 상세 설명 &gt;</h3>
+        <div className="description-box">{classData.description || "(내용 없음)"}</div>
+
+        <div className="bottom-section">
+          <div className="schedule-section">
+            <h4>&lt; 스케줄 &gt;</h4>
+            {classData.schedule.map((s, i) => (
+              <div key={i} className="schedule-item">{s} <span style={{ float: 'right' }}>X</span></div>
+            ))}
+          </div>
+
+          <div className="extra-info-section">
+            <h4>&lt; 부가정보 &gt;</h4>
+            <table>
+              <thead><tr><th>포함 사항</th><th>준비물</th><th>검색 키워드</th></tr></thead>
               <tbody>
-                {studentList.length > 0 ? (
-                  studentList.map((student, idx) => (
-                    <tr key={student.id || idx}>
-                      <td>{idx + 1}</td>
-                      <td>{student.userName || student.userId}</td>
-                      <td>{student.name || student.studentName}</td>
-                      <td>{student.email}</td>
-                      <td>{student.enrollDate || student.regDate}</td>
-                      <td>
-                        <span className={`status-badgeHY ${getStatusClass(student.status || '등록')}`}>
-                          {student.status || '등록'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="no-dataHY">
-                      등록된 수강생이 없습니다.
-                    </td>
-                  </tr>
-                )}
+                <tr>
+                  <td>{classData.extraInfo.map(i => i.label).join(", ")}</td>
+                  <td>{classData.extraInfo.map(i => i.value).join(", ")}</td>
+                  <td>{classData.keywords.join(", ")}</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* 액션 버튼 */}
-        <div className="action-buttonsHY">
-          {classData.processStatus === '승인대기' && (
-            <>
-              <button onClick={handleApprove} className="btn-primaryHY">
-                승인
-              </button>
-              <button onClick={handleReject} className="btn-dangerHY">
-                거절
-              </button>
-            </>
-          )}
-          {(classData.processStatus === '모집중' || classData.processStatus === '모집마감') && (
-            <button onClick={handleClose} className="btn-dangerHY">
-              폐강
-            </button>
-          )}
-        </div>
-      </div>
+        <h3>&lt; 수강생 목록 &gt;</h3>
+        <table className="students-table">
+          <thead>
+            <tr>
+              <th>회원 ID</th>
+              <th>이름</th>
+              <th>연락처</th>
+              <th>이메일</th>
+              <th>등록일</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {classData.students.map((s, idx) => (
+              <tr key={idx}>
+                <td>{s.userId}</td>
+                <td>{s.name}</td>
+                <td>{s.phone}</td>
+                <td>{s.email}</td>
+                <td>{s.regDate}</td>
+                <td><span className="badge success">{s.status}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      {/* 거절 사유 입력 모달 */}
-      {showRejectModal && (
-        <div className="modal-overlayHY">
-          <div className="reject-modal-contentHY">
-            <h3>거절 사유 입력</h3>
-            <textarea
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="거절 사유를 입력해주세요..."
-              rows="4"
-              className="reject-textareaHY"
-            />
-            <div className="reject-modal-actionsHY">
-              <button onClick={() => setShowRejectModal(false)} className="btn-secondaryHY">
-                취소
-              </button>
-              <button onClick={handleRejectSubmit} className="btn-dangerHY">
-                거절
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        <p className="note">등록요청 전에 대해서는 수강생 목록 없음<br/>모집중, 모집마감, 폐강, 종료된 경우에만 있음</p>
+      </div>
     </Layout>
   );
 };

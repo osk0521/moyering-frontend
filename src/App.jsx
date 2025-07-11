@@ -45,7 +45,7 @@ import BadgeAndScore from './pages/admin/BadgeAndScore.jsx';
 import FeedCreate from './pages/user/socialRing/FeedCreate.jsx';
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import PaymentManagement from "./pages/admin/PaymentManagement";
-import ReportManagement from "./pages/admin/ReportManagement";
+// import ReportManagement from "./pages/admin/ReportManagement";
 import TwoFactorAuth from "./pages/admin/TwoFactorAuth";
 import SettlementManagement  from "./pages/admin/SettlementManagement"; 
 // import SettlementModal  from "./pages/admin/SettlementModal.jsx"; 
@@ -80,7 +80,7 @@ import MyGatheringList from "./pages/user/0myPage/gathering/MyGatheringList";
 import MyGatheringApplyList from "./pages/user/0myPage/gathering/MyGatheringApplyList";
 import MyAlarmList from "./pages/user/0myPage/common/MyAlarmList.jsx";
 import MyGatherInquiryList from "./pages/user/0myPage/gathering/MyGatherInquiryList.jsx";
-import GatheringChat from './pages/user/gathering/GatheringChat';
+import GatheringChat from './pages/user/gathering/GatheringChatRoomList.jsx';
 import GatheringList from './pages/common/GatheringList.jsx';
 import ClassRingReviewList from './pages/common/ClassRingReviewList.jsx';
 
@@ -215,12 +215,12 @@ function App() {
         <Route path="/admin/dashboard" element={<Dashboard />} />        {/* 대시보드 페이지 */}
         <Route path="/admin/member" element={<MemberManagement />} />   {/* 회원 관리 페이지 */}
         <Route path="/admin/class" element={<ClassManagement />} />   {/* 클래스 관리 페이지 */}
-        <Route path="/admin/class/detail" element={<ClassManagementDetail />} />   {/* 클래스 관리 상세 페이지 */}
+        <Route path="/admin/class/:classId" element={<ClassManagementDetail />} />   {/* 클래스 관리 상세 페이지 */}
         <Route path="/admin/notice" element={<NoticeManagement />} />    {/* 공지사항 관리 페이지  */}
         <Route path="/admin/notice/create" element={<NoticeCreate />} />     {/* 공지사항 생성 모달  */}
         <Route path="/admin/notice/edit/:noticeId" element={<NoticeEdit />} />     {/* 공지사항 수정 페이지  */}
         <Route path="/admin/coupon" element={<CouponManagement />} />     {/* 쿠폰 관리 페이지  */}
-        <Route path="/admin/report" element={<ReportManagement />} />       {/* 신고관리 페이지  */}
+        {/* <Route path="/admin/report" element={<ReportManagement />} />       신고관리 페이지  */}
         <Route path="/admin/banner" element={<BannerManagement />} />    {/* 배너관리 페이지  */}
         <Route path="/admin/banner/create" element={<BannerCreateModal />} />  {/* 배너등록 모달  */}
         <Route path="/admin/badge" element={<BadgeAndScore />} />    {/* 배지, 활동점수 관리 페이지  */}

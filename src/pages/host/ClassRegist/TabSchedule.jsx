@@ -4,7 +4,7 @@ import 'react-multi-date-picker/styles/colors/teal.css';
 import { Calendar } from 'react-multi-date-picker';
 import React from 'react';
 
-const TabSchedule = ({ classData, setClassData }) => {
+const TabSchedule = ({ classData, setClassData,registerValidator }) => {
   const { schedule } = classData;
 
   // 최초 마운트 시 스케줄 디테일 1개 기본값 세팅
@@ -15,7 +15,7 @@ const TabSchedule = ({ classData, setClassData }) => {
         schedule: {
           ...prev.schedule,
           scheduleDetail: [
-            { startTime: '00:00', endTime: '00:00', content: '' }
+            { startTime: '', endTime: '', content: '' }
           ]
         }
       }));
@@ -24,7 +24,7 @@ const TabSchedule = ({ classData, setClassData }) => {
 
   const addScheduleDetail = () => {
     const newDetails = [...(schedule.scheduleDetail || [])];
-    newDetails.push({ startTime: '00:00', endTime: '00:00', content: '' });
+    newDetails.push({ startTime: '', endTime: '', content: '' });
     setClassData(prev => ({
       ...prev,
       schedule: {
@@ -143,6 +143,12 @@ const TabSchedule = ({ classData, setClassData }) => {
     digits: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
     meridiems: [["AM", "오전"], ["PM", "오후"]]
   };
+
+  useEffect(() => {
+    const { recruitMax, recruitMin, dates, scheduleDetail } = classData.schedule;
+    const isValid = recruitMax && recruitMin && dates.length && scheduleDetail;
+    registerValidator(1, () => isValid);
+  }, [classData.schedule, registerValidator]);
 
   return (
     <div className="KHJ-class-info-box">

@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './Layout.css';
 import { useSetAtom } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
+import { useAtomValue } from 'jotai';
+
 
 // React Icons 추가
 import { 
@@ -24,6 +26,7 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const setUser = useSetAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
+  const user = useAtomValue(userAtom); // 사용자 정보 가져오기 
 
   const menuItems = [
     { id: 'dashboard', label: '대시보드', icon: <MdDashboard />, path: '/admin/dashboard' },
@@ -35,7 +38,7 @@ const Layout = ({ children }) => {
     { id: 'badge', label: '배지 관리', icon: <MdEmojiEvents />, path: '/admin/badge' },
     { id: 'banner', label: '배너 관리', icon: <MdImage />, path: '/admin/banner' },
     // { id: 'statistics', label: '통계 리포트', icon: <MdBarChart />, path: '/admin/statistics' },
-    { id: 'report', label: '신고 관리', icon: <MdReport />, path: '/admin/report' },
+    // { id: 'report', label: '신고 관리', icon: <MdReport />, path: '/admin/report' },
     { id: 'notice', label: '공지사항 관리', icon: <MdAnnouncement />, path: '/admin/notice' },
   ];
 
@@ -83,6 +86,8 @@ const Layout = ({ children }) => {
               src="/logo_managerHeader.png" 
               alt="모여링 로고" 
               className="header-logo-iconHY"
+              onClick={() => navigate('/admin/dashboard')}
+              style={{ cursor: 'pointer' }}
               onError={(e) => {
                 e.target.style.display = 'none';
               }}
@@ -90,7 +95,10 @@ const Layout = ({ children }) => {
           </div>
         </div>
         <div className="header-rightHY">
-          <span className="admin-nameHY">관리자123</span>
+          <span className="admin-nameHY">
+            {/* username있으면 username 표시, 없으면 '관리자' */}
+            {user?.username || '관리자'}  
+          </span>
           <button className="logout-btnHY" onClick={handleLogout}>
             로그아웃
           </button>

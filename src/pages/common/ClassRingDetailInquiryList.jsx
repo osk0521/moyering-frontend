@@ -39,7 +39,7 @@ export default function ClassRingDetailInquiryList({classId}) {
         setInquiryListAtom(res.data.content);
         setTotalPages(res.data.totalPages);
         } catch (err) {
-        console.error("질문 불러오기 실패", err);
+        console.error("문의 불러오기 실패", err);
         }
     };
     useEffect(() => {
@@ -49,7 +49,7 @@ export default function ClassRingDetailInquiryList({classId}) {
     const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
     const [questionContent, setQuestionContent] = useState("");
     
-    // 질문하기 모달 관련 함수들
+    // 문의하기 모달 관련 함수들
     const toggleQuestionModal = () => {
     if (!user || !token) {
         if (
@@ -90,9 +90,9 @@ export default function ClassRingDetailInquiryList({classId}) {
         );
 
         if (response.status === 200 && typeof response.data === "number") {
-        toggleQuestionModal(); // 모달 닫기
-        setQuestionContent(""); // 입력 초기화
-                setCurrentPage(1);
+            toggleQuestionModal(); // 모달 닫기
+            setQuestionContent(""); // 입력 초기화
+            setCurrentPage(1);
         fetchInquiry();
         } else {
         alert("문의 등록에 실패했습니다. 다시 시도해주세요.");
@@ -104,7 +104,7 @@ export default function ClassRingDetailInquiryList({classId}) {
     };
     return (
         <div>
-            <h2>질문</h2>
+            <h2>문의</h2>
             <div className={styles.questionsTable}>
                 <div className={styles.questionsHeader}>
                 <div>답변상태</div>
@@ -162,12 +162,12 @@ export default function ClassRingDetailInquiryList({classId}) {
                     &gt;
                 </button>
                 </div>
-                : <div className={styles.noneInq}>질문이 존재하지 않습니다.</div>
+                : <div className={styles.noneInq}>문의이 존재하지 않습니다.</div>
                 }
             <div className={styles.questionButtonWrap}>
                 </div>
         
-        {/* 질문 모달 */}
+        {/* 문의 모달 */}
         {isQuestionModalOpen && (
         <form>
             <Modal
@@ -244,7 +244,7 @@ export default function ClassRingDetailInquiryList({classId}) {
             </ModalFooter>
             </Modal>
         </form>
-      )}
+    )}
         </div>  
     );
 }

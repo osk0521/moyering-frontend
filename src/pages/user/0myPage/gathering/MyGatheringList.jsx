@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Button,} from "reactstrap";
+import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Button, } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { CiCalendar, CiClock1, CiSearch, CiLocationOn } from "react-icons/ci";
 import { GoPeople } from "react-icons/go";
@@ -32,7 +32,7 @@ export default function MyGatheringList() {
     if (item.canceled === true || item.status === "취소됨") {
       return true;
     }
-    
+
     // 모임 날짜와 시간이 현재보다 과거인 경우
     try {
       const meetingDateTime = new Date(`${item.meetingDate} ${item.startTime}`);
@@ -70,7 +70,7 @@ export default function MyGatheringList() {
 
     return { pending, accepted, rejected };
   };
-  
+
   const [pageInfo, setPageInfo] = useState({
     curPage: 1,
     allPage: 1,
@@ -83,7 +83,7 @@ export default function MyGatheringList() {
     status: "전체",
     searchWord: "",
   });
-  
+
   const handleCancelGathering = async (gatheringId) => {
     try {
       const confirmCancel = window.confirm('정말로 이 모임을 취소하시겠습니까?');
@@ -108,14 +108,14 @@ export default function MyGatheringList() {
       }
     }
   };
-  
+
   const handleEditGathering = (gatheringId) => {
     navigate(`/user/gatheringModify/${gatheringId}`);
-  };  
+  };
   const handleDetailGathering = (gatheringId) => {
     navigate(`/gatheringDetail/${gatheringId}`);
   };
-  
+
   const [searchWord, setSearchWord] = useState("");
 
   // 탭 변경 핸들러=
@@ -128,7 +128,7 @@ export default function MyGatheringList() {
   const handleSearch = () => {
     setSearch((prev) => ({ ...prev, searchWord: searchWord, page: 1 }));
   };
-  
+
   // 상태별 카운트
   const getStatusCount = (status) => {
     if (status === "전체") return allCnt;
@@ -182,7 +182,7 @@ export default function MyGatheringList() {
             const transformedData = res.data.list.map((item) => ({
               gatheringId: item.gatheringId,
               thumbnail: `${url}/image?filename=${item.thumbnailFileName}`,
-              category: item.categoryName +` > `+ item.subCategoryName,
+              category: item.categoryName + ` > ` + item.subCategoryName,
               region: item.locName,
               title: item.title,
               applyDeadline: new Date(item.applyDeadline).toLocaleDateString(
@@ -193,8 +193,8 @@ export default function MyGatheringList() {
                   day: "numeric",
                 }
               ),
-              appliedCount:item.appliedCount,
-              acceptedCount:item.acceptedCount,
+              appliedCount: item.appliedCount,
+              acceptedCount: item.acceptedCount,
               meetingTime: `${item.meetingDate} ${item.startTime} - ${item.endTime}`,
               meetingDate: item.meetingDate, // 날짜 비교를 위해 추가
               startTime: item.startTime, // 시간 비교를 위해 추가
@@ -214,8 +214,8 @@ export default function MyGatheringList() {
               preparationItems: item.preparationItems,
 
             }));
-          console.log("Transformed Data:", transformedData);
-          setGatheringList(transformedData);
+            console.log("Transformed Data:", transformedData);
+            setGatheringList(transformedData);
           }
         })
         .catch((err) => {
@@ -234,42 +234,41 @@ export default function MyGatheringList() {
       }
     }
   }, [token, search]);
-  
- const updateApproval = async (applyId, isApprove) => {
-  try {
-    // 🔥 추가: 즉시 UI 업데이트 (이 부분만 추가!)
-    setApplyList(prevList => 
-      prevList.map(applicant => 
-        applicant.gatheringApplyId === applyId 
-          ? { ...applicant, isApprove: isApprove }
-          : applicant
-      )
-    );
-    const response = await myAxios(token, setToken).post(`/updateApproval?applyId=${applyId}&isApprove=${isApprove}`);
-    return response.data;
-    
-  } catch (error) {
-    console.error('승인 상태 변경 실패:', error);
-    
-    // 실패 시 원래 데이터로 복원
-    if (selectedGatheringId) {
-      try {
-        const rollbackResponse = await myAxios(token, setToken).get(`/getApplyListByGatheringId/${selectedGatheringId}`);
-        setApplyList(rollbackResponse.data);
-      } catch (rollbackError) {
-        console.error('데이터 복원 실패:', rollbackError);
+
+  const updateApproval = async (applyId, isApprove) => {
+    try {
+      setApplyList(prevList =>
+        prevList.map(applicant =>
+          applicant.gatheringApplyId === applyId
+            ? { ...applicant, isApprove: isApprove }
+            : applicant
+        )
+      );
+      const response = await myAxios(token, setToken).post(`/updateApproval?applyId=${applyId}&isApprove=${isApprove}`);
+      return response.data;
+
+    } catch (error) {
+      console.error('승인 상태 변경 실패:', error);
+
+      // 실패 시 원래 데이터로 복원
+      if (selectedGatheringId) {
+        try {
+          const rollbackResponse = await myAxios(token, setToken).get(`/getApplyListByGatheringId/${selectedGatheringId}`);
+          setApplyList(rollbackResponse.data);
+        } catch (rollbackError) {
+          console.error('데이터 복원 실패:', rollbackError);
+        }
       }
+
+      alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
+      throw error;
     }
-    
-    alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
-    throw error;
-  }
-};
-const handleRemoveAccepted = async (applyId) => {
-  if (window.confirm('정말로 이 참가자를 내보내시겠습니까?')) {
-    await updateApproval(applyId, false);
-  }
-};
+  };
+  const handleRemoveAccepted = async (applyId) => {
+    if (window.confirm('정말로 이 참가자를 내보내시겠습니까?')) {
+      await updateApproval(applyId, false);
+    }
+  };
   useEffect(() => {
     if (selectedGatheringId) {
       token && myAxios(token, setToken).get(`/getApplyListByGatheringId/${selectedGatheringId}`)
@@ -284,24 +283,19 @@ const handleRemoveAccepted = async (applyId) => {
   }, [selectedGatheringId]);
 
   const toggleAccordion = (id) => {
-    // 먼저 해당 gathering의 신청자 목록을 확인
     const gatheringId = parseInt(id);
-    
-    // 현재 accordion이 닫혀있는 상태에서 열려고 하는 경우
+
     if (activeAccordion !== id) {
-      // 신청자 목록을 먼저 가져와서 확인
       if (token) {
         myAxios(token, setToken).get(`/getApplyListByGatheringId/${gatheringId}`)
           .then((res) => {
             const applicants = categorizeApplicants(res.data);
             const totalApplicants = applicants.pending.length + applicants.accepted.length + applicants.rejected.length;
-            
+
             if (totalApplicants === 0) {
               alert('신청자가 없습니다.');
-              return; // accordion을 열지 않음
+              return;
             }
-            
-            // 신청자가 있는 경우에만 accordion 열기
             setActiveAccordion(id);
             setSelectedGatheringId(gatheringId);
             setApplyList(res.data);
@@ -323,7 +317,9 @@ const handleRemoveAccepted = async (applyId) => {
     <div>
       <Header />
       <div className="MyGatherPage_container MyGatheringList_mypage-wrapper_osk">
-        <Sidebar />
+       <aside>
+          <Sidebar />
+        </aside>
         <section className="MyGatheringList_gathering-main_osk">
           <div className="MyGatheringList_gathering-header_osk">
             <h3>게더링 목록</h3>
@@ -377,196 +373,213 @@ const handleRemoveAccepted = async (applyId) => {
               toggle={toggleAccordion}
               className="MyGatheringList_gathering-list_osk"
             >
-              {gatheringList.map((item) => {
-                const applicants = selectedGatheringId === item.gatheringId && applyList.length > 0
-                  ? categorizeApplicants(applyList)
-                  : { pending: [], accepted: [], rejected: [] };
-                const isDisabled = isGatheringDisabled(item);
-                
-                return (
-                  <AccordionItem key={item.gatheringId}>
-                    <AccordionHeader targetId={String(item.gatheringId)}>
-                      <div className="MyGatheringList_card-summary_osk">
-                        <img src={item.thumbnail} alt={item.title} className="MyGatheringList_thumbnail_osk" />
-                        <div className="MyGatheringList_summary-content_osk">
-                          <div className="MyGatheringList_badge-row_osk">
-                            <span className="MyGatheringList_badge_osk MyGatheringList_red_osk">
-                              {item.category}
-                            </span>
-                            <span className="MyGatheringList_badge_osk MyGatheringList_blue_osk">
-                              {item.region}
-                            </span>
-                          </div>
-                          <h4 className="MyGatheringList_gathering-title_osk"
-                           onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDetailGathering(item.gatheringId);
-                                }}
-                          >{item.title}
-                          </h4>
-                          <div className="MyGatheringList_meta_osk">
-                            <div className="MyGatheringList_meta-row_osk">
-                              <span className="MyGatheringList_meta-icon_osk">
-                                <CiCalendar /> 
+              {gatheringList.length === 0 ? (
+                <div className="MyGatheringList_empty-state_osk">
+                  <div className="MyGatheringList_empty-content_osk">
+                    <h4>조회된 목록이 없습니다</h4>
+                    <p>검색 조건을 변경해보세요.</p>
+                  </div>
+                </div>
+              ) : (
+                gatheringList.map((item) => {
+                  const applicants = selectedGatheringId === item.gatheringId && applyList.length > 0
+                    ? categorizeApplicants(applyList)
+                    : { pending: [], accepted: [], rejected: [] };
+                  const isDisabled = isGatheringDisabled(item);
+                  return (
+                    <AccordionItem key={item.gatheringId}>
+                      <AccordionHeader targetId={String(item.gatheringId)}>
+                        <div className="MyGatheringList_card-summary_osk">
+                          <img src={item.thumbnail} alt={item.title} className="MyGatheringList_thumbnail_osk" />
+                          <div className="MyGatheringList_summary-content_osk">
+                            <div className="MyGatheringList_badge-row_osk">
+                              <span className="MyGatheringList_badge_osk MyGatheringList_red_osk">
+                                {item.category}
                               </span>
-                              <span>신청 마감: {item.applyDeadline}까지</span>
-                            </div>
-                            <div className="MyGatheringList_meta-row_osk">
-                              <span className="MyGatheringList_meta-icon_osk">
-                                <CiClock1 />
+                              <span className="MyGatheringList_badge_osk MyGatheringList_blue_osk">
+                                {item.region}
                               </span>
-                              <span>모임 시간: {item.meetingTime}</span>
                             </div>
-                            <div className="MyGatheringList_meta-row_osk">
-                              <span className="MyGatheringList_meta-icon_osk">
-                                <GoPeople />
-                              </span>
-                              <span>참석 인원: {item.participants}, 지원자 총 {item.appliedCount} 명, {item.acceptedCount} 명 참여 중</span>
-                            </div>
-                            <div className="MyGatheringList_meta-row_osk">
-                              <span className="MyGatheringList_meta-icon_osk">
-                                <CiLocationOn />
-                              </span>
-                              <span>{item.location}</span>
-                            </div>
-                          </div>
-                          {item.description && (
-                            <p className="MyGatheringList_description_osk">
-                              {item.description}
-                            </p>
-                          )}
-                          <div className="MyGatheringList_tags_osk">
-                            {Array.isArray(item.tags) &&
-                              item.tags.map((tag, idx) => (
-                                <span
-                                  key={idx}
-                                  className="MyGatheringList_tag_osk"
-                                >
-                                  {tag}
+                            <h4 className="MyGatheringList_gathering-title_osk"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDetailGathering(item.gatheringId);
+                              }}
+                            >{item.title}
+                            </h4>
+                            <div className="MyGatheringList_meta_osk">
+                              <div className="MyGatheringList_meta-row_osk">
+                                <span className="MyGatheringList_meta-icon_osk">
+                                  <CiCalendar />
                                 </span>
-                              ))}
+                                <span className="MyGatheringList_meta-row-info_osk">신청 마감: {item.applyDeadline}까지</span>
+                              </div>
+                              <div className="MyGatheringList_meta-row_osk">
+                                <span className="MyGatheringList_meta-icon_osk">
+                                  <CiClock1 />
+                                </span>
+                                <span className="MyGatheringList_meta-row-info_osk">모임 시간: {item.meetingTime}</span>
+                              </div>
+                              <div className="MyGatheringList_meta-row_osk">
+                                <span className="MyGatheringList_meta-icon_osk">
+                                  <GoPeople />
+                                </span>
+                                <span className="MyGatheringList_meta-row-info_osk">참석 인원: {item.participants}, 지원자 총 {item.appliedCount} 명, {item.acceptedCount} 명 참여 중</span>
+                              </div>
+                              <div className="MyGatheringList_meta-row_osk">
+                                <span className="MyGatheringList_meta-icon_osk">
+                                  <CiLocationOn />
+                                </span>
+                                <span className="MyGatheringList_meta-row-info_osk">{item.location}</span>
+                              </div>
+                            </div>
+                            {item.description && (
+                              <p className="MyGatheringList_description_osk">
+                                {item.description}
+                              </p>
+                            )}
+                            <div className="MyGatheringList_tags_osk">
+                              {Array.isArray(item.tags) &&
+                                item.tags.map((tag, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="MyGatheringList_tag_osk"
+                                  > 
+                                  {`#${tag}`}
+                                  </span>
+                                ))}
+                            </div>
+                          </div>
+                          <div className="MyGatheringList_actions_osk">
+                            {!isDisabled && (
+                              <>
+                                <a
+                                  className="MyGatheringList_btn-cancel_osk"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCancelGathering(item.gatheringId);
+                                  }}
+                                > 모임 취소
+                                </a>
+                                <a
+                                  className="MyGatheringList_btn-edit_osk"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEditGathering(item.gatheringId);
+                                  }}
+                                >
+                                  수정하기
+                                </a>
+                              </>
+                            )}
                           </div>
                         </div>
-                        <div className="MyGatheringList_actions_osk">
-                          {!isDisabled && (
-                            <>
-                              <a
-                                className="MyGatheringList_btn-cancel_osk"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCancelGathering(item.gatheringId);
-                                }}
-                              > 모임 취소
-                              </a>
-                              <a
-                                className="MyGatheringList_btn-edit_osk"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleEditGathering(item.gatheringId);
-                                }}
-                              >
-                                수정하기
-                              </a>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </AccordionHeader>
-                    <AccordionBody accordionId={String(item.gatheringId)}>
-                      {/* 미처리 신청자 섹션 - 0명이면 숨김 */}
-                      {applicants.pending.length > 0 && (
-                        <div className="MyGatheringList_accordion-body-section_osk MyGatheringList_yellow_osk">
-                          <h5 className="MyGatheringList_section-title_osk">미처리 ({applicants.pending.length})</h5>
-                          {applicants.pending.map((applicant, i) => (
-                            <div className="MyGatheringList_applicant_osk" key={i}>
-                              <div className="MyGatheringList_info_osk">
-                                <img src={`${url}/image?filename=${applicant.profile}`} alt={applicant.nickName} className="MyGatheringList_info_applicant-profile_osk" />
-                                <strong className="MyGatheringList_applicant-name_osk">{applicant.nickName}</strong>
-                                {applicant.aspiration && (
-                                  <p className="MyGatheringList_applicant-aspiration_osk">지원동기: {applicant.aspiration}</p>
-                                )}
-                                <div className="MyGatheringList_applicant-tags_osk">
-                                  {applicant.tags.map((t, idx) => (
-                                    <span className="MyGatheringList_tag_osk" key={idx}>
-                                      {t}
-                                    </span>
-                                  ))}
+                      </AccordionHeader>
+                      <AccordionBody accordionId={String(item.gatheringId)}>
+                        {/* 미처리 신청자 섹션  */}
+                        {applicants.pending.length > 0 && (
+                          <div className="MyGatheringList_accordion-body-section_osk MyGatheringList_yellow_osk">
+                            <h5 className="MyGatheringList_section-title_osk">미처리 ({applicants.pending.length})</h5>
+                            {applicants.pending.map((applicant, i) => (
+                              <div className="MyGatheringList_applicant_osk" key={i}>
+                                <div className="MyGatheringList_info_osk">
+                                  <img src={`${url}/image?filename=${applicant.profile}`} alt={applicant.nickName} className="MyGatheringList_info_applicant-profile_osk" />
+                                  <strong className="MyGatheringList_applicant-name_osk">{applicant.nickName}</strong>
+                                  {applicant.aspiration && (
+                                    <p className="MyGatheringList_applicant-aspiration_osk">지원동기: {applicant.aspiration}</p>
+                                  )}
+                                  <div className="MyGatheringList_applicant-tags_osk">
+                                    {applicant.tags.map((t, idx) => (
+                                      <span className="MyGatheringList_tag_osk" key={idx}>
+                                         {`#${t}`}
+                                      </span>
+                                    ))}
+                                  </div>
                                 </div>
+                                {!isDisabled && (
+                                  <div className="MyGatheringList_btn-group_osk">
+                                    <Button onClick={() => updateApproval(applicant.gatheringApplyId, true)} className="MyGatheringList_btn-accept_osk">수락</Button>
+                                    <Button onClick={() => updateApproval(applicant.gatheringApplyId, false)} className="MyGatheringList_btn-reject_osk">거절</Button>
+                                  </div>
+                                )}
                               </div>
-                              {!isDisabled && (
-                                <div className="MyGatheringList_btn-group_osk">
+                            ))}
+                          </div>
+                        )}
+
+                        {/* 수락된 신청자 섹션 */}
+                        {applicants.accepted.length > 0 && (
+                          <div className="MyGatheringList_accordion-body-section_osk MyGatheringList_green_osk">
+                            <h5 className="MyGatheringList_section-title_osk">수락됨 ({applicants.accepted.length})</h5>
+                            {applicants.accepted.map((applicant, i) => (
+                              <div className="MyGatheringList_applicant_osk" key={i}>
+                                <div className="MyGatheringList_info_osk">
+                                  <img src={`${url}/image?filename=${applicant.profile}`} alt={applicant.nickName} className="MyGatheringList_info_applicant-profile_osk" />
+                                  <strong className="MyGatheringList_applicant-name_osk">{applicant.nickName}</strong>
+                                  {applicant.aspiration && (
+                                    <p className="MyGatheringList_applicant-aspiration_osk">지원동기: {applicant.aspiration}</p>
+                                  )}
+                                  <div className="MyGatheringList_applicant-tags_osk">
+                                    {applicant.tags.map((t, idx) => (
+                                      <span className="MyGatheringList_tag_osk" key={idx}>
+                                        {t}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                                {!isDisabled && (
+                                  <Button onClick={() => handleRemoveAccepted(applicant.gatheringApplyId)} className="MyGatheringList_btn-remove_osk">내보내기</Button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* 거절된 신청자 섹션 */}
+                        {applicants.rejected.length > 0 && (
+                          <div className="MyGatheringList_accordion-body-section_osk MyGatheringList_red_osk">
+                            <h5 className="MyGatheringList_section-title_osk">거절함 ({applicants.rejected.length})</h5>
+                            {applicants.rejected.map((applicant, i) => (
+                              <div className="MyGatheringList_applicant_osk" key={i}>
+                                <div className="MyGatheringList_info_osk">
+                                  <img src={`${url}/image?filename=${applicant.profile}`} alt={applicant.nickName} className="MyGatheringList_info_applicant-profile_osk" />
+                                  <strong className="MyGatheringList_applicant-name_osk">{applicant.nickName}</strong>
+                                  {applicant.aspiration && (
+                                    <p className="MyGatheringList_applicant-aspiration_osk">지원동기: {applicant.aspiration}</p>
+                                  )}
+                                  <div className="MyGatheringList_applicant-tags_osk">
+                                    {applicant.tags.map((t, idx) => (
+                                      <span className="MyGatheringList_tag_osk" key={idx}>
+                                        {t}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                                {!isDisabled && (
                                   <Button onClick={() => updateApproval(applicant.gatheringApplyId, true)} className="MyGatheringList_btn-accept_osk">수락</Button>
-                                  <Button onClick={() => updateApproval(applicant.gatheringApplyId, false)} className="MyGatheringList_btn-reject_osk">거절</Button>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* 수락된 신청자 섹션 - 0명이면 숨김 */}
-                      {applicants.accepted.length > 0 && (
-                        <div className="MyGatheringList_accordion-body-section_osk MyGatheringList_green_osk">
-                          <h5 className="MyGatheringList_section-title_osk">수락됨 ({applicants.accepted.length})</h5>
-                          {applicants.accepted.map((applicant, i) => (
-                            <div className="MyGatheringList_applicant_osk" key={i}>
-                              <div className="MyGatheringList_info_osk">
-                                <img src={`${url}/image?filename=${applicant.profile}`} alt={applicant.nickName} className="MyGatheringList_info_applicant-profile_osk" />
-                                <strong className="MyGatheringList_applicant-name_osk">{applicant.nickName}</strong>
-                                {applicant.aspiration && (
-                                  <p className="MyGatheringList_applicant-aspiration_osk">지원동기: {applicant.aspiration}</p>
                                 )}
-                                <div className="MyGatheringList_applicant-tags_osk">
-                                  {applicant.tags.map((t, idx) => (
-                                    <span className="MyGatheringList_tag_osk" key={idx}>
-                                      {t}
-                                    </span>
-                                  ))}
-                                </div>
                               </div>
-                              {!isDisabled && (
-                                <Button onClick={() => handleRemoveAccepted(applicant.gatheringApplyId)} className="MyGatheringList_btn-remove_osk">내보내기</Button>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* 거절된 신청자 섹션 - 0명이면 숨김 */}
-                      {applicants.rejected.length > 0 && (
-                        <div className="MyGatheringList_accordion-body-section_osk MyGatheringList_red_osk">
-                          <h5 className="MyGatheringList_section-title_osk">거절함 ({applicants.rejected.length})</h5>
-                          {applicants.rejected.map((applicant, i) => (
-                            <div className="MyGatheringList_applicant_osk" key={i}>
-                              <div className="MyGatheringList_info_osk">
-                                <img src={`${url}/image?filename=${applicant.profile}`} alt={applicant.nickName} className="MyGatheringList_info_applicant-profile_osk" />
-                                <strong className="MyGatheringList_applicant-name_osk">{applicant.nickName}</strong>
-                                {applicant.aspiration && (
-                                  <p className="MyGatheringList_applicant-aspiration_osk">지원동기: {applicant.aspiration}</p>
-                                )}
-                                <div className="MyGatheringList_applicant-tags_osk">
-                                  {applicant.tags.map((t, idx) => (
-                                    <span className="MyGatheringList_tag_osk" key={idx}>
-                                      {t}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              {!isDisabled && (
-                                <Button onClick={() => updateApproval(applicant.gatheringApplyId, true)} className="MyGatheringList_btn-accept_osk">수락</Button>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </AccordionBody>
-                  </AccordionItem>
-                );
-              })}
+                            ))}
+                          </div>
+                        )}
+                      </AccordionBody>
+                    </AccordionItem>
+                  );
+                })
+              )}
             </Accordion>
           )}
           {pageInfo.allPage > 1 && (
             <div className="MyGatheringList_pagination_osk">
+               {pageInfo.curPage > 1 && (
+                <button
+                  onClick={() =>
+                    setSearch((prev) => ({ ...prev, page: pageInfo.curPage - 1 }))
+                  }
+                >
+              〈
+                </button>
+              )}
               {pageNums.map((pageNum) => (
                 <button
                   key={pageNum}
@@ -582,6 +595,15 @@ const handleRemoveAccepted = async (applyId) => {
                   {pageNum}
                 </button>
               ))}
+              {pageInfo.curPage < pageInfo.allPage && (
+                <button
+                  onClick={() =>
+                    setSearch((prev) => ({ ...prev, page: pageInfo.curPage + 1 }))
+                  }
+                >
+                  〉
+                </button>
+              )}
             </div>
           )}
         </section>

@@ -1,0 +1,337 @@
+.GatheringChat_chat-app_osk {
+  min-height: 100vh;
+  width: 1280px;
+  margin: 0 auto;
+  background: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.GatheringChat_logo-icon_osk {
+  font-size: 24px;
+}
+
+.GatheringChat_logo-text_osk {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6b35;
+}
+
+.GatheringChat_search-container_osk {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.GatheringChat_search-input_osk {
+  width: 300px;
+  padding: 8px 40px 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.GatheringChat_search-btn_osk {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.GatheringChat_nav-menu_osk {
+  display: flex;
+  gap: 30px;
+}
+
+.GatheringChat_nav-item_osk {
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.GatheringChat_nav-item_osk:hover {
+  color: #ff6b35;
+}
+
+.GatheringChat_header-right_osk {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.GatheringChat_user-menu_osk {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.GatheringChat_icon_osk {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.GatheringChat_main-content_osk {
+  display: flex;
+  height: 900px;
+}
+
+.GatheringChat_sidebar_osk {
+  width: 300px;
+  background: white;
+  border: 1px solid #e9ecef;
+}
+
+.GatheringChat_chat-tabs_osk {
+  display: flex;
+  border-bottom: 1px solid #e9ecef;
+  padding: 15px;
+  position: relative;
+}
+
+.GatheringChat_tab_osk {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+}
+
+.GatheringChat_tab_osk.GatheringChat_active_osk {
+  color: #333;
+  font-weight: 600;
+}
+
+.GatheringChat_close-btn_osk {
+  position: absolute;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+}
+
+.GatheringChat_chat-room-list_osk {
+  padding: 10px 0;
+}
+
+.GatheringChat_chat-room-item_osk {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.GatheringChat_chat-room-item_osk:hover {
+  background: #f8f9fa;
+}
+
+.GatheringChat_room-avatar_osk {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ddd;
+  margin-right: 12px;
+}
+
+.GatheringChat_room-info_osk {
+  flex: 1;
+}
+
+.GatheringChat_room-name_osk {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.GatheringChat_room-last-message_osk {
+  font-size: 12px;
+  color: #666;
+}
+
+.GatheringChat_unread-badge_osk {
+  background: #ff6b35;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 11px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.GatheringChat_chat-area_osk {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.GatheringChat_chat-header_osk {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.GatheringChat_chat-header_osk h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.GatheringChat_menu-btn_osk {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+.GatheringChat_menu-btn_osk > svg {
+  width: 24px;
+  height: 24px;
+  color: #666;
+} 
+.GatheringChat_chat-messages_osk {
+  height: 600px;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.GatheringChat_date-divider_osk {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.GatheringChat_notification_osk {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+.GatheringChat_user-message_osk {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.GatheringChat_message-avatar_osk {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.GatheringChat_message-content_osk {
+  display: flex;
+  flex-direction: column;
+}
+
+.GatheringChat_sender-name_osk {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.GatheringChat_message-text_osk {
+  background: #f1f3f4;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.GatheringChat_my-message-container_osk {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+}
+
+.GatheringChat_my-message-bubble_osk {
+  background: #ffc1a6;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  max-width: 70%;
+}
+
+.GatheringChat_chat-input-container_osk {
+  padding: 20px;
+  border-top: 1px solid #e9ecef;
+}
+
+.GatheringChat_input-wrapper_osk {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 24px;
+  padding: 8px;
+  gap: 8px;
+}
+
+.GatheringChat_attach-btn_osk, .GatheringChat_send-btn_osk {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+ color: #333;
+  background-color : white;
+  padding: none;
+}
+
+.GatheringChat_message-input_osk {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+  outline: none;
+  color: #333;
+}
+
+.GatheringChat_close-btn_osk {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+}
+
+.GatheringChat_message-time_osk {
+  font-size: 10px;
+  color: #999;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.GatheringChat_date-divider_osk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  color: #999;
+  font-size: 12px;
+}
+
+.GatheringChat_date-divider_osk::before,
+.GatheringChat_date-divider_osk::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0 8px;
+}
+
+.GatheringChat_date-text_osk {
+  white-space: nowrap;
+}

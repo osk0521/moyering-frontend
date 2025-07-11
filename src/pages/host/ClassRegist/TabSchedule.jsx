@@ -15,7 +15,7 @@ const TabSchedule = ({ classData, setClassData,registerValidator }) => {
         schedule: {
           ...prev.schedule,
           scheduleDetail: [
-            { startTime: '00:00', endTime: '00:00', content: '' }
+            { startTime: '', endTime: '', content: '' }
           ]
         }
       }));
@@ -24,7 +24,7 @@ const TabSchedule = ({ classData, setClassData,registerValidator }) => {
 
   const addScheduleDetail = () => {
     const newDetails = [...(schedule.scheduleDetail || [])];
-    newDetails.push({ startTime: '00:00', endTime: '00:00', content: '' });
+    newDetails.push({ startTime: '', endTime: '', content: '' });
     setClassData(prev => ({
       ...prev,
       schedule: {

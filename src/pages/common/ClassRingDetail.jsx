@@ -274,7 +274,29 @@ export default function ClassRingDetail() {
             {/* 준비물 섹션 */}
             <div className={styles.preparation}>
               <h3>준비물</h3>
-              <p>{classDetail?.preparation}</p>
+              <p>
+                {classDetail?.preparation?.split(',').map((item, index) => (
+                  <span key={index} className={styles.tagStyle}>
+                    {item.trim()}
+                  </span>
+                ))}
+              </p>
+               <h3>포함사항</h3>
+              <p>
+                {classDetail?.incluision?.split(',').map((item, index) => (
+                  <span key={index} className={styles.tagStyle}>
+                    {item.trim()}
+                  </span>
+                ))}
+              </p>
+               <h3>키워드</h3>
+              <p>
+                {classDetail?.keywords?.split(',').map((item, index) => (
+                  <span key={index} className={styles.tagStyle}>
+                    {item.trim()}
+                  </span>
+                ))}
+              </p>
             </div>
             <hr />
             {/* 커리큘럼 섹션 */}

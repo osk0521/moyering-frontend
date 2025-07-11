@@ -102,8 +102,8 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   };
 
   useEffect(() => {
-    const { immaterialg1, incluision,preparation,keywords,coupons } = classData.extraInfo;
-    const isValid = immaterialg1 && incluision&&preparation&&keywords&&coupons.lnegth;
+    const { immaterialg1 } = classData.extraInfo;
+    const isValid = immaterialg1 !== null;
     registerValidator(3, () => isValid);
   }, [classData.extraInfo, registerValidator]);
 
@@ -159,7 +159,7 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
       <TagInput label="검색 키워드" keyName="keywords" placeholder="예: 베이킹, 원데이클래스" />
 
       <div className="KHJ-form-section">
-        <label className="KHJ-coupon-label"><span className="KHJ-required-text-dot">*</span>쿠폰 등록(선택)</label>
+        <label className="KHJ-coupon-label">쿠폰 등록(선택)</label>
         <div className="KHJ-coupon-input-container">
           <button className="KHJ-coupon-input-btn" onClick={() => setIsCouponModalOpen(true)}>쿠폰 선택</button>
         </div>

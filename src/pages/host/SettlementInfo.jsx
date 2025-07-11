@@ -3,10 +3,10 @@ import './SettlementInfo.css';
 import ProfileFooter from './ProfileFooter';
 import { myAxios, url } from '../../config';
 import { tokenAtom, userAtom } from '../../atoms';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 const SettlementInfo = () => {
-  const token = useAtomValue(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
   const user = useAtomValue(userAtom);
   const [host, setHost] = useState([]);
   const [initialHost, setInitialHost] = useState([]);
@@ -28,12 +28,11 @@ const SettlementInfo = () => {
     const file = e.target.files[0];
     if (file) {
       setIdImage(file);
-      setIdImagePreview(URL.createObjectURL(file));
+      setIdImagePreview(file.name);
       setHost((prev) => ({
         ...prev,
         idCard: file.name
       }));
-
       setIsUpdateSettle(true);
     }
   }
@@ -54,7 +53,7 @@ const SettlementInfo = () => {
 
 
   useEffect(() => {
-    myAxios(token).get("/host/hostProfile", {
+    token&&myAxios(token,setToken).get("/host/hostProfile", {
       params: {
         hostId: user.hostId
       }
@@ -63,6 +62,7 @@ const SettlementInfo = () => {
         console.log(res);
         setHost(res.data);
         setInitialHost(res.data);
+        setIdImagePreview(res.data.idCard);
       })
       .catch(err => {
         console.log(err);
@@ -75,6 +75,7 @@ const SettlementInfo = () => {
       host.accName !== initialHost.accName ||
       host.accNum !== initialHost.accNum ||
       (idImage !== null);
+      console.log(idImagePreview)
     setIsUpdateSettle(changed);
   }, [host, initialHost])
 
@@ -107,7 +108,7 @@ const SettlementInfo = () => {
     for (let [key, value] of formData.entries()) {
       console.log(key, value);  // 여기에 파일 객체도 나와야 정상!
     }
-    myAxios(token).post("/host/settlementInfoUpdate", formData)
+    token && myAxios(token,setToken).post("/host/settlementInfoUpdate", formData)
       .then(res => {
         console.log(res);
         alert("변경사항을 저장하였습니다!");
@@ -179,14 +180,14 @@ const SettlementInfo = () => {
             </>
           ) : (
             <div className="KHJ-settlement__image-preview-wrapper">
-              <img src={`${url}/files?filename=${idImagePreview}`} alt="신분증 미리보기" className="KHJ-settlement__image-preview" />
+              <img src={`${url}/image?filename=${idImagePreview}`} alt="신분증 미리보기" className="KHJ-settlement__image-preview" />
               <button type="button" className="KHJ-remove-btn" onClick={removeImage}>×</button>
             </div>
           )}
-          {host.idCard && <span>{host.idCard}</span>}
+          {/* {host.idCard && <span>{host.idCard}</span>} */}
           <p className="KHJ-settlement__note KHJ-settlement__note--warning">
-            용량 2MB 이하 JPG, PNG<br />
-            주민등록번호 전체 확인 가능해야 함. 앞자리만 보이면 불가
+            {/* 용량 2MB 이하 JPG, PNG<br />
+            주민등록번호 전체 확인 가능해야 함. 앞자리만 보이면 불가 */}
           </p>
         </div>
       </div>

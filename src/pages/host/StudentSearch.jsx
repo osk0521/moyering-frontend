@@ -101,7 +101,6 @@ const StudentSearch = () => {
           </div>
         </div>
       </div>
-
       <div className="KHJ-class-result-container">
         <table className="KHJ-inquiry-table">
           <thead>
@@ -154,6 +153,7 @@ const StudentSearch = () => {
             ))}
           </tbody>
         </table>
+        {students.length === 0 && <div className="KHJ-no-data">조회된 목록이 없습니다.</div>}
         {pageInfo.allPage > 1 && (
           <div className="KHJ-pagination">
             {(() => {

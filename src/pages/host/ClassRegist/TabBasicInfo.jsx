@@ -162,8 +162,8 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
   };
 
   useEffect(() => {
-    const { category1, category2, name, addr } = classData.basicInfo;
-    const isValid = category1 && category2 && name.trim() && addr;
+    const { category1, category2, name, addr,detailAddr } = classData.basicInfo;
+    const isValid = category1 && category2 && name.trim() && addr && detailAddr;
     registerValidator(0, () => isValid);
   }, [classData.basicInfo, registerValidator]);
 

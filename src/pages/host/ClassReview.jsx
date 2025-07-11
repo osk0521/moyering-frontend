@@ -188,8 +188,7 @@ const ClassReview = () => {
         {reviews.length === 0 && (
           <div className="noneDiv">
             <div className="classNone">
-              <h4>조회된 목록이 없습니다</h4>
-              <p>검색 조건을 변경하거나 새로운 질문을 남겨보세요.</p>
+               <div className="KHJ-no-data">조회된 목록이 없습니다.</div>
             </div>
           </div>
         )}

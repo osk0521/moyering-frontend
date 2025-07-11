@@ -8,13 +8,13 @@ import { tokenAtom } from '../../../atoms';
 
 const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
   const { extraInfo } = classData;
-  const [token,setToken] = useAtom(tokenAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const [couponList, setCouponList] = useState([]);
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
   const [selectedCoupons, setSelectedCoupons] = useState([]);
 
   useEffect(() => {
-    token && myAxios(token,setToken).get("/host/couponList")
+    token && myAxios(token, setToken).get("/host/couponList")
       .then(res => setCouponList(res.data))
       .catch(err => console.log("쿠폰 불러오기 실패", err));
   }, [token]);
@@ -101,17 +101,11 @@ const TabExtraInfo = ({ registerValidator, classData, setClassData }) => {
     }));
   };
 
-  const validate = () => {
-    const hasMaterial = extraInfo.material != null;
-    const hasIncluision = extraInfo.incluision?.split(',').filter(Boolean).length > 0;
-    const hasPreparation = extraInfo.preparation?.split(',').filter(Boolean).length > 0;
-    const hasKeywords = extraInfo.keywords?.split(',').filter(Boolean).length > 0;
-    return hasMaterial && hasIncluision && hasPreparation && hasKeywords;
-  };
-
   useEffect(() => {
-    registerValidator(3, validate);
-  }, [extraInfo]);
+    const { immaterialg1, incluision,preparation,keywords,coupons } = classData.extraInfo;
+    const isValid = immaterialg1 && incluision&&preparation&&keywords&&coupons.lnegth;
+    registerValidator(3, () => isValid);
+  }, [classData.extraInfo, registerValidator]);
 
   const TagInput = ({ label, keyName, placeholder }) => {
     const [input, setInput] = useState('');

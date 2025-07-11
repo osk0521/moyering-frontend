@@ -15,16 +15,11 @@ const TabPortfolio = ({ registerValidator,classData,setClassData }) => {
     }))
   };
 
-  // 유효성 검사 함수 (필수 항목: 파일)
-  const validate = () => {
-    if (classPortfolio.portfolio) return false;
-    return true;
-  };
-
-  // 부모 컴포넌트에 유효성 검사 함수 등록
   useEffect(() => {
-    registerValidator(5, validate);
-  }, [classData.classPortfolio]);
+    const { portfolio} = classData.classPortfolio;
+    const isValid = portfolio !== null;
+    registerValidator(5, () => isValid);
+  }, [classData.extraInfo, registerValidator]);
 
   return (
     <div className="KHJ-class-info-box">

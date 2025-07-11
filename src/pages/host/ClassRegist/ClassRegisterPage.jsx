@@ -180,6 +180,7 @@ const ClassRegisterPage = () => {
         console.log(res);
         console.log(formData);
         let classId = res.data;
+        alert("검수요청을 완료했습니다!");
         navigate("/host/HostclassList");
       })
       .catch(err => {

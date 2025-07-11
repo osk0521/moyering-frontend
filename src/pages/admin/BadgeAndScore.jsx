@@ -60,8 +60,6 @@ const BadgeAndScore = () => {
       })
       .catch(error => {
         console.error('데이터 로드 실패:', error);
-        alert('데이터를 불러오는데 실패했습니다.');
-      
       })
       .finally(() => {
         setLoading(false);
@@ -79,7 +77,6 @@ const BadgeAndScore = () => {
       })
       .then(res => {
         console.log('점수 수정 응답:', res.data);
-        alert('점수가 수정되었습니다.');
         
         // 로컬 상태 업데이트
         setScoreList(prevList =>
@@ -95,14 +92,7 @@ const BadgeAndScore = () => {
       .catch(error => {
         console.error('점수 수정 실패:', error);
         
-        if (error.response) {
-          console.error('서버 응답:', error.response.data);
-          alert(`점수 수정에 실패했습니다. (${error.response.status})`);
-        } else if (error.request) {
-          alert('서버에 연결할 수 없습니다. 네트워크를 확인해주세요.');
-        } else {
-          alert('점수 수정 중 오류가 발생했습니다.');
-        }
+       
       });
   };
 

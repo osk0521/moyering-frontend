@@ -170,6 +170,12 @@
   display: inline-block;
   margin-left: 8px;
 }
+.MyGatherInquiryList_status-completed_osk{
+  color: #0E8EA7;
+}
+.MyGatherInquiryList_status-waiting_osk{
+ color: #FA812F;
+}
 
 .MyGatherInquiryList_inquirer-name_osk {
   font-weight: 400;
@@ -338,6 +344,8 @@
   border-radius: 4px;
   color: #666;
   transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
 }
 
 .MyGatherInquiryList_pagination-btn_osk:hover {
@@ -345,9 +353,9 @@
 }
 
 .MyGatherInquiryList_pagination-btn_osk.MyGatherInquiryList_pagination-active_osk {
-  background-color: #ff6b35;
+  background-color: #FFB534;
   color: white;
-  border-color: #ff6b35;
+  border-color: #FFB534;
 }
 
 /* React DatePicker 커스텀 스타일 */

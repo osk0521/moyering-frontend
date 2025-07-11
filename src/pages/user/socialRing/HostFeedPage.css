@@ -1,0 +1,234 @@
+/* ─── 전체 컨테이너 ─── */
+.KYM-host-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* ─── 제목 ─── */
+.KYM-host-container .KYM-host-title h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* ─── 필터 버튼 ─── */
+.KYM-host-container .KYM-host-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.KYM-host-container .KYM-host-filter-button {
+  background: #fff;
+  border: 1px solid #FFB22C;
+  color: #FFB22C;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+
+.KYM-host-container .KYM-host-filter-button:hover,
+.KYM-host-container .KYM-host-filter-button.active {
+  background: #FFB22C;
+  color: #fff;
+}
+
+/* ─── 메인 레이아웃 ─── */
+.KYM-host-container .KYM-host-main {
+  display: flex;
+  gap: 20px;
+}
+
+/* ─── 게시물 그리드 ─── */
+.KYM-host-container .KYM-host-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  flex: 1;
+}
+
+/* ─── 포스트 카드 ─── */
+.KYM-host-container .KYM-host-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 포스트 헤더 */
+.KYM-host-container .KYM-host-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  position: relative;
+}
+
+.KYM-host-container .KYM-host-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.KYM-host-container .KYM-host-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.KYM-host-container .KYM-host-nickname {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.KYM-host-container .KYM-host-category {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.KYM-host-container .KYM-host-more-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* 포스트 이미지 */
+.KYM-host-container .KYM-host-slider {
+  height: 300px;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  text-align: center;
+  aspect-ratio: 4/3;
+}
+
+.KYM-host-container .KYM-host-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  height: 100%;
+}
+
+/* 슬라이드 네비게이션 버튼 */
+.KYM-host-container .KYM-host-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2;
+  padding: 8px 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.2s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.KYM-host-container .KYM-host-slider:hover .KYM-host-nav {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.KYM-host-container .KYM-host-nav.left {
+  left: 12px;
+}
+
+.KYM-host-container .KYM-host-nav.right {
+  right: 12px;
+}
+
+.KYM-host-container .KYM-host-nav:hover {
+  background: #FFB22C;
+  color: #fff;
+}
+
+/* 이미지 하단 점 표시 */
+.KYM-host-container .KYM-host-dots {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.KYM-host-container .dot {
+  font-size: 16px;
+  color: #ccc;
+  cursor: pointer;
+}
+.KYM-host-container .dot.active {
+  color: #FFB22C;
+}
+
+/* 포스트 내용 */
+.KYM-host-container .KYM-host-content {
+  height: 120px;
+  padding: 12px;
+  flex: 1;
+}
+
+.KYM-host-container .KYM-host-content p {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.KYM-host-container .KYM-host-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.KYM-host-container .KYM-host-tag {
+  background: #f0f0f0;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* ─── 더보기 메뉴 ─── */
+.KYM-host-container .KYM-host-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 160px;
+  z-index: 1000;
+  padding: 8px 0;
+  list-style: none;
+}
+
+.KYM-host-container .KYM-host-menu.open {
+  display: block;
+}
+
+.KYM-host-container .KYM-host-menu li {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.KYM-host-container .KYM-host-menu li:hover {
+  background: #f5f5f5;
+}
+
+.KYM-host-container .KYM-host-menu li+li {
+  border-top: 1px solid #eee;
+}

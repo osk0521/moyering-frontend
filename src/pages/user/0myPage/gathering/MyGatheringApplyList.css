@@ -208,16 +208,18 @@
 .MyGatheringApplyList_info-label_osk {
   color: #666;
   min-width: 60px;
+  font-size: 14px;
 }
 
 .MyGatheringApplyList_info-value_osk {
   color: #333;
   font-weight: 500;
+  font-size: 14px;
 }
 
-.MyGatheringApplyList_info-value_osk > svg {
-  width: 16px;
-  height: 16px;
+.MyGatheringApplyList_info-label_osk> svg {
+  width: 20px;
+  height: 20px;
   fill: #FFB22C;
   margin-right: 4px;
 }

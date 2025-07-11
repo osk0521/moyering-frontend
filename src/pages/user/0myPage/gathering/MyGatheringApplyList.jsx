@@ -84,7 +84,7 @@ export default function MyGatheringApplyList() {
     { display: "전체", value: "전체" },
     { display: "수락됨", value: "수락됨" },
     { display: "대기중", value: "대기중" },
-    { display: "거절됨/게더링 취소됨", value: "거절됨" }
+    { display: "거절됨/취소된 게더링", value: "거절됨" }
   ];
   const handleSearch = () => {
     setSearch((prev) => ({ ...prev, searchWord: searchWord, page: 1 }));
@@ -217,7 +217,9 @@ export default function MyGatheringApplyList() {
     <div>
       <Header />
       <div className="MyGatherPage_container MyGatheringApplyList_mypage-wrapper_osk">
-        <Sidebar />
+        <aside>
+          <Sidebar />
+        </aside>
         <section className="MyGatheringApplyList_gathering-main_osk">
           <div className="MyGatheringApplyList_gathering-header_osk">
             <h3>지원한 게더링 목록</h3>
@@ -252,7 +254,7 @@ export default function MyGatheringApplyList() {
           </div>
 
           <div className="MyGatheringApplyList_gathering-list_osk">
-            {allCnt <= 0 ? (
+            {applyList.length === 0 ? (
               <div className="MyGatheringList_empty-state_osk">
                 <div className="MyGatheringList_empty-content_osk">
                   <h4>조회된 목록이 없습니다</h4>
@@ -345,7 +347,7 @@ export default function MyGatheringApplyList() {
                     <div className="MyGatheringApplyList_gathering-tags_osk">
                       {gathering.tags.map((tag, index) => (
                         <span key={index} className="MyGatheringApplyList_tag_osk">
-                          {tag}
+                          {`#${tag}`}
                         </span>
                       ))}
                     </div>

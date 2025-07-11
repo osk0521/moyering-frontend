@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {url} from "/src/config";
+import { BsPinAngleFill } from "react-icons/bs";
 import axios from "axios"; 
 import Layout from "./Layout";
 import { useNavigate } from 'react-router-dom';
@@ -60,7 +61,6 @@ export default function NoticeList() {
       });
     } catch (error) {
       console.error('공지사항 목록 로드 실패:', error);
-      alert('공지사항 목록을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -95,7 +95,6 @@ export default function NoticeList() {
       }
     } catch (error) {
       console.error('공지사항 등록 실패:', error);
-      alert('공지사항 등록에 실패했습니다.');
       throw error;
     }
   };
@@ -110,13 +109,11 @@ export default function NoticeList() {
       });
       
       if (response.status === 200) {
-        alert('공지사항이 수정되었습니다.');
         loadNoticeList(); // 목록 새로고침
         return response.data;
       }
     } catch (error) {
       console.error('공지사항 수정 실패:', error);
-      alert('공지사항 수정에 실패했습니다.');
       throw error;
     }
   };
@@ -129,18 +126,17 @@ export default function NoticeList() {
       const response = await axios.delete(`${url}/api/notice/${noticeId}`);
       
       if (response.status === 204 || response.status === 200) {
-        alert('공지사항이 삭제되었습니다.');
         loadNoticeList(); // 목록 새로고침
       }
     } catch (error) {
       console.error('공지사항 삭제 실패:', error);
-      alert('공지사항 삭제에 실패했습니다.');
     }
   };
 
 
 
   // 핀 상태 변경 API (메인화면 고정/해제)
+
   const togglePinStatus = async (noticeId, currentPinYn) => {
     try {
       const newPinYn = !currentPinYn;
@@ -149,12 +145,10 @@ export default function NoticeList() {
       );
       
       if (response.status === 200) {
-        alert(`공지사항이 ${newPinYn ? '상단 고정' : '고정 해제'}되었습니다.`);
         loadNoticeList(); // 목록 새로고침
       }
     } catch (error) {
       console.error('핀 상태 변경 실패:', error);
-      alert('핀 상태 변경에 실패했습니다.');
     }
   };
 
@@ -236,7 +230,6 @@ const hideNotice = async (noticeId) => {
     console.log('응답 데이터 타입:', typeof response.data);
     
     if (response.status === 200) {
-      alert("공지사항이 숨겨졌습니다.");
       
       if (response.data) {
         setNoticeList(prevList => {
@@ -254,7 +247,7 @@ const hideNotice = async (noticeId) => {
       }
     }
   } catch (error) {
-    alert("숨기기에 실패했습니다.");
+    console.error("숨기기에 실패했습니다.", error);
   }
   
 };
@@ -263,7 +256,6 @@ const showNotice = async (noticeId) => {
   try {
     const response = await axios.patch(`${url}/api/notice/${noticeId}/show`);    
     if (response.status === 200) {
-      alert("공지사항이 게시되었습니다.");
       
       if (response.data) {
         console.log('=== 상태 업데이트 시작 ===');
@@ -288,7 +280,6 @@ const showNotice = async (noticeId) => {
     }
   } catch (error) {
     console.error("보이기 실패:", error);
-    alert("보이기에 실패했습니다.");
   }
   
   console.log('=== 보이기 끝 ===');
@@ -381,8 +372,13 @@ const showNotice = async (noticeId) => {
                 <tr key={notice.noticeId} className={notice.pinYn ? 'pinned-row' : ''}>
              
                   <td>
-                    {notice.pinYn && <span className="pin-iconHY">📌</span>}
-                    {pageInfo.totalElements - (pageInfo.number * pageInfo.size) - index}
+                    {notice.pinYn && <span className="pin-iconHY">  <BsPinAngleFill 
+                           style={{ 
+                            color: '#dc2626', 
+                            fill: '#dc2626',
+                            fontSize: '16px'
+                          }} /></span>}
+                      {pageInfo.number * pageInfo.size + index + 1}
                   </td>
                   <td>{formatDate(notice.createdAt)}</td>
                   <td>{notice.title}</td>
@@ -410,11 +406,12 @@ const showNotice = async (noticeId) => {
                   </td>
                       <td>
                     <button 
-                      className={`pin-btnHY ${notice.pinYn ? 'pinned' : 'unpinned'}`}
+                      className={` ${notice.pinYn ? 'pinned' : 'unpinned'}`}
                       onClick={() => togglePinStatus(notice.noticeId, notice.pinYn)}
                       title={notice.pinYn ? '핀 해제' : '상단 고정'}
                     >
-                      📌
+                    <BsPinAngleFill
+                         />
                     </button>
                   </td>
                   <td>

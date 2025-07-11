@@ -24,18 +24,20 @@
 }
 
 .new-notice-btnHY {
-  background-color: #3182ce;
+  background-color: #FFB22C;
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 11px 20px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
+
+
 .new-notice-btnHY:hover {
-  background-color: #2c5aa0;
+  background-color: #dc2626;
 }
 
 /* ===== 컨트롤 섹션 ===== */
@@ -277,20 +279,20 @@
 }
 
 .publish-btnHY.published {
-  background-color: #c6f6d5;
-  color: #22543d;
+  background-color: #D3D3D3;
+  color: #000000;
 }
 
 .publish-btnHY.unpublished {
-  background-color: #fed7cc;
-  color: #c53030;
+  background-color: #A8D8EA;
+  color: #000000;
 }
 
 .publish-btnHY:hover {
   transform: scale(1.05);
 }
 
-
+/* btn-primary new-notice-btnHY */
 
 /* ===== 모달 ===== */
 .modal-overlayHY {
@@ -411,7 +413,7 @@
 .btn-primaryHY {
   padding: 8px 16px;
   border: none;
-  background-color: #3182ce;
+  background-color: #FEF3E2;
   color: white;
   border-radius: 6px;
   cursor: pointer;
@@ -420,7 +422,7 @@
 }
 
 .btn-primaryHY:hover {
-  background-color: #2c5aa0;
+  background-color: #FEF3E2;
 }
 
 .btn-dangerHY {
@@ -536,4 +538,46 @@
     font-size: 11px;
     padding: 4px 8px;
   }
+/* 핀 관련 스타일 - CSS 파일의 적절한 위치에 추가하세요 */
+
+
+
+/* 액션 버튼 스타일 */
+.action-buttonsHY {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.btn-editHY {
+  padding: 4px 8px;
+  border: 1px solid #3182ce;
+  background-color: white;
+  color: #3182ce;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btn-editHY:hover {
+  background-color: #3182ce;
+  color: white;
+}
+
+.btn-deleteHY {
+  padding: 4px 8px;
+  border: 1px solid #e53e3e;
+  background-color: white;
+  color: #e53e3e;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btn-deleteHY:hover {
+  background-color: #e53e3e;
+  color: white;
+}
 }

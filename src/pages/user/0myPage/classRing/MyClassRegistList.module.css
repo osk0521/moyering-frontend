@@ -267,3 +267,38 @@
   min-height: 300px;
   padding: 0px 20px;
 }
+
+
+/* 결제내역 모달 */
+.modalBackdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modalContent {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  position: relative;
+  width: 320px;
+}
+.modalClose {
+  position: absolute;
+  top: 8px; right: 8px;
+  border: none;
+  background: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.modalList {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+.modalList li {
+  margin-bottom: 0.75rem;
+}

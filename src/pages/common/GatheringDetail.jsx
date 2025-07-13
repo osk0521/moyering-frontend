@@ -449,10 +449,11 @@ export default function GatheringDetail() {
   };
 
   const isMeetingDatePassed = () => {
+    
     if (!gatheringData.meetingDate) return false;
     const now = new Date();
     const meetingDate = new Date(gatheringData.meetingDate);
-    return now > meetingDate;
+    return now > meetingDate&& now==meetingDate;
   };
 
   const isMaxAttendeesReached = () => {

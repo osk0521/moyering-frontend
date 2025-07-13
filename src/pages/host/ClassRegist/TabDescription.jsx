@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './TabDescription.css';
 import React from 'react'; // 이 한 줄만 추가!
 import { Editor } from '@toast-ui/editor';
+import { url } from '../../../config';
 
 const TabDescription = ({ classData, setClassData, registerValidator }) => {
     const editorRef = useRef();
@@ -66,14 +67,29 @@ const TabDescription = ({ classData, setClassData, registerValidator }) => {
                     ['image'],
                 ],
                 hooks: {
-                    addImageBlobHook: (blob, callback) => {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            const imageUrl = e.target.result;
-                            callback(imageUrl, blob.name || 'uploaded image');
-                        };
-                        reader.readAsDataURL(blob);
-                    },
+                    addImageBlobHook: async (blob, callback) => {
+                        try {
+                            const formData = new FormData();
+                            formData.append('image', blob);
+
+                            const res = await fetch('/api/upload/image', {
+                                method: 'POST',
+                                body: formData,
+                            });
+
+                            const result = await res.json();
+
+                            // 백엔드 절대 주소 직접 작성 or 환경변수에서 가져오기
+                            const backendUrl = 'http://localhost:8080'; // ⭐ 백엔드 포트에 맞게 설정
+                            const imageUrl = `${backendUrl}${result.url}`;
+
+                            console.log('✅ 이미지 URL:', imageUrl);
+
+                            callback(imageUrl, blob.name);
+                        } catch (error) {
+                            console.error('❌ 이미지 업로드 실패:', error);
+                        }
+                    }
                 },
                 events: {
                     change: () => {
@@ -94,7 +110,7 @@ const TabDescription = ({ classData, setClassData, registerValidator }) => {
     }, [editorRef]);
 
     useEffect(() => {
-        const { img1,detailDescription } = classData.description;
+        const { img1, detailDescription } = classData.description;
         const isValid = img1 && detailDescription;
         registerValidator(2, () => isValid);
     }, [classData.description, registerValidator]);

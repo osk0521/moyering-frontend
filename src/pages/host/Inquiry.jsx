@@ -19,27 +19,31 @@ const Inquiry = () => {
   const [replyStatus, setReplyStatus] = useState('');
   const [pageInfo, setPageInfo] = useState([]);
 
+
+
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const classIdParam = params.get("classId");
-  const calendarIdParam = params.get("calendarId");
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);  // URL 파라미터 가져오기
+    const classId = queryParams.get('classId');  // classId 가져오기
+    const calendarId = queryParams.get('calendarId');  // calendarId 가져오기
+
     const params = {
       hostId: user.hostId,
-      classId: classIdParam ? Number(classIdParam) : undefined,
-      calendarId: calendarIdParam ? Number(calendarIdParam) : undefined,
+      classId: classId ? Number(classId) : undefined,  // classId가 존재하면 Number로 변환
+      calendarId: calendarId ? Number(calendarId) : undefined,  // calendarId도 마찬가지
       page: 0,
       size: 10,
     };
 
+    // `classId`와 `calendarId`에 맞는 문의 데이터를 API로 요청
     token && myAxios(token, setToken).post("/host/inquiry/search", params)
       .then(res => {
-        setInquiry(res.data.content);
-        setPageInfo(res.data.pageInfo);
+        setInquiry(res.data.content);  // 받은 데이터를 inquiry 상태에 저장
+        setPageInfo(res.data.pageInfo);  // 페이지 정보 설정
       })
       .catch(err => console.error(err));
-  }, [token]);
+  }, [token, location]);  // location이 변경되면 useEffect 실행
 
   const handleSearch = () => {
     const params = {

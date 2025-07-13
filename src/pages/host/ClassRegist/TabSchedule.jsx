@@ -4,7 +4,7 @@ import 'react-multi-date-picker/styles/colors/teal.css';
 import { Calendar } from 'react-multi-date-picker';
 import React from 'react';
 
-const TabSchedule = ({ classData, setClassData,registerValidator }) => {
+const TabSchedule = ({ classData, setClassData, registerValidator }) => {
   const { schedule } = classData;
 
   // 최초 마운트 시 스케줄 디테일 1개 기본값 세팅
@@ -55,35 +55,45 @@ const TabSchedule = ({ classData, setClassData,registerValidator }) => {
     const start = updatedEntry.startTime;
     const end = updatedEntry.endTime;
 
-    console.log(start);
-    console.log(end);
-
     const isValidTimeFormat = (time) => time && time.length === 5;
 
-    if (isValidTimeFormat(start) && isValidTimeFormat(end)) {
-      if (start >= end) {
-        alert("시작 시간은 종료시간보다 빠르게 지정해야 합니다.")
-        return;
-      }
+    const parseTime = (timeStr) => {
+      if (!timeStr || timeStr.length !== 5) return null;
+      const [hourStr, minuteStr] = timeStr.split(':');
+      const hour = parseInt(hourStr, 10);
+      const minute = parseInt(minuteStr, 10);
+      return hour * 60 + minute; // 분 단위
+    };
 
-      if (index > 0 && isValidTimeFormat(start)) {
-        const prevEnd = newDetails[index - 1].endTime;
-        if (isValidTimeFormat(prevEnd)) {
-          if (start <= prevEnd) {
-            alert("이전 스케쥴의 종료시간보다 늦게 시작시간을 지정할 수 없습니다.")
-            return;
-          }
+    if (isValidTimeFormat(start) && isValidTimeFormat(end)) {
+    const startMinutes = parseTime(start);
+    const endMinutes = parseTime(end);
+
+    if (startMinutes >= endMinutes) {
+      alert("시작 시간은 종료시간보다 빠르게 지정해야 합니다.");
+      return;
+    }
+
+    if (index > 0) {
+      const prevEnd = newDetails[index - 1].endTime;
+      if (isValidTimeFormat(prevEnd)) {
+        const prevEndMinutes = parseTime(prevEnd);
+        if (startMinutes <= prevEndMinutes) {
+          alert("이전 스케쥴의 종료시간보다 늦게 시작시간을 지정해야 합니다.");
+          return;
         }
       }
     }
-    setClassData(prev => ({
-      ...prev,
-      schedule: {
-        ...schedule,
-        scheduleDetail: newDetails
-      }
-    }));
-  };
+  }
+
+  setClassData(prev => ({
+    ...prev,
+    schedule: {
+      ...schedule,
+      scheduleDetail: newDetails
+    }
+  }));
+};
 
   const handleCruitMinChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
@@ -106,22 +116,31 @@ const TabSchedule = ({ classData, setClassData,registerValidator }) => {
 
   const handleCruitMaxChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
+    setClassData(prev => ({
+      ...prev,
+      schedule: {
+        ...prev.schedule,
+        recruitMax: value,
+      }
+    }));
+  };
+
+  const handleCruitMaxBlur = (e) => {
+    const value = e.target.value;
     setClassData(prev => {
       const min = prev.schedule.recruitMin;
-
       if (min !== '' && parseInt(value) < parseInt(min)) {
         alert("최대 인원은 최소인원보다 작을 수 없습니다.");
-
-        return prev;
+        // 최소 인원과 같게 수정
+        return {
+          ...prev,
+          schedule: {
+            ...prev.schedule,
+            recruitMax: min,
+          }
+        };
       }
-
-      return {
-        ...prev,
-        schedule: {
-          ...prev.schedule,
-          recruitMax: value,
-        }
-      }
+      return prev;
     });
   };
 
@@ -172,6 +191,7 @@ const TabSchedule = ({ classData, setClassData,registerValidator }) => {
               type="text"
               value={schedule.recruitMax || ''}
               onChange={handleCruitMaxChange}
+              onBlur={handleCruitMaxBlur}
               placeholder="숫자만 입력"
               className="KHJ-people-input"
             />
@@ -186,7 +206,7 @@ const TabSchedule = ({ classData, setClassData,registerValidator }) => {
               <tr>
                 <th>일정 시작</th>
                 <th>일정 종료</th>
-                <th>상태</th>
+                <th>상세내용</th>
                 <th></th>
               </tr>
             </thead>

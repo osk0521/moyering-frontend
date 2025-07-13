@@ -66,6 +66,10 @@
   color: #222;
 }
 
+.section img{
+  width: 500px;
+}
+
 /* 상세정보 */
 .moreBtn {
   width: 100%;
@@ -143,8 +147,8 @@
 }
 
 .instructorImage {
-  width: 80px;
-  height: 80px;
+  width: 80px !important;
+  height: 80px !important;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid #eee;

@@ -268,7 +268,6 @@ export default function MyClassList() {
               {modalData.canceledAt && (
                 <li>취소일시: {new Date(modalData.canceledAt).toLocaleString()}</li>
               )}
-              {/* 필요시 쿠폰/할인 정보 등 추가 */}
             </ul>
           </div>
         </div>

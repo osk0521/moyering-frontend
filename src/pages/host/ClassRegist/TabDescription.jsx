@@ -81,11 +81,13 @@ const TabDescription = ({ classData, setClassData, registerValidator }) => {
 
                             // 백엔드 절대 주소 직접 작성 or 환경변수에서 가져오기
                             const backendUrl = 'http://localhost:8080'; // ⭐ 백엔드 포트에 맞게 설정
-                            const imageUrl = `${backendUrl}${result.url}`;
+                            const imageUrl = `${backendUrl}/iupload/${result.imageName}`;
+                            const imageName = result.imageName;
 
                             console.log('✅ 이미지 URL:', imageUrl);
+                            console.log('✅ 이미지 이름:', imageName);
 
-                            callback(imageUrl, blob.name);
+                            callback(imageUrl, imageName);
                         } catch (error) {
                             console.error('❌ 이미지 업로드 실패:', error);
                         }

@@ -56,11 +56,8 @@ const PaymentManagement = () => {
         toDate: endDate || undefined,
       };
 
-      // 특정 사용자의 결제 내역을 조회하는 경우 userId 추가
-      if (userInfo && userInfo.userId) {
-        params.userId = userInfo.userId;
-      }
-
+      // // 특정 사용자의 결제 내역을 조회하는 경우 userId 추가
+     
       try {
         const response = await myAxios(token).get('/api/payment', { params });
         const data = response.data;

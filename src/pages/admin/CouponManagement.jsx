@@ -131,6 +131,7 @@ const CouponManagement = () => {
       dto.issueCount = Number(formData.issueCount);
       dto.validFrom = formData.startDate ? formData.startDate + 'T00:00:00' : null;
       dto.validUntil = formData.endDate ? formData.endDate + 'T23:59:59' : null;
+      dto.usedCount = 0;
     }
     try {
       await axios.post(`${url}/api/coupon`, dto);

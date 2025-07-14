@@ -104,8 +104,8 @@
 }
 
 .KYM-detail-container .KYM-detail-avatar {
-  width: 48px;
-  height: 48px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   margin-right: 12px;
 }
@@ -238,6 +238,7 @@
   color: #262626;
   word-break: break-word;
   flex-grow: 1;
+  white-space: pre-line;
 }
 
 .KYM-detail-container .KYM-hashtags {
@@ -257,6 +258,10 @@
 }
 
 .KYM-detail-container .KYM-comment-block {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
   margin-bottom: 12px;
 }
 

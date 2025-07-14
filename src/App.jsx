@@ -28,7 +28,6 @@ import Test2 from './pages/user/socialRing/Test2.jsx';
 import MyScrapList from './pages/user/socialRing/MyScrapList.jsx';
 import NoticeList from './pages/common/NoticeList';
 import NoticeDetail from './pages/common/NoticeDetail';
-import DmChat from './pages/user/gathering/DmChat.jsx';
 
 // 관리자 페이지
 import BannerCreateModal from "./pages/admin/BannerCreateModal";
@@ -155,7 +154,7 @@ function App() {
         <Route path="/user/gatheringWrite" element={<GatheringWrite />} />
         <Route path="/user/gatheringModify/:gatheringId" element={<GatheringModify />} />
         <Route path="/user/logout" />
-        <Route exact path="/user/chat" element={<DmChat />} />
+        <Route exact path="/user/chat" element={<GatheringChat />} />
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />

@@ -64,7 +64,6 @@ export default function FeedDetail() {
   useEffect(() => {
     myAxios().get(`/socialing/feed?feedId=${feedId}`)
       .then(res => {
-        console.log("▶ COMMENT =", JSON.stringify(res.data.comments, null, 2));
         const data = res.data;
         console.log(res.data)
         setFeed(data);
@@ -110,42 +109,42 @@ export default function FeedDetail() {
   //   }));
   // };
 
-  //  const onToggleReplies = (commentId, replies) => {
-  //   setShowReplies(prev => {
-  //     const newReplies = { ...prev, [commentId]: !prev[commentId] };
-  //     const openChild = (children) => {
-  //       children.forEach(c => {
-  //         newReplies[c.commentId] = true;
-  //         if (c.replies) openChild(c.replies);
-  //       });
-  //     };
-  //     if (replies) {
-  //       openChild(replies);
-  //     }
-  //     return newReplies;
-  //   });
-  // };
+//  const onToggleReplies = (commentId, replies) => {
+//   setShowReplies(prev => {
+//     const newReplies = { ...prev, [commentId]: !prev[commentId] };
+//     const openChild = (children) => {
+//       children.forEach(c => {
+//         newReplies[c.commentId] = true;
+//         if (c.replies) openChild(c.replies);
+//       });
+//     };
+//     if (replies) {
+//       openChild(replies);
+//     }
+//     return newReplies;
+//   });
+// };
 
-  const onToggleReplies = (commentId, replies) => {
-    setShowReplies(prev => {
-      const newReplies = { ...prev, [commentId]: !prev[commentId] };
+const onToggleReplies = (commentId, replies) => {
+  setShowReplies(prev => {
+    const newReplies = { ...prev, [commentId]: !prev[commentId] };
 
-      const openAllChildren = (children) => {
-        if (!children) return;
-        children.forEach(child => {
-          newReplies[child.commentId] = true;
-          if (child.replies && child.replies.length > 0) {
-            openAllChildren(child.replies); // 재귀 호출로 계속 내려감
-          }
-        });
-      };
+    const openAllChildren = (children) => {
+      if (!children) return;
+      children.forEach(child => {
+        newReplies[child.commentId] = true;
+        if (child.replies && child.replies.length > 0) {
+          openAllChildren(child.replies); // 재귀 호출로 계속 내려감
+        }
+      });
+    };
 
-      if (replies && newReplies[commentId]) {
-        openAllChildren(replies);
-      }
-      return newReplies;
-    });
-  };
+    if (replies && newReplies[commentId]) {
+      openAllChildren(replies);
+    }
+    return newReplies;
+  });
+};
 
 
   const postComment = async () => {
@@ -277,33 +276,25 @@ export default function FeedDetail() {
       alert("좋아요 처리에 실패했습니다.");
     }
   };
-console.log('writerProfile =', writerProfile, typeof writerProfile);
-  const renderComment = (c, level = 0) => (
 
+  const renderComment = (c, level = 0) => (
+    
     <div key={c.commentId} className="KYM-comment-block" style={{ marginLeft: `${level * 20}px` }}>
-      <img
-        className="KYM-detail-avatar"
-        src={writerProfile ? `${url}/iupload/${writerProfile}` : "/profile.png"}
-        alt="프로필"
-      />
+      <img className="KYM-comment-avatar" src={c.userProfile || null} alt="" />
       <div className="KYM-comment-body">
         <div className="KYM-comment-header">
           <span className="KYM-comment-author">{c.writerId}</span>
         </div>
-       <p className="KYM-comment-text">
-  {c.parentWriterId && (
-    <span style={{ color: '#888', fontWeight: 'bold' }}>
-      @{c.parentWriterId}
-    </span>
-  )}{" "}
-  {c.content}
-</p>
+        <p className="KYM-comment-text">
+          {c.parentWriterId && <span style={{ color: '#888' }}>@{c.parentWriterId} </span>}
+          {c.content}
+        </p>
         <div className="KYM-comment-actions">
           <span className="KYM-comment-date">{formatDate(c.createAt)}</span>
           {c.replies && c.replies.length > 0 && (
             <button
               className="KYM-reply-toggle"
-              onClick={() => onToggleReplies(c.commentId, c.replies)}
+              onClick={() => onToggleReplies(c.commentId,c.replies)}
             >
               {showReplies[c.commentId] ? '답글 숨기기' : '답글 보기'}
             </button>
@@ -357,8 +348,7 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
           </div>
         )}
 
-        {/* {showReplies[c.commentId] && c.replies?.map(r => renderComment(r, level + 1))} */}
-        {showReplies[c.commentId] && (c.replies || []).map(r => renderComment(r, level + 1))}
+        {showReplies[c.commentId] && c.replies?.map(r => renderComment(r, level + 1))}
       </div>
     </div>
   );
@@ -389,17 +379,17 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (showMenu && menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowMenu(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMenu]);
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (showMenu && menuRef.current && !menuRef.current.contains(event.target)) {
+      setShowMenu(false);
+    }
+  };
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [showMenu]);
 
   return (
     <>
@@ -450,7 +440,7 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
             {/* header */}
             <div className="KYM-detail-header">
               <div className="KYM-left-info">
-                <img className="KYM-detail-avatar"  src={writerProfile ? `${url}/iupload/${writerProfile}` : "/profile.png"} alt="" />
+                <img className="KYM-detail-avatar" src={`${url}/iupload/${writerProfile}`} alt="" />
                 <span className="KYM-detail-nickname">{writerId}</span>
                 {feed.writerBadge &&
                   <img src={`/${feed.writerBadgeImg}`} alt="대표 배지" className="KYM-detail-badge-img" />
@@ -503,7 +493,7 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
             <div className="KYM-detail-date">{formatDate(createdAt)}</div>
 
             {/* comments */}
-
+            
             <div className="KYM-detail-comments">
               {comment.map(c => renderComment(c))}
               {console.log("▶ showReplies:", showReplies)}

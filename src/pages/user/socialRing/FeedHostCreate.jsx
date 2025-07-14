@@ -90,7 +90,7 @@ export default function HostFeedCreate() {
             const res = await myAxios(token, setToken).post(`/host/createFeedHost`, formData);
             setFeedId(res.data);
             console.log(res)
-            // alert("강사 홍보 피드가 작성되었습니다.");
+            alert("강사 홍보 피드가 작성되었습니다.");
             navigate(`/hostFeed/${res.data}`);
         } catch (err) {
             console.error('강사 피드 등록 실패:', err);

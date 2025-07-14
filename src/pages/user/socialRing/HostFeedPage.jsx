@@ -77,7 +77,7 @@ export default function HostFeedPage() {
                 )}
 
                 <div className="KYM-host-filters">
-                    {['', '스포츠', '음식', '공예 / DIY', '뷰티', '문화예술', '심리 / 상담', '자유모임'].map(cat => (
+                    {['', '스포츠', '음식', '공예 / DIY', '뷰티', '문화예술', '심리 / 상담'].map(cat => (
                         <button key={cat}
                             className={`KYM-host-filter-button${category === cat ? ' active' : ''}`}
                             onClick={() => {
@@ -100,7 +100,10 @@ export default function HostFeedPage() {
                                 <div className="KYM-host-card" key={feed.feedId}>
                                     <div className="KYM-host-header">
                                         <div className="KYM-host-user">
-                                            <img src={`${url}/iupload/${feed.hostProfile}`} alt="강사 프로필"
+                                            <img src={feed.hostProfile
+                                                ? `${url}/iupload/${feed.hostProfile}`
+                                                : "/profile.png"
+                                            } alt="강사 프로필"
                                                 className="KYM-host-avatar" style={{ cursor: "pointer" }}
                                                 onClick={() => navigate(`/feedHost/${feed.hostId}`)} />
                                             <span className="KYM-host-nickname"
@@ -182,11 +185,7 @@ export default function HostFeedPage() {
                                 </div>
                             );
                         })}
-
-                       
                     </div>
-
-                 
                 </div>
             </div>
         </>

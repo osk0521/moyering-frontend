@@ -124,33 +124,11 @@ const ClassManagement = () => {
     navigate(`/admin/class/${classId}`);
   }, [navigate]);
 
-  // 승인하기 처리
-  const approveClass = useCallback(async (classId, className) => {
-    if (!confirm(`"${className}" 클래스를 승인하시겠습니까?`)) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await myAxios(token).patch(`/api/class/${classId}/approve`);
-      
-      setClassData(prev => ({
-        ...prev,
-        list: prev.list.map(item => 
-          item.classId === classId 
-            ? { ...item, processStatus: "모집중" }
-            : item
-        )
-      }));
-      
-      alert("클래스가 승인되었습니다.");
-    } catch (error) {
-      console.error("클래스 승인 실패:", error);
-      alert("클래스 승인에 실패했습니다.");
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
+  // 처리하기 클릭 핸들러 - 상세 페이지로 이동
+  const handleProcessClick = useCallback((classId) => {
+    console.log('처리하기 클릭 - 상세 페이지로 이동:', classId);
+    navigate(`/admin/class/${classId}`);
+  }, [navigate]);
 
   // 페이지 번호 생성
   const pageNumbers = useMemo(() => {
@@ -239,6 +217,8 @@ const ClassManagement = () => {
           <thead>
             <tr>
               <th>NO</th>
+              <th>클래스 ID </th>
+              <th>일정 ID</th>
               <th>1차 카테고리</th>
               <th>2차 카테고리</th>
               <th>강사 ID</th>
@@ -265,6 +245,8 @@ const ClassManagement = () => {
               classData.list.map((item, idx) => (
                 <tr key={`${item.classId}_${idx}`}>
                   <td>{(currentPage * PAGE_SIZE) + idx + 1}</td>
+                  <td>{item.classId}</td>
+                    <td>{item.calendarId}</td>
                   <td>{item.firstCategory}</td>
                   <td>{item.secondCategory}</td>
                   <td className="instructor-idHY">{item.hostUserName}</td>
@@ -294,11 +276,11 @@ const ClassManagement = () => {
                   <td className="actionHY">
                     {item.processStatus === "승인대기" && (
                       <button
-                        className="btn-approveHY"
-                        onClick={() => approveClass(item.classId, item.className)}
+                        className="btn-processHY"
+                        onClick={() => handleProcessClick(item.classId)}
                         disabled={loading}
                       >
-                        승인하기
+                        처리하기
                       </button>
                     )}
                   </td>

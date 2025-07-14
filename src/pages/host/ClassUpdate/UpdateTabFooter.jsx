@@ -14,7 +14,7 @@ const UpdateTabFooter = ({ activeTab,onSubmit,handleReset }) => {
             미리보기
           </button>
           <button className="KHJ-footer-btn KHJ-save-btn" onClick={onSubmit}>저장</button>
-          <button className="KHJ-footer-btn KHJ-delete-btn">삭제</button>
+          {/* <button className="KHJ-footer-btn KHJ-delete-btn">삭제</button> */}
         </div>
       );
   };

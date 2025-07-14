@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './UpdateTabDescription.css';
-import React from 'react'; // 이 한 줄만 추가!
+import React from 'react';
+import { Editor } from '@toast-ui/editor';
+import '@toast-ui/editor/dist/toastui-editor.css'; // 스타일 꼭 필요!
 import { url } from '../../../config';
 
 const UpdateTabDescription = ({ classData, setClassData }) => {
+    const editorRef = useRef();
+    const editorInstanceRef = useRef();
     const { description } = classData;
 
     const [images, setImages] = useState([
@@ -18,14 +22,11 @@ const UpdateTabDescription = ({ classData, setClassData }) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // 1. 미리보기 이미지 URL 저장
         const previewUrl = URL.createObjectURL(file);
         const updatedImages = [...images];
         updatedImages[index] = previewUrl;
         setImages(updatedImages);
-        setClassData({...classData, description:{...classData.description, [e.target.name]:file}})
 
-        // 2. classData.description에 실제 파일 저장
         const imageKey = `img${index + 1}`;
         setClassData((prev) => ({
             ...prev,
@@ -36,16 +37,66 @@ const UpdateTabDescription = ({ classData, setClassData }) => {
         }));
     };
 
+    useEffect(() => {
+        if (editorRef.current && !editorInstanceRef.current) {
+            const instance = new Editor({
+                el: editorRef.current,
+                height: '400px',
+                initialEditType: 'wysiwyg',
+                previewStyle: 'vertical',
+                initialValue: description?.detailDescription || '',
+                hideModeSwitch: true,
+                placeholder: '모임에 대한 상세한 설명을 작성해주세요',
+                toolbarItems: [
+                    ['heading', 'bold', 'italic', 'strike'],
+                    ['hr', 'quote'],
+                    ['ul', 'ol'],
+                    ['table', 'link'],
+                    ['image'],
+                ],
+                hooks: {
+                    addImageBlobHook: async (blob, callback) => {
+                        try {
+                            const formData = new FormData();
+                            formData.append('image', blob);
 
-    const handledetailDescriptionChange = (e) => {
-        setClassData(prev => ({
-            ...prev,
-            description: {
-                ...prev.description,
-                detailDescription: e.target.value
+                            const res = await fetch(`${url}/api/upload/image`, {
+                                method: 'POST',
+                                body: formData,
+                            });
+
+                            const result = await res.json();
+                            const imageUrl = `${url}${result.url}`; // 절대경로 조립
+                            callback(imageUrl, blob.name);
+                        } catch (error) {
+                            console.error('이미지 업로드 실패:', error);
+                        }
+                    },
+                },
+                events: {
+                    change: () => {
+                        const content = instance.getHTML();
+                        setClassData((prev) => ({
+                            ...prev,
+                            description: {
+                                ...prev.description,
+                                detailDescription: content,
+                            },
+                        }));
+                    },
+                },
+            });
+
+            editorInstanceRef.current = instance;
+        }
+
+        return () => {
+            if (editorInstanceRef.current) {
+                editorInstanceRef.current.destroy();
+                editorInstanceRef.current = null;
             }
-        }))
-    }
+        };
+    }, [editorRef]);
 
     return (
         <div className="KHJ-class-info-box">
@@ -61,12 +112,20 @@ const UpdateTabDescription = ({ classData, setClassData }) => {
                                 accept="image/*"
                                 onChange={(e) => handleImageChange(e, index)}
                                 id={`KHJ-image-input-${index}`}
-                                name={`img${index+1}`}
+                                name={`img${index + 1}`}
                                 style={{ display: 'none' }}
                             />
                             <label htmlFor={`KHJ-image-input-${index}`} className="KHJ-image-box-label">
                                 {image ? (
-                                    <img src={image.startsWith('blob:')? image : `${url}/image?filename=${image}`} alt={`이미지 ${index + 1}`} className="KHJ-image-box-img" />
+                                    <img
+                                        src={
+                                            image.startsWith('blob:')
+                                                ? image
+                                                : `${url}/image?filename=${image}`
+                                        }
+                                        alt={`이미지 ${index + 1}`}
+                                        className="KHJ-image-box-img"
+                                    />
                                 ) : (
                                     <div className="KHJ-plus-icon">+</div>
                                 )}
@@ -88,13 +147,8 @@ const UpdateTabDescription = ({ classData, setClassData }) => {
                 <label className="KHJ-description-label">
                     <span className="KHJ-required-text-dot">*</span>클래스 상세설명
                 </label>
-                <textarea
-                    value={description.detailDescription || ''}
-                    onChange={handledetailDescriptionChange}
-                    placeholder="클래스에 대한 설명을 작성해주세요."
-                    className="KHJ-description-textarea"
-                    maxLength="2000"
-                />
+                {/* ✅ Toast UI Editor 들어갈 자리 */}
+                <div ref={editorRef} />
                 <div className="KHJ-footer">
                     <span>{(description.detailDescription || '').length} / 2000</span>
                 </div>

@@ -486,7 +486,7 @@ body {
 
 .search-btnHY {
   padding: 10px 20px !important;
-  background-color: #3b82f6 !important;
+  background-color: #FFB22C !important;
   color: white !important;
   border: none !important;
   border-radius: 6px !important;
@@ -503,7 +503,7 @@ body {
 }
 
 .search-btnHY:hover {
-  background-color: #2563eb !important;
+  background-color: #FFB22C !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }

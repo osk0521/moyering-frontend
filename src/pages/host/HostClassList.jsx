@@ -3,12 +3,12 @@ import './HostClassList.css';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { myAxios, url } from '../../config';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../atoms';
 
 const ClassList = () => {
   const user = useAtomValue(userAtom);
-  const token = useAtomValue(tokenAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const [classData, setClassData] = useState([]);
   const [pageInfo, setPageInfo] = useState({ curPage: 1, allPage: 1 });
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,6 +19,7 @@ const ClassList = () => {
   const [classStatus, setClassStatus] = useState('전체');
   const statusFilter = classStatus === '전체' ? '' : classStatus;
   const [dropdownIndex, setDropdownIndex] = useState(null);
+  const [inquiry, setInquiry] = useState([]);
 
 
   const navigate = useNavigate();
@@ -31,19 +32,18 @@ const ClassList = () => {
 
     const statusFilter = classStatus === '전체' ? '' : classStatus;
 
-    myAxios(token)
+    token && myAxios(token, setToken)
       .post(`/host/class/list`, {
         hostId: user.hostId,
         page,
         size: 5,
         keyword: searchQuery,
-        category1: '',
-        category2: '',
         status: statusFilter,
         startDate: customStartDate || '',
         endDate: customEndDate || '',
       })
       .then(res => {
+        console.log(res.data);
         setClassData(res.data.content);
         setPageInfo(res.data.pageInfo);
       })
@@ -115,6 +115,11 @@ const ClassList = () => {
   const toggleDropdown = (index) => setDropdownIndex(dropdownIndex === index ? null : index);
   const handleNavigate = (path) => navigate(path);
 
+  const handleInquiryClick = (classId, calendarId) => {
+  // 1. 페이지 이동 (URL 파라미터 전달)
+  navigate(`/host/inquiry?classId=${classId}&calendarId=${calendarId}`);
+};
+
   return (
     <>
       <div className="KHJ-class-search-container">
@@ -184,7 +189,7 @@ const ClassList = () => {
                   <p><strong>상태:</strong> {result.status}</p>
                 </div>
                 <div className="KHJ-result-actions">
-                  <button onClick={() => handleNavigate(`/host/inquiry?classId=${result.classId}&calendarId=${result.calendarId}`)}>문의</button>
+                  <button onClick={() => handleInquiryClick(result.classId, result.calendarId)}>문의</button>
                   <br />
                   <button onClick={() => handleNavigate(`/host/classReview?calendarId=${result.calendarId}`)}>리뷰</button>
                   <br />

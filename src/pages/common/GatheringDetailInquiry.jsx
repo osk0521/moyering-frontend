@@ -26,7 +26,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
   const [totalPages, setTotalPages] = useState(1);
 
   const user = useAtomValue(userAtom);
-  const [token,setToken] = useAtom(tokenAtom)
+  const [token, setToken] = useAtom(tokenAtom)
   const userId = user.id;
   const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
           gatheringId: gatheringId,
           title: res.data.gatheringTitle,
           thumbnailFileName: res.data.gatheringThumbnailFileName,
-          organizer:res.data.organizer,
+          organizer: res.data.organizer,
           meetingDate: res.data.gatheringMeetingDate,
           startTime: res.data.gatheringStartTime,
           endTime: res.data.gatheringEndTime,
@@ -126,11 +126,11 @@ export default function GatheringDetailInquiry({ gatheringId }) {
     const formDataToSend = {
       gatheringId: parseInt(gatheringId),
       inquiryContent: questionContent.trim(),
-      title:gatheringData.title,
+      title: gatheringData.title,
     };
     console.log("Form Data to Send:", formDataToSend);
     try {
-      const response = await myAxios(token,setToken).post(
+      const response = await myAxios(token, setToken).post(
         `/user/writeGatheringInquiry`,
         formDataToSend
       );
@@ -239,18 +239,16 @@ export default function GatheringDetailInquiry({ gatheringId }) {
           currentQuestions.map((question, index) => (
             <React.Fragment key={question.id}>
               <div
-                className={`GatheringDetail_questions-row_osk ${
-                  index % 2 === 1 ? "GatheringDetail_alternate_osk" : ""
-                }`}
+                className={`GatheringDetail_questions-row_osk ${index % 2 === 1 ? "GatheringDetail_alternate_osk" : ""
+                  }`}
               >
                 <div className="GatheringDetail_questions-grid_osk">
                   <div className="GatheringDetail_status_osk">
                     <span
-                      className={`GatheringDetail_status-badge_osk ${
-                        question.status === "답변완료"
+                      className={`GatheringDetail_status-badge_osk ${question.status === "답변완료"
                           ? "GatheringDetail_status-completed_osk"
                           : "GatheringDetail_status-pending_osk"
-                      }`}
+                        }`}
                     >
                       {question.status}
                     </span>
@@ -274,14 +272,7 @@ export default function GatheringDetailInquiry({ gatheringId }) {
                     <span className="GatheringDetail_answer-badge_osk">
                       답변
                     </span>
-                    <span className="GatheringDetail_answer-author_osk">
-                      {question.answer.author}
-                    </span>
-                    <span className="GatheringDetail_answer-date_osk">
-                      {question.answer.date}
-                    </span>
-                  </div>
-                  <div className="GatheringDetail_answer-content_osk">
+                    <div className="GatheringDetail_answer-content_osk">
                     {/* 답변 내용이 배열인 경우 각 줄을 p 태그로 렌더링 */}
                     {Array.isArray(question.answer.content) ? (
                       question.answer.content.map((line, lineIndex) => (
@@ -291,12 +282,37 @@ export default function GatheringDetailInquiry({ gatheringId }) {
                       <p>{question.answer.content}</p>
                     )}
                   </div>
+                    <span className="GatheringDetail_answer-author_osk">
+                      {question.answer.author}
+                    </span>
+                    <span className="GatheringDetail_answer-date_osk">
+                      {question.answer.date}
+                    </span>
+                  </div>
                 </div>
               )}
             </React.Fragment>
           ))
         )}
       </div>
+
+      {/* Pagination - 질문이 있을 때만 표시 */}
+      {qnaData.length > 0 && (
+        <div className="GatheringDetail_questions-pagination_osk">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+            (pageNum) => (
+              <button
+                key={pageNum}
+                className={`GatheringDetail_pagination-btn_osk ${currentPage === pageNum ? "GatheringDetail_active_osk" : ""
+                  }`}
+                onClick={() => handlePageChange(pageNum)}
+              >
+                {pageNum}
+              </button>
+            )
+          )}
+        </div>
+      )}
 
       {/* Question Button */}
       {gatheringData.organizer && userId && gatheringData.organizer !== userId && (
@@ -306,25 +322,6 @@ export default function GatheringDetailInquiry({ gatheringId }) {
         >
           문의하기
         </button>
-      )}
-
-      {/* Pagination - 질문이 있을 때만 표시 */}
-      {qnaData.length > 0 && (
-        <div className="GatheringDetail_questions-pagination_osk">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-            (pageNum) => (
-              <button
-                key={pageNum}
-                className={`GatheringDetail_pagination-btn_osk ${
-                  currentPage === pageNum ? "GatheringDetail_active_osk" : ""
-                }`}
-                onClick={() => handlePageChange(pageNum)}
-              >
-                {pageNum}
-              </button>
-            )
-          )}
-        </div>
       )}
       {isQuestionModalOpen && (
         <form>
@@ -377,18 +374,16 @@ export default function GatheringDetailInquiry({ gatheringId }) {
                       {gatheringData.detailAddress}
                     </span>
                   </div>
-                </div>
+                  {gatheringData.tags && gatheringData.tags.length > 0 && (
+                    <div className="GatheringDetail_modal-tags_osk">
+                      {gatheringData.tags.map((tag, index) => (
+                        <span key={index} className="GatheringDetail_modal-tag_osk">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}</div>
               </div>
-
-              {gatheringData.tags && gatheringData.tags.length > 0 && (
-                <div className="GatheringDetail_modal-tags_osk">
-                  {gatheringData.tags.map((tag, index) => (
-                    <span key={index} className="GatheringDetail_modal-tag_osk">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
 
               <div className="GatheringDetail_input-section_osk">
                 <label className="GatheringDetail_input-label_osk">

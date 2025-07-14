@@ -1,3 +1,4 @@
+
 .class-detail-container {
   padding: 24px;
   font-family: 'Pretendard', sans-serif;
@@ -130,4 +131,61 @@
   background-color: #f9fafb;
   padding: 8px;
   border-left: 4px solid #3b82f6;
+}
+
+
+
+
+/* 액션 컬럼 중앙 정렬 */
+.actionHY {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* 기존 스타일들도 유지 */
+.action-buttonsHY {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-approveHY {
+  padding: 4px 12px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.btn-approveHY:hover {
+  background-color: #059669;
+}
+
+.btn-approveHY:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.btn-rejectHY {
+  padding: 4px 12px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.btn-rejectHY:hover {
+  background-color: #dc2626;
+}
+
+.btn-rejectHY:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
 }

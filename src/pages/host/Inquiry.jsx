@@ -20,27 +20,68 @@ const Inquiry = () => {
   const [pageInfo, setPageInfo] = useState([]);
 
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const classIdParam = params.get("classId");
-  const calendarIdParam = params.get("calendarId");
 
-  useEffect(() => {
+  // URL 파라미터에서 classId, calendarId 가져오기
+  const getQueryParams = () => {
+    const queryParams = new URLSearchParams(location.search);  // URL 파라미터 가져오기
+    const classId = queryParams.get('classId');  // classId 가져오기
+    const calendarId = queryParams.get('calendarId');  // calendarId 가져오기
+    return { classId, calendarId };
+  };
+
+  // 데이터를 가져오는 함수
+  const fetchInquiries = (classId, calendarId) => {
     const params = {
       hostId: user.hostId,
-      classId: classIdParam ? Number(classIdParam) : undefined,
-      calendarId: calendarIdParam ? Number(calendarIdParam) : undefined,
+      classId: classId ? Number(classId) : undefined,  // classId가 존재하면 Number로 변환
+      calendarId: calendarId ? Number(calendarId) : undefined,  // calendarId도 마찬가지
       page: 0,
       size: 10,
     };
 
+    // `classId`와 `calendarId`에 맞는 문의 데이터를 API로 요청
+    token && myAxios(token, setToken).post("/host/inquiry/search", params)
+      .then(res => {
+        setInquiry(res.data.content);  // 받은 데이터를 inquiry 상태에 저장
+        setPageInfo(res.data.pageInfo);  // 페이지 정보 설정
+      })
+      .catch(err => console.error(err));
+  };
+
+  // URL 파라미터가 바뀔 때마다 데이터 가져오기
+  useEffect(() => {
+    const { classId, calendarId } = getQueryParams();  // classId, calendarId 파라미터 가져오기
+    fetchInquiries(classId, calendarId);  // 데이터를 가져오는 함수 호출
+  }, [location, token]);  // location이나 token이 변경될 때마다 실행
+
+  // 필터링에 맞게 데이터 검색
+  useEffect(() => {
+    const { classId, calendarId } = getQueryParams();  // URL 파라미터에서 classId, calendarId 가져오기
+
+    // 필터 상태가 변경되면 handleSearch 호출
+    const params = {
+      hostId: user.hostId,
+      searchFilter,
+      searchQuery,
+      startDate,
+      endDate,
+      replyStatus: replyStatus === '답변완료' ? 1 : (replyStatus === '답변대기' ? 0 : ''),  // 답변 상태 필터
+      page: 0,
+      size: 10,
+      classId: classId ? Number(classId) : undefined,
+      calendarId: calendarId ? Number(calendarId) : undefined,
+    };
+
+    // `handleSearch`를 호출해서 필터에 맞는 데이터를 API로 요청
     token && myAxios(token, setToken).post("/host/inquiry/search", params)
       .then(res => {
         setInquiry(res.data.content);
         setPageInfo(res.data.pageInfo);
       })
       .catch(err => console.error(err));
-  }, [token]);
+  }, [replyStatus, searchQuery, startDate, endDate, location, token]);  // 필터와 URL 파라미터 변경 시마다 호출
 
+  // 검색 요청
   const handleSearch = () => {
     const params = {
       hostId: user.hostId,
@@ -48,7 +89,7 @@ const Inquiry = () => {
       searchQuery,
       startDate,
       endDate,
-      replyStatus,
+      replyStatus: replyStatus === '답변완료' ? 1 : (replyStatus === '답변대기' ? 0 : ''),  // 답변 상태 필터
       page: 0,
       size: 10,
     };
@@ -71,7 +112,6 @@ const Inquiry = () => {
   const handleReplyClick = (index, inquiryId) => {
     setSelectedInquiryId(inquiryId);
     setExpandedIndex(index);
-    // Set iqResContent to the existing reply if available
     const existingReply = inquiry.find(item => item.inquiryId === inquiryId)?.iqResContent || '';
     setIqResContent(existingReply); // Pre-fill with the existing response if any
   };
@@ -132,16 +172,10 @@ const Inquiry = () => {
     setEndDate(newEnd);
   };
 
-
-  useEffect(() => {
-    handleSearch();
-  }, [replyStatus, searchQuery, startDate, endDate]);
-
   return (
     <>
       <div className="KHJ-inquiry-container">
         <h3>문의 관리</h3>
-
         <div className="KHJ-form-row">
           <input
             type="text"
@@ -195,7 +229,6 @@ const Inquiry = () => {
             </div>
           </div>
         )}
-
         {inquiry.map((item, index) => (
           <div key={item.inquiryId} className="KHJ-inquiry-card">
             <div className="KHJ-inquiry-summary" onClick={() => toggleExpand(index, item.inquiryId)}>

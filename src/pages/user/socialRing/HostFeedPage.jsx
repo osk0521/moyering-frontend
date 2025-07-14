@@ -185,11 +185,7 @@ export default function HostFeedPage() {
                                 </div>
                             );
                         })}
-
-
                     </div>
-
-
                 </div>
             </div>
         </>

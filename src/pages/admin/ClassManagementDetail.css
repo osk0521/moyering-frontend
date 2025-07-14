@@ -1,133 +1,373 @@
-.class-detail-container {
-  padding: 24px;
-  font-family: 'Pretendard', sans-serif;
-  font-size: 14px;
-  color: #333;
-  line-height: 1.6;
-}
+/* ClassManagementDetail.css - MemberManagement 스타일과 일관성 유지 */
 
-.header {
+/* 페이지 헤더 스타일 */
+.page-titleHY {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e5e7eb;
 }
 
-.action-buttons button {
-  margin-right: 8px;
-  padding: 6px 12px;
+.page-titleHY h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.header-actionsHY {
+  display: flex;
+  gap: 8px;
+}
+
+/* 액션 버튼 스타일 - MemberManagement와 일관성 유지 */
+.action-btnHY {
+  padding: 8px 16px;
   border: none;
-  border-radius: 4px;
-  font-weight: 600;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
 }
 
-.btn-approve {
+.approve-btnHY {
   background-color: #22c55e;
   color: white;
 }
 
-.btn-reject {
+.approve-btnHY:hover {
+  background-color: #16a34a;
+}
+
+.reject-btnHY {
   background-color: #ef4444;
   color: white;
 }
 
-.btn-link {
-  background-color: transparent;
-  color: #3b82f6;
-  text-decoration: underline;
+.reject-btnHY:hover {
+  background-color: #dc2626;
 }
 
-.btn-close {
-  background-color: #facc15;
-  color: #000;
-  font-weight: bold;
+.close-btnHY {
+  background-color: #6b7280;
+  color: white;
 }
 
-.download-links {
-  margin: 12px 0;
-  display: flex;
-  gap: 24px;
+.close-btnHY:hover {
+  background-color: #4b5563;
 }
 
-.class-summary {
-  margin: 16px 0;
-  background: #f9fafb;
-  padding: 12px;
+/* 클래스 정보 카드 */
+.class-info-cardHY {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.class-titleHY {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.class-titleHY h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* 상태 뱃지 스타일 - MemberManagement와 일관성 */
+.status-badgeHY {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.status-badgeHY.status-pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.status-badgeHY.status-recruiting {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.status-badgeHY.status-closed {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.status-badgeHY.status-cancelled {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.status-badgeHY.status-completed {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.status-badgeHY.status-default {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* 메타 정보 그리드 */
+.class-metaHY {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.meta-itemHY {
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  font-size: 12px;
-  background: #e5e7eb;
-  color: #111;
+.meta-labelHY {
+  font-weight: 600;
+  color: #374151;
+  min-width: 80px;
+  font-size: 14px;
 }
 
-.badge.success {
-  background: #d1fae5;
-  color: #065f46;
+.meta-valueHY {
+  color: #1f2937;
+  font-size: 14px;
 }
 
-.info-table,
-.students-table,
-.extra-info-section table {
+/* 파일 링크 스타일 */
+.file-linksHY {
+  display: flex;
+  gap: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.file-itemHY {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-labelHY {
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.file-linkHY {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.file-linkHY:hover {
+  background-color: #dbeafe;
+  text-decoration: underline;
+}
+
+.file-emptyHY {
+  color: #9ca3af;
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* 섹션 제목 */
+.section-titleHY {
+  margin: 32px 0 16px 0;
+}
+
+.section-titleHY h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* 설명 박스 */
+.description-boxHY {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #374151;
+  min-height: 100px;
+}
+
+/* 테이블 스타일 - MemberManagement와 동일 */
+.table-containerHY {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+.tableHY {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
-  margin-bottom: 24px;
+  font-size: 14px;
 }
 
-.info-table th,
-.info-table td,
-.students-table th,
-.students-table td,
-.extra-info-section table th,
-.extra-info-section table td {
-  border: 1px solid #e5e7eb;
-  padding: 8px;
+.tableHY th {
+  background-color: #f8fafc;
+  color: #374151;
+  font-weight: 600;
+  padding: 12px 16px;
   text-align: center;
-  background-color: white;
+  border-bottom: 2px solid #e5e7eb;
+  font-size: 13px;
 }
 
-.description-box {
-  border: 1px solid #e5e7eb;
-  padding: 16px;
-  background-color: #fefefe;
-  border-radius: 4px;
-  margin-bottom: 24px;
+.tableHY td {
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1f2937;
+  vertical-align: middle;
 }
 
-.bottom-section {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 24px;
+.tableHY tr:hover {
+  background-color: #f8fafc;
 }
 
-.schedule-section,
-.extra-info-section {
-  width: 48%;
+.tableHY tr:last-child td {
+  border-bottom: none;
 }
 
-.schedule-item {
-  background: #fef3c7;
-  border: 1px solid #fcd34d;
-  border-radius: 4px;
-  padding: 8px;
-  margin-bottom: 6px;
+.tableHY tr > th:first-child {
+  width: 55px;
 }
 
-.note {
-  font-size: 12px;
-  color: #666;
-  margin-top: 16px;
+/* 결과 수 표시 - MemberManagement와 동일 */
+.result-countHY {
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.result-countHY strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* 데이터 없음 메시지 */
+.no-dataHY {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 14px;
   background-color: #f9fafb;
-  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+/* 로딩 및 에러 메시지 - MemberManagement와 일관성 */
+.loading-messageHY {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.error-messageHY {
+  text-align: center;
+  padding: 40px 20px;
+  color: #dc2626;
+  font-size: 14px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+/* 안내 메시지 박스 */
+.notice-boxHY {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-left: 4px solid #3b82f6;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.notice-boxHY p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #1e40af;
+  line-height: 1.5;
+}
+
+.notice-boxHY p:first-child {
+  margin-top: 0;
+}
+
+.notice-boxHY p:last-child {
+  margin-bottom: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .page-titleHY {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .header-actionsHY {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .class-metaHY {
+    grid-template-columns: 1fr;
+  }
+  
+  .file-linksHY {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .meta-itemHY {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .meta-labelHY {
+    min-width: auto;
+    font-weight: 700;
+  }
 }

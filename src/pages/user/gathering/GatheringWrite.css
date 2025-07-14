@@ -80,7 +80,20 @@
   outline: none;
   box-shadow: 0 0 0 0.2rem rgba(255, 178, 44, 0.25);
 }
-
+.GatheringWrite_span-tag_osk{
+  padding: 4px 10px;
+  background: #e3f2fd;
+  border: 1px solid s#e3f2fd;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #1976d2;
+  font-weight: 500;
+}
+.GatheringWrite_delete-tag-btn_osk{
+  background-color: none ;
+  border: none;
+  color: #1976d2;
+}
 .GatheringWrite_custom-textarea_osk {
   width: 100%;
   border: 1px solid #ddd;

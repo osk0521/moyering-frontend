@@ -1,11 +1,10 @@
 /* ─── 최상위 부모 클래스 ─── */
 .KYM-myfeed-wrapper {
-  width: 69%;
-  margin: 0 auto;
-  padding: 20px;
+  padding: 2rem 2rem 2rem 2rem;  
+  width: 1280px;
+  margin: auto;
   display: flex;
-  gap: 30px;
-  /* 사이 간격 */
+  justify-content: space-between;
 }
 
 .KYM-myfeed-sidebar {

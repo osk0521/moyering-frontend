@@ -16,9 +16,8 @@ import useFetchUserGatherLikes from "../../hooks/common/useFetchUserGatherLikes"
 export default function Header() {
   const user = useAtomValue(userAtom);
   const navigate = useNavigate();
-  const token = useAtomValue(tokenAtom);
   const setUser = useSetAtom(userAtom);
-  const setToken = useSetAtom(tokenAtom);
+  const [token,setToken] = useAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
   const [query, setQuery] = useState('');
 
@@ -42,6 +41,7 @@ export default function Header() {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("fcmToken");
     navigate("/userlogin");// 로그인 페이지로 이동
   }, [setUser, setToken, navigate]);
 
@@ -309,7 +309,8 @@ export default function Header() {
             <span
               className="Header_nav-item_osk"
               onClick={() =>
-                navigate("/classList")}
+                navigate("/classList", { state: { reset: true } })
+              }
             >
               클래스링
             </span>

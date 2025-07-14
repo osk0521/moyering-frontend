@@ -78,6 +78,10 @@ export default function MyClassList() {
     setPage(0);
     fetchWishlist();
   };
+
+  //결제내역 모달
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
   
   return (
     <>
@@ -133,7 +137,11 @@ export default function MyClassList() {
               <div className={styles.cardLeft}>
                 <img src={`${url}/image?filename=${cls.imageUrl}`} alt={cls.classTitle} className={styles.classImage} />
               </div>
-              <div className={styles.cardRight}>
+              <div className={styles.cardRight} 
+                  onClick={ 
+                    () => navigate(`/class/classRingDetail/${cls.hostClassId}`)
+                    }
+              >
                 <div className={styles.cardHeader}>
                   {cls.paymentStatus === "결제완료" && cls.status === "모집중" ? (
                     <span className={styles.statusBadge}>모집중</span>
@@ -156,9 +164,28 @@ export default function MyClassList() {
                 <div className={styles.tagList}>
                 </div>
                 <div className={styles.actions}>
-                  {cls?.itemsName ? (
-                    <a href={`${url}/filedown?filename=${cls.itemsName }`} className={styles.actionBtn}> 강의자료 다운</a>
-                  ): (<></>) }
+                  {cls?.itemsName && (
+                      <a
+                        href={`${url}/filedown?filename=${cls.itemsName}`}
+                        download
+                        className={styles.actionBtn}
+                        onClick={e => {
+                          e.stopPropagation();   // 상위 onClick 전파 방지
+                        }}
+                      >
+                        강의자료 다운
+                      </a>
+                    )}
+                    <button
+                      className={styles.actionBtn}
+                      onClick={e => {
+                        e.stopPropagation();
+                        setModalData(cls);
+                        setModalOpen(true);
+                      }}
+                    >
+                      결제내역
+                    </button>
                 </div>
               </div>
             </div>
@@ -215,6 +242,57 @@ export default function MyClassList() {
       </section>
       </main>
       <Footer />
+      {modalOpen && (
+        <div className={styles.modalBackdrop} onClick={() => setModalOpen(false)}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={() => setModalOpen(false)}>×</button>
+            <h3 className={styles.modalTitle}>결제 내역</h3>
+            
+            <div className={styles.modalRow}>
+              <span>클래스명</span>
+              <span>{modalData.classTitle}</span>
+            </div>
+            <div className={styles.modalRow}>
+              <span>결제 시간</span>
+              <span>{new Date(modalData.paidAt).toLocaleString()}</span>
+            </div>
+            <div className={styles.modalRow}>
+              <span>결제 정보</span>
+              <span>{modalData.paymentType}</span>
+            </div>
+
+            <hr className={styles.modalDivider}/>
+
+
+            {modalData.couponName!=="쿠폰없음" && (
+              <>
+              <div className={styles.modalRow}>
+                <span>상품 금액</span>
+                <span className={styles.blue}>₩{modalData.classPrice?.toLocaleString() || '—'}원</span>
+              </div>
+              <div className={styles.modalRow}>
+                <span>할인 ({modalData.couponName} 적용)</span>
+                <span className={styles.red}>
+                  -₩
+                  {(
+                    (modalData.classPrice ?? 0) - (modalData.amount ?? 0)
+                  ).toLocaleString()}원
+                </span>
+              </div>
+              </>
+            )}
+
+
+            <hr className={styles.modalDivider}/>
+
+            <div className={`${styles.modalRow} ${styles.totalRow}`}>
+              <span>최종 결제 금액</span>
+              <span className={styles.bold}>₩{modalData.amount.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
     </>
   );
 }

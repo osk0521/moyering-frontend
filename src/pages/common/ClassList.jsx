@@ -3,6 +3,7 @@ import ClassCard from '../../components/ClassCard';
 import styles from './ClassList.module.css';
 import DatePicker from 'react-datepicker';
 import Header from './Header';
+import Footer from './Footer';
 import { useNavigate ,useLocation  } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
@@ -14,11 +15,14 @@ import {
 } from '../../atom/classAtom';
 import {fetchClassListAtom} from '../../hooks/common/fetchClassListAtom';
 import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom';
+import axios from 'axios';
+import AutoLocationFilter from '../../components/AutoLocationFilter';
 
 export default function ClassList() {
   const location = useLocation();
   const initCategory1 = location.state?.category1 || '';
   const initCategory2 = location.state?.category2 || '';
+  const shouldUseLocationFilter = location.state?.useLocationFilter === true;
   const [selectedDate1, setSelectedDate1] = useState(null);
   const [selectedDate2, setSelectedDate2] = useState(null);
   const [selectedSido, setSelectedSido] = useState("");
@@ -49,17 +53,47 @@ export default function ClassList() {
   useEffect(() => {
     fetchCategories();
   }, []);
-// 그 다음 초기 필터 적용
-useEffect(() => {
-  // 초기 진입 시 항상 fetchClassList 호출되도록 조건 제거
-  setFilter((prev) => ({
-    ...prev,
-    category1: initCategory1,
-    category2: initCategory2,
-  }));
-  setCurrentPage(1);
-  fetchClassList();
-}, []);
+  useEffect(() => {
+    if (location.state?.reset) {
+      // 모든 상태 초기화
+      setSelectedSido('');
+      setSelectedCategory1('');
+      setSelectedCategory2('');
+      setSelectedDate1(null);
+      setSelectedDate2(null);
+      setSelectedPriceMin('');
+      setSelectedPriceMax('');
+      setSelectedName('');
+      setCurrentPage(1);
+      setFilter({
+        sido: '',
+        category1: '',
+        category2: '',
+        startDate: null,
+        endDate: null,
+        priceMin: '',
+        priceMax: '',
+        name: '',
+      });
+
+      // AutoLocationFilter 실행 안 되게 막고
+      fetchClassList();
+      navigate(location.pathname, { replace: true }); // reset 플래그 제거
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+
+    // 초기 진입 시 항상 fetchClassList 호출되도록 조건 제거
+    setFilter((prev) => ({
+      ...prev,
+      category1: initCategory1,
+      category2: initCategory2,
+    }));
+    setCurrentPage(1);
+    fetchClassList();
+  }, []);
+
   const firstCategoryList = Array.from(
     new Map(categoryList.map(item => [item.categoryId, item.categoryName])).entries()
   ).map(([id, name]) => ({ id, name }));
@@ -125,6 +159,13 @@ const handleReset = () => {
   return (
     <>
     <Header/>
+    {shouldUseLocationFilter && (
+      <AutoLocationFilter
+        setSelectedSido={setSelectedSido}
+        setFilter={setFilter}
+        fetchClassList={fetchClassList}
+      />
+    )}
     <main className={styles.page}>
       <h2 className={styles.sectionTitle}>클래스링</h2>
       <p className={styles.sectionSub}>모여링의 모든 원데이 클래스를 모아 모아~</p>
@@ -136,7 +177,7 @@ const handleReset = () => {
                 <label>지역</label>
                 <select className={styles.datePickerInput} value={selectedSido} onChange={handleSidoChange}>
                   <option value="">전체</option>
-                  <option value="서울">서울</option>
+                  <option value="서울특별시">서울</option>
                   <option value="부산">부산</option>
                   <option value="대구광역시">대구광역시</option>
                   <option value="인천광역시">인천광역시</option>
@@ -271,6 +312,7 @@ const handleReset = () => {
         <button className={styles.pageBtn}  onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>〉</button>
       </div>
     </main>
+    <Footer/>
     </>
   );
 }

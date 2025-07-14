@@ -21,6 +21,7 @@ import KakaoMap from "./KakaoMap";
 import { url } from '../../config';
 import { FaStar } from "react-icons/fa";
 import ClassRingDetailInquiryList from "./ClassRingDetailInquiryList";
+import ClassRingReviewList from "./ClassRingReviewList";
 import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
 import Footer from "../../components/Footer";
 import "./GatheringDetail.css";
@@ -241,7 +242,7 @@ export default function ClassRingDetail() {
               { id: "details", label: "상세 정보" },
               { id: "location", label: "위치" },
               { id: "instructor", label: "강사소개" },
-              { id: "reviews", label: "강사 후기" },
+              { id: "reviews", label: "후기" },
               { id: "questions", label: "문의" },
               { id: "recommend", label: "추천" }
             ].map(({ id, label }) => (
@@ -274,7 +275,29 @@ export default function ClassRingDetail() {
             {/* 준비물 섹션 */}
             <div className={styles.preparation}>
               <h3>준비물</h3>
-              <p>{classDetail?.preparation}</p>
+              <p>
+                {classDetail?.preparation?.split(',').map((item, index) => (
+                  <span key={index} className={styles.tagStyle}>
+                    {item.trim()}
+                  </span>
+                ))}
+              </p>
+               <h3>포함사항</h3>
+              <p>
+                {classDetail?.incluision?.split(',').map((item, index) => (
+                  <span key={index} className={styles.tagStyle}>
+                    {item.trim()}
+                  </span>
+                ))}
+              </p>
+               <h3>키워드</h3>
+              <p>
+                {classDetail?.keywords?.split(',').map((item, index) => (
+                  <span key={index} className={styles.tagStyle}>
+                    {item.trim()}
+                  </span>
+                ))}
+              </p>
             </div>
             <hr />
             {/* 커리큘럼 섹션 */}
@@ -328,8 +351,8 @@ export default function ClassRingDetail() {
           </section>
           {/* 후기 */}
           <section className={styles.section} id="reviews">
-            <h2>강사 후기</h2>
-            <div className={styles.reviewCard}>
+            <h2>후기</h2>
+            {/* <div className={styles.reviewCard}>
               {reviews.map((r, i) => (
                 <div key={r?.reviewId} className={styles.reviewDiv}>
                   <div className={styles.reviewHeader}>
@@ -367,11 +390,12 @@ export default function ClassRingDetail() {
             {host && (
               <button
                 className={styles.reviewMoreBtn}
-                onClick={() => navigate(`/classRingReviewList/${host.hostId}`)}
+                onClick={() => navigate(`/classRingReviewList/${classId}?className=${encodeURIComponent(classDetail?.name)}`)}
               >
                 더보기
               </button>
-            )}
+            )} */}
+            <ClassRingReviewList classId={classId} />
           </section>
           {/* 문의 */}
           <section className={styles.section} id="questions">

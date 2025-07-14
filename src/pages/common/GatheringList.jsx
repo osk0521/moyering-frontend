@@ -3,7 +3,8 @@ import GatheringCard from '../../components/GatheringCard';
 import styles from './GatheringList.module.css';
 import DatePicker from 'react-datepicker';
 import Header from './Header';
-import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   gatheringListAtom,
@@ -16,7 +17,14 @@ import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom'
 import { categoryListAtom } from '../../atom/classAtom';
 
 export default function GatheringList() {
-    const [selectedDate1, setSelectedDate1] = useState(null);
+  const location = useLocation();
+  const initStartDate = location.state?.today
+  ? new Date(location.state.today)
+  : null;
+  const initCategory1 = location.state?.category1 || '';
+  const initCategory2 = location.state?.category2 || '';
+
+  const [selectedDate1, setSelectedDate1] = useState(null);
   const [selectedDate2, setSelectedDate2] = useState(null);
   const [selectedSido, setSelectedSido] = useState("");
   const [selectedCategory1, setSelectedCategory1] = useState('');
@@ -44,9 +52,24 @@ export default function GatheringList() {
   // useEffect로 최초 1회 호출
   useEffect(() => {
     fetchCategories();
-    fetchGatheringList();
-  }, [currentPage, filters]);
+  }, []);
 
+  // 그 다음 초기 필터 적용
+  useEffect(() => {
+    // 초기 진입 시 항상 fetchClassList 호출되도록 조건 제거
+    setSelectedDate1(initStartDate||null);
+    setSelectedDate2(initStartDate||null);
+    setFilter((prev) => ({
+      ...prev,
+      category1: initCategory1,
+      category2: initCategory2,
+      startDate:initStartDate,
+      endDate:initStartDate
+    }));
+    setCurrentPage(1);
+    fetchGatheringList();
+  }, []);
+  
   const firstCategoryList = Array.from(
     new Map(categoryList.map(item => [item.categoryId, item.categoryName])).entries()
   ).map(([id, name]) => ({ id, name }));
@@ -80,7 +103,8 @@ setCurrentPage(1); // 페이지 초기화
 
 const handlePageChange = (page) => {
   setCurrentPage(page);
-  fetchClassList(); // 새 페이지로 서버 요청
+  fetchGatheringList(); // 새 페이지로 서버 요청
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 //초기화
 const handleReset = () => {
@@ -254,6 +278,7 @@ const handleReset = () => {
         <button className={styles.pageBtn}  onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>〉</button>
       </div>
     </main>
+    <Footer/>
     </>
   );
 }

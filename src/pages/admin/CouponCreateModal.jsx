@@ -202,9 +202,7 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
 
         <div className="modal-footer">
           <div className="modal-action-buttons">
-            <button className="cancel-btn" onClick={onClose}>
-              취소
-            </button>
+       
             <button className="submit-btn" onClick={handleSubmit}>
               생성
             </button>

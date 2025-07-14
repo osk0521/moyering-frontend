@@ -95,7 +95,11 @@
   transition: all 0.3s;
   box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
 }
-
+.status-endedHY{
+  background-color: #d8dadf;
+  color: #111111 !important;
+  border: 1px solid #D1D5DB;
+}
 .reject-btnHY:hover {
   background: linear-gradient(135deg, #d32f2f, #f44336);
   transform: translateY(-3px);
@@ -267,5 +271,9 @@
   color: #666;
 }
 
-/* 수강생 테이블 스타일 */
-.students-table
+
+status-endedHY {
+  background-color: #153b86;
+  color: #6B7280;
+  border: 1px solid #D1D5DB;
+}

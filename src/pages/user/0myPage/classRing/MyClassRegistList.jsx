@@ -133,7 +133,11 @@ export default function MyClassList() {
               <div className={styles.cardLeft}>
                 <img src={`${url}/image?filename=${cls.imageUrl}`} alt={cls.classTitle} className={styles.classImage} />
               </div>
-              <div className={styles.cardRight}>
+              <div className={styles.cardRight} 
+                  onClick={ 
+                    () => navigate(`/class/classRingDetail/${cls.calendarId}`)
+                    }
+              >
                 <div className={styles.cardHeader}>
                   {cls.paymentStatus === "결제완료" && cls.status === "모집중" ? (
                     <span className={styles.statusBadge}>모집중</span>

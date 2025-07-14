@@ -3,7 +3,7 @@ import './TabDescription.css';
 import React from 'react'; // 이 한 줄만 추가!
 import { Editor } from '@toast-ui/editor';
 
-const TabDescription = ({ classData, setClassData }) => {
+const TabDescription = ({ classData, setClassData, registerValidator }) => {
     const editorRef = useRef();
     const editorInstanceRef = useRef();
     const { description } = classData;
@@ -92,6 +92,13 @@ const TabDescription = ({ classData, setClassData }) => {
             editorInstanceRef.current = instance;
         }
     }, [editorRef]);
+
+    useEffect(() => {
+        const { img1,detailDescription } = classData.description;
+        const isValid = img1 && detailDescription;
+        registerValidator(2, () => isValid);
+    }, [classData.description, registerValidator]);
+
     return (
         <div className="KHJ-class-info-box">
             <h3 className="KHJ-section-title">클래스 설명</h3>
@@ -118,12 +125,12 @@ const TabDescription = ({ classData, setClassData }) => {
                         </div>
                     ))}
                 </div>
-                <p className="KHJ-info-text">텍스트를 사용한 대표이미지는 노출이 불가합니다.</p>
+                {/* <p className="KHJ-info-text">텍스트를 사용한 대표이미지는 노출이 불가합니다.</p>
                 <p className="KHJ-img-info-text">
                     권장 사이즈 : 가로 1000px * 세로 1000px<br />
                     최소 사이즈 : 가로 600px * 세로 600px<br />
                     용량 : 10MB이하, 파일유형 : JPG, PNG, 최소 1장 - 최대 5장 등록 가능
-                </p>
+                </p> */}
             </div>
 
             <hr />
@@ -139,7 +146,7 @@ const TabDescription = ({ classData, setClassData }) => {
                     className="KHJ-description-textarea"
                     maxLength="2000"
                 /> */}
-               <div ref={editorRef} />
+                <div ref={editorRef} />
                 <div className="KHJ-footer">
                     <span>{(description.detailDescription || '').length} / 2000</span>
                 </div>

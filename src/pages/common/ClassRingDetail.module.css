@@ -683,3 +683,14 @@
   align-items: center;   
 }
 
+.tagStyle{
+  display: inline-block; /* 가로로 나란히 */
+  padding: 6px 12px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #f58020; /* 테두리 색상 */
+  border-radius: 20px;       /* 둥근 모서리 */
+  background-color: #fff6ef; /* 선택사항: 연한 배경 */
+  color: #f58020;            /* 글씨 색 */
+  font-size: 14px;
+}

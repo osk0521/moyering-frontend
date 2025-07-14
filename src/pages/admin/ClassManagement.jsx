@@ -32,7 +32,7 @@ const ClassManagement = () => {
   const token = useAtomValue(tokenAtom);
   const setToken = useSetAtom(tokenAtom);
 
-  // 상태 관리 - currentPage를 별도로 분리
+  // 상태 관리
   const [filters, setFilters] = useState({
     searchTerm: "",
     statusFilter: [],
@@ -40,7 +40,7 @@ const ClassManagement = () => {
     endDate: ""
   });
 
-  const [currentPage, setCurrentPage] = useState(0); // 별도 state로 분리
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [classData, setClassData] = useState({
     list: [],
@@ -50,16 +50,16 @@ const ClassManagement = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // API 호출 함수 - currentPage를 dependency에 추가
+  // API 호출 함수
   const fetchClassList = useCallback(async () => {
     if (!token) return;
 
-    console.log('API 호출 - 페이지:', currentPage, '필터:', filters); // 디버깅용
+    console.log('API 호출 - 페이지:', currentPage, '필터:', filters);
 
     setLoading(true);
     try {
       const params = {
-        page: currentPage, // classData.currentPage 대신 currentPage 사용
+        page: currentPage,
         size: PAGE_SIZE,
         ...(filters.searchTerm && { keyword: filters.searchTerm }),
         ...(filters.startDate && { fromDate: filters.startDate }),
@@ -69,11 +69,11 @@ const ClassManagement = () => {
         })
       };
 
-      console.log('요청 파라미터:', params); // 디버깅용
+      console.log('요청 파라미터:', params);
 
       const { data } = await myAxios(token, setToken).get("/api/class", { params });
       
-      console.log('응답 데이터:', data); // 디버깅용
+      console.log('응답 데이터:', data);
 
       setClassData({
         list: data.content || [],
@@ -86,12 +86,12 @@ const ClassManagement = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, setToken,filters, currentPage]); // currentPage를 dependency에 추가
+  }, [token, setToken, filters, currentPage]);
 
   // 필터 업데이트 함수
   const updateFilter = useCallback((key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-    setCurrentPage(0); // 필터 변경 시 첫 페이지로
+    setCurrentPage(0);
   }, []);
 
   // 상태 필터 토글
@@ -105,21 +105,22 @@ const ClassManagement = () => {
           ? prev.statusFilter.filter(s => s !== value)
           : [...prev.statusFilter, value]
       }));
-      setCurrentPage(0); // 상태 변경 시 첫 페이지로
+      setCurrentPage(0);
     }
   }, [updateFilter]);
 
-  // 페이지 변경 - currentPage state 사용
+  // 페이지 변경
   const changePage = useCallback((newPage) => {
-    console.log('페이지 변경 시도:', newPage, '현재 페이지:', currentPage, '전체 페이지:', classData.totalPages); // 디버깅용
+    console.log('페이지 변경 시도:', newPage, '현재 페이지:', currentPage, '전체 페이지:', classData.totalPages);
     if (newPage >= 0 && newPage < classData.totalPages && newPage !== currentPage) {
-      console.log('페이지 변경 실행:', currentPage, '->', newPage); // 디버깅용
+      console.log('페이지 변경 실행:', currentPage, '->', newPage);
       setCurrentPage(newPage);
     }
   }, [classData.totalPages, currentPage]);
 
-  // 클래스 상세 이동
-  const navigateToDetail = useCallback((classId) => {
+  // 클래스명 클릭 핸들러 - 상세 페이지로 이동
+  const handleClassNameClick = useCallback((classId) => {
+    console.log('클래스 상세 페이지로 이동:', classId);
     navigate(`/admin/class/${classId}`);
   }, [navigate]);
 
@@ -133,7 +134,6 @@ const ClassManagement = () => {
       setLoading(true);
       await myAxios(token).patch(`/api/class/${classId}/approve`);
       
-      // 성공 시 해당 클래스의 상태를 즉시 업데이트
       setClassData(prev => ({
         ...prev,
         list: prev.list.map(item => 
@@ -152,12 +152,12 @@ const ClassManagement = () => {
     }
   }, [token]);
 
-  // 페이지 번호 생성 (메모이제이션) - currentPage 사용
+  // 페이지 번호 생성
   const pageNumbers = useMemo(() => {
     if (classData.totalPages <= 1) return [0];
     
     const maxVisible = 5;
-    const current = currentPage; // currentPage 사용
+    const current = currentPage;
     let start = Math.max(0, current - Math.floor(maxVisible / 2));
     let end = Math.min(classData.totalPages - 1, start + maxVisible - 1);
     
@@ -166,7 +166,7 @@ const ClassManagement = () => {
     }
     
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }, [currentPage, classData.totalPages]); // currentPage 사용
+  }, [currentPage, classData.totalPages]);
 
   // 데이터 fetch
   useEffect(() => {
@@ -263,23 +263,24 @@ const ClassManagement = () => {
               </tr>
             ) : (
               classData.list.map((item, idx) => (
-                <tr key={item.classId}>
-                  <td>{(currentPage * PAGE_SIZE ) + idx + 1}</td>
+                <tr key={`${item.classId}_${idx}`}>
+                  <td>{(currentPage * PAGE_SIZE) + idx + 1}</td>
                   <td>{item.firstCategory}</td>
                   <td>{item.secondCategory}</td>
                   <td className="instructor-idHY">{item.hostUserName}</td>
                   <td>{item.hostName}</td>
                   <td className="class-nameHY">
-                    <a
-                      href={`/admin/class/${item.classId}`}
-                      className="class-name-linkHY"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateToDetail(item.classId);
+                    <span
+                      className="class-name-clickable"
+                      onClick={() => handleClassNameClick(item.classId)}
+                      style={{ 
+                        cursor: 'pointer', 
+                        color: '#3b82f6', 
+                        textDecoration: 'underline' 
                       }}
                     >
                       {item.className}
-                    </a>
+                    </span>
                   </td>
                   <td className="priceHY">{item.price?.toLocaleString()}원</td>
                   <td className="text-center">{item.recruitMin}명</td>

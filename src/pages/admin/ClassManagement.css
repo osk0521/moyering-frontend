@@ -277,3 +277,15 @@ status-endedHY {
   color: #6B7280;
   border: 1px solid #D1D5DB;
 }
+
+.btn-processHY {
+  background: linear-gradient(135deg, #FFB22C 0%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+}

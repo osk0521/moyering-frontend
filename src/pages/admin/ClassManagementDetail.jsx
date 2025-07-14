@@ -33,7 +33,7 @@ const ClassManagementDetail = () => {
     if (!window.confirm("클래스를 승인하시겠습니까?")) return;
     
     try {
-      await myAxios(token, setToken).post(`/api/class/${classId}/approve`);
+      await myAxios(token, setToken).patch(`/api/class/${classId}/approve`);
       alert("클래스가 승인되었습니다.");
       // 승인 후 데이터 다시 조회
       fetchClassDetail();
@@ -47,7 +47,7 @@ const ClassManagementDetail = () => {
     if (!window.confirm("클래스를 거절하시겠습니까?")) return;
     
     try {
-      await myAxios(token, setToken).post(`/api/class/${classId}/reject`);
+      await myAxios(token, setToken).patch(`/api/class/${classId}/reject`);
       alert("클래스가 거절되었습니다.");
       // 거절 후 데이터 다시 조회
       fetchClassDetail();
@@ -84,29 +84,40 @@ const ClassManagementDetail = () => {
   // 키워드를 배열로 변환 (콤마로 구분된 문자열을 배열로)
   const keywordsArray = classData.keywords ? classData.keywords.split(',').map(k => k.trim()) : [];
 
+  // 디버깅을 위한 콘솔 로그
+  console.log('현재 클래스 상태:', classData.processStatus);
+  console.log('승인대기 상태인지 체크:', classData.processStatus === "승인대기");
+
   return (
     <Layout>
+    <div className = "page-titleHY">
+      <h1>클래스 상세</h1>
+    </div>
       <div className="class-detail-container">
         <div className="header">
-          <h2>{classData.hostName}께 땡기시죠?</h2>
+          <h5>{classData.className}</h5>
           <div className="action-buttons">
-            <button className="btn-approve" onClick={handleApprove}>승인</button>
-            <button className="btn-reject" onClick={handleReject}>거절</button>
-            <button className="btn-close" onClick={() => navigate("/admin/class")}>닫기</button>
+            {/* 승인대기 상태일 때만 승인/거절 버튼 표시 */}
+            {classData.processStatus && classData.processStatus.trim() === "승인대기" ? (
+              <>
+                <button className="btn-approve" onClick={handleApprove}>승인</button>
+                <button className="btn-reject" onClick={handleReject}>거절</button>
+              </>
+            ) : null}
           </div>
         </div>
 
         <div className="download-links">
-          <div>포트폴리오 
+          <div>포트폴리오 : 
             {classData.portfolioName ? (
-              <a href={`/api/files/download/${classData.portfolioName}`} download>다운로드</a>
+              <a href={`/api/files/download/${classData.portfolioName}`} download> 다운로드</a>
             ) : (
               <span> (파일 없음)</span>
             )}
           </div>
-          <div>강의자료 
+          <div>강의자료 :
             {classData.materialName ? (
-              <a href={`/api/files/download/${classData.materialName}`} download>다운로드</a>
+              <a href={`/api/files/download/${classData.materialName}`} download> 다운로드</a>
             ) : (
               <span> (파일 없음)</span>
             )}
@@ -114,6 +125,7 @@ const ClassManagementDetail = () => {
         </div>
 
         <div className="class-summary">
+          <div><strong>클래스 ID:</strong> {classData.classId}</div>
           <div><strong>카테고리:</strong> {classData.firstCategory} &gt; {classData.secondCategory}</div>
           <div><strong>가격:</strong> {classData.price?.toLocaleString()} 원</div>
           <div><strong>클래스 일자:</strong> {classData.startDate} ~ {classData.endDate}</div>
@@ -122,7 +134,7 @@ const ClassManagementDetail = () => {
           <div><strong>상태:</strong> <span className="badge">{classData.processStatus}</span></div>
         </div>
 
-        <h3>&lt; 클래스 정보 &gt;</h3>
+        <h6>&lt; 클래스 정보 &gt;</h6>
         <table className="info-table">
           <thead>
             <tr><th>카테고리</th><th>클래스명</th><th>장소명</th><th>주소</th><th>시작일</th><th>종료일</th><th>현재인원</th></tr>
@@ -140,21 +152,22 @@ const ClassManagementDetail = () => {
           </tbody>
         </table>
 
-        <h3>&lt; 상세 설명 &gt;</h3>
+        <h>&lt; 상세 설명 &gt;</h>
         <div className="description-box">{classData.description || "(내용 없음)"}</div>
 
         <div className="bottom-section">
           <div className="schedule-section">
-            <h4>&lt; 스케줄 &gt;</h4>
+            <h6>&lt; 스케줄 &gt;</h6>
             <div className="schedule-item">
               시작시간: {classData.scheduleStart || "미설정"}
               <br />
               종료시간: {classData.scheduleEnd || "미설정"}
+              , 상태 : {classData.status || "미설정"}
             </div>
           </div>
 
           <div className="extra-info-section">
-            <h4>&lt; 부가정보 &gt;</h4>
+            <h6>&lt; 부가정보 &gt;</h6>
             <table>
               <thead><tr><th>포함 사항</th><th>준비물</th><th>검색 키워드</th></tr></thead>
               <tbody>
@@ -168,7 +181,7 @@ const ClassManagementDetail = () => {
           </div>
         </div>
 
-        <h3>&lt; 수강생 목록 &gt;</h3>
+        <h6>&lt; 수강생 목록 &gt;</h6>
         {classData.students && classData.students.length > 0 ? (
           <table className="students-table">
             <thead>

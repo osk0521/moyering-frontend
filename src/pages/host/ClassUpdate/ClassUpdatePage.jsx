@@ -24,9 +24,9 @@ const ClassUpdatePage = () => {
   const user = useAtomValue(userAtom);
   const navigate = useNavigate();
   const [token, setToken] = useAtom(tokenAtom);
-  const { classId,calendarId } = useParams();
+  const { classId, calendarId } = useParams();
   const [classData, setClassData] = useState(null);
-  
+
 
   useEffect(() => {
     if (token && classId) {
@@ -44,7 +44,7 @@ const ClassUpdatePage = () => {
               category1: host.category1 || '',
               category2: host.category2 || '',
               subCategoryId: host.subCategoryId || '',
-              categoryId:host.categoryId || '',
+              categoryId: host.categoryId || '',
               name: host.name || '',
               locName: host.locName || '',
               addr: host.addr || '',
@@ -64,11 +64,11 @@ const ClassUpdatePage = () => {
               imgName3: host.imgName3 || null,
               imgName4: host.imgName4 || null,
               imgName5: host.imgName5 || null,
-              img1:null,
-              img2:null,
-              img3:null,
-              img4:null,
-              img5:null,
+              img1: null,
+              img2: null,
+              img3: null,
+              img4: null,
+              img5: null,
               detailDescription: host.detailDescription || '',
             },
             extraInfo: {
@@ -147,7 +147,7 @@ const ClassUpdatePage = () => {
     };
 
     // 일반 필드 추가
-    appendIfExists("classId",classId);
+    appendIfExists("classId", classId);
     appendIfExists("addr", reqData.addr);
     appendIfExists("category1", reqData.category1);
     appendIfExists("category2", reqData.category2);
@@ -166,11 +166,11 @@ const ClassUpdatePage = () => {
     }
 
     // 이미지
-    reqData.img1!=null && formData.append("img1", reqData.img1);
-    reqData.img2!=null && formData.append("img2", reqData.img2);
-    reqData.img3!=null && formData.append("img3", reqData.img3);
-    reqData.img4!=null && formData.append("img4", reqData.img4);
-    reqData.img5!=null && formData.append("img5", reqData.img5);
+    reqData.img1 != null && formData.append("img1", reqData.img1);
+    reqData.img2 != null && formData.append("img2", reqData.img2);
+    reqData.img3 != null && formData.append("img3", reqData.img3);
+    reqData.img4 != null && formData.append("img4", reqData.img4);
+    reqData.img5 != null && formData.append("img5", reqData.img5);
 
     // 나머지 문자열 필드
     appendIfExists("detailDescription", reqData.detailDescription);
@@ -179,7 +179,9 @@ const ClassUpdatePage = () => {
     appendIfExists("latitude", reqData.latitude);
     appendIfExists("locName", reqData.locName);
     appendIfExists("longitude", reqData.longitude);
-    reqData.material && formData.append("material", reqData.material);
+    if (reqData.material && typeof reqData.material !== 'string') {
+      formData.append("material", reqData.material);
+    }
     appendIfExists("name", reqData.name);
     appendIfExists("preparation", reqData.preparation);
     appendIfExists("recruitMax", reqData.recruitMax);

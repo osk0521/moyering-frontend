@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from "jotai";
 import React, { useEffect, useState } from "react";
-import { BiChevronDown, BiChevronRight } from "react-icons/bi";
+import { BiChevronDown, BiChevronRight,BiChevronUp  } from "react-icons/bi";
 import { CiCalendar, CiClock1, CiHeart, CiLocationOn } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { GoPeople } from "react-icons/go";
@@ -342,37 +342,83 @@ export default function GatheringDetail() {
   };
 
   // HTML 콘텐츠를 지정된 길이로 자르는 함수
-  const truncateHtmlContent = (html, maxLength) => {
-    const textContent = stripHtmlTags(html);
-    if (textContent.length <= maxLength) {
-      return html;
+ const truncateHtmlContent = (html, maxLength) => {
+  const textContent = stripHtmlTags(html);
+  if (textContent.length <= maxLength) {
+    return html;
+  }
+
+  // DOM 파싱하여 HTML 구조 유지하면서 텍스트 자르기
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const walker = document.createTreeWalker(
+    doc.body,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+
+  let currentLength = 0;
+  let textNode;
+  let truncated = false;
+  
+  while (textNode = walker.nextNode()) {
+    const nodeText = textNode.textContent;
+    if (currentLength + nodeText.length > maxLength) {
+      // 현재 노드에서 잘라야 하는 경우
+      const remainingLength = maxLength - currentLength;
+      textNode.textContent = nodeText.substring(0, remainingLength) + "...";
+      truncated = true;
+      
+      // 이후 모든 노드들을 제거 (텍스트 노드와 엘리먼트 노드 모두)
+      let nextNode = walker.nextNode();
+      while (nextNode) {
+        const nodeToRemove = nextNode;
+        nextNode = walker.nextNode();
+        if (nodeToRemove.parentNode) {
+          nodeToRemove.parentNode.removeChild(nodeToRemove);
+        }
+      }
+      
+      // 닫히지 않은 태그들을 정리하기 위해 현재 노드의 부모들을 확인
+      let currentNode = textNode.parentNode;
+      while (currentNode && currentNode !== doc.body) {
+        // 현재 노드 이후의 모든 형제 노드들을 제거
+        let sibling = currentNode.nextSibling;
+        while (sibling) {
+          const siblingToRemove = sibling;
+          sibling = sibling.nextSibling;
+          if (siblingToRemove.parentNode) {
+            siblingToRemove.parentNode.removeChild(siblingToRemove);
+          }
+        }
+        currentNode = currentNode.parentNode;
+      }
+      break;
     }
+    currentLength += nodeText.length;
+  }
 
-    // 텍스트가 길면 간단하게 처리
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    const textNodes = doc.body.textContent || "";
-    const truncatedText = textNodes.substring(0, maxLength) + "...";
-
-    // 기본적인 HTML 구조 유지하면서 텍스트만 자르기
-    return `<p>${truncatedText}</p>`;
-  };
+  return doc.body.innerHTML;
+};
 
   // 미리보기 텍스트 길이 설정 (문자 수 기준)
-  const PREVIEW_LENGTH = 500;
-
   // 전체 상세 설명 텍스트 (gatheringContent 사용)
   const fullDescription = gatheringData.gatheringContent || "";
-
   // HTML 태그를 제거한 순수 텍스트로 길이 판단
   const plainTextContent = stripHtmlTags(fullDescription);
+  const hasImageTags = (htmlContent) => {
+    const imgTagRegex = /<img[^>]*>/i;
+    return imgTagRegex.test(htmlContent);
+  };
+  const PREVIEW_LENGTH = hasImageTags(fullDescription) ? 100 : 500;
 
   // 더보기 버튼을 보여줄지 결정 (순수 텍스트 기준)
   const shouldShowMoreButton = plainTextContent.length > PREVIEW_LENGTH;
 
   // 미리보기용 HTML 콘텐츠
-  const previewHtmlContent = shouldShowMoreButton
-    ? truncateHtmlContent(fullDescription, PREVIEW_LENGTH)
-    : fullDescription;
+    const previewHtmlContent = shouldShowMoreButton
+      ? truncateHtmlContent(fullDescription, PREVIEW_LENGTH)
+      : fullDescription;
 
   // 날짜 포맷팅 함수
   const formatDate = (dateString) => {
@@ -449,10 +495,11 @@ export default function GatheringDetail() {
   };
 
   const isMeetingDatePassed = () => {
+    
     if (!gatheringData.meetingDate) return false;
     const now = new Date();
     const meetingDate = new Date(gatheringData.meetingDate);
-    return now > meetingDate;
+    return now > meetingDate&& now==meetingDate;
   };
 
   const isMaxAttendeesReached = () => {
@@ -565,8 +612,6 @@ export default function GatheringDetail() {
                 <p className="mb-4 text-gray-700 leading-relaxed">
                   {gatheringData.intrOnln}
                 </p>
-
-                {/* Toast UI Editor로 작성된 내용을 HTML로 렌더링 */}
                 {!isExpanded && shouldShowMoreButton && (
                   <>
                     <div
@@ -575,9 +620,25 @@ export default function GatheringDetail() {
                     />
                     <button
                       className="GatheringDetail_more_osk"
-                      onClick={handleExpandClick}
+                      onClick={() => setIsExpanded(true)}
                     >
                       더보기 <BiChevronDown />
+                    </button>
+                  </>
+                )}
+                {(isExpanded && !shouldShowMoreButton) && (
+                  <>
+                    <div
+                      className="text-gray-700 leading-relaxed"
+                      dangerouslySetInnerHTML={{
+                        __html: gatheringData.gatheringContent,
+                      }}
+                    />
+                    <button
+                      className="GatheringDetail_more_osk mt-4"
+                      onClick={() => setIsExpanded(false)}
+                    >
+                      접기 <BiChevronUp />
                     </button>
                   </>
                 )}
@@ -847,7 +908,9 @@ export default function GatheringDetail() {
                   <GoPeople />
                 </span>
                 <span>
-                  {gatheringData.acceptedCount}명 참가 중 (최소 {gatheringData.minAttendees} 명, 최대 {gatheringData.maxAttendees}명)
+                  {gatheringData.acceptedCount}명 참가 중 (최소 {gatheringData.minAttendees}명
+                  {gatheringData.maxAttendees ? `, 최대 ${gatheringData.maxAttendees}명` : ''}
+                  )
                 </span>
               </div>
 

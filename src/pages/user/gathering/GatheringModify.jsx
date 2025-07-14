@@ -676,9 +676,9 @@ export default function GatheringModify() {
     console.log("모임 수정 요청 시작...");
     const response = await myAxios(token).post(`/user/modifyGathering`, formDataToSend);
     console.log("모임 수정 성공:", response);
-    alert("모임이 성공적으로 수정되었습니다!");
     navigate(`/gatheringDetail/${gatheringId}`);
   } catch (err) {
+    alert("게더링 수정에 실패했습니다. 다시 수정해주세요.");
     console.error("모임 수정 실패:", err);
   }
 };

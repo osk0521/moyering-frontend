@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { myAxios, url } from '../../../config';
 import './HostFeedPage.css';
 import Header from '../../common/Header';
@@ -11,73 +10,31 @@ import { tokenAtom, userAtom } from '../../../atoms';
 export default function HostFeedPage() {
     const navigate = useNavigate();
     const [category, setCategory] = useState('');
-    const [offset, setOffset] = useState(0);
-    const [size] = useState(10);
     const [feeds, setFeeds] = useState([]);
-    const [hasMore, setHasMore] = useState(true);
     const [menuOpenId, setMenuOpenId] = useState(null);
     const [imageIndexes, setImageIndexes] = useState({});
     const user = useAtomValue(userAtom);
     const token = useAtomValue(tokenAtom);
     const menuRef = useRef(null);
-    const loaderRef = useRef(null);
 
-    // 데이터 요청
-    const { refetch, isFetching } = useQuery({
-        queryKey: ['hostFeeds'],
-        enabled: false,
-        queryFn: async () => {
-            const params = new URLSearchParams({ offset, size });
-            if (category) params.append('category', category);
+    // ✅ 단순한 데이터 요청 (카테고리 변경 시 포함)
+    const fetchFeeds = async () => {
+        try {
+            const params = new URLSearchParams();
+            params.append("offset", 0);
+            params.append("size", 100); // 원하는 만큼 충분히 큰 수
+            if (category) params.append("category", category);
+
             const res = await myAxios().get(`/feedHost?${params}`);
-            return res.data;
-        },
-        onSuccess: (newData) => {
-            if (offset === 0) {
-                setFeeds(newData);
-            } else {
-                setFeeds(prev => [...prev, ...newData]);
-            }
-            setHasMore(newData.length === size);
+            setFeeds(res.data);
+        } catch (err) {
+            console.error("피드 조회 실패", err);
         }
-    });
+    };
 
     useEffect(() => {
-        refetch();
-    }, [offset]);
-
-    useEffect(() => {
-        setFeeds([]);
-        setOffset(0);
-        setHasMore(true);
-        // 🔥 이걸 추가해줘야 함
-        refetch();
+        fetchFeeds();
     }, [category]);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(entries => {
-            const target = entries[0];
-            if (target.isIntersecting) {
-                setLoadTrigger(true);
-            }
-        }, { threshold: 1.0 });
-
-        const current = loaderRef.current;
-        if (current) observer.observe(current);
-
-        return () => {
-            if (current) observer.unobserve(current);
-        };
-    }, []); // 👈 최초 1번만 실행
-
-    const [loadTrigger, setLoadTrigger] = useState(false);
-
-    useEffect(() => {
-        if (loadTrigger && hasMore && !isFetching) {
-            setOffset(prev => prev + size);
-        }
-        setLoadTrigger(false); // 재감지 방지
-    }, [loadTrigger, hasMore, isFetching]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -91,9 +48,8 @@ export default function HostFeedPage() {
         };
     }, [menuOpenId]);
 
-
-
     const getFeedImages = feed => [feed.img1, feed.img2, feed.img3, feed.img4, feed.img5].filter(Boolean);
+
 
     return (
         <>
@@ -227,17 +183,10 @@ export default function HostFeedPage() {
                             );
                         })}
 
-                        {/* 무한스크롤 트리거 */}
-                        {hasMore && <div ref={loaderRef} style={{ height: '40px' }} />}
+                       
                     </div>
 
-                    {/* 로딩 or 없음 안내 */}
-                    {isFetching && feeds.length === 0 && (
-                        <p style={{ textAlign: 'center', margin: '1rem' }}>로딩 중...</p>
-                    )}
-                    {!isFetching && feeds.length === 0 && (
-                        <p style={{ textAlign: 'center', margin: '1rem' }}>게시물이 없습니다.</p>
-                    )}
+                 
                 </div>
             </div>
         </>

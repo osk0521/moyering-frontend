@@ -266,8 +266,15 @@ export default function MyAlarmList() {
   };
 
   // 날짜 변경 핸들러
-  const handleDateChange = (dates) => {
+  const onChange = useCallback((dates) => {
     const [start, end] = dates;
+    if (start && end) {
+      if (end < start) {
+        setStartDate(start);
+        setEndDate(start);
+        return;
+      }
+    }
     setStartDate(start);
     setEndDate(end);
     setSearch(prev => ({
@@ -276,12 +283,17 @@ export default function MyAlarmList() {
       endDate: end ? end.toISOString().split('T')[0] : '',
       page: 1
     }));
-  };
+  }, []);
 
   // 페이지 변경 핸들러
   const handlePageChange = (page) => {
     setSearch(prev => ({ ...prev, page }));
   };
+  const clearDates = useCallback(() => {
+    setStartDate(null);
+    setEndDate(null);
+  }, []);
+
 
   return (
     <div>
@@ -316,7 +328,7 @@ export default function MyAlarmList() {
                 <div className="MyAlarmList_date_range_container_osk">
                   <DatePicker
                     selected={selectedDate}
-                    onChange={handleDateChange}
+                    onChange={onChange}
                     startDate={startDate}
                     endDate={endDate}
                     selectsRange
@@ -336,6 +348,16 @@ export default function MyAlarmList() {
                       />
                     }
                   />
+                  {(startDate || endDate) && (
+                    <button
+                      type="button"
+                      className="MyAlarmList_clear-button_osk"
+                      onClick={clearDates}
+                      aria-label="Clear dates"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -414,7 +436,7 @@ export default function MyAlarmList() {
                       <td className="MyAlarmList_table_cell_osk">{alarm.senderNickname}</td>
                       <td className="MyAlarmList_table_cell_osk">{alarm.alarmDate}</td>
                       <td className="MyAlarmList_table_cell_osk">
-                       <button className={`MyAlarmList_status_badge_osk ${alarm.isRead ? 'MyAlarmList_status_read_osk' : 'MyAlarmList_status_unread_osk'}`}
+                        <button className={`MyAlarmList_status_badge_osk ${alarm.isRead ? 'MyAlarmList_status_read_osk' : 'MyAlarmList_status_unread_osk'}`}
                           onClick={() => handleConfirmAlarmStatus(alarm.alarmId)}
                           disabled={alarm.isRead}
                         >
@@ -427,8 +449,6 @@ export default function MyAlarmList() {
               </tbody>
             </table>
           </div>
-
-          {/* Pagination */}
           {pageInfo.allPage > 1 && (
             <div className="MyAlarmList_pagination_osk">
               {pageInfo.curPage > 1 && (

@@ -449,8 +449,6 @@ export default function MyAlarmList() {
               </tbody>
             </table>
           </div>
-
-          {/* Pagination */}
           {pageInfo.allPage > 1 && (
             <div className="MyAlarmList_pagination_osk">
               {pageInfo.curPage > 1 && (

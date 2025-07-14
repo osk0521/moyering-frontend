@@ -476,6 +476,8 @@ button.GatheringDetail_more_osk {
   flex-shrink: 0;
   margin-left: auto;
   text-align: right;
+  position: absolute;
+  right: 176px;
 }
 /* 멤버 그리드 */
 .GatheringDetail_section-header_osk {
@@ -1035,17 +1037,13 @@ button.GatheringDetail_more_osk {
 
 .GatheringDetail_answer-badge_osk {
   padding: 2px 8px;
-  font-size: 11px;
   border-radius: 4px;
   font-weight: bold;
   font-size: 13px;
   border-radius: 4px;
-  padding: 4px 8px;
-  padding: 2px 8px;
-  background: #28a745;
-  color: white;
-  font-size: 11px;
-  border-radius: 4px;
+   background-color: #d4edda;
+  color: #155724;
+  display: inline-block;
 }
 .GatheringDetail_questions-grid-header_osk {
   background-color: #f7f4ec;
@@ -1456,15 +1454,6 @@ svg.GatheringDetail_liked_osk{
   justify-content: space-between;
 }
 
-.GatheringDetail_answer-badge_osk {
-  background-color: #d4edda;
-  color: #155724;
-  font-weight: bold;
-  font-size: 13px;
-  border-radius: 4px;
-  padding: 4px 8px;
-}
-
 .GatheringDetail_answer-content_osk {
   font-size: 14px;
   color: #333;
@@ -1484,16 +1473,6 @@ svg.GatheringDetail_liked_osk{
   align-items: center;
   gap: 12px;
   margin-bottom: 8px;
-}
-
-.GatheringDetail_answer-badge_osk {
-  display: inline-block;
-  padding: 4px 8px;
-  background-color: #28a745;
-  color: white;
-  font-weight: 500;
-  border-radius: 4px;
-  font-size: 13px;
 }
 
 .GatheringDetail_answer-date_osk {

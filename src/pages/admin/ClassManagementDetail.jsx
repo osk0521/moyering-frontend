@@ -14,12 +14,26 @@ const ClassManagementDetail = () => {
   const [classData, setClassData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // 상태에 따른 CSS 클래스 반환 함수
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "승인대기": return "warning";
+      case "모집중": return "success";
+      case "모집마감": return "info";
+      case "종료": return "secondary";
+      case "폐강": 
+      case "거절": return "danger";
+      default: return "";
+    }
+  };
+
   const fetchClassDetail = async () => {
     if (!classId) return;
     setLoading(true);
     try {
       const response = await myAxios(token, setToken).get(`/api/class/${classId}/detail`);
       setClassData(response.data);
+      console.log("받아온 클래스 데이터:", response.data); // 디버깅용
     } catch (error) {
       console.error("클래스 상세 데이터 로딩 실패:", error);
       alert("클래스 정보를 불러오는데 실패했습니다.");
@@ -86,13 +100,13 @@ const ClassManagementDetail = () => {
 
   // 디버깅을 위한 콘솔 로그
   console.log('현재 클래스 상태:', classData.processStatus);
-  console.log('승인대기 상태인지 체크:', classData.processStatus === "승인대기");
+  console.log('스케줄 데이터:', classData.schedules);
 
   return (
     <Layout>
-    <div className = "page-titleHY">
-      <h1>클래스 상세</h1>
-    </div>
+      <div className="page-titleHY">
+        <h1>클래스 상세</h1>
+      </div>
       <div className="class-detail-container">
         <div className="header">
           <h5>{classData.className}</h5>
@@ -152,18 +166,55 @@ const ClassManagementDetail = () => {
           </tbody>
         </table>
 
-        <h>&lt; 상세 설명 &gt;</h>
+        <h6>&lt; 상세 설명 &gt;</h6>
         <div className="description-box">{classData.description || "(내용 없음)"}</div>
 
         <div className="bottom-section">
           <div className="schedule-section">
-            <h6>&lt; 스케줄 &gt;</h6>
-            <div className="schedule-item">
-              시작시간: {classData.scheduleStart || "미설정"}
-              <br />
-              종료시간: {classData.scheduleEnd || "미설정"}
-              , 상태 : {classData.status || "미설정"}
-            </div>
+            <h6>&lt; 스케줄 목록 &gt;</h6>
+            {classData.schedules && classData.schedules.length > 0 ? (
+              <table className="schedule-table">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>일정 ID</th>
+                    <th>클래스 일자</th>
+                    <th>시작시간</th>
+                    <th>종료시간</th>
+                    <th>상태</th>
+                    <th>등록 인원</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {classData.schedules.map((schedule, idx) => (
+                    <tr key={idx}>
+                      <td>{idx + 1}</td>
+                      <td>{schedule.calendarId}</td>
+                      <td>{schedule.startDate}</td>
+                      <td>{classData.scheduleStart || "미설정"}</td>
+                      <td>{classData.scheduleEnd || "미설정"}</td>
+                      <td>
+                        <span className={`badge ${getStatusClass(schedule.status)}`}>
+                          {schedule.status}
+                        </span>
+                      </td>
+                      <td>{schedule.registeredCount || 0} / {classData.recruitMax}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="no-schedules">
+                <p>등록된 일정이 없습니다.</p>
+                <div className="schedule-item">
+                  시작시간: {classData.scheduleStart || "미설정"}
+                  <br />
+                  종료시간: {classData.scheduleEnd || "미설정"}
+                  <br />
+                  상태: {classData.processStatus || "미설정"}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="extra-info-section">
@@ -186,23 +237,24 @@ const ClassManagementDetail = () => {
           <table className="students-table">
             <thead>
               <tr>
+                <th>No.</th>
                 <th>회원 ID</th>
                 <th>이름</th>
                 <th>연락처</th>
                 <th>이메일</th>
                 <th>등록일</th>
-                <th>상태</th>
               </tr>
             </thead>
             <tbody>
               {classData.students.map((student, idx) => (
                 <tr key={idx}>
-                  <td>{student.userId}</td>
+                   <td>{idx + 1}</td>
+                       <td>{student.userId}</td>
+                  {/* <td>{student.username}</td> */}
                   <td>{student.name}</td>
                   <td>{student.phone}</td>
                   <td>{student.email}</td>
                   <td>{student.regDate}</td>
-                  <td><span className="badge success">{student.status}</span></td>
                 </tr>
               ))}
             </tbody>

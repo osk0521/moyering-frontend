@@ -12,6 +12,7 @@ export default function GatheringCard({ gatherInfo, onClick  }) {
   const gatherLikes = useAtomValue(gatheringLikesAtom);
   const [token,setToken] = useAtom(tokenAtom);
   const gatheringId = gatherInfo.gatheringId;
+console.log('bg-url:', `${url}/image?filename=${gatherInfo.thumbnailFileName}`);
 
   //찜하기
   const [isLiked, setIsLiked] = useState(false);
@@ -40,7 +41,7 @@ export default function GatheringCard({ gatherInfo, onClick  }) {
       <div
         className={styles.cardImage}
         style={{
-              backgroundImage: `url(${url}/image?filename=${gatherInfo.thumbnailFileName})`,
+              backgroundImage: `url(${url}/image?filename=${encodeURIComponent(gatherInfo.thumbnailFileName)})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}

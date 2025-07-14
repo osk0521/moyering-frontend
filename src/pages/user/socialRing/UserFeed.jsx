@@ -115,12 +115,16 @@ export default function UserFeed() {
       <Header />
       <div className="KYM-userfeed-container">
         <div className="KYM-userfeed-header">
-          <img className="KYM-userfeed-avatar" src={`${url}/iupload/${user.profile}`} alt="프로필" />
+          <img
+            className="KYM-userfeed-avatar"
+            src={user.profile ? `${url}/iupload/${user.profile}` : '/profile.png'}
+            alt="프로필"
+          />
           <div className="KYM-userfeed-info">
             <div className="KYM-userfeed-name-line">
               <h2 className="KYM-userfeed-nickname">{user.nickname}</h2>
               {feeds.length > 0 && feeds[0].badgeImg && (
-                <img className="KYM-userfeed-badge" src={`/${feeds[0].badgeImg}`} alt="배지" />
+                <img className="KYM-userfeed-badge" src={`/${user.badgeImg}`} alt="배지" />
               )}
             </div>
             <p className="KYM-userfeed-intro">
@@ -130,7 +134,9 @@ export default function UserFeed() {
             </p>
             <div className="KYM-userfeed-action-buttons">
               <FollowButton targetUserId={user.userId} className="KYM-userfeed-follow-btn" />
-              <button className="KYM-userfeed-btn">메시지</button>
+              <button className="KYM-userfeed-btn" onClick={() => navigate(`/user/chat?receiverId=${user.userId}`)}>
+                DM
+              </button>
             </div>
             <ul className="KYM-userfeed-stat-list">
               <li><strong>{feedCount}</strong><span>게시물</span></li>

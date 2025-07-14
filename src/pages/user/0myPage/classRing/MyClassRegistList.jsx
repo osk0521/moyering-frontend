@@ -242,36 +242,57 @@ export default function MyClassList() {
       </section>
       </main>
       <Footer />
-      {/* ===== inline Modal ===== */}
       {modalOpen && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setModalOpen(false)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              className={styles.modalClose}
-              onClick={() => setModalOpen(false)}
-            >
-              ×
-            </button>
-            <h3>결제 내역</h3>
-            <ul className={styles.modalList}>
-              <li>상품명: {modalData.classTitle}</li>
-              <li>결제일시: {new Date(modalData.paidAt).toLocaleString()}</li>
-              <li>결제금액: {modalData.amount.toLocaleString()}원</li>
-              <li>결제수단: {modalData.paymentType}</li>
-              <li>주문번호: {modalData.orderNo}</li>
-              {modalData.canceledAt && (
-                <li>취소일시: {new Date(modalData.canceledAt).toLocaleString()}</li>
-              )}
-            </ul>
+        <div className={styles.modalBackdrop} onClick={() => setModalOpen(false)}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={() => setModalOpen(false)}>×</button>
+            <h3 className={styles.modalTitle}>결제 내역</h3>
+            
+            <div className={styles.modalRow}>
+              <span>클래스명</span>
+              <span>{modalData.classTitle}</span>
+            </div>
+            <div className={styles.modalRow}>
+              <span>결제 시간</span>
+              <span>{new Date(modalData.paidAt).toLocaleString()}</span>
+            </div>
+            <div className={styles.modalRow}>
+              <span>결제 정보</span>
+              <span>{modalData.paymentType}</span>
+            </div>
+
+            <hr className={styles.modalDivider}/>
+
+
+            {modalData.couponName!=="쿠폰없음" && (
+              <>
+              <div className={styles.modalRow}>
+                <span>상품 금액</span>
+                <span className={styles.blue}>₩{modalData.classPrice?.toLocaleString() || '—'}원</span>
+              </div>
+              <div className={styles.modalRow}>
+                <span>할인 ({modalData.couponName} 적용)</span>
+                <span className={styles.red}>
+                  -₩
+                  {(
+                    (modalData.classPrice ?? 0) - (modalData.amount ?? 0)
+                  ).toLocaleString()}원
+                </span>
+              </div>
+              </>
+            )}
+
+
+            <hr className={styles.modalDivider}/>
+
+            <div className={`${styles.modalRow} ${styles.totalRow}`}>
+              <span>최종 결제 금액</span>
+              <span className={styles.bold}>₩{modalData.amount.toLocaleString()}</span>
+            </div>
           </div>
         </div>
       )}
+
     </>
   );
 }

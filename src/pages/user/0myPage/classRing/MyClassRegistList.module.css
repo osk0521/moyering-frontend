@@ -270,35 +270,58 @@
 
 
 /* 결제내역 모달 */
+/* modal 기본 */
 .modalBackdrop {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
+  inset: 0;
+  background: rgba(0,0,0,0.3);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 .modalContent {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
+  background: #fff9e6;           /* 연한 노란 배경 */
+  border-radius: 12px;           /* 둥근 모서리 */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  padding: 1.5rem 2rem;
+  width: 360px;
   position: relative;
-  width: 320px;
 }
 .modalClose {
   position: absolute;
-  top: 8px; right: 8px;
-  border: none;
-  background: none;
-  font-size: 1.2rem;
-  cursor: pointer;
+  top: 12px; right: 12px;
+  border: none; background: none;
+  font-size: 1.2rem; cursor: pointer;
 }
-.modalList {
-  list-style: none;
-  padding: 0;
-  margin-top: 1rem;
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
-.modalList li {
+
+/* 항목 행 */
+.modalRow {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+.modalDivider {
+  border: none;
+  border-top: 1px solid #ffe6a1;
+  margin: 0.75rem 0;
+}
+.totalRow {
+  margin-top: 0.5rem;
+}
+.bold {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.red {
+  color: #d72638;
+}
+.blue {
+  color: #2f80ed;
 }

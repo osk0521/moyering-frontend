@@ -908,7 +908,9 @@ export default function GatheringDetail() {
                   <GoPeople />
                 </span>
                 <span>
-                  {gatheringData.acceptedCount}명 참가 중 (최소 {gatheringData.minAttendees} 명, 최대 {gatheringData.maxAttendees}명)
+                  {gatheringData.acceptedCount}명 참가 중 (최소 {gatheringData.minAttendees}명
+                  {gatheringData.maxAttendees ? `, 최대 ${gatheringData.maxAttendees}명` : ''}
+                  )
                 </span>
               </div>
 

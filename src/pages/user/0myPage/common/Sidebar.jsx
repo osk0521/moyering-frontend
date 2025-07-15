@@ -4,7 +4,7 @@ import './Sidebar.css';
 // import avatarImg from '../icons/avatar.jpg'; // 기본 아바타 이미지
 import { useLocation, useNavigate } from "react-router-dom";
 import { tokenAtom, userAtom } from "../../../../atoms";
-import { myAxios ,url } from "../../../../config";
+import { myAxios, url } from "../../../../config";
 import { useSetAtom, useAtomValue, useAtom } from "jotai";
 
 
@@ -33,12 +33,13 @@ export default function Sidebar() {
                 <div className="KYM-member-box">
                     <img
                         className="KYM-member-avatar"
+                        // src={user?.profile ? `${url}/iupload/${user.profile}`: '/profile.png'}
                         src={
-                        user.profile
-                            ? user.profile.startsWith("http")
-                            ? user.profile
-                            : `${url}/image?filename=${user.profile}`
-                            : '/profile.png'
+                            user.profile
+                                ? user.profile.startsWith("http")
+                                    ? user.profile
+                                    : `${url}/image?filename=${user.profile}`
+                                : '/profile.png'
                         }
                         alt="아바타"
                     />
@@ -55,7 +56,7 @@ export default function Sidebar() {
                     </div>
                 </div>
                 <div className="KYM-member-actions">
-                    <button className="KYM-btn KYM-primary" onClick={()=> navigate(`/user/mypage/mySchedule`)}>모여링 일정</button>
+                    <button className="KYM-btn KYM-primary" onClick={() => navigate(`/user/mypage/mySchedule`)}>모여링 일정</button>
                     <button className="KYM-btn" onClick={logout}>로그아웃</button>
                 </div>
             </section>
@@ -78,7 +79,7 @@ export default function Sidebar() {
                         <li><strong>소셜링</strong></li>
                         <li><a href="/user/mypage/myFeed">작성한 피드</a></li>
                         <li><a href="/user/mypage/myScraps">스크랩 목록</a></li>
-                        <li><a href="/user/mypage/follower">팔로우 목록</a></li>
+                        <li><a href="/user/mypage/follower">팔로워 목록</a></li>
                         <li><a href="/user/mypage/following">팔로잉 목록</a></li>
 
                         <li><strong></strong></li>

@@ -22,7 +22,7 @@ import SettlementInfo from './pages/host/SettlementInfo';
 import StudentSearch from './pages/host/StudentSearch';
 import './App.css';
 import FeedDetail from './pages/user/socialRing/FeedDetail';
-import FeedPage from './pages/user/socialRing/FeedPage';
+
 import UserFeed from './pages/user/socialRing/UserFeed';
 import Test2 from './pages/user/socialRing/Test2.jsx';
 import MyScrapList from './pages/user/socialRing/MyScrapList.jsx';
@@ -128,7 +128,7 @@ function App() {
         <Route path="/gatheringList" element={<GatheringList />} />
         <Route path="/class/classRingDetail/:classId" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
-        {/* <Route path="/feeds" element={<FeedPage />} /> */}
+
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />

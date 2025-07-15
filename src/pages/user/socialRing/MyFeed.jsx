@@ -164,10 +164,11 @@ export default function MyFeed() {
                 <div key={feed.feedId} className="KYM-myfeed-card">
                   <div className="KYM-myfeed-header">
                     <div className="KYM-myfeed-user-info">
-                      <img src={`${url}/iupload/${user.profile}`} alt='프로필' className="KYM-myfeed-avatar" />
+                      <img src={user.profile ? `${url}/iupload/${user.proflie}` : '/profile.png'} alt='프로필' className="KYM-myfeed-avatar" />
+                      {/* <img src={`${url}/iupload/${user.profile}`} alt='프로필' className="KYM-myfeed-avatar" /> */}
                       <span className="KYM-myfeed-nickname">{feed.writerId}</span>
                       {feed.writerBadgeImg &&
-                        <img src={ed.writerBadgeImg} alt="대표 배지" className="KYM-myfeed-badge" />
+                        <img src={`/badge_${ed.writerBadgeImg}.png`} alt="대표 배지" className="KYM-myfeed-badge" />
                       }
                       <span className="KYM-myfeed-date">{feed.createdAt}</span>
                     </div>

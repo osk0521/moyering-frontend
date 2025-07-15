@@ -276,14 +276,14 @@ export default function FeedPage2() {
                                                         setImageIndexes(prev => ({
                                                             ...prev, [feed.feedId]: (currentIdx - 1 + images.length) % images.length
                                                         }));
-                                                    }}>◀</button>
+                                                    }}>&lt;</button>
                                                 <button className="KYM-image-nav right"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         setImageIndexes(prev => ({
                                                             ...prev, [feed.feedId]: (currentIdx + 1) % images.length
                                                         }));
-                                                    }}>▶</button>
+                                                    }}>&gt;</button>
                                             </>
                                         )}
                                     </div>

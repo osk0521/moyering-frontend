@@ -1,6 +1,7 @@
 .mainPage {
   padding: 0px 2rem 2rem 2rem;  
-  width: 1280px;
+  /* width: 1280px; */
+  width: 1420px;
   margin: auto;
 }
 .bannerSection {
@@ -80,7 +81,7 @@
 .cardList {
   display: flex;
   gap: 1rem;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .quickLinkBox {

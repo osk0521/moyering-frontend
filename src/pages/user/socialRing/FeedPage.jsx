@@ -233,8 +233,8 @@ console.log('userId:', userId);
                     <img src={`${url}/iupload/${images[currentIdx]}`} alt={`피드 이미지 `} className="KYM-post-image" />
                     {images.length > 1 && (
                       <>
-                        <button className="KYM-image-nav left" onClick={() => handlePrevImage(feed.feedId, images.length)}>◀</button>
-                        <button className="KYM-image-nav right" onClick={() => handleNextImage(feed.feedId, images.length)}>▶</button>
+                        <button className="KYM-image-nav left" onClick={() => handlePrevImage(feed.feedId, images.length)}>&lt;</button>
+                        <button className="KYM-image-nav right" onClick={() => handleNextImage(feed.feedId, images.length)}>&gt;</button>
                         <div className="KYM-image-dots">
                           {images.map((_, i) => (
                             <span key={i} className={i === currentIdx ? 'dot active' : 'dot'}>●</span>

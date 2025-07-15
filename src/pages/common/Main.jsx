@@ -78,8 +78,7 @@ const settings = {
             )))}
           </Slider>
         </section>
-      <main className={styles.mainPage}>
-
+        <main className={`${styles.mainPage} section_osk`}>
 
         {/* 바로가기 버튼 */}
         <section className={styles.quickLinksSec}>
@@ -107,7 +106,7 @@ const settings = {
         </section>
 
         {/* 추천 클래스 */}
-        <section className={styles.sectionBlock}>
+        <section className={`${styles.sectionBlock} section_osk`}>
           {classes.length === 0 ? <>
           <h2 className={styles.sectionTitle}>🎯당신의 취향 저격!</h2>
           <p className={styles.sectionSub}>수강일이 얼마 남지 않았아요</p></>
@@ -129,7 +128,7 @@ const settings = {
         </section>
 
         {/* 추천 모임 */}
-        <section className={styles.sectionBlock}>
+        <section className={styles.sectionBlock} >
           <h2 className={styles.sectionTitle}>👍추천 모임</h2>
           <p className={styles.sectionSub}>모여링이 대표하는 알짜 모임들</p>
           <div className={styles.cardList}>

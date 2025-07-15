@@ -17,6 +17,7 @@ import {fetchClassListAtom} from '../../hooks/common/fetchClassListAtom';
 import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom';
 import axios from 'axios';
 import AutoLocationFilter from '../../components/AutoLocationFilter';
+import { ko } from "date-fns/locale";
 
 export default function ClassList() {
   const location = useLocation();
@@ -247,6 +248,7 @@ const handleReset = () => {
                     dateFormat="yyyy.MM.dd"
                     placeholderText="날짜"
                     className={styles.datePickerInput}
+                    locale={ko}
                   />
                   <span>~</span>
                   <DatePicker
@@ -255,6 +257,7 @@ const handleReset = () => {
                     dateFormat="yyyy.MM.dd"
                     placeholderText="날짜"
                     className={styles.datePickerInput}
+                    locale={ko}
                   />
                 </div>
               </div>

@@ -297,7 +297,6 @@ export default function GatheringDetail() {
           }))
         );
         window.scrollTo(0, 0);
-        console.log("변환된 tags:", parsedTags);
       })
       .catch((err) => {
         console.log(err);
@@ -825,15 +824,16 @@ export default function GatheringDetail() {
               >
                 <h3 className="GatheringDetail_section-title_osk">
                   함께하면 좋을 모임을 찾아드려요
-                  {recommendations.length > 2 && (<span className="GatheringDetail_section-more_osk" onClick={() =>
-                    navigate("/gatheringList", {
-                      state: {
-                        category1: gatheringData?.categoryId,
-                        category2: gatheringData?.subCategoryId,
-                      }
-                    })
-                  }> 더보기</span>)}
                 </h3>
+                { 
+                recommendations.length > 2 && (<span className="GatheringDetail_section-more_osk" onClick={() =>
+                  navigate("/gatheringList", {
+                    state: {
+                      category1: gatheringData.categoryId,
+                      category2: gatheringData.subCategoryId,
+                    }
+                  })
+                }> 더보기 &gt; </span>)}
               </div>
               <div className="GatheringDetail_recommendations_osk">
                 {recommendations.length === 0 ? (

@@ -414,14 +414,14 @@ useEffect(() => {
                           (currentImage - 1 + images.length) % images.length
                         )
                       }
-                    >‹</button>
+                    >&lt;</button>
 
                     <button
                       className="KYM-image-nav right"
                       onClick={() =>
                         setCurrentImage((currentImage + 1) % images.length)
                       }
-                    >›</button>
+                    >&gt;</button>
 
                     <div className="KYM-image-dots">
                       {images.map((_, i) => (

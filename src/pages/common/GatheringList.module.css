@@ -1,6 +1,6 @@
 .page {
   padding: 2rem;
-  width: 1280px;
+  width: 1420px;
   margin: auto;
 }
 
@@ -74,16 +74,24 @@
 .formGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 3.5rem;
 }
 
 .formGroup label {
   font-weight: 600;
   display: block;
   margin-bottom: 0.5rem;
+  min-width: 32px;
+  margin-right: 11px;
 }
-
-
+.formGroup {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+}
+.formGroup select:focus , .formGroup input:focus {
+  outline: 1px solid #f58020!important;
+}
 
 .day-buttons button {
   margin-right: 0.5rem;

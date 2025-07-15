@@ -87,8 +87,10 @@ const ClassRegisterPage = () => {
   };
 
   const handleTabClick = async (nextTabIndex) => {
-    if (nextTabIndex === activeTab) return;
-
+    if (nextTabIndex <= activeTab) {
+      setActiveTab(nextTabIndex);
+      return;
+    } 
     const validateCurrent = validators.current[activeTab];
     if (validateCurrent) {
       const isValid = await validateCurrent();

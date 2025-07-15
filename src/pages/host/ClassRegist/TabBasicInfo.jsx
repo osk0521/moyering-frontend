@@ -73,6 +73,15 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
     setCategory1Name(selectedCategory1Name);
     setCategory2(''); // 1차 카테고리 변경 시 2차 카테고리 초기화
     setSbuCategoryId(null);
+    setClassData(prev => ({
+      ...prev,
+      basicInfo: {
+        ...prev.basicInfo,
+        category1: selectedCategory1Name,
+        category2: '',
+        subCategoryId: null,
+      }
+    }));
   };
 
   const handleSecondaryChange = (e) => {
@@ -160,6 +169,25 @@ const TabBasicInfo = ({ registerValidator, classData, setClassData }) => {
     const { category1, category2, name, addr } = classData.basicInfo;
     return category1 && category2 && name.trim() && addr;
   };
+
+  useEffect(() => {
+    if (basicInfo.category1) {
+      const found = categories.find(cat => cat.categoryName === basicInfo.category1);
+      if (found) {
+        setCategory1(found.categoryId.toString());
+        setCategory1Name(found.categoryName);
+      }
+    }
+    if (basicInfo.subCategoryId) {
+      const sub = subCategories.find(sub => sub.subCategoryId === basicInfo.subCategoryId);
+      if (sub) {
+        setCategory2(sub.subCategoryId.toString());
+        setCategory2Name(sub.subCategoryName);
+      }
+    }
+  }, [categories, subCategories, basicInfo]);
+
+
 
   useEffect(() => {
     const { category1, category2, name, addr, detailAddr } = classData.basicInfo;

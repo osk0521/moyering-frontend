@@ -206,8 +206,8 @@
 
 .KYM-feed-container button:not(.KYM-like-button):not(.KYM-comment-button):hover,
 .KYM-feed-container button:not(.KYM-like-button):not(.KYM-comment-button).active {
-  background: #FFB22C;
-  color: #fff;
+  background: none;
+  color: #FFB22C;
 }
 
 /* ─── 좋아요 버튼만 별도 처리 ─── */
@@ -530,7 +530,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.8);
+  background:none;
   border: none;
   font-size: 20px;
   cursor: pointer;

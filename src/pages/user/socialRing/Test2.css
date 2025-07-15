@@ -213,8 +213,9 @@
 
 .KYM-feed2-container button:not(.KYM-like-button):not(.KYM-comment-button):hover,
 .KYM-feed2-container button:not(.KYM-like-button):not(.KYM-comment-button).active {
-  background: #FFB22C;
-  color: #fff;
+  background: none;
+  color: #FFB22C;
+  font-weight: bolder;
 }
 
 /* ─── 좋아요 버튼만 별도 처리 ─── */
@@ -538,26 +539,16 @@
 
 /* 슬라이드 좌우 네비게이션 버튼 */
 .KYM-feed2-container .KYM-image-nav {
-  /* position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.8);
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 2;
-  padding: 5px 10px; */
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
+  background: none;
   border: none;
   font-size: 24px;
   cursor: pointer;
   z-index: 2;
   padding: 8px 12px;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   transition: all 0.2s;
   opacity: 0;
   pointer-events: none;
@@ -578,8 +569,8 @@
 }
 
 .KYM-feed2-container .KYM-image-nav:hover {
-  background: #FFB22C;
-  color: #fff;
+  background: none;
+  color: #FFB22C;
 }
 
 /* 이미지 하단 점(dot) 표시 */

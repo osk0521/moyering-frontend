@@ -115,7 +115,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    JSON.stringify(alarm) !== "{}" && setAlarms([...alarms, alarm]);
+    JSON.stringify(alarm) !== "{}" && setAlarms([alarm, ...alarms]);
   }, [alarm]);
 
   return (

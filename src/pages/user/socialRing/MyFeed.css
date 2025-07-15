@@ -13,6 +13,7 @@
 
 .KYM-myfeed-container {
   max-width: 1200px;
+  margin-left: 23px;
 }
 
 /* 더보기 아이콘 스타일 */
@@ -114,6 +115,7 @@
   /* ← 핵심! 양쪽 정렬 */
   position: relative;
   /* 더보기 메뉴 위치 기준 */
+  gap: 320px;
 }
 
 .KYM-myfeed-container .KYM-myfeed-user-info {

@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import './FeedCreate.css';
+import './FeedHostCreate.css'; // css 경로는 유지, 필요하면 HostFeedCreate.css로 바꾸세요
 import plusIcon from './icons/plus.svg';
 import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
 import { useNavigate } from 'react-router-dom';
 import { myAxios, url } from '../../../config';
 
-export default function HostFeedCreate() {
+export default function HostFeedCreate(props) {
     const user = useAtomValue(userAtom);
     const [token, setToken] = useAtom(tokenAtom);
     const navigate = useNavigate();
@@ -21,8 +21,9 @@ export default function HostFeedCreate() {
     const fileInputRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [feedId, setFeedId] = useState('');
+
     // 취소
-    const handleCancel = () => navigate(-1);
+    const handleCancel = () => props.onCancel();
 
     // 이미지 선택
     const openFileDialog = () => fileInputRef.current.click();
@@ -47,7 +48,7 @@ export default function HostFeedCreate() {
     };
 
     const handleTextChange = e => {
-        if (e.target.value.length <= 2000) {
+        if (e.target.value.length <= 500) {
             setText(e.target.value);
         }
     };
@@ -81,16 +82,12 @@ export default function HostFeedCreate() {
                 tag5: tags[4] || ''
             };
             const formData = new FormData();
-            formData.append(
-                'feed',
-                new Blob([JSON.stringify(feedDto)], { type: 'application/json' })
-            );
+            formData.append('feed', new Blob([JSON.stringify(feedDto)], { type: 'application/json' }));
             imageFiles.forEach(file => formData.append('images', file));
             console.log("🟢 myAxios token=", token);
             const res = await myAxios(token, setToken).post(`/host/createFeedHost`, formData);
             setFeedId(res.data);
             console.log(res)
-            // alert("강사 홍보 피드가 작성되었습니다.");
             navigate(`/hostFeed/${res.data}`);
         } catch (err) {
             console.error('강사 피드 등록 실패:', err);
@@ -99,18 +96,17 @@ export default function HostFeedCreate() {
     };
 
     return (
-        <div className="KYM-FeedCreate-container">
-            <div className="KYM-FeedCreate-header">
-                <button className="KYM-FeedCreate-btn-cancel" onClick={handleCancel}>취소</button>
-                <div className="KYM-FeedCreate-title">
-                    <img src={plusIcon} className="KYM-FeedCreate-icon-plus" alt="플러스 아이콘" />
+        <div className="KYM-HostFeedCreate-container">
+            <div className="KYM-HostFeedCreate-header">
+                <button className="KYM-HostFeedCreate-btn-cancel" onClick={handleCancel}>취소</button>
+                <div className="KYM-HostFeedCreate-title">
                     새 강사 홍보 피드
                 </div>
-                <button className="KYM-FeedCreate-btn-submit" onClick={handleSubmit}>작성</button>
+                <button className="KYM-HostFeedCreate-btn-submit" onClick={handleSubmit}>작성</button>
             </div>
 
-            <div className="KYM-FeedCreate-main">
-                <div className="KYM-FeedCreate-carousel" onClick={openFileDialog}>
+            <div className="KYM-HostFeedCreate-main">
+                <div className="KYM-HostFeedCreate-carousel" onClick={openFileDialog}>
                     {previewUrls.length > 0 ? (
                         <>
                             <button className="carousel-btn left" onClick={e => { e.stopPropagation(); prevImage(); }}>‹</button>
@@ -119,23 +115,23 @@ export default function HostFeedCreate() {
                             <button className="carousel-remove" onClick={e => { e.stopPropagation(); removeCurrent(); }}>×</button>
                         </>
                     ) : (
-                        <span className="KYM-FeedCreate-placeholder">사진 선택 (최대 5장)</span>
+                        <span className="KYM-HostFeedCreate-placeholder">사진 선택 (최대 5장)</span>
                     )}
                     <input type="file" accept="image/*" multiple ref={fileInputRef} onChange={readUrl} style={{ display: 'none' }} />
                 </div>
 
-                <form className="KYM-FeedCreate-form" onSubmit={handleSubmit}>
+                <form className="KYM-HostFeedCreate-form" onSubmit={handleSubmit}>
                     {/* 작성자 정보 */}
-                    <div className="KYM-FeedCreate-author-info">
-                        <img src={user.profile} alt={user.nickName} className="KYM-FeedCreate-author-profile" />
-                        <div className="KYM-FeedCreate-author-meta">
-                            <span className="KYM-FeedCreate-author-nickname">{user.nickName}</span>
-                            <img src={`/badges/${user.userBadgeId}.png`} alt="배지" className="KYM-FeedCreate-author-badge" />
+                    {/* <div className="KYM-HostFeedCreate-author-info">
+                        <img src={user.profile} alt={user.nickName} className="KYM-HostFeedCreate-author-profile" />
+                        <div className="KYM-HostFeedCreate-author-meta">
+                            <span className="KYM-HostFeedCreate-author-nickname">{user.nickName}</span>
+                            <img src={`/badges/${user.userBadgeId}.png`} alt="배지" className="KYM-HostFeedCreate-author-badge" />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* 카테고리 */}
-                    <div className="KYM-FeedCreate-category">
+                    <div className="KYM-HostFeedCreate-category">
                         <label>카테고리 선택</label>
                         <select value={category} onChange={e => setCategory(e.target.value)}>
                             <option value="">카테고리 선택</option>
@@ -151,33 +147,33 @@ export default function HostFeedCreate() {
 
                     {/* 글 내용 */}
                     <textarea
-                        className="KYM-FeedCreate-text"
+                        className="KYM-HostFeedCreate-text"
                         placeholder="글을 작성해 주세요"
                         value={text}
                         onChange={handleTextChange}
                     />
-                    <div className="KYM-FeedCreate-text-count">{text.length}/2000</div>
+                    <div className="KYM-HostFeedCreate-text-count">{text.length}/500</div>
 
                     {/* 태그 */}
-                    <div className="KYM-FeedCreate-tags">
+                    <div className="KYM-HostFeedCreate-tags">
                         <label>태그추가</label>
-                        <div className="KYM-FeedCreate-tag-input-wrap">
+                        <div className="KYM-HostFeedCreate-tag-input-wrap">
                             <input
                                 type="text"
                                 value={tagInput}
                                 onChange={e => setTagInput(e.target.value)}
                                 onKeyDown={e => {
                                     if (e.key === 'Enter') {
-                                        e.preventDefault(); // 엔터로 form submit 막기
+                                        e.preventDefault();
                                         handleAddTag();
                                     }
                                 }}
-                            placeholder="태그 입력 후 Enter"
+                                placeholder="태그 입력 후 Enter"
                             />
                         </div>
-                        <div className="KYM-FeedCreate-tag-list">
+                        <div className="KYM-HostFeedCreate-tag-list">
                             {tags.map(t => (
-                                <span key={t} className="KYM-FeedCreate-tag-item">
+                                <span key={t} className="KYM-HostFeedCreate-tag-item">
                                     {t}
                                     <button type="button" onClick={() => handleRemoveTag(t)}>×</button>
                                 </span>

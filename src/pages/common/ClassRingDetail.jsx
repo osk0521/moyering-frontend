@@ -274,30 +274,44 @@ export default function ClassRingDetail() {
 
             {/* 준비물 섹션 */}
             <div className={styles.preparation}>
-              <h3>준비물</h3>
-              <p>
-                {classDetail?.preparation?.split(',').map((item, index) => (
-                  <span key={index} className={styles.tagStyle}>
-                    {item.trim()}
-                  </span>
-                ))}
-              </p>
-               <h3>포함사항</h3>
-              <p>
-                {classDetail?.incluision?.split(',').map((item, index) => (
-                  <span key={index} className={styles.tagStyle}>
-                    {item.trim()}
-                  </span>
-                ))}
-              </p>
-               <h3>키워드</h3>
-              <p>
-                {classDetail?.keywords?.split(',').map((item, index) => (
-                  <span key={index} className={styles.tagStyle}>
-                    {item.trim()}
-                  </span>
-                ))}
-              </p>
+              {classDetail?.preparation && (
+                <>
+                  <h3>준비물</h3>
+                  <p>
+                    {classDetail.preparation.split(',').map((item, index) => (
+                      <span key={index} className={styles.tagStyle}>
+                        {item.trim()}
+                      </span>
+                    ))}
+                  </p>
+                </>
+              )}
+
+              {classDetail?.incluision && (
+                <>
+                  <h3>포함사항</h3>
+                  <p>
+                    {classDetail.incluision.split(',').map((item, index) => (
+                      <span key={index} className={styles.tagStyle}>
+                        {item.trim()}
+                      </span>
+                    ))}
+                  </p>
+                </>
+              )}
+
+              {classDetail?.keywords && (
+                <>
+                  <h3>키워드</h3>
+                  <p>
+                    {classDetail.keywords.split(',').map((item, index) => (
+                      <span key={index} className={styles.tagStyle}>
+                        {item.trim()}
+                      </span>
+                    ))}
+                  </p>
+                </>
+              )}
             </div>
             <hr />
             {/* 커리큘럼 섹션 */}
@@ -433,11 +447,11 @@ export default function ClassRingDetail() {
                 ) : (<></>)}
               {recommends.map((classInfo) => (
                 <div className={styles.card}
-                           style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                }}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                  }}
                   onClick={() => {
                     navigate(`/class/classRingDetail/${classInfo.classId}`);
                     window.scrollTo({ top: 0, behavior: "auto" });
@@ -459,16 +473,16 @@ export default function ClassRingDetail() {
                   <div className={styles.cardContent}>
                     <div className={styles.cardTags}>
                       <span className={`${styles.tag} ${styles.yellow}`} style={{
-                      fontSize: "12px",
-                    }}>{classInfo.category1}&gt;{classInfo.category2}</span>
+                        fontSize: "12px",
+                      }}>{classInfo.category1}&gt;{classInfo.category2}</span>
                       <span className={`${styles.tag} ${styles.blue}`} style={{
-                      fontSize: "12px",
-                    }}>{classInfo.addr}</span>
+                        fontSize: "12px",
+                      }}>{classInfo.addr}</span>
                     </div>
                     <div className={styles.cardEtc}
-                        style={{
-                      flexDirection:"column"
-                    }}>
+                      style={{
+                        flexDirection: "column"
+                      }}>
                       <span className={styles.cardTitle}>{classInfo.name}</span>
                       <span className={styles.cardPrice}>{classInfo.price.toLocaleString()}원</span>
                     </div>

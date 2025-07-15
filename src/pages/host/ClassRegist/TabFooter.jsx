@@ -10,19 +10,16 @@ const TabFooter = ({ activeTab,onSubmit,handleReset}) => {
     if (activeTab === 5) {
       return (
         <div className="KHJ-footer-buttons">
-          <button className="KHJ-footer-btn KHJ-preview-btn" onClick={() => setIsPreview(!isPreview)}>
+          {/* <button className="KHJ-footer-btn KHJ-preview-btn" onClick={() => setIsPreview(!isPreview)}>
             미리보기
-          </button>
-          <button className="KHJ-footer-btn KHJ-delete-btn">삭제</button>
+          </button> */}
+          <button className="KHJ-footer-btn KHJ-delete-btn" onClick={handleReset}>초기화</button>
           <button className="KHJ-footer-btn KHJ-review-request-btn" onClick={onSubmit}>검수 요청</button>
         </div>
       );
     } else {
       return (
         <div className="KHJ-footer-buttons">
-          <button className="KHJ-footer-btn KHJ-preview-btn" onClick={() => setIsPreview(!isPreview)}>
-            미리보기
-          </button>
           <button className="KHJ-footer-btn KHJ-delete-btn" onClick={handleReset}>초기화</button>
         </div>
       );

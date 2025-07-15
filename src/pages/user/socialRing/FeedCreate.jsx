@@ -55,7 +55,7 @@ export default function FeedCreate() {
 
     // 글 내용 변경
     const handleTextChange = e => {
-        if (e.target.value.length <= 2000) {
+        if (e.target.value.length <= 500) {
             setText(e.target.value);
         }
     };
@@ -173,7 +173,7 @@ export default function FeedCreate() {
                         onChange={handleTextChange}
                     />
                     <div className="KYM-FeedCreate-text-count">
-                        {text.length}/2000
+                        {text.length}/500
                     </div>
 
                     {/* 태그 */}

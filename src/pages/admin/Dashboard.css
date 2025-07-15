@@ -595,11 +595,6 @@
   border: 1px solid #FECACA;
 }
 
-status-endedHY {
-  background-color: #E5E7EB;
-  color: #6B7280;
-  border: 1px solid #D1D5DB;
-}
 /* 반응형 디자인 */
 @media (max-width: 1200px) {
   .stats-gridHY {

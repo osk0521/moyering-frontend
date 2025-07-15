@@ -12,9 +12,40 @@ import './CouponManagement.css';
 // 수정 모달 컴포넌트
 function CouponEditModal({ isOpen, coupon, onClose, onSubmit }) {
   const [formData, setFormData] = useState(coupon || {});
-  useEffect(() => { setFormData(coupon || {}); }, [coupon]);
+  
+  useEffect(() => { 
+    if (coupon) {
+      // 날짜 형식 정규화
+      const normalizedCoupon = {
+        ...coupon,
+        validFrom: coupon.validFrom ? coupon.validFrom.slice(0, 10) : '',
+        validUntil: coupon.validUntil ? coupon.validUntil.slice(0, 10) : ''
+      };
+      setFormData(normalizedCoupon);
+    }
+  }, [coupon]);
+  
   if (!isOpen) return null;
+  
   const isAdmin = formData.couponType === 'MG' || formData.couponType === '관리자';
+  
+  const handleSubmit = () => {
+    // 필수 필드 검증
+    if (!formData.couponCode || !formData.discount) {
+      alert('쿠폰코드와 할인값은 필수입니다.');
+      return;
+    }
+    
+    if (isAdmin) {
+      if (!formData.issueCount || !formData.validFrom || !formData.validUntil) {
+        alert('관리자 쿠폰의 경우 발급수량과 유효기간이 필수입니다.');
+        return;
+      }
+    }
+    
+    onSubmit(formData);
+  };
+  
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -25,31 +56,59 @@ function CouponEditModal({ isOpen, coupon, onClose, onSubmit }) {
         <div className="modal-body">
           <div className="form-group">
             <label className="form-label">쿠폰 코드</label>
-            <input className="form-input" value={formData.couponCode || ''} onChange={e => setFormData({ ...formData, couponCode: e.target.value })} />
+            <input 
+              className="form-input" 
+              value={formData.couponCode || ''} 
+              onChange={e => setFormData({ ...formData, couponCode: e.target.value })} 
+            />
           </div>
+          
           <div className="form-group">
-            <label className="form-label">할인</label>
-            <input className="form-input" type="number" value={formData.discount || ''} onChange={e => setFormData({ ...formData, discount: e.target.value })} />
+            <label className="form-label">할인값</label>
+            <input 
+              className="form-input" 
+              type="number" 
+              value={formData.discount || ''} 
+              onChange={e => setFormData({ ...formData, discount: e.target.value })} 
+            />
           </div>
+          
           {isAdmin && (
             <>
               <div className="form-group">
                 <label className="form-label">발급 매수</label>
-                <input className="form-input" type="number" value={formData.issueCount || ''} onChange={e => setFormData({ ...formData, issueCount: e.target.value })} />
+                <input 
+                  className="form-input" 
+                  type="number" 
+                  value={formData.issueCount || ''} 
+                  onChange={e => setFormData({ ...formData, issueCount: e.target.value })} 
+                />
               </div>
+              
               <div className="form-group">
                 <label className="form-label">시작일</label>
-                <input className="form-input" type="date" value={formData.validFrom ? formData.validFrom.slice(0,10) : ''} onChange={e => setFormData({ ...formData, validFrom: e.target.value + (formData.validFrom && formData.validFrom.length > 10 ? formData.validFrom.slice(10) : 'T00:00:00') })} />
+                <input 
+                  className="form-input" 
+                  type="date" 
+                  value={formData.validFrom || ''} 
+                  onChange={e => setFormData({ ...formData, validFrom: e.target.value })} 
+                />
               </div>
+              
               <div className="form-group">
                 <label className="form-label">종료일</label>
-                <input className="form-input" type="date" value={formData.validUntil ? formData.validUntil.slice(0,10) : ''} onChange={e => setFormData({ ...formData, validUntil: e.target.value + (formData.validUntil && formData.validUntil.length > 10 ? formData.validUntil.slice(10) : 'T23:59:59') })} />
+                <input 
+                  className="form-input" 
+                  type="date" 
+                  value={formData.validUntil || ''} 
+                  onChange={e => setFormData({ ...formData, validUntil: e.target.value })} 
+                />
               </div>
             </>
           )}
         </div>
         <div className="modal-footer">
-          <button className="submit-btn" onClick={() => onSubmit(formData)}>저장</button>
+          <button className="submit-btn" onClick={handleSubmit}>저장</button>
         </div>
       </div>
     </div>
@@ -71,13 +130,13 @@ const CouponManagement = () => {
   const [pageInfo, setPageInfo] = useState({ totalElements: 0 });
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editCoupon, setEditCoupon] = useState(null);
-  const [loading, setLoading] = useState(false); // 누락된 loading state 추가
+  const [loading, setLoading] = useState(false);
 
   // 쿠폰 목록 불러오기
   useEffect(() => {
     loadCouponList();
     // eslint-disable-next-line
-  }, [searchTerm, couponType, statusFilter, startDate, endDate, currentPage]); // currentPage 의존성 추가
+  }, [searchTerm, couponType, statusFilter, startDate, endDate, currentPage]);
 
   const loadCouponList = async () => {
     setLoading(true);
@@ -85,10 +144,10 @@ const CouponManagement = () => {
       const params = {};
       if (searchTerm) params.keyword = searchTerm;
       if (couponType !== '전체') params.couponType = couponType === '관리자' ? 'MG' : 'HT';
-      if (statusFilter !== '전체') params.status = statusFilter; // 백엔드에서 status 필터 지원 시
+      if (statusFilter !== '전체') params.status = statusFilter;
       if (startDate) params.validFrom = startDate;
       if (endDate) params.validUntil = endDate;
-      params.size = 20; // 백엔드에서 20개씩 처리한다고 하셨으니 20으로 변경
+      params.size = 20;
       params.page = currentPage;
       
       const response = await axios.get(`${url}/api/coupon`, { params });
@@ -131,11 +190,12 @@ const CouponManagement = () => {
       dto.issueCount = Number(formData.issueCount);
       dto.validFrom = formData.startDate ? formData.startDate + 'T00:00:00' : null;
       dto.validUntil = formData.endDate ? formData.endDate + 'T23:59:59' : null;
+      dto.usedCount = 0;
     }
     try {
       await axios.post(`${url}/api/coupon`, dto);
       setIsModalOpen(false);
-      setCurrentPage(0); // 첫 페이지로 이동
+      setCurrentPage(0);
       loadCouponList();
     } catch (error) {
       alert('쿠폰 생성에 실패했습니다.');
@@ -146,19 +206,19 @@ const CouponManagement = () => {
   // 쿠폰 유형(발급주체) 변경 핸들러
   const handleCouponTypeChange = (type) => {
     setCouponType(type);
-    setCurrentPage(0); // 필터 변경 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   // 상태 필터 변경 핸들러
   const handleStatusFilterChange = (status) => {
     setStatusFilter(status);
-    setCurrentPage(0); // 필터 변경 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   // 검색어 변경 핸들러
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(0); // 검색 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   // 날짜 필터 변경 핸들러
@@ -168,7 +228,7 @@ const CouponManagement = () => {
     } else {
       setEndDate(value);
     }
-    setCurrentPage(0); // 날짜 변경 시 첫 페이지로 이동
+    setCurrentPage(0);
   };
 
   // 페이지 변경 핸들러
@@ -202,16 +262,87 @@ const CouponManagement = () => {
     setEditModalOpen(true);
   };
 
-  // 쿠폰 수정 저장 핸들러 (PUT)
+  // 쿠폰 수정 저장 핸들러 (PUT) - usedCount null 문제 해결
   const handleEditCouponSubmit = async (formData) => {
     try {
-      await axios.put(`${url}/api/coupon/${formData.couponId}`, formData);
+      console.log('=== 쿠폰 수정 디버깅 시작 ===');
+      console.log('수정 요청 원본 데이터:', JSON.stringify(formData, null, 2));
+      
+      // 백엔드 AdminCouponDto 형식에 맞게 데이터 변환
+      const isAdmin = formData.couponType === 'MG' || formData.couponType === '관리자';
+      console.log('isAdmin:', isAdmin);
+      
+      const dto = {
+        couponId: formData.couponId,
+        couponType: isAdmin ? 'MG' : 'HT',
+        couponCode: formData.couponCode,
+        discountType: formData.discountType, // 이미 'RT' 또는 'AMT' 형식
+        discount: Number(formData.discount), // 숫자로 변환
+        createdAt: formData.createdAt, // 기존 생성일 유지
+      };
+      
+      // 관리자 쿠폰인 경우 추가 필드
+      if (isAdmin) {
+        dto.issueCount = Number(formData.issueCount) || 0;
+        dto.usedCount = formData.usedCount || 0;
+        
+        // 날짜 형식 처리 - LocalDateTime 형식으로 변환
+        if (formData.validFrom) {
+          dto.validFrom = formData.validFrom.includes('T') 
+            ? formData.validFrom 
+            : formData.validFrom + 'T00:00:00';
+        }
+        
+        if (formData.validUntil) {
+          dto.validUntil = formData.validUntil.includes('T') 
+            ? formData.validUntil 
+            : formData.validUntil + 'T23:59:59';
+        }
+      } else {
+        // 호스트 쿠폰인 경우 - null 대신 기본값 설정
+        dto.issueCount = 0; // null 대신 0
+        dto.usedCount = 0;  // null 대신 0 (이게 핵심!)
+        dto.validFrom = null;
+        dto.validUntil = null;
+      }
+      
+      console.log('전송할 DTO:', JSON.stringify(dto, null, 2));
+      console.log('요청 URL:', `${url}/api/coupon/${formData.couponId}`);
+      
+      const response = await axios.put(`${url}/api/coupon/${formData.couponId}`, dto, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('수정 성공:', response.data);
+      
+      alert('쿠폰이 성공적으로 수정되었습니다.');
       setEditModalOpen(false);
       setEditCoupon(null);
       loadCouponList();
+      
     } catch (error) {
-      alert('쿠폰 수정에 실패했습니다.');
+      console.log('=== 쿠폰 수정 에러 디버깅 ===');
       console.error('쿠폰 수정 실패:', error);
+      console.error('에러 상세:', error.response?.data);
+      console.error('에러 상태:', error.response?.status);
+      
+      // 구체적인 에러 메시지 표시
+      let errorMessage = '쿠폰 수정에 실패했습니다.';
+      
+      if (error.response?.data) {
+        if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        } else if (error.response.data.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.response.data.error) {
+          errorMessage = error.response.data.error;
+        }
+      }
+      
+      console.log('표시할 에러 메시지:', errorMessage);
+      alert(errorMessage);
     }
   };
 
@@ -377,7 +508,7 @@ const CouponManagement = () => {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="11">로딩 중...</td></tr>
+              <tr><td colSpan="12">로딩 중...</td></tr>
             ) : filteredData.length > 0 ? (
               filteredData.map((coupon, idx) => (
                 <tr key={coupon.couponId || idx}>
@@ -399,7 +530,7 @@ const CouponManagement = () => {
                         ? 'usage-badge warning'
                         : 'usage-badge normal'
                     }>
-                      {coupon.usedCount}/{coupon.issueCount}
+                      {coupon.usedCount || 0}/{coupon.issueCount || 0}
                     </span>
                   </td>
                   <td>{formatDate(coupon.validFrom)}</td>
@@ -424,7 +555,7 @@ const CouponManagement = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="11" className="no-data">검색 결과가 없습니다.</td>
+                <td colSpan="12" className="no-data">검색 결과가 없습니다.</td>
               </tr>
             )}
           </tbody>

@@ -41,16 +41,30 @@
 
 /* 결제내역 버튼 스타일 */
 .payment-btnHY {
-  background-color: #007bff;
+  background-color: #FFB22C;
   color: white;
   justify-content: center;
 }
+
+.pinned{
+  border:none;
+  background: none;
+  color: red; 
+}
+
+ .unpinned{
+  border:none;
+  background: none;
+  color:black;
+ }
+
 .tableHY td button {
+
   display: block;        /* inline-block이 아니라 block이면 margin auto가 먹힘 */
   margin: 0 auto;        /* 수평 중앙 정렬 */
 }
 .payment-btnHY:hover {
-  background-color: #0056b3;
+  background-color: #FFB22C;
   
 }
 
@@ -67,7 +81,7 @@
 
 /* 검색 버튼 스타일 */
 .search-btnHY {
-  background-color: #28a745;
+  background-color: #FFB22C;
   color: white;
 }
 

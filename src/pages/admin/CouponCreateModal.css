@@ -115,7 +115,7 @@
   }
   
   .generate-btn {
-    background: #4f75ff;
+    background: #FFB22C;
     color: white;
     border: none;
     border-radius: 12px;
@@ -131,7 +131,7 @@
   }
   
   .generate-btn:hover {
-    background: #3d5acc;
+    background: #FFB22C;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(79, 117, 255, 0.3);
   }

@@ -115,7 +115,7 @@
   }
   
   .generate-btn {
-    background: #4F75FF;
+    background: #FFB22C;
     color: white;
     border: none;
     border-radius: 8px;
@@ -260,7 +260,7 @@
   }
   
   .submit-btn {
-    background: #4F75FF;
+    background: #FFB22C;
     color: white;
     border: none;
     border-radius: 8px;
@@ -271,7 +271,7 @@
   }
   
   .submit-btn:hover {
-    background: #3d5acc;
+    background: #FFB22C;
   }
   
 

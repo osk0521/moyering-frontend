@@ -123,6 +123,7 @@
   margin: 0 0 10px;
   font-size: 0.9rem;
   color: #333;
+  white-space: pre-line;
   /* display: -webkit-box;
   -webkit-line-clamp: 3;         /* 몇 줄까지 보여줄지 */
   /*

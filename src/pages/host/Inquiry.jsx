@@ -232,7 +232,7 @@ const Inquiry = () => {
         {inquiry.map((item, index) => (
           <div key={item.inquiryId} className="KHJ-inquiry-card">
             <div className="KHJ-inquiry-summary" onClick={() => toggleExpand(index, item.inquiryId)}>
-              <p><strong>{item.className}</strong> | 수강생: {item.studentName} | 클래스명: {item.className} | 문의일: {item.inquiryDate}</p>
+              <p><strong>{item.className}</strong> | 문의자: {item.studentName} | 클래스명: {item.className} | 문의일: {item.inquiryDate}</p>
               <span>{item.state === 1 ? '답변완료' : '답변대기'}</span>
             </div>
 
@@ -257,7 +257,7 @@ const Inquiry = () => {
                       value={iqResContent}
                       onChange={(e) => setIqResContent(e.target.value)}
                     />
-                    <button type="submit">{item.state ? '수정' : '저장'}</button>
+                    <button type="submit">{item.state ? '수정' : '등록'}</button>
                   </form>
                 </div>
               </div>

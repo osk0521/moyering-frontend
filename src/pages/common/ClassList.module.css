@@ -59,6 +59,7 @@
   padding: 2rem;
   border-radius: 20px;
   margin-bottom: 2rem;
+  min-height: 200px;
 }
 
 .formTitle {
@@ -74,25 +75,27 @@
 .formGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3.5rem;
+   gap: 3.5rem; 
+  /* row-gap: 2.5rem;
+  column-gap: 2.5rem; */
 }
+
+
 .formGroup label {
   font-weight: 600;
   display: block;
   margin-bottom: 0.5rem;
-  min-width: 50px;
+  min-width: 32px;
+  margin-right: 11px;
 }
-.formGroup{    
-      font-weight: 600;
-    display: block;
-    margin-bottom: 0.5rem;
-    min-width: 32px;
-    margin-right: 11px;
-  /* display: inline-flex;
-  height: 90px;
-  flex-direction: row;
-  align-items: center; */
-} 
+.formGroup {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+}
+.formGroup select:focus , .formGroup input:focus {
+  outline: 1px solid #f58020!important;
+}
 
 
 .day-buttons button {
@@ -132,6 +135,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
+
 }
 
 .datePickerInput {
@@ -144,6 +148,6 @@
 
 .categoryGroup select {
   width: 100%;
-  min-width: 150px;
+  min-width: 160px;
 }
 

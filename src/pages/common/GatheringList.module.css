@@ -59,6 +59,7 @@
   padding: 2rem;
   border-radius: 20px;
   margin-bottom: 2rem;
+  min-height: 200px;
 }
 
 .formTitle {
@@ -142,4 +143,5 @@
 
 .categoryGroup select {
   width: 100%;
+  min-width: 160px;
 }

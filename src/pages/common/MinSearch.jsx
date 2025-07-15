@@ -119,7 +119,7 @@ export default function MainSearch() {
                                         <span className={`type-text ${item.type}`}>{getLabel(item.type)} | </span>
                                         {truncate(item.title, 30)}
                                     </div>
-                                    <br />
+                                    {/* <br /> */}
                                     {item.content && (
                                         <div className="card-content-text viewer-wrapper">
                                             {item.content.includes('<') || item.content.includes('>') ? (

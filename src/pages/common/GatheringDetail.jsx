@@ -161,7 +161,7 @@ export default function GatheringDetail() {
       setIsApplied(true);
       setIsApplyModalOpen(false);
       setAspirationContent("");
-      alert("모임 신청이 완료되었습니다!");
+      // alert("모임 신청이 완료되었습니다!");
     } catch (error) {
       console.error("신청 처리 중 오류:", error);
     } finally {
@@ -1024,7 +1024,7 @@ export default function GatheringDetail() {
 
                   <div className="GatheringDetail_gathering-info-item_osk">
                     <span>
-                      소개: {gatheringData.introOnline} <br />
+                      소개: {gatheringData.intrOnln} <br />
                     </span>
                   </div>
                   <div className="GatheringDetail_gathering-info-item_osk">

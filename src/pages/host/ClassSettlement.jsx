@@ -123,7 +123,7 @@ const ClassSettlement = () => {
             {settlementList.map((item, index) => (
               <tr key={item.id}>
                 <td>{index + 1}</td>
-                <td>{item.settlementAmount}</td>
+                <td>{item.settlementAmountTodo}</td>
                 <td>10%</td>
                 <td>{item.settlementDate}</td>
                 <td>
@@ -143,8 +143,7 @@ const ClassSettlement = () => {
         </table>
         {settlementList.length === 0 && <div className="KHJ-no-data">조회된 목록이 없습니다.</div>}
         <div className="KHJ-info-msg">
-          강의 종료 후 7일째에 정산이 진행됩니다. <br />
-          정산은 매일 05:00시에 진행되며,<br />
+          정산은 매일 00:00시에 진행되며,<br />
           <strong>수업 7일 후에도 정산이 완료되지 않았다면 정산요청 버튼을 눌러주세요!</strong>
         </div>
 

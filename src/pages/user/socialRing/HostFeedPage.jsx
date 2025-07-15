@@ -6,6 +6,7 @@ import Header from '../../common/Header';
 import moreIcon from './icons/more.png';
 import { useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
+import HostFeedCreate from './FeedHostCreate'; // 🔥 HostFeedCreate 임포트
 
 export default function HostFeedPage() {
     const navigate = useNavigate();
@@ -16,13 +17,13 @@ export default function HostFeedPage() {
     const user = useAtomValue(userAtom);
     const token = useAtomValue(tokenAtom);
     const menuRef = useRef(null);
+    const [showCreateModal, setShowCreateModal] = useState(false); // ✅ 모달 상태 추가
 
-    // ✅ 단순한 데이터 요청 (카테고리 변경 시 포함)
     const fetchFeeds = async () => {
         try {
             const params = new URLSearchParams();
             params.append("offset", 0);
-            params.append("size", 100); // 원하는 만큼 충분히 큰 수
+            params.append("size", 100);
             if (category) params.append("category", category);
 
             const res = await myAxios().get(`/feedHost?${params}`);
@@ -50,7 +51,6 @@ export default function HostFeedPage() {
 
     const getFeedImages = feed => [feed.img1, feed.img2, feed.img3, feed.img4, feed.img5].filter(Boolean);
 
-
     return (
         <>
             <Header />
@@ -69,7 +69,7 @@ export default function HostFeedPage() {
                                 cursor: "pointer",
                                 fontSize: "1rem"
                             }}
-                            onClick={() => navigate("/host/createFeed")}
+                            onClick={() => setShowCreateModal(true)} // ✅ navigate → 모달 열기
                         >
                             + 글쓰기
                         </button>
@@ -81,9 +81,7 @@ export default function HostFeedPage() {
                         <button key={cat}
                             className={`KYM-host-filter-button${category === cat ? ' active' : ''}`}
                             onClick={() => {
-                                if (cat !== category) {
-                                    setCategory(cat);
-                                }
+                                if (cat !== category) setCategory(cat);
                             }}>
                             {cat || '전체'}
                         </button>
@@ -100,10 +98,8 @@ export default function HostFeedPage() {
                                 <div className="KYM-host-card" key={feed.feedId}>
                                     <div className="KYM-host-header">
                                         <div className="KYM-host-user">
-                                            <img src={feed.hostProfile
-                                                ? `${url}/iupload/${feed.hostProfile}`
-                                                : "/profile.png"
-                                            } alt="강사 프로필"
+                                            <img src={feed.hostProfile ? `${url}/iupload/${feed.hostProfile}` : "/profile.png"}
+                                                alt="강사 프로필"
                                                 className="KYM-host-avatar" style={{ cursor: "pointer" }}
                                                 onClick={() => navigate(`/feedHost/${feed.hostId}`)} />
                                             <span className="KYM-host-nickname"
@@ -116,9 +112,7 @@ export default function HostFeedPage() {
                                             src={moreIcon}
                                             alt="더보기"
                                             className="KYM-host-more-icon"
-                                            onClick={() => {
-                                                setMenuOpenId(menuOpenId === feed.feedId ? null : feed.feedId);
-                                            }}
+                                            onClick={() => setMenuOpenId(menuOpenId === feed.feedId ? null : feed.feedId)}
                                         />
                                         {menuOpenId === feed.feedId && (
                                             <ul ref={menuRef} className="KYM-host-menu open">
@@ -187,6 +181,14 @@ export default function HostFeedPage() {
                         })}
                     </div>
                 </div>
+
+                {showCreateModal && (
+                    <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+                        <div className="modal-content KYM-HostFeedCreate-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <HostFeedCreate onCancel={() => setShowCreateModal(false)} />
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     );

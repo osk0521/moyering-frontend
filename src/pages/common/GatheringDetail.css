@@ -1151,7 +1151,11 @@ svg.GatheringDetail_liked_osk{
   padding: 20px 24px;
   border-radius: 12px 12px 0 0;
 }
-
+.GatheringDetail_modal-header_osk .btn-close{
+  background-color: unset;
+  color: #333;
+  font-weight:bold;
+}
 .GatheringDetail_modal-title_osk {
   font-size: 18px;
   font-weight: 600;
@@ -1587,19 +1591,6 @@ svg.GatheringDetail_liked_osk{
 }
 
 .GatheringDetail_pagination-btn_osk {
-  /* width: 32px;
-  height: 32px;
-  border: 1px solid #e9ecef;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: #666;
-  transition: all 0.2s; */
-  
   width: 32px;
   height: 32px;
   border: 1px solid #ddd;

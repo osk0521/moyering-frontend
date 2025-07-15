@@ -1,0 +1,198 @@
+.KYM-HostFeedCreate-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 12px;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-btn-cancel,
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-btn-submit {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-btn-cancel {
+    background: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-btn-submit {
+    background: #FFB22C;
+    color: #fff;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-main {
+    flex: 1;
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-carousel {
+    position: relative;
+    width: 50%;
+    height: 0;
+    padding-bottom: 60%;
+    background: #f5f5f5;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.KYM-HostFeedCreate-container .carousel-img {
+    position: absolute;
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.KYM-HostFeedCreate-container .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.KYM-HostFeedCreate-container .carousel-btn.left  { left: 8px; }
+.KYM-HostFeedCreate-container .carousel-btn.right { right: 8px; }
+
+.KYM-HostFeedCreate-container .carousel-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-text {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-size: 0.95rem;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-text-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-tags label {
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-tag-input-wrap input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-tag-list {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-tag-item {
+    background: #fff7e6;
+    border: 1px solid #ffd47c;
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-tag-item button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #ff8c00;
+    padding: 0 5px !important;
+    margin: 0 !important;
+}
+
+.KYM-HostFeedCreate-container .button_osk {
+    background: none !important;
+    border: none !important;
+}
+
+.KYM-HostFeedCreate-container .carousel-remove,
+.KYM-HostFeedCreate-container .button_osk {
+    padding: 5px;
+    margin: 0;
+}
+
+.KYM-HostFeedCreate-container .KYM-HostFeedCreate-category label {
+    display: inline-block;
+    margin-right: 10px; /* 여기만 추가하면 됩니다 */
+    font-weight: bold;
+}

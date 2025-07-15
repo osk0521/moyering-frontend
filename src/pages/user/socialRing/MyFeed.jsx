@@ -181,8 +181,8 @@ export default function MyFeed() {
                       />
                       {menuOpenId === feed.feedId && (
                         <ul ref={menuRef} className="KYM-post-menu open">
-                          <li onClick={() => { handleDelete(feed.feedId); setMenuOpenId(null); }}>삭제하기</li>
-                          <li onClick={() => { console.log(`신고: ${feed.feedId}`); setMenuOpenId(null); }}>신고하기</li>
+                          {/* <li onClick={() => { handleDelete(feed.feedId); setMenuOpenId(null); }}>삭제하기</li>
+                          <li onClick={() => { console.log(`신고: ${feed.feedId}`); setMenuOpenId(null); }}>신고하기</li> */}
                           <li onClick={() => { toggleScrap(feed); setMenuOpenId(null); }}>
                             {feed.scrapped ? '스크랩 해제' : '스크랩하기'}
                           </li>
@@ -192,7 +192,7 @@ export default function MyFeed() {
                             alert("링크 복사됨");
                             setMenuOpenId(null);
                           }}>링크복사</li>
-                          <li onClick={() => { handleShare(feed); setMenuOpenId(null); }}>공유하기</li>
+                          {/* <li onClick={() => { handleShare(feed); setMenuOpenId(null); }}>공유하기</li> */}
                         </ul>
                       )}
                     </div>

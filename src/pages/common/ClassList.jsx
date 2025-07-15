@@ -212,7 +212,6 @@ const handleReset = () => {
                       <option key={cat.id} value={cat.id}>{cat.name}</option>
                     ))}
                   </select>
-
                   <select
                     className={styles.datePickerInput}
                     value={selectedCategory2}

@@ -95,7 +95,7 @@ export default function MyGatheringList() {
       const response = await myAxios(token, setToken).post(`/user/cancelGathering/${gatheringId}`);
 
       if (response.status === 200) {
-        alert('모임이 성공적으로 취소되었습니다.');
+        // alert('모임이 성공적으로 취소되었습니다.');
         // 목록 새로고침
         setSearch(prev => ({ ...prev }));
       }
@@ -397,6 +397,8 @@ export default function MyGatheringList() {
                                 {item.category}
                               </span>
                               <span className="MyGatheringList_badge_osk MyGatheringList_blue_osk">
+                                
+                              <CiLocationOn/>
                                 {item.region}
                               </span>
                             </div>

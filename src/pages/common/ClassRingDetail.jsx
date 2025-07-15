@@ -483,7 +483,7 @@ export default function ClassRingDetail() {
           <div className={styles.cardBox}>
             <div className={styles.badges}>
               <span className={styles.badgeCategory}>{classDetail?.category1}&gt;{classDetail?.category2}</span>
-              <span className={styles.badgeLocation}>{classDetail?.addr}</span>
+              <span className={styles.badgeLocation}><CiLocationOn/>{classDetail?.addr}</span>
             </div>
             <h1 className={styles.title}>{classDetail?.name}</h1>
             <div className={styles.row}><CiCalendar className={styles.infoIcon} />

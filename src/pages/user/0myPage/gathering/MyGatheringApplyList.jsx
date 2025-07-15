@@ -54,29 +54,45 @@ export default function MyGatheringApplyList() {
   });
 
   // 참여 취소 처리 함수
-  const handleCancelApply = async (gathering) => {
-    try {
-      const isConfirmed = window.confirm(`'${gathering.title}' 게더링 참여를 정말 취소하시겠습니까?`);
-      if (!isConfirmed) {
-        return;
-      }
-      const response = await myAxios(token, setToken).post(`/user/cancelGatheringApply/${gathering.gatheringApplyId}`);
-
-      if (response.status === 200) {
-        // alert('모임이 성공적으로 취소되었습니다.');
-        // 목록 새로고침
-        setSearch(prev => ({ ...prev }));
-      }
-    } catch (error) {
-      console.error('모임 취소 오류:', error);
-      if (error.response?.data?.message) {
-        alert(`모임 취소 실패: ${error.response.data.message}`);
-      } else {
-        alert('모임 취소에 실패했습니다. 다시 시도해주세요.');
-      }
+const handleCancelApply = async (gathering) => {
+  try {
+    const isConfirmed = window.confirm(`'${gathering.title}' 게더링 참여를 정말 취소하시겠습니까?`);
+    if (!isConfirmed) {
+      return;
     }
-  };
+    
+    const response = await myAxios(token, setToken).post(`/user/cancelGatheringApply/${gathering.gatheringApplyId}`);
 
+    if (response.status === 200) {
+      alert('게더링 참여가 성공적으로 취소되었습니다.');
+      
+      // 취소된 항목을 목록에서 제거
+      setApplyList(prevList => 
+        prevList.filter(item => item.gatheringApplyId !== gathering.gatheringApplyId)
+      );
+      
+      // 전체 카운트 감소
+      setAllCnt(prevCount => prevCount - 1);
+      
+      // 현재 항목의 상태에 따라 해당 카운트 감소
+      if (gathering.status === "수락됨") {
+        setInProgressCnt(prevCount => prevCount - 1);
+      } else if (gathering.status === "대기중") {
+        setUndefinedCnt(prevCount => prevCount - 1);
+      } else if (gathering.status === "거절됨" || gathering.status === "취소됨") {
+        setCanceledCnt(prevCount => prevCount - 1);
+      }
+      setSearch(prev => ({ ...prev }));
+    }
+  } catch (error) {
+    console.error('모임 취소 오류:', error);
+    if (error.response?.data?.message) {
+      alert(`모임 취소 실패: ${error.response.data.message}`);
+    } else {
+      alert('모임 취소에 실패했습니다. 다시 시도해주세요.');
+    }
+  }
+};
   const handleDetailGathering = (gatheringId) => {
     navigate(`/gatheringDetail/${gatheringId}`);
   };

@@ -11,6 +11,9 @@ import Header from '../../common/Header';
 import FollowButton from './FollowButton';
 import { useQuery } from '@tanstack/react-query';
 import share from './icons/share.png';
+import { LuMessageCircleMore } from "react-icons/lu";
+import heartOutline from './icons/heart-outline.png';
+import heartFilled from './icons/heart-filled.png';
 import { useNavigate } from 'react-router-dom';
 
 export default function FeedDetail() {
@@ -515,9 +518,10 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
                 className={`KYM-action-icon ${liked ? 'liked' : ''}`}
                 onClick={toggleLike}
               >
-                {liked ? '❤️' : '🤍'}
+                 <img src={liked ? heartFilled : heartOutline} alt="좋아요" />
+                {/* {liked ? '❤️' : '🤍'} */}
               </button>
-              <button className="KYM-action-icon">💬</button>
+              <button className="KYM-action-icon"><LuMessageCircleMore/> </button>
               <img src={share} alt="공유" className="KYM-action-icon2" onClick={() => {
                 handleShare(feed);
                 setMenuOpenId(null);

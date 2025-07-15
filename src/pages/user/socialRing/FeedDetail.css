@@ -1,6 +1,6 @@
 /* Scoped under .KYM-detail-container */
 .KYM-detail-container {
-  max-width: 1600px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -9,7 +9,7 @@
 
 .KYM-detail-container .KYM-detail-main {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-space-evenly;
   border: 1px solid #eee;
   border-radius: 8px;
   overflow: hidden;
@@ -38,16 +38,14 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #fff;
-  border: 1px solid #FFB22C;
-  color: #FFB22C;
-  font-size: 20px;
+  background: none; 
+  border: none;
+  color: #Ffff;
+  font-size: 40px;
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: background 0.2s, color 0.2s;
-  opacity: 0;
+  opacity: 0;  
   pointer-events: none;
 }
 .KYM-detail-container .KYM-detail-image:hover .KYM-image-nav {
@@ -61,10 +59,6 @@
 
 .KYM-detail-container .KYM-image-nav.right {
   right: 12px;
-}
-.KYM-detail-container .KYM-image-nav:hover {
-  background: #FFB22C;
-  color: #fff;
 }
 
 .KYM-detail-container .KYM-image-dots {
@@ -91,6 +85,7 @@
   background: #fff;
   height: 75vh;
   overflow: visible;
+  margin: 0 auto;
 }
 
 .KYM-detail-container .KYM-detail-header {
@@ -200,6 +195,10 @@
   border: none;
   margin-right: 16px;
 }
+.KYM-action-icon >img{
+  width: 24px;
+  height: 24px;
+}
 .KYM-detail-container .KYM-action-icon2 {
   font-size: 26px;
   width: 26px;
@@ -226,9 +225,10 @@
 }
 
 .KYM-detail-container .KYM-detail-date {
-  font-size: 12px;
+  font-size: 14px;
   color: #8e8e8e;
   margin-top: 4px;
+  padding:16px 24px;
 }
 
 .KYM-detail-container .KYM-detail-content {
@@ -236,13 +236,14 @@
   font-size: 16px;
   line-height: 1.6;
   color: #262626;
-  word-break: break-word;
+  word-break: keep-all;
   flex-grow: 1;
   white-space: pre-line;
 }
 
 .KYM-detail-container .KYM-hashtags {
-  padding: 8px 16px;
+  /* padding: 8px 16px; */
+  padding: 16px 24px;
 }
 
 .KYM-detail-container .KYM-hashtag {

@@ -17,6 +17,13 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
+.MyGatherInquiryList_error-state_osk{
+      display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    padding: 40px 20px;
+}
 
 .MyGatherInquiryList_inquiry-header_osk {
   display: flex;

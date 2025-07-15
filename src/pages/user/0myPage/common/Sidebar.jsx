@@ -45,7 +45,7 @@ export default function Sidebar() {
                     />
                     <div className="KYM-member-text">
                         <div className="KYM-member-name-line">
-                            <strong className="KYM-member-name">{user.username}</strong>
+                            <strong className="KYM-member-name">{user.nickName}</strong>
                             {/* <img className="KYM-member-badge" src={badgeIcon} alt="배지" /> */}
                         </div>
                         {/* <div className="KYM-member-stats">

@@ -187,7 +187,7 @@ const ClassManagement = () => {
         <div className="search-boxHY">
           <input
             type="text"
-            placeholder="클래스명, 강사명, 강사 ID 검색"
+            placeholder="일정ID, 클래스명, 강사명, 강사 ID 검색"
             value={filters.searchTerm}
             onChange={(e) => updateFilter("searchTerm", e.target.value)}
             className="search-inputHY"

@@ -22,7 +22,7 @@ import SettlementInfo from './pages/host/SettlementInfo';
 import StudentSearch from './pages/host/StudentSearch';
 import './App.css';
 import FeedDetail from './pages/user/socialRing/FeedDetail';
-import FeedPage from './pages/user/socialRing/FeedPage';
+
 import UserFeed from './pages/user/socialRing/UserFeed';
 import Test2 from './pages/user/socialRing/Test2.jsx';
 import MyScrapList from './pages/user/socialRing/MyScrapList.jsx';
@@ -52,6 +52,8 @@ import SettlementManagement  from "./pages/admin/SettlementManagement";
 // import SettlementModal  from "./pages/admin/SettlementModal.jsx"; 
 
 
+
+
 import FeedEdit from './pages/user/socialRing/FeedEdit.jsx';
 import MyFeed from './pages/user/socialRing/MyFeed.jsx';
 import ScrapList from './pages/user/socialRing/ScrapList.jsx';
@@ -59,6 +61,7 @@ import Follower from './pages/user/socialRing/Follower.jsx';
 import Following from './pages/user/socialRing/Following.jsx'
 import HostFeedPage from './pages/user/socialRing/HostFeedPage.jsx';
 import HostFeedCreate from './pages/user/socialRing/FeedHostCreate.jsx';
+
 
 import ClassList from "./pages/common/ClassList.jsx";
 import ClassRingDetail from "./pages/common/ClassRingDetail.jsx";
@@ -97,7 +100,7 @@ import ResetPassword from './pages/common/ResetPassword.jsx';
 import HostFeedDetail from './pages/user/socialRing/HostFeedDetail.jsx';
 import MainSearch from './pages/common/MinSearch.jsx';
 import HostFeedEdit from './pages/user/socialRing/HostFeedEdit.jsx';
-
+import PaymentResult from './pages/user/classRing/PaymentResult.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -125,7 +128,7 @@ function App() {
         <Route path="/gatheringList" element={<GatheringList />} />
         <Route path="/class/classRingDetail/:classId" element={<ClassRingDetail />} />
         <Route path="/gatheringDetail/:gatheringId" element={<GatheringDetail />} />
-        {/* <Route path="/feeds" element={<FeedPage />} /> */}
+
         <Route path="/userFeed/:nickname" element={<UserFeed />} />
         <Route path="/feed/:feedId" element={<FeedDetail />} />
         <Route path="/token" element={<Token />} />
@@ -159,6 +162,7 @@ function App() {
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
+        <Route path="/user/payment/payment-result" element={<PaymentResult />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />

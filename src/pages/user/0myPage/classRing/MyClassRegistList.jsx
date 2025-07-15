@@ -82,10 +82,13 @@ export default function MyClassList() {
   //결제내역 모달
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
+  //취소내역 모달  
+  const [modalOpen2, setModalOpen2] = useState(false);
+  const [modalData2, setModalData2] = useState(null);
 
   //결제 취소
   const handleCancelClass = async (cls) => {
-    const confirmCancel = window.confirm(`'${cls.classTitle}' 수강을 정말 취소하시겠습니까?`);
+    const confirmCancel = window.confirm(`'${cls.classTitle}' 수강을 정말 취소하시겠습니까? 쿠폰은 환불되지 않습니다.`);
     if (!confirmCancel) return;
 
     try {
@@ -202,17 +205,31 @@ export default function MyClassList() {
                         강의자료 다운
                       </a>
                     )}
-                    <button
-                      className={styles.actionBtn}
-                      onClick={e => {
-                        e.stopPropagation();
-                        setModalData(cls);
-                        setModalOpen(true);
-                      }}
-                    >
-                      결제내역
-                    </button>
-                    {isCancelable(cls.startDate) && (
+                    {cls.paymentStatus==="결제완료" ? (
+                      <button
+                        className={styles.actionBtn}
+                        onClick={e => {
+                          e.stopPropagation();
+                          setModalData(cls);
+                          setModalOpen(true);
+                        }}
+                      >
+                        결제내역
+                      </button>
+                    ) : (
+                      <button
+                        className={styles.actionBtn}
+                        onClick={e => {
+                          e.stopPropagation();
+                          setModalData2(cls);
+                          setModalOpen2(true);
+                        }}
+                      >
+                        취소내역
+                      </button>
+                    )}
+
+                    {cls.paymentStatus==="결제완료"&& isCancelable(cls.startDate) && (
                       <button
                         className={styles.actionBtn2}
                         onClick={(e) => {
@@ -308,7 +325,7 @@ export default function MyClassList() {
                 <span className={styles.blue}>₩{modalData.classPrice?.toLocaleString() || '—'}원</span>
               </div>
               <div className={styles.modalRow}>
-                <span>할인 ({modalData.couponName} 적용)</span>
+                <span>할인 ({modalData.couponName} 쿠폰 적용)</span>
                 <span className={styles.red}>
                   -₩
                   {(
@@ -330,6 +347,64 @@ export default function MyClassList() {
         </div>
       )}
 
+
+      {modalOpen2 && (
+        <div className={styles.modalBackdrop} onClick={() => setModalOpen2(false)}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={() => setModalOpen2(false)}>×</button>
+            <h3 className={styles.modalTitle}>결제 및 취소 내역</h3>
+            
+            <div className={styles.modalRow}>
+              <span>클래스명</span>
+              <span>{modalData2.classTitle}</span>
+            </div>
+            <div className={styles.modalRow}>
+              <span>결제 시간</span>
+              <span>{new Date(modalData2.paidAt).toLocaleString()}</span>
+            </div>
+            <div className={styles.modalRow}>
+              <span>취소 시간</span>
+              <span>{new Date(modalData2.canceledAt).toLocaleString()}</span>
+            </div>
+            <div className={styles.modalRow}>
+              <span>결제 정보</span>
+              <span>{modalData2.paymentType}</span>
+            </div>
+
+            <hr className={styles.modalDivider}/>
+
+            {modalData2.couponName!=="쿠폰없음" && (
+              <>
+              <div className={styles.modalRow}>
+                <span>상품 금액</span>
+                <span className={styles.blue}>₩{modalData2.classPrice?.toLocaleString() || '—'}원</span>
+              </div>
+              <div className={styles.modalRow}>
+                <span>할인 ({modalData2.couponName} 쿠폰 적용)</span>
+                <span className={styles.red}>
+                  -₩
+                  {(
+                    (modalData2.classPrice ?? 0) - (modalData2.amount ?? 0)
+                  ).toLocaleString()}원
+                </span>
+              </div>
+              </>
+            )}
+
+
+            <hr className={styles.modalDivider}/>
+
+            <div className={`${styles.modalRow} ${styles.totalRow}`}>
+              <span>최종 결제 금액</span>
+              <span>₩{modalData2.amount.toLocaleString()}</span>
+            </div>
+            <div className={`${styles.modalRow} ${styles.totalRow}`}>
+              <span>최종 환불 금액</span>
+              <span className={styles.bold}>₩{modalData2.amount.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

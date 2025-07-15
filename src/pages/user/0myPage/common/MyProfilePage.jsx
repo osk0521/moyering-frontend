@@ -179,12 +179,11 @@ export default function MyProfilePage() {
                                     <span className="KYM-badge-title">배지</span>
                                     <div className="KYM-active-wrap">
                                         <span className="KYM-active-score">활동점수 : {activeScore}점</span>
-                                        <button className="KYM-help-btn">?</button>
+                                        {/* <button className="KYM-help-btn">?</button> */}
                                     </div>
                                 </div>
                                 <div className="KYM-badge-cell-content">
-                                    {/* <img src={`/${firstBadgeImg}`} alt="뱃지" className="KYM-badge-img" /> */}
-                                    <img src={`/badge_${firstBadgeImg}.png`} alt="뱃지" className="KYM-badge-img" />
+                                    <img src={`/badge_${firstBadgeImg}.png`} alt="배지" className="KYM-badge-img" />
                                     <button onClick={() => {
                                         setIsBadgeModalOpen(true);
                                         token && myAxios(token, setToken).get("/user/badges")
@@ -282,7 +281,6 @@ export default function MyProfilePage() {
                             </div>
                         </div>
                     )}
-
                     <div className="KYM-intro-box">
                         <label>한줄소개</label>
                         <textarea value={intro} onChange={e => setIntro(e.target.value)} />

@@ -82,6 +82,32 @@ export default function MyClassList() {
   //결제내역 모달
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
+
+  //결제 취소
+  const handleCancelClass = async (cls) => {
+    const confirmCancel = window.confirm(`'${cls.classTitle}' 수강을 정말 취소하시겠습니까?`);
+    if (!confirmCancel) return;
+
+    try {
+      const res = await myAxios(token, setToken).put(`/user/class/cancel/${cls.paymentId}`);
+      alert('수강이 취소되었습니다.');
+      fetchWishlist(); // 목록 새로고침
+    } catch (error) {
+      console.error('수강 취소 실패', error);
+      alert('수강 취소 중 오류가 발생했습니다.');
+    }
+  };
+  const isCancelable = (startDateStr) => {
+    const today = new Date();
+    const classDate = new Date(startDateStr); // e.g., "2025-07-18"
+    
+    // 수업일로부터 2일 전 자정
+    const cancelDeadline = new Date(classDate);
+    cancelDeadline.setDate(cancelDeadline.getDate() - 2);
+    cancelDeadline.setHours(0, 0, 0, 0);
+
+    return today < cancelDeadline;
+  };
   
   return (
     <>
@@ -151,7 +177,7 @@ export default function MyClassList() {
                     <span className={styles.statusBadge}>폐강</span>
                   ) : cls.paymentStatus === "결제완료" && cls.status === "종료" ? (
                     <span className={styles.statusBadge}>종료</span>
-                  ) : cls.paymentStatus === "취소" ? (
+                  ) : cls.paymentStatus === "취소됨" ? (
                     <span className={styles.statusBadge}>수강취소</span>
                   ) : null}
                   <h3 className={styles.classTitle}>{cls.classTitle}</h3>
@@ -186,6 +212,17 @@ export default function MyClassList() {
                     >
                       결제내역
                     </button>
+                    {isCancelable(cls.startDate) && (
+                      <button
+                        className={styles.actionBtn2}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCancelClass(cls);
+                        }}
+                      >
+                        수강취소
+                      </button>
+                    )}
                 </div>
               </div>
             </div>

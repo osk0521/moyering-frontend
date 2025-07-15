@@ -1,6 +1,6 @@
 /* NoticeList.css */
 .NoticeList_container_osk {
-  width: 1920px;
+  width: 1420px;
   margin: 0 auto;
   background-color: #ffffff;
   min-height: 100vh;
@@ -21,7 +21,7 @@
 }
 
 .NoticeList_title_osk {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 700;
   color: #333333;
   margin: 0 0 30px 0;
@@ -52,12 +52,20 @@
   text-align: center;
   font-weight: 600;
   color: #495057;
-  font-size: 14px;
+  font-size: 17px;
   border-right: 1px solid #e9ecef;
 }
+.NoticeList_thead_osk th:nth-child(1) {
+  width: 122px;
+}
+/* .NoticeList_thead_osk th:nth-child(2) {
+  width: 80px;
+} */
 
 .NoticeList_thead_osk th:last-child {
   border-right: none;
+  width: 122px;
+  fo
 }
 
 .NoticeList_th_number_osk {
@@ -99,7 +107,7 @@
 .NoticeList_tbody_osk td {
   padding: 18px 16px;
   color: #495057;
-  font-size: 14px;
+  font-size: 15px;
   border-right: 1px solid #e9ecef;
 }
 

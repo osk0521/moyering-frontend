@@ -1,11 +1,11 @@
 .card {
-  width: 278px;
+  width: 310px;
   border-radius: 8px;
   overflow: hidden;
   background: white;
   box-shadow: 2px 2px 7px 2px rgb(0 0 0 / 8%);
   /* transition: transform 0.2s ease; */
-  height: 331px;
+  height: 360px;
   cursor: pointer;
   margin: 12px 7px;
 }
@@ -15,6 +15,7 @@
 
 .cardImage {
   position: relative;
+    width: 100%;           /* 부모 .card의 278px을 그대로 따라갑니다 */
   height: 210px;
   background-color: #ddd;
   background-size: cover;
@@ -72,7 +73,9 @@
   border-radius: 8px;
   font-weight: 600;
 }
-
+.tag > svg{
+  margin-bottom: 3px;
+}
 .yellow {
   background: #fff3e0;
   color: #f57c00;
@@ -86,11 +89,14 @@
 .cardTitle {
   font-size: 1rem;
   font-weight: 600;
-  margin: 0.25rem 0;
+  margin: 0.65rem 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .cardInfo {
-  font-size: 0.9rem;
+  font-size: 15px;
   color: #666;
   display: flex;
   align-items: center;
@@ -100,7 +106,12 @@
 .cardEtc {
   display: flex;
   justify-content: space-between;
+  position: relative;
+  bottom: -20px;
 }
 .cardPrice {
   font-weight: 700;
+}
+.section_osk{
+  justify-content: space-around;
 }

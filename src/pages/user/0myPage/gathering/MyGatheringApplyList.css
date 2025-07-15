@@ -200,7 +200,7 @@
 
 .MyGatheringApplyList_info-row_osk {
   display: flex;
-  align-items: center;
+  align-items: self-start;
   gap: 8px;
   font-size: 13px;
 }

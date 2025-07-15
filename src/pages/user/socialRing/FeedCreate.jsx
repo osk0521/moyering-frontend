@@ -201,6 +201,7 @@ export default function FeedCreate() {
                                 >
                                     {t}
                                     <button
+                                        className=" KYM-FeedCreate-tag-remove button_osk"
                                         type="button"
                                         onClick={() => handleRemoveTag(t)}
                                     >

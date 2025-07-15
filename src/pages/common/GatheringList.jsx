@@ -15,6 +15,7 @@ import {
 import {fetchGatheringListAtom} from '../../hooks/common/fetchGatheringListAtom';
 import { fetchCategoryListAtom } from '../../hooks/common/fetchCategoryListAtom';
 import { categoryListAtom } from '../../atom/classAtom';
+import { ko } from "date-fns/locale";
 
 export default function GatheringList() {
   const location = useLocation();
@@ -213,6 +214,7 @@ const handleReset = () => {
                     dateFormat="yyyy.MM.dd"
                     placeholderText="날짜"
                     className={styles.datePickerInput}
+                    locale={ko}
                   />
                   <span>~</span>
                   <DatePicker
@@ -221,6 +223,7 @@ const handleReset = () => {
                     dateFormat="yyyy.MM.dd"
                     placeholderText="날짜"
                     className={styles.datePickerInput}
+                    locale={ko}
                   />
                 </div>
               </div>

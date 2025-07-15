@@ -81,6 +81,8 @@ const SettlementManagement = () => {
         });
         
         setSettlementData(uniqueContent);
+                    console.log(response.data);
+
         setTotalPages(totalPages || 0);
         setTotalElements(totalElements || 0);
         setCurrentPage(number || 0);
@@ -89,6 +91,7 @@ const SettlementManagement = () => {
       console.error('정산 목록 조회 실패:', err);
       setError('정산 목록을 불러오는데 실패했습니다.');
     } finally {
+
       setLoading(false);
     }
   }, [currentPage, pageSize, searchTerm, startDate, endDate, token]);
@@ -105,8 +108,8 @@ const handleConfirmSettlement = async (settlementId, stats) => {
         const response = await myAxios(token).put(
             `/api/settlement/${settlementId}/complete`, 
             {
-                totalSettlementAmount: stats.settleAmountToDo,
-                totalPayments: stats.totalPayments
+                totalSettlementAmount: settlementData.settleAmountToDo,
+                totalPayments: settlementData.settleAmountToDo
             },
             {
                 headers: {
@@ -371,7 +374,7 @@ const handleConfirmSettlement = async (settlementId, stats) => {
                   </td>
                   <td className="settlement-dateHY">{formatDate(item.settlementDate)}</td>
                   <td className="settlement-amountHY">
-                    {formatAmount(item.settlementAmount)}원
+                    {formatAmount(item.settleAmountToDo)}원
                   </td>
                   <td className="settled-dateHY">{formatDate(item.settledAt)}</td>
                   <td className="bank-nameHY">{item.bankName || '-'}</td>

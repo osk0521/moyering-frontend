@@ -1,4 +1,4 @@
-.KYM-profile-container {
+.KYM-myprofile-container {
   width: 1280px;
   margin: 0 auto;
   display: flex;
@@ -7,7 +7,7 @@
 
 .KYM-sidebar-area {
   width: 240px;
-  margin-left: 300px;
+  /* margin-left: 300px; */
 }
 
 .KYM-profile-wrap {
@@ -16,7 +16,7 @@
   max-width: 900px;
   min-width: 0;
   padding: 30px;
-  margin-left: 570px;
+  /* margin-left: 570px; */
 }
 .KYM-profile-wrap h3{
      font-size: 24px;
@@ -127,7 +127,10 @@
     cursor: pointer;
     font-weight: bold;
 }
-
+.KYM-help-btn{
+    height: fit-content!important;
+    width: fit-content !important;
+}
 .KYM-profile-wrap .KYM-profile-table tr:first-child td {
     border-top: none;
 }
@@ -168,6 +171,13 @@
     margin-top: 10px;
 }
 
+.KYM-category-list button{
+    background: none;
+    border: none!important;
+    color: #f6b74d;
+    padding:1px 6px!important;
+    font-size: small;
+}
 .KYM-profile-wrap .KYM-category-list span,
 .KYM-profile-wrap .KYM-category-list button {
     border: 1px solid #f6b74d;
@@ -177,6 +187,13 @@
     cursor: pointer;
 }
 
+.KYM-profile-wrap .modify-btn {
+    padding: 0 !important;
+    border-radius: 20px;
+    background: none;
+    font-size: 22px;
+    font-weight: bold;
+}
 .KYM-profile-wrap .KYM-btns {
     text-align: center;
     margin-top: 20px;
@@ -266,16 +283,8 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    font-size: 14px;
 }
-
-.KYM-profile-wrap .modify-btn {
-    padding: 6px 12px;
-    border: 1px solid #f6b74d;
-    border-radius: 20px;
-    background: #fff;
-    cursor: pointer;
-}
-
 .KYM-profile-wrap .modal-category-list {
     display: flex;
     flex-wrap: wrap;

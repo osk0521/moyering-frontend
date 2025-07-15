@@ -33,7 +33,8 @@ export default function Sidebar() {
                 <div className="KYM-member-box">
                     <img
                         className="KYM-member-avatar"
-                        src={`${url}/image?filename=${user?.profile}`}
+                        src={user?.profile ? `${url}/iupload/${user.profile}`: '/profile.png'}
+                        // src={`${url}/image?filename=${user?.profile}`}
                         alt="아바타"
                     />
                     <div className="KYM-member-text">
@@ -72,7 +73,7 @@ export default function Sidebar() {
                         <li><strong>소셜링</strong></li>
                         <li><a href="/user/mypage/myFeed">작성한 피드</a></li>
                         <li><a href="/user/mypage/myScraps">스크랩 목록</a></li>
-                        <li><a href="/user/mypage/follower">팔로우 목록</a></li>
+                        <li><a href="/user/mypage/follower">팔로워 목록</a></li>
                         <li><a href="/user/mypage/following">팔로잉 목록</a></li>
 
                         <li><strong></strong></li>

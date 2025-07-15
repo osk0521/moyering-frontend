@@ -22,7 +22,6 @@ export default function FeedDetail() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showReplyPickerId, setShowReplyPickerId] = useState(null);
   const { feedId } = useParams();
-  // const [feed, setFeed] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
@@ -44,23 +43,7 @@ export default function FeedDetail() {
   const currentUser = useAtomValue(userAtom);
   const isMyFeed = feed.writerUserId === currentUser.id;
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   console.log(token)
-  //   myAxios().get(`/socialing/feed?feedId=${feedId}`)
-  //     .then(res => {
-  //       console.log('▶ feed detail:', res.data);
-  //       console.log(res)
-  //       setFeed(res.data)
-  //       console.log("댓글")
-  //       console.log(res.data.comments)
-  //       setComment(res.data.comments)
-  //       console.log(token)
-  //       console.log('▶ writerUserId:', feed.writerUserId);
-  //     })
-  //     .catch(err => {
-  //       console.log(err)
-  //     })
-  // }, [token])
+
   useEffect(() => {
     myAxios().get(`/socialing/feed?feedId=${feedId}`)
       .then(res => {
@@ -103,28 +86,7 @@ export default function FeedDetail() {
   const openReport = () => { setShowMenu(false); setShowReport(true); };
   const closeReport = () => setShowReport(false);
   console.log("▶ mine :", mine);
-  // const onToggleReplies = (commentId) => {
-  //   setShowReplies(prev => ({
-  //     ...prev,
-  //     [commentId]: !prev[commentId]
-  //   }));
-  // };
 
-  //  const onToggleReplies = (commentId, replies) => {
-  //   setShowReplies(prev => {
-  //     const newReplies = { ...prev, [commentId]: !prev[commentId] };
-  //     const openChild = (children) => {
-  //       children.forEach(c => {
-  //         newReplies[c.commentId] = true;
-  //         if (c.replies) openChild(c.replies);
-  //       });
-  //     };
-  //     if (replies) {
-  //       openChild(replies);
-  //     }
-  //     return newReplies;
-  //   });
-  // };
 
   const onToggleReplies = (commentId, replies) => {
     setShowReplies(prev => {
@@ -453,7 +415,7 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
                 <img className="KYM-detail-avatar"  src={writerProfile ? `${url}/iupload/${writerProfile}` : "/profile.png"} alt="" />
                 <span className="KYM-detail-nickname">{writerId}</span>
                 {feed.writerBadge &&
-                  <img src={`/${feed.writerBadgeImg}`} alt="대표 배지" className="KYM-detail-badge-img" />
+                  <img src={`/badge_${feed.writerBadgeImg}.png`} alt="대표 배지" className="KYM-detail-badge-img" />
                 }
                 {!mine
                   ? <FollowButton

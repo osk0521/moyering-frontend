@@ -224,7 +224,7 @@ export default function FeedPage2() {
                                                 onClick={() => navigate(`/userFeed/${feed.writerId}`)} style={{ cursor: "pointer" }} />
                                             <span className="KYM-nickname"
                                                 onClick={() => navigate(`/userFeed/${feed.writerId}`)} style={{ cursor: "pointer" }} >{feed.writerId}</span>
-                                            {feed.writerBadge && <img src={feed.writerBadgeImg} alt="대표 배지" className="KYM-detail-badge-img" />}
+                                            {feed.writerBadge && <img src={`/badge_${feed.writerBadgeImg}.png`}  alt="대표 배지" className="KYM-detail-badge-img" />}
                                             <FollowButton targetUserId={feed.writerUserId} className="KYM-follow-btn" style={{ marginLeft: '8px' }} />
                                         </div>
                                         <img src={moreIcon} alt="더보기" className="KYM-more-icon"

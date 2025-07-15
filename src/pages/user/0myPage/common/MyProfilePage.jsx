@@ -12,7 +12,7 @@ export default function MyProfilePage() {
 
     const [token, setToken] = useAtom(tokenAtom)
     const navigate = useNavigate();
-    const [username,setUsername] = useState('');
+    const [username, setUsername] = useState('');
     const [name, setName] = useState('');
     const [tel, setTel] = useState('');
     const [email, setEmail] = useState('');
@@ -54,9 +54,9 @@ export default function MyProfilePage() {
                 setActiveScore(data.activeScore || 0);
                 setUserBadgeId(data.userBadgeId || null);
                 // if (data.profile) setProfileUrl(`${url}/image?filename=${user.profile}` + data.profile);
-                if(!data.profile && !profileUrl){
+                if (!data.profile && !profileUrl) {
                     setProfileUrl("/profile.png")
-                }else if (data.profile && !profileUrl) {
+                } else if (data.profile && !profileUrl) {
                     setProfileUrl(`${url}/image?filename=${data.profile}&t=${new Date().getTime()}`);
                 }
             })
@@ -155,123 +155,144 @@ export default function MyProfilePage() {
             <Header />
             <div className="KYM-myprofile-container">
                 <aside className="KYM-sidebar-area">
-            <Sidebar />
-            </aside>
-            <div className="KYM-profile-wrap">
-                <h3>내 정보 수정</h3>
-                <div className="KYM-profile-table">
-  <div className="KYM-profile-row">
-    <div className="KYM-profile-cell">
-      <div className="KYM-photo-title">프로필 사진</div>
-      <div className="KYM-photo-cell-content">
-        <img
-          src={profileUrl ? profileUrl : `${url}/image?filename=${user.profile}&t=${new Date().getTime()}`}
-          alt="프로필"
-          className="KYM-photo-img"
-        />
-        <button onClick={() => document.getElementById("fileInput").click()}>프로필 변경</button>
-        <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
-      </div>
-    </div>
-
-    <div className="KYM-profile-cell">
-      <div className="KYM-badge-top">
-        <span className="KYM-badge-title">배지</span>
-        <div className="KYM-active-wrap">
-          <span className="KYM-active-score">활동점수 : {activeScore}점</span>
-          <button className="KYM-help-btn">?</button>
-        </div>
-      </div>
-      <div className="KYM-badge-cell-content">
-        <img src={`/${firstBadgeImg}`} alt="뱃지" className="KYM-badge-img" />
-        <button onClick={() => {
-          setIsBadgeModalOpen(true);
-          token && myAxios(token, setToken).get("/user/badges")
-            .then(res => setBadgeList(res.data))
-            .catch(console.error);
-        }}>뱃지 변경</button>
-      </div>
-    </div>
-  </div>
-
-  <div className="KYM-profile-row">
-    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>아이디</label><input disabled value={username} /></div></div>
-    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>비밀번호</label><input type="password" value="********" disabled /></div></div>
-  </div>
-  <div className="KYM-profile-row">
-    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>이름</label><input value={name} onChange={e => setName(e.target.value)} /></div></div>
-    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>전화번호</label><input value={tel} onChange={e => setTel(e.target.value)} /></div></div>
-  </div>
-  <div className="KYM-profile-row">
-    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>이메일</label><input value={email} onChange={e => setEmail(e.target.value)} /></div></div>
-    <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>생년월일</label><input type="date" value={birthday} onChange={e => setBirthday(e.target.value)} /></div></div>
-  </div>
-</div>
-
-                <div className="KYM-address-box">
-                        <label>주소</label>
-                    <div className="KYM-post-row">
-                        <input type="text" value={addr} readOnly onClick={() => setIsPostcodeOpen(true)} style={{ cursor: 'pointer' }} />
-                        <button className="KYM-address-btn" onClick={() => setIsPostcodeOpen(true)}>주소 검색</button>
-                    </div>
-                    <input id="detailAddrInput" value={detailAddr} onChange={e => setDetailAddr(e.target.value)} placeholder="상세주소" />
-                </div>
-                {isPostcodeOpen && (
-                    <div className="modal-overlay" onClick={() => setIsPostcodeOpen(false)}>
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <DaumPostcode onComplete={handleComplete} autoClose />
-                            <button className="close-btn" onClick={() => setIsPostcodeOpen(false)}>닫기</button>
-                        </div>
-                    </div>
-                )}
-
-                <div className="KYM-category-section">
-                    <label>선호 카테고리</label>
-                    <div className="KYM-category-list">
-                        {selectedCategories.map((cat, idx) => (
-                            <span key={idx} className="selected-cat">
-                                {(typeof cat === 'string') ? cat : (cat.subCategoryName || cat.name)}
-                                <button onClick={() => handleRemoveCategory(idx)}>X</button>
-                            </span>
-                        ))}
-                        {selectedCategories.length < 5 && (
-                            <button className="modify-btn" onClick={() => setIsCategoryModalOpen(true)}>
-                                +
-                            </button>
-                        )}
-                    </div>
-                </div>
-
-                {isCategoryModalOpen && (
-                    <div className="modal-overlay" onClick={() => setIsCategoryModalOpen(false)}>
-                        <div className="modal-content" onClick={e => e.stopPropagation()}>
-                            <h3>카테고리 선택 (최대 5개)</h3>
-                            <div className="modal-category-list">
-                                {categoryList.map((cat, idx) => (
-                                    <div
-                                        key={idx}
-                                        className={`category-item ${selectedCategories.includes(cat.subCategoryName) ? 'selected' : ''}`}
-                                        onClick={() => toggleCategory(cat.subCategoryName)}
-                                    >
-                                        {cat.subCategoryName}
-                                    </div>
-                                ))}
+                    <Sidebar />
+                </aside>
+                <div className="KYM-profile-wrap">
+                    <h3>내 정보 수정</h3>
+                    <div className="KYM-profile-table">
+                        <div className="KYM-profile-row">
+                            <div className="KYM-profile-cell">
+                                <div className="KYM-photo-title">프로필 사진</div>
+                                <div className="KYM-photo-cell-content">
+                                    <img
+                                        src={profileUrl ? profileUrl : `${url}/image?filename=${user.profile}&t=${new Date().getTime()}`}
+                                        alt="프로필"
+                                        className="KYM-photo-img"
+                                    />
+                                    <button onClick={() => document.getElementById("fileInput").click()}>프로필 변경</button>
+                                    <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
+                                </div>
                             </div>
-                            <button className="close-btn" onClick={() => setIsCategoryModalOpen(false)}>확인</button>
+
+                            <div className="KYM-profile-cell">
+                                <div className="KYM-badge-top">
+                                    <span className="KYM-badge-title">배지</span>
+                                    <div className="KYM-active-wrap">
+                                        <span className="KYM-active-score">활동점수 : {activeScore}점</span>
+                                        <button className="KYM-help-btn">?</button>
+                                    </div>
+                                </div>
+                                <div className="KYM-badge-cell-content">
+                                    {/* <img src={`/${firstBadgeImg}`} alt="뱃지" className="KYM-badge-img" /> */}
+                                    <img src={`/badge_${firstBadgeImg}.png`} alt="뱃지" className="KYM-badge-img" />
+                                    <button onClick={() => {
+                                        setIsBadgeModalOpen(true);
+                                        token && myAxios(token, setToken).get("/user/badges")
+                                            .then(res => setBadgeList(res.data))
+                                            .catch(console.error);
+                                    }}>배지 변경</button>
+                                </div>
+                                {isBadgeModalOpen && (
+                                    <div className="modal-overlay" onClick={() => setIsBadgeModalOpen(false)}>
+                                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                            <h3>내 배지 목록</h3>
+                                            <div className="modal-badge-list">
+                                                {badgeList.length === 0 && <div>보유한 배지가 없습니다.</div>}
+                                                {badgeList.map((badge) => (
+                                                    <div
+                                                        key={badge.userBadgeId}
+                                                        className="badge-item"
+                                                        onClick={() => handleBadgeSelect(badge.userBadgeId, badge.badgeImg)}
+                                                    >
+                                                        <img src={`/badge_${badge.badgeImg}.png`} alt="뱃지" style={{ width: '60px', height: '60px' }} />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <button className="close-btn" onClick={() => setIsBadgeModalOpen(false)}>닫기</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="KYM-profile-row">
+                            <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>아이디</label><input disabled value={username} /></div></div>
+                            <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>비밀번호</label><input type="password" value="********" disabled /></div></div>
+                        </div>
+                        <div className="KYM-profile-row">
+                            <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>이름</label><input value={name} onChange={e => setName(e.target.value)} /></div></div>
+                            <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>전화번호</label><input value={tel} onChange={e => setTel(e.target.value)} /></div></div>
+                        </div>
+                        <div className="KYM-profile-row">
+                            <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>이메일</label><input value={email} onChange={e => setEmail(e.target.value)} /></div></div>
+                            <div className="KYM-profile-cell"><div className="KYM-td-flex"><label>생년월일</label><input type="date" value={birthday} onChange={e => setBirthday(e.target.value)} /></div></div>
                         </div>
                     </div>
-                )}
 
-                <div className="KYM-intro-box">
-                    <label>한줄소개</label>
-                    <textarea value={intro} onChange={e => setIntro(e.target.value)} />
-                </div>
+                    <div className="KYM-address-box">
+                        <label>주소</label>
+                        <div className="KYM-post-row">
+                            <input type="text" value={addr} readOnly onClick={() => setIsPostcodeOpen(true)} style={{ cursor: 'pointer' }} />
+                            <button className="KYM-address-btn" onClick={() => setIsPostcodeOpen(true)}>주소 검색</button>
+                        </div>
+                        <input id="detailAddrInput" value={detailAddr} onChange={e => setDetailAddr(e.target.value)} placeholder="상세주소" />
+                    </div>
+                    {isPostcodeOpen && (
+                        <div className="modal-overlay" onClick={() => setIsPostcodeOpen(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <DaumPostcode onComplete={handleComplete} autoClose />
+                                <button className="close-btn" onClick={() => setIsPostcodeOpen(false)}>닫기</button>
+                            </div>
+                        </div>
+                    )}
 
-                <div className="KYM-btns">
-                    <button onClick={handleSubmit}>수정하기</button>
-                    <button onClick={() => navigate("/mypage/password")}>비밀번호 변경</button>
+                    <div className="KYM-category-section">
+                        <label>선호 카테고리</label>
+                        <div className="KYM-category-list">
+                            {selectedCategories.map((cat, idx) => (
+                                <span key={idx} className="selected-cat">
+                                    {(typeof cat === 'string') ? cat : (cat.subCategoryName || cat.name)}
+                                    <button onClick={() => handleRemoveCategory(idx)}>X</button>
+                                </span>
+                            ))}
+                            {selectedCategories.length < 5 && (
+                                <button className="modify-btn" onClick={() => setIsCategoryModalOpen(true)}>
+                                    +
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {isCategoryModalOpen && (
+                        <div className="modal-overlay" onClick={() => setIsCategoryModalOpen(false)}>
+                            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                                <h3>카테고리 선택 (최대 5개)</h3>
+                                <div className="modal-category-list">
+                                    {categoryList.map((cat, idx) => (
+                                        <div
+                                            key={idx}
+                                            className={`category-item ${selectedCategories.includes(cat.subCategoryName) ? 'selected' : ''}`}
+                                            onClick={() => toggleCategory(cat.subCategoryName)}
+                                        >
+                                            {cat.subCategoryName}
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="close-btn" onClick={() => setIsCategoryModalOpen(false)}>확인</button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="KYM-intro-box">
+                        <label>한줄소개</label>
+                        <textarea value={intro} onChange={e => setIntro(e.target.value)} />
+                    </div>
+
+                    <div className="KYM-btns">
+                        <button onClick={handleSubmit}>수정하기</button>
+                        <button onClick={() => navigate("/resetPassword")}>비밀번호 변경</button>
+                    </div>
                 </div>
-            </div>
             </div>
         </>
     );

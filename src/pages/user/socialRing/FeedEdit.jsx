@@ -90,32 +90,6 @@ form.append("tag4", tags[3] || "");
 form.append("tag5", tags[4] || "");
     removeUrls.forEach(url => form.append("removeUrls", url));
 
-
-    // if (imageFiles && imageFiles.length) {
-    //   imageFiles.forEach(file => form.append('images', file));
-    // }
-    // // 5개의 자리(1~5)에 대해
-    // for (let i = 0; i < 5; i++) {
-    //   if (imageFiles[i]) {
-    //     // 새로 업로드한 파일이 있으면 파일을 보냄
-    //     form.append(`img${i + 1}`, imageFiles[i]);
-    //   } else if (previewUrls[i] && !previewUrls[i].startsWith("blob:")) {
-    //     // 기존 서버 이미지가 있으면 파일명이든 경로든 문자열로 보내기
-    //     form.append(`img${i + 1}`, previewUrls[i]);
-    //   } else {
-    //     // 아무것도 없으면 빈 문자열
-    //     form.append(`img${i + 1}`, "");
-    //   }
-    // }
-//     for (let i = 0; i < 5; i++) {
-//   if (imageFiles[i]) {
-//     form.append(`img${i + 1}`, imageFiles[i]);
-//   } else if (previewUrls[i] && !previewUrls[i].startsWith("blob:")) {
-//     form.append(`img${i + 1}`, previewUrls[i]);  // 파일명을 그대로 넣음
-//   } else {
-//     form.append(`img${i + 1}`, "");
-//   }
-// }
 for (let i = 0; i < 5; i++) {
   if (imageFiles[i]) {
      console.log(`img${i+1}:`, imageFiles[i]);
@@ -231,8 +205,6 @@ for (let i = 0; i < 5; i++) {
               type="text"
               value={tagInput}
               onChange={e => setTagInput(e.target.value)}
-              // onKeyDown={e => e.key === 'Enter' && handleAddTag()}
-              // placeholder="Enter로 추가"
               onKeyDown={e => {
   if (e.key === 'Enter') {
     e.preventDefault(); // 엔터로 줄바꿈 방지

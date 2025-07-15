@@ -127,10 +127,23 @@
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
-  width: 100px;
+  width: 100%;
   /* width: 120px; */
   margin-left: 8px;
   flex-shrink: 0;
+  height: 32px;
+  min-width: 80px;
+  flex: 1;
+  position: relative;
+  z-index: 20;
+}
+.KYM-follow-btn:hover {
+  background: #e69d24;
+}
+
+.KYM-follow-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 178, 44, 0.6);
 }
 
 .KYM-detail-container .KYM-more-wrapper {
@@ -201,7 +214,7 @@
 }
 .KYM-detail-container .KYM-action-icon2 {
   font-size: 26px;
-  width: 26px;
+  width: 20px;
   cursor: pointer;
   background: none;
   border: none;

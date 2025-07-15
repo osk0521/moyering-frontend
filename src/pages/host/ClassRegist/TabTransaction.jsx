@@ -38,7 +38,7 @@ const TabTransaction = ({ registerValidator, classData, setClassData }) => {
           <span className="KHJ-required-text-dot">*</span>클래스 하루 금액
         </label>
         <div className="price-wrapper">
-          <input className="KHJ-price-input" placeholder="금액을 입력하세요." name="price" onChange={handlepriceChange} />
+          <input className="KHJ-price-input" placeholder="금액을 입력하세요." name="price" onChange={handlepriceChange} value={transaction.price || ''}/>
           <span>원</span>
         </div>
       </div>

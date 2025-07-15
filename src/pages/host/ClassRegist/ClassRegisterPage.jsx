@@ -102,26 +102,7 @@ const ClassRegisterPage = () => {
     setActiveTab(nextTabIndex);
   };
 
-  // const saveCurrentTab = async () => {
-  //   const validator = validators.current[activeTab];
-  //   if (validator) {
-  //     const isValid = await validator();
-  //     if (!isValid) return false;
-  //   }
 
-  //   await axios.post(`/host/classRegist/${activeTab}`, classData);//작성 내용만 저장
-  // }
-
-  // const submitAllData = async () => {
-  //   for(const validator of validators.current){
-  //     if(validator && !(await validator())){
-  //       alert("입력되지 않은 항목이 있습니다!")
-  //       return;
-  //     }
-  //   }
-
-  //   await axios.post('/host/classRegist/submit',classData);//검수요청
-  // }
   const [token, setToken] = useAtom(tokenAtom);
   console.log(token)
   const submit = () => {
@@ -192,107 +173,11 @@ const ClassRegisterPage = () => {
       })
   }
 
-
-  // const filterFilledFields = (data) => {
-  //   const result = {};
-
-  //   for (const key in data) {
-  //     const value = data[key];
-
-  //     if (value && typeof value === 'object' && !Array.isArray(value)) {
-  //       result[key] = filterFilledFields(value);
-  //     } else if (
-  //       value !== '' && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0)
-  //     ) {
-  //       result[key] = value;
-  //     }
-  //   }
-  //   return result
-  // }
-
-  // const safeAppend = (formData, key, value) => {
-  //   if (value !== '' && value !== null && value !== undefined) {
-  //     formData.append(key, value);
-  //   }
-  // };
-
-  // const safeAppendFile = (formData, key, file) => {
-  //   if (file instanceof File || file instanceof Blob) {
-  //     formData.append(key, file);
-  //   }
-  // };
-
-  // const saveDraft = () => {
-  //   const cleanDates = [...new Set(
-  //     (classData.schedule.dates || []).map(date =>
-  //       new Date(date).toISOString().slice(0, 10)
-  //     )
-  //   )].sort((a, b) => new Date(a) - new Date(b));
-
-  //   const filtered = filterFilledFields(classData);
-  //   const reqData = {
-  //     ...filtered.basicInfo,
-  //     ...filtered.classPortfolio,
-  //     ...filtered.description,
-  //     ...filtered.extraInfo,
-  //     ...filtered.schedule,
-  //     ...filtered.transaction
-  //   };
-
-  //   const formData = new FormData();
-  //   safeAppend(formData, "hostId", user.hostId);
-  //   safeAppend(formData, "status", "임시저장");
-  //   safeAppend(formData, "dates", cleanDates);
-  //   safeAppend(formData, "scheduleDetail", JSON.stringify(reqData.scheduleDetail || []));
-
-  //   // 일반 필드
-  //   safeAppend(formData, "addr", reqData.addr);
-  //   safeAppend(formData, "category1", reqData.category1);
-  //   safeAppend(formData, "category2", reqData.category2);
-  //   safeAppend(formData, "caution", reqData.caution);
-  //   safeAppend(formData, "price", reqData.price);
-  //   safeAppend(formData, "detailDescription", reqData.detailDescription);
-  //   safeAppend(formData, "incluision", reqData.incluision);
-  //   safeAppend(formData, "keywords", reqData.keywords);
-  //   if (reqData.coupons) safeAppend(formData, "coupons", JSON.stringify(reqData.coupons));
-  //   safeAppend(formData, "latitude", reqData.latitude);
-  //   safeAppend(formData, "locName", reqData.locName);
-  //   safeAppend(formData, "longitude", reqData.longitude);
-  //   safeAppend(formData, "name", reqData.name);
-  //   safeAppend(formData, "preparation", reqData.preparation);
-  //   safeAppend(formData, "recruitMax", reqData.recruitMax);
-  //   safeAppend(formData, "recruitMin", reqData.recruitMin);
-
-  //   // ✅ 파일 필드만 파일로 체크 후 append
-  //   safeAppendFile(formData, "material", reqData.material);
-  //   safeAppendFile(formData, "portfolio", reqData.portfolio);
-
-  //   // 이미지들
-  //   ['img1', 'img2', 'img3', 'img4', 'img5'].forEach(key => {
-  //     safeAppendFile(formData, key, reqData[key]); // ✅
-  //   });
-
-  //   // 디버깅용 출력
-  //   for (let pair of formData.entries()) {
-  //     console.log(`${pair[0]}:`, pair[1]);
-  //   }
-
-  //   myAxios(token, setToken)
-  //     .post("/host/classRegist/save", formData)
-  //     .then(res => {
-  //       alert("임시저장 완료!");
-  //       console.log(res.data);
-  //     })
-  //     .catch(err => {
-  //       alert("임시저장 실패...");
-  //       console.log(err);
-  //     });
-  // };
-
   const handleReset = () => {
     const confirmed = window.confirm("정말 입력한 내용을 초기화하시겠습니까?");
     if (confirmed) {
       setClassData(initialClassData);
+      setActiveTab(0);
     }
   }
 

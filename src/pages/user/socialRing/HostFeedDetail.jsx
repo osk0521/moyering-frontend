@@ -99,7 +99,7 @@ useEffect(() => {
           <div className="KYM-hostdetail-side">
             <div className="KYM-hostdetail-header">
               <div className="KYM-left-info">
-                <img className="KYM-hostdetail-avatar" src={`${url}/iupload/${hostProfile}`} alt="" />
+                <img className="KYM-hostdetail-avatar" src={hostProfile ? `${url}/iupload/${hostProfile}` :'/profile.png'} alt="" />
                 <span className="KYM-hostdetail-nickname">{hostName}</span>
               </div>
               <img
@@ -143,9 +143,9 @@ useEffect(() => {
             <div className="KYM-hostdetail-hashtags">
               {tags.map((t, i) => <span key={i} className="KYM-hostdetail-hashtag">#{t}</span>)}
             </div>
-            <div className="KYM-hostdetail-comments">
+            {/* <div className="KYM-hostdetail-comments">
               <p>카테고리: {category}</p>
-            </div>
+            </div> */}
             <div className="KYM-hostdetail-like-info">
               <span className="KYM-hostdetail-date">{new Date().toLocaleDateString()}</span>
             </div>

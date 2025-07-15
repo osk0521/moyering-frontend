@@ -43,13 +43,19 @@ const ClassReview = () => {
   }, [token]);
 
   const handleSearch = () => {
+
+    let statusParam = null;
+    if (replyStatus === '답변대기') statusParam = 0;
+    else if (replyStatus === '답변완료') statusParam = 1;
+
     const params = {
       hostId: user.hostId,
+      calendarId:calendarParam ? Number(calendarParam) : undefined,
       searchFilter,
       searchQuery,
       startDate,
       endDate,
-      replyStatus, // 추가된 필드
+      replyStatus : statusParam, // 추가된 필드
       page: 0,
       size: 10,
     };
@@ -102,7 +108,7 @@ const ClassReview = () => {
       })
         .then((res) => {
           console.log(res.data);
-          alert('답변이 저장되었습니다!');
+          alert('답변이 등록되었습니다!');
           setRevRegContent(''); // 답변 입력 필드 초기화
           setExpandedIndex(null); // 폼 닫기
 
@@ -188,7 +194,7 @@ const ClassReview = () => {
         {reviews.length === 0 && (
           <div className="noneDiv">
             <div className="classNone">
-               <div className="KHJ-no-data">조회된 목록이 없습니다.</div>
+              <div className="KHJ-no-data">조회된 목록이 없습니다.</div>
             </div>
           </div>
         )}
@@ -220,7 +226,7 @@ const ClassReview = () => {
                       value={revRegContent}
                       onChange={handleReplyChange}
                     />
-                    <button type="submit">{review.state === 0 ? '답변 저장' : '답변 수정'}</button>
+                    <button type="submit">{review.state === 0 ? '답변 등록' : '답변 수정'}</button>
                   </form>
                 </div>
               </div>

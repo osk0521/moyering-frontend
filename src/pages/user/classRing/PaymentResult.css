@@ -1,0 +1,61 @@
+.success-wrapper {
+  max-width: 500px;
+  margin: 80px auto;
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.success-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.success-box {
+  background-color: #fff7e0;
+  border: 1px solid #f5c66a;
+  border-radius: 8px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.success-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.success-message p {
+  margin: 4px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.success-message .highlight {
+  font-weight: bold;
+  color: #f5a623;
+  margin-bottom: 6px;
+}
+
+.success-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.success-btn {
+  padding: 10px 16px;
+  background-color: #fff;
+  border: 1px solid #f5c66a;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.success-btn:hover {
+  background-color: #ffeb99;
+}

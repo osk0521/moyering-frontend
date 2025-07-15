@@ -12,22 +12,27 @@ const ClassSettlement = () => {
   const user = useAtomValue(userAtom);
   const [settlementList, setSettlementList] = useState([]);
   const [pageInfo, setPageInfo] = useState([]);
+  const [curPage, setCurPage] = useState(1);
 
-  const fetchData = (startDateParam = startDate, endDateParam = endDate) => {
-    const params = {
-      hostId: user.hostId,
-      startDate: startDateParam,
-      endDate: endDateParam,
-      page: 0,
-      size: 10,
-    };
-    token && myAxios(token, setToken).post("/host/settlementList", params)
+  const fetchData = (startDateParam = startDate, endDateParam = endDate, pageParam = curPage) => {
+  const params = {
+    hostId: user.hostId,
+    startDate: startDateParam,
+    endDate: endDateParam,
+    page: pageParam - 1,
+    size: 10,
+  };
+  token &&
+    myAxios(token, setToken)
+      .post("/host/settlementList", params)
       .then(res => {
+        console.log(res.data)
         setSettlementList(res.data.content);
         setPageInfo(res.data.pageInfo);
+        setCurPage(res.data.pageInfo.curPage); // 갱신
       })
       .catch(err => console.log(err));
-  };
+};
 
   useEffect(() => {
     fetchData();
@@ -76,6 +81,20 @@ const ClassSettlement = () => {
     fetchData(newStartStr, newEndStr);
   };
 
+  const settleRequest = (settlementId) => {
+    token && myAxios(token, setToken).post(`/host/settlementRequest?settlementId=${settlementId}`)
+      .then(res => {
+        console.log(res);
+        alert("정산요청 완료!")
+        fetchData();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("정산요청 실패!")
+      })
+  }
+
+
   const totalAmount = settlementList
     .filter((s) => s.settlementStatus === 'CP')
     .reduce((acc, cur) => acc + cur.amount, 0);
@@ -114,7 +133,7 @@ const ClassSettlement = () => {
               <th>No.</th>
               <th>정산 금액</th>
               <th>수수료</th>
-              <th>등록일</th>
+              <th>정산예정일</th>
               <th>정산 상태</th>
               <th>정산 요청</th>
             </tr>
@@ -123,7 +142,7 @@ const ClassSettlement = () => {
             {settlementList.map((item, index) => (
               <tr key={item.id}>
                 <td>{index + 1}</td>
-                <td>{item.settlementAmountTodo}</td>
+                <td>{item.settleAmountToDo}</td>
                 <td>10%</td>
                 <td>{item.settlementDate}</td>
                 <td>
@@ -132,7 +151,7 @@ const ClassSettlement = () => {
                 </td>
                 <td>
                   {item.settlementStatus === 'WT' ? (
-                    <button className="KHJ-settle-btn">정산 요청</button>
+                    <button className="KHJ-settle-btn" onClick={()=>settleRequest(item.settlementId)}>정산 요청</button>
                   ) : (
                     <button className="KHJ-cancel-btn" disabled>정산 요청</button>
                   )}

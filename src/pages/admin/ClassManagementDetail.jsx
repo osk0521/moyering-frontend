@@ -165,35 +165,24 @@ const ClassManagementDetail = () => {
           </div>
         </div>
 
-        <div className="class-summary">
-          <div><strong>클래스 ID:</strong> {classData.classId}</div>
-          <div><strong>카테고리:</strong> {classData.firstCategory} &gt; {classData.secondCategory}</div>
-          <div><strong>가격:</strong> {classData.price?.toLocaleString()} 원</div>
-          <div><strong>클래스 일자:</strong> {classData.startDate} ~ {classData.endDate}</div>
-          <div><strong>장소:</strong> {classData.location}</div>
-          <div><strong>인원:</strong> {classData.currentCount} / {classData.recruitMax}</div>
-          {/* 화면에는 표시용 상태("승인대기") 표시 */}
-          <div><strong>상태:</strong> 
-            <span className={`badge ${getStatusClass(getDisplayStatus(classData.processStatus))}`}>
-              {getDisplayStatus(classData.processStatus)}
-            </span>
-          </div>
-        </div>
+
 
         <h6>&lt; 클래스 정보 &gt;</h6>
         <table className="info-table">
           <thead>
-            <tr><th>카테고리</th><th>클래스명</th><th>장소명</th><th>주소</th><th>시작일</th><th>종료일</th><th>현재인원</th></tr>
+            <tr><th>클래스 ID</th><th>일정 ID</th><th>카테고리</th><th>클래스명</th><th>가격</th><th>위치</th><th>상세주소</th><th>최소 인원</th><th>최대 인원</th></tr>
           </thead>
           <tbody>
             <tr>
+              <td>{classData.classId}</td>
+              <td>{classData.calendarId}</td>
               <td>{classData.firstCategory}&gt;{classData.secondCategory}</td>
               <td>{classData.className}</td>
+              <td>{classData.price?.toLocaleString()} 원</td>
               <td>{classData.location}</td>
               <td>{classData.detailAddr || classData.location}</td>
-              <td>{classData.startDate}</td>
-              <td>{classData.endDate}</td>
-              <td>{classData.currentCount}</td>
+              <td>{classData.recruitMin}</td>
+              <td>{classData.recruitMax}</td>
             </tr>
           </tbody>
         </table>
@@ -279,18 +268,18 @@ const ClassManagementDetail = () => {
                 <th>이름</th>
                 <th>연락처</th>
                 <th>이메일</th>
-                <th>등록일</th>
+      
               </tr>
             </thead>
             <tbody>
               {classData.students.map((student, idx) => (
                 <tr key={idx}>
                    <td>{idx + 1}</td>
-                   <td>{student.userId}</td>
+                   <td>{student.username}</td>
                   <td>{student.name}</td>
                   <td>{student.phone}</td>
                   <td>{student.email}</td>
-                  <td>{student.regDate}</td>
+         
                 </tr>
               ))}
             </tbody>

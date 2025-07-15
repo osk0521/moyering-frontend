@@ -15,6 +15,7 @@
 
 .cardImage {
   position: relative;
+    width: 100%;           /* 부모 .card의 278px을 그대로 따라갑니다 */
   height: 210px;
   background-color: #ddd;
   background-size: cover;

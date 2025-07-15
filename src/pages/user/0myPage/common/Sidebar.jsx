@@ -33,7 +33,13 @@ export default function Sidebar() {
                 <div className="KYM-member-box">
                     <img
                         className="KYM-member-avatar"
-                        src={`${url}/image?filename=${user?.profile}`}
+                        src={
+                        user.profile
+                            ? user.profile.startsWith("http")
+                            ? user.profile
+                            : `${url}/image?filename=${user.profile}`
+                            : '/profile.png'
+                        }
                         alt="아바타"
                     />
                     <div className="KYM-member-text">

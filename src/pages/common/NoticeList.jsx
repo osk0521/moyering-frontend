@@ -159,8 +159,9 @@ export default function NoticeList() {
   }, [pageInfo.allPage, pageInfo.curPage]);
 
   return (
-    <div className="NoticeList_container_osk">
+  <>
       <Header />
+    <div className="NoticeList_container_osk">
       
       <main className="NoticeList_main_osk">
         <div className="NoticeList_content_osk">
@@ -259,8 +260,9 @@ export default function NoticeList() {
           )}
         </div>
       </main>
+    </div>
       
       <Footer />
-    </div>
+      </>
   );
 }

@@ -402,7 +402,11 @@ export default function ClassRingDetail() {
             <ClassRingDetailInquiryList classId={classId} />
           </section>
           {/* 추천 클래스 섹션 */}
-          <section className={styles.section} id="recommend">
+          <section className={styles.section} id="recommend" style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+          }}>
             <div className={styles.recommendHeader}>
               <h2>같은 카테고리의 클래스링은 어때요</h2>
               {recommends.length > 0 ?
@@ -429,6 +433,11 @@ export default function ClassRingDetail() {
                 ) : (<></>)}
               {recommends.map((classInfo) => (
                 <div className={styles.card}
+                           style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                }}
                   onClick={() => {
                     navigate(`/class/classRingDetail/${classInfo.classId}`);
                     window.scrollTo({ top: 0, behavior: "auto" });
@@ -449,10 +458,17 @@ export default function ClassRingDetail() {
                   </div>
                   <div className={styles.cardContent}>
                     <div className={styles.cardTags}>
-                      <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}&gt;{classInfo.category2}</span>
-                      <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
+                      <span className={`${styles.tag} ${styles.yellow}`} style={{
+                      fontSize: "12px",
+                    }}>{classInfo.category1}&gt;{classInfo.category2}</span>
+                      <span className={`${styles.tag} ${styles.blue}`} style={{
+                      fontSize: "12px",
+                    }}>{classInfo.addr}</span>
                     </div>
-                    <div className={styles.cardEtc}>
+                    <div className={styles.cardEtc}
+                        style={{
+                      flexDirection:"column"
+                    }}>
                       <span className={styles.cardTitle}>{classInfo.name}</span>
                       <span className={styles.cardPrice}>{classInfo.price.toLocaleString()}원</span>
                     </div>

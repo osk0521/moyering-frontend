@@ -17,7 +17,7 @@ export default function Header() {
   const user = useAtomValue(userAtom);
   const navigate = useNavigate();
   const setUser = useSetAtom(userAtom);
-  const [token,setToken] = useAtom(tokenAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const [alarms, setAlarms] = useAtom(alarmsAtom);
   const [query, setQuery] = useState('');
 
@@ -294,6 +294,12 @@ export default function Header() {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();  // ❗ 새로고침 방지
+                      handleSearch(e);      // ✅ 검색 실행
+                    }
+                  }}
                   placeholder="다양한 컨텐츠를 찾아보세요!"
                   className="Header_search-input_osk"
                 />

@@ -45,7 +45,21 @@
   color: white;
   justify-content: center;
 }
+
+.pinned{
+  border:none;
+  background: none;
+  color: red; 
+}
+
+ .unpinned{
+  border:none;
+  background: none;
+  color:black;
+ }
+
 .tableHY td button {
+
   display: block;        /* inline-block이 아니라 block이면 margin auto가 먹힘 */
   margin: 0 auto;        /* 수평 중앙 정렬 */
 }

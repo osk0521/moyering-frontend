@@ -257,7 +257,7 @@ export default function FeedDetail() {
         </div>
         <p className="KYM-comment-text">
           {c.parentWriterId && (
-            <span style={{ color: '#888', fontWeight: 'bold' }}>
+            <span style={{ color: '#888', fontWeight: 'bold', fontSize:'14px' }}>
               @{c.parentWriterId}
             </span>
           )}{" "}
@@ -311,6 +311,12 @@ export default function FeedDetail() {
               disabled={!isLoggedIn}
               value={replyText}
               onChange={e => setReplyText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  replysubmit();
+                }
+              }}
             />
             <button
               className="KYM-input-post"

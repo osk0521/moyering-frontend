@@ -14,6 +14,7 @@ import FeedCreate from '../socialRing/FeedCreate';
 import { tokenAtom, userAtom } from '../../../atoms';
 import { useAtom, useAtomValue } from 'jotai';
 import { myAxios, url } from '../../../config';
+import { LuMessageCircleMore } from "react-icons/lu";
 
 const POSTS_PER_PAGE = 3;
 
@@ -264,7 +265,7 @@ console.log('userId:', userId);
                         className="KYM-comment-button"
                         onClick={() => navigate(`/feed/${feed.feedId}`)}
                       >
-                        💬 {feed.commentsCount}
+                        <LuMessageCircleMore/> {feed.commentsCount}
                       </button>
                     </div>
                   </div>

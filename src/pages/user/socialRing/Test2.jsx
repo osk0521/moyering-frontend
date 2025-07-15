@@ -16,6 +16,7 @@ import moreIcon from './icons/more.png';
 import plusIcon from './icons/plus.svg';
 import FeedCreate from '../socialRing/FeedCreate';
 
+import { LuMessageCircleMore } from "react-icons/lu";
 export default function FeedPage2() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -317,7 +318,7 @@ export default function FeedPage2() {
                                                 <span>{feed.likesCount}</span>
                                             </button>
                                             <button className="KYM-comment-button" onClick={() => navigate(`/feed/${feed.feedId}`)}>
-                                                💬 {feed.commentsCount}
+                                                <LuMessageCircleMore/>  {feed.commentsCount}
                                             </button>
                                         </div>
                                     </div>

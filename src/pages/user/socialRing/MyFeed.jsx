@@ -10,6 +10,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { tokenAtom, userAtom } from '../../../atoms';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { LuMessageCircleMore } from "react-icons/lu";
 
 export default function MyFeed() {
   const [token, setToken] = useAtom(tokenAtom);
@@ -233,7 +234,7 @@ export default function MyFeed() {
                       <span>{feed.likeCount}</span>
                     </button>
                     <button className="KYM-comment-button" onClick={() => navigate(`/feed/${feed.feedId}`)}>
-                      💬 {feed.commentsCount}
+                      <LuMessageCircleMore/>  {feed.commentsCount}
                     </button>
                   </div>
                 </div>

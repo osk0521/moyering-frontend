@@ -161,6 +161,9 @@
     line-height: 1;
     cursor: pointer;
     color: #ff8c00;
+    padding: 0 5px!important;
+    margin:0!important;
+
 }
 
 /* 작성자 정보 블록 */
@@ -197,7 +200,7 @@
   position: relative;
   width: 50%;
   height: 0;
-  padding-bottom: 75%; /* 원하는 비율로 조정 */
+  padding-bottom: 60%; /* 원하는 비율로 조정 */
   background: #f5f5f5;
   overflow: hidden;
   display: flex;

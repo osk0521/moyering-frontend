@@ -6,20 +6,45 @@ import { myAxios } from "../../config";
 import { tokenAtom } from "../../atoms";
 import "./ClassManagement.css";
 
+// 백엔드 상태값을 관리자 화면용으로 변환하는 함수
+const getDisplayStatus = (backendStatus) => {
+  if (!backendStatus) return "";
+  
+  const statusMap = {
+    "승인대기": "승인대기",
+    "모집중": "모집중",
+    "모집마감": "모집마감", 
+    "종료": "종료",
+    "폐강": "폐강",
+    "반려": "반려"
+  };
+  
+  return statusMap[backendStatus.trim()] || backendStatus;
+};
+
+// 처리하기 버튼을 표시할지 체크하는 함수 (백엔드 원본 상태 기준)
+const shouldShowProcessButton = (backendStatus) => {
+  if (!backendStatus) return false;
+  
+  const normalizedStatus = backendStatus.trim();
+  // 백엔드에서 오는 실제 상태값 기준으로 체크
+  return normalizedStatus === "승인대기";
+};
+
 const STATUS_OPTIONS = [
   { label: "전체", value: "" },
-  { label: "승인대기", value: "승인대기" },
+  { label: "승인대기", value: "승인대기" }, // 백엔드 값은 "검수중"이지만 화면에는 "승인대기"로 표시
   { label: "모집중", value: "모집중" },
   { label: "모집마감", value: "모집마감" },
-  { label: "거절", value: "거절" },
+  { label: "반려", value: "반려" },
   { label: "폐강", value: "폐강" },
   { label: "종료", value: "종료" }
 ];
 
 const STATUS_STYLES = {
   모집중: "status-recruitingHY",
-  승인대기: "status-pendingHY",
-  거절: "status-rejectedHY",
+  승인대기: "status-pendingHY", // 표시용 상태 기준
+  반려: "status-rejectedHY",
   모집마감: "status-fullHY",
   폐강: "status-cancelledHY",
   종료: "status-endedHY"
@@ -235,57 +260,63 @@ const ClassManagement = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="12" className="loading-cellHY">데이터를 불러오는 중...</td>
+                <td colSpan="14" className="loading-cellHY">데이터를 불러오는 중...</td>
               </tr>
             ) : classData.list.length === 0 ? (
               <tr>
-                <td colSpan="12" className="empty-cellHY">데이터가 없습니다.</td>
+                <td colSpan="14" className="empty-cellHY">데이터가 없습니다.</td>
               </tr>
             ) : (
-              classData.list.map((item, idx) => (
-                <tr key={`${item.classId}_${idx}`}>
-                  <td>{(currentPage * PAGE_SIZE) + idx + 1}</td>
-                  <td>{item.classId}</td>
+              classData.list.map((item, idx) => {
+                const displayStatus = getDisplayStatus(item.processStatus);
+                
+                return (
+                  <tr key={`${item.classId}_${idx}`}>
+                    <td>{(currentPage * PAGE_SIZE) + idx + 1}</td>
+                    <td>{item.classId}</td>
                     <td>{item.calendarId}</td>
-                  <td>{item.firstCategory}</td>
-                  <td>{item.secondCategory}</td>
-                  <td className="instructor-idHY">{item.hostUserName}</td>
-                  <td>{item.hostName}</td>
-                  <td className="class-nameHY">
-                    <span
-                      className="class-name-clickable"
-                      onClick={() => handleClassNameClick(item.classId)}
-                      style={{ 
-                        cursor: 'pointer', 
-                        color: '#3b82f6', 
-                        textDecoration: 'underline' 
-                      }}
-                    >
-                      {item.className}
-                    </span>
-                  </td>
-                  <td className="priceHY">{item.price?.toLocaleString()}원</td>
-                  <td className="text-center">{item.recruitMin}명</td>
-                  <td className="text-center">{item.recruitMax}명</td>
-                  <td>{item.regDate}</td>
-                  <td>
-                    <span className={`status-badgeHY ${STATUS_STYLES[item.processStatus]}`}>
-                      {item.processStatus}
-                    </span>
-                  </td>
-                  <td className="actionHY">
-                    {item.processStatus === "승인대기" && (
-                      <button
-                        className="btn-processHY"
-                        onClick={() => handleProcessClick(item.classId)}
-                        disabled={loading}
+                    <td>{item.firstCategory}</td>
+                    <td>{item.secondCategory}</td>
+                    <td className="instructor-idHY">{item.hostUserName}</td>
+                    <td>{item.hostName}</td>
+                    <td className="class-nameHY">
+                      <span
+                        className="class-name-clickable"
+                        onClick={() => handleClassNameClick(item.classId)}
+                        style={{ 
+                          cursor: 'pointer', 
+                          color: '#3b82f6', 
+                          textDecoration: 'underline' 
+                        }}
                       >
-                        처리하기
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))
+                        {item.className}
+                      </span>
+                    </td>
+                    <td className="priceHY">{item.price?.toLocaleString()}원</td>
+                    <td className="text-center">{item.recruitMin}명</td>
+                    <td className="text-center">{item.recruitMax}명</td>
+                    <td>{item.regDate}</td>
+                    <td>
+                      {/* 화면에는 표시용 상태("승인대기") 표시 */}
+                      <span className={`status-badgeHY ${STATUS_STYLES[displayStatus]}`}>
+                        {displayStatus}
+                      </span>
+                    </td>
+                    <td className="actionHY">
+                      {/* 백엔드 원본 상태로 버튼 표시 여부 결정 */}
+                      {shouldShowProcessButton(item.processStatus) && (
+                        <button
+                          className="btn-processHY"
+                          onClick={() => handleProcessClick(item.classId)}
+                          disabled={loading}
+                        >
+                          처리하기
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

@@ -14,15 +14,40 @@ const ClassManagementDetail = () => {
   const [classData, setClassData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // 상태에 따른 CSS 클래스 반환 함수
-  const getStatusClass = (status) => {
-    switch (status) {
+  // 백엔드 상태값을 관리자 화면용으로 변환하는 함수
+  const getDisplayStatus = (backendStatus) => {
+    if (!backendStatus) return "";
+    
+    const statusMap = {
+      "승인대기": "승인대기",
+      "모집중": "모집중",
+      "모집마감": "모집마감", 
+      "종료": "종료",
+      "폐강": "폐강",
+      "반려": "반려"
+    };
+    
+    return statusMap[backendStatus.trim()] || backendStatus;
+  };
+
+  // 승인/거절 버튼을 표시할지 체크하는 함수 (백엔드 원본 상태 기준)
+  const shouldShowApprovalButtons = (backendStatus) => {
+    if (!backendStatus) return false;
+    
+    const normalizedStatus = backendStatus.trim();
+    // 백엔드에서 오는 실제 상태값 기준으로 체크
+    return normalizedStatus === "승인대기";
+  };
+
+  // 상태에 따른 CSS 클래스 반환 함수 (표시용 상태 기준)
+  const getStatusClass = (displayStatus) => {
+    switch (displayStatus) {
       case "승인대기": return "warning";
       case "모집중": return "success";
       case "모집마감": return "info";
       case "종료": return "secondary";
       case "폐강": 
-      case "거절": return "danger";
+      case "반려": return "danger";
       default: return "";
     }
   };
@@ -33,7 +58,13 @@ const ClassManagementDetail = () => {
     try {
       const response = await myAxios(token, setToken).get(`/api/class/${classId}/detail`);
       setClassData(response.data);
-      console.log("받아온 클래스 데이터:", response.data); // 디버깅용
+      
+      // 상태 매핑 디버깅
+      console.log("받아온 클래스 데이터:", response.data);
+      console.log("백엔드 원본 상태:", response.data.processStatus);
+      console.log("화면 표시 상태:", getDisplayStatus(response.data.processStatus));
+      console.log("버튼 표시 여부:", shouldShowApprovalButtons(response.data.processStatus));
+      
     } catch (error) {
       console.error("클래스 상세 데이터 로딩 실패:", error);
       alert("클래스 정보를 불러오는데 실패했습니다.");
@@ -98,10 +129,6 @@ const ClassManagementDetail = () => {
   // 키워드를 배열로 변환 (콤마로 구분된 문자열을 배열로)
   const keywordsArray = classData.keywords ? classData.keywords.split(',').map(k => k.trim()) : [];
 
-  // 디버깅을 위한 콘솔 로그
-  console.log('현재 클래스 상태:', classData.processStatus);
-  console.log('스케줄 데이터:', classData.schedules);
-
   return (
     <Layout>
       <div className="page-titleHY">
@@ -111,13 +138,13 @@ const ClassManagementDetail = () => {
         <div className="header">
           <h5>{classData.className}</h5>
           <div className="action-buttons">
-            {/* 승인대기 상태일 때만 승인/거절 버튼 표시 */}
-            {classData.processStatus && classData.processStatus.trim() === "승인대기" ? (
+            {/* 백엔드 원본 상태("검수중")로 버튼 표시 여부 결정 */}
+            {shouldShowApprovalButtons(classData.processStatus) && (
               <>
                 <button className="btn-approve" onClick={handleApprove}>승인</button>
                 <button className="btn-reject" onClick={handleReject}>거절</button>
               </>
-            ) : null}
+            )}
           </div>
         </div>
 
@@ -145,7 +172,12 @@ const ClassManagementDetail = () => {
           <div><strong>클래스 일자:</strong> {classData.startDate} ~ {classData.endDate}</div>
           <div><strong>장소:</strong> {classData.location}</div>
           <div><strong>인원:</strong> {classData.currentCount} / {classData.recruitMax}</div>
-          <div><strong>상태:</strong> <span className="badge">{classData.processStatus}</span></div>
+          {/* 화면에는 표시용 상태("승인대기") 표시 */}
+          <div><strong>상태:</strong> 
+            <span className={`badge ${getStatusClass(getDisplayStatus(classData.processStatus))}`}>
+              {getDisplayStatus(classData.processStatus)}
+            </span>
+          </div>
         </div>
 
         <h6>&lt; 클래스 정보 &gt;</h6>
@@ -166,13 +198,14 @@ const ClassManagementDetail = () => {
           </tbody>
         </table>
 
-            <h6>&lt; 상세 설명 &gt;</h6>
+        <h6>&lt; 상세 설명 &gt;</h6>
         <div 
           className="description-box" 
           dangerouslySetInnerHTML={{
             __html: classData.description || "(내용 없음)"
           }}
         ></div>
+        
         <div className="bottom-section">
           <div className="schedule-section">
             <h6>&lt; 스케줄 목록 &gt;</h6>
@@ -198,8 +231,8 @@ const ClassManagementDetail = () => {
                       <td>{classData.scheduleStart || "미설정"}</td>
                       <td>{classData.scheduleEnd || "미설정"}</td>
                       <td>
-                        <span className={`badge ${getStatusClass(schedule.status)}`}>
-                          {schedule.status}
+                        <span className={`badge ${getStatusClass(getDisplayStatus(schedule.status))}`}>
+                          {getDisplayStatus(schedule.status)}
                         </span>
                       </td>
                       <td>{schedule.registeredCount || 0} / {classData.recruitMax}</td>
@@ -215,7 +248,7 @@ const ClassManagementDetail = () => {
                   <br />
                   종료시간: {classData.scheduleEnd || "미설정"}
                   <br />
-                  상태: {classData.processStatus || "미설정"}
+                  상태: {getDisplayStatus(classData.processStatus) || "미설정"}
                 </div>
               </div>
             )}
@@ -253,8 +286,7 @@ const ClassManagementDetail = () => {
               {classData.students.map((student, idx) => (
                 <tr key={idx}>
                    <td>{idx + 1}</td>
-                       <td>{student.userId}</td>
-                  {/* <td>{student.username}</td> */}
+                   <td>{student.userId}</td>
                   <td>{student.name}</td>
                   <td>{student.phone}</td>
                   <td>{student.email}</td>

@@ -11,7 +11,7 @@ import ReportModal from './ReportModal';
 import { tokenAtom, userAtom } from '../../../atoms';
 import { useAtom, useAtomValue } from 'jotai';
 import { myAxios, url } from '../../../config';
-
+import { LuMessageCircleMore } from "react-icons/lu";
 export default function MyScrapPage() {
   const user = useAtomValue(userAtom);
   const userId = user?.id;
@@ -163,7 +163,7 @@ export default function MyScrapPage() {
                             className="KYM-comment-button"
                             onClick={() => navigate(`/feed/${feed.feedId}`)}
                           >
-                            💬 {feed.commentsCount}
+                            <LuMessageCircleMore/> {feed.commentsCount}
                           </button>
                         </div>
                       </div>

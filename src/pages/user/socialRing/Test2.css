@@ -2,7 +2,7 @@
 
 /* ─── 전체 컨테이너 ─── */
 .KYM-feed2-container {
-  max-width: 1000px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -45,7 +45,10 @@
   display: flex;
   gap: 20px;
 }
-
+.KYM-feed-title, .KYM-feed2-filters{
+  width: 870px;
+  margin: 0 auto;
+}
 /* ─── 게시물 그리드 ─── */
 .KYM-feed2-container .KYM-posts-grid {
   display: grid;
@@ -62,7 +65,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  /* width: 300px; */
+  width: 300px; 
 }
 
 /* 포스트 헤더 */

@@ -6,6 +6,7 @@ import { useAtomValue ,useAtom,useSetAtom } from "jotai";
 import { classLikesAtom } from "../atom/classAtom";
 import { GoHeart,GoHeartFill  } from "react-icons/go";
 import { tokenAtom } from "../atoms";
+import {CiLocationOn } from "react-icons/ci";
 
 
 export default function ClassCard({ classInfo, onClick  }) {
@@ -61,7 +62,7 @@ export default function ClassCard({ classInfo, onClick  }) {
       <div className={styles.cardContent}>
         <div className={styles.cardTags}>
           <span className={`${styles.tag} ${styles.yellow}`}>{classInfo.category1}&gt;{classInfo.category2}</span>
-          <span className={`${styles.tag} ${styles.blue}`}>{classInfo.addr}</span>
+          <span className={`${styles.tag} ${styles.blue}`}><CiLocationOn />&nbsp;{classInfo.addr}</span>
         </div>
         <h3 className={styles.cardTitle}>{classInfo.name}</h3>
         <div className={styles.cardEtc}>

@@ -1,6 +1,6 @@
 .page {
   padding: 2rem;
-  width: 1280px;
+  width: 1420px;
   margin: auto;
 }
 
@@ -74,15 +74,25 @@
 .formGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 3.5rem;
 }
-
 .formGroup label {
   font-weight: 600;
   display: block;
   margin-bottom: 0.5rem;
+  min-width: 50px;
 }
-
+.formGroup{    
+      font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    min-width: 32px;
+    margin-right: 11px;
+  /* display: inline-flex;
+  height: 90px;
+  flex-direction: row;
+  align-items: center; */
+} 
 
 
 .day-buttons button {
@@ -134,5 +144,6 @@
 
 .categoryGroup select {
   width: 100%;
+  min-width: 150px;
 }
 

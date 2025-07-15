@@ -72,9 +72,10 @@
 
 .cardHeader {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
   margin-bottom: 0.5rem;
+  
 }
 
 .statusBadge {
@@ -84,6 +85,7 @@
   border-radius: 8px;
   font-size: 0.8rem;
   font-weight: bold;
+  min-width: fit-content;
 }
 
 .classTitle {

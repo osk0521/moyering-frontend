@@ -251,7 +251,7 @@
 
 /* 활성화된 알림 아이콘 (새 알림이 있을 때) */
 .Header_notification-active_osk {
-  color: #ff4757 !important;
+  color: #f57c00 !important;
   animation: bellShake 0.5s ease-in-out;
 }
 

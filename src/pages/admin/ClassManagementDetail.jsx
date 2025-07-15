@@ -166,9 +166,13 @@ const ClassManagementDetail = () => {
           </tbody>
         </table>
 
-        <h6>&lt; 상세 설명 &gt;</h6>
-        <div className="description-box">{classData.description || "(내용 없음)"}</div>
-
+            <h6>&lt; 상세 설명 &gt;</h6>
+        <div 
+          className="description-box" 
+          dangerouslySetInnerHTML={{
+            __html: classData.description || "(내용 없음)"
+          }}
+        ></div>
         <div className="bottom-section">
           <div className="schedule-section">
             <h6>&lt; 스케줄 목록 &gt;</h6>

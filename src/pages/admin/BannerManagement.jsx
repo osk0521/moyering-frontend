@@ -456,7 +456,7 @@ const BannerManagement = () => {
                   <td>
                     <div className="action-buttons">
                       <button 
-                        className="btn-edit"
+                        className="btn-editHY"
                         onClick={() => handleEdit(banner.bannerId || banner.id)}
                       >
                         수정

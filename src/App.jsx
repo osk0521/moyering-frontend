@@ -97,7 +97,7 @@ import ResetPassword from './pages/common/ResetPassword.jsx';
 import HostFeedDetail from './pages/user/socialRing/HostFeedDetail.jsx';
 import MainSearch from './pages/common/MinSearch.jsx';
 import HostFeedEdit from './pages/user/socialRing/HostFeedEdit.jsx';
-
+import PaymentResult from './pages/user/classRing/PaymentResult.jsx';
 
 function App() {
   const [alarm, setAlarm] = useState({});
@@ -159,6 +159,7 @@ function App() {
         <Route path="/user/feedCreate" element={<FeedCreate />} />
         <Route path="/user/feedEdit/:feedId" element={<FeedEdit />} />
         <Route path="/user/payment-success" element={<PaymentSuccess />} />
+        <Route path="/user/payment/payment-result" element={<PaymentResult />} />
 
         {/* 유저의 마이페이지 /user/mypage/~~~~ */}
         <Route path="/user/mypage/mySchedule" element={<MySchedule />} />

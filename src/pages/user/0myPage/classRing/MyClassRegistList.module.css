@@ -144,7 +144,21 @@
 .actionBtn:hover {
   background-color: #e36d28;
 }
-
+.actionBtn2 {
+  background-color: #a7a7a7;
+  color: white;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.actionBtn2:hover {
+  background-color: #c2c2c2;
+}
 /* 배경 컬러 */
 /* .mint {
   background-color: #e6f7f2;

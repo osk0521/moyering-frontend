@@ -40,7 +40,7 @@ export default function PaymentSuccess() {
             calendarId: parseInt(calendarId),
             userCouponId: userCouponId ? parseInt(userCouponId) : null
             });
-            navigate('/classList');
+            navigate('/user/payment/payment-result');
         } catch (err) {
             console.error('❌ 결제 승인 실패', err);
             alert('결제 승인 중 문제가 발생했습니다.');

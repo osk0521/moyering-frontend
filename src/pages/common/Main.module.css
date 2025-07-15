@@ -1,6 +1,7 @@
 .mainPage {
   padding: 0px 2rem 2rem 2rem;  
-  width: 1280px;
+  /* width: 1280px; */
+  width: 1420px;
   margin: auto;
 }
 .bannerSection {
@@ -33,7 +34,7 @@
 
 .quickLinks {
   display: flex;
-  gap: 1rem;
+  gap: 5rem;
   margin: 2.5rem;
 }
 
@@ -80,7 +81,7 @@
 .cardList {
   display: flex;
   gap: 1rem;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .quickLinkBox {
@@ -94,6 +95,8 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
   transition: transform 0.2s ease;
   cursor: pointer;
+  min-width: 271px;
+  min-height:100px;
 }
 .quickLinkBox:hover {
   transform: translateY(-3px);

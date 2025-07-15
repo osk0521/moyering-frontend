@@ -163,7 +163,7 @@ export default function HostFeedPage() {
                                                         setImageIndexes(prev => ({
                                                             ...prev, [feed.feedId]: (currentIdx + 1) % images.length
                                                         }));
-                                                    }}>▶</button>
+                                                    }}>&gt;</button>
                                             </>
                                         )}
                                     </div>

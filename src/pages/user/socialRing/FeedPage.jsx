@@ -14,6 +14,7 @@ import FeedCreate from '../socialRing/FeedCreate';
 import { tokenAtom, userAtom } from '../../../atoms';
 import { useAtom, useAtomValue } from 'jotai';
 import { myAxios, url } from '../../../config';
+import { LuMessageCircleMore } from "react-icons/lu";
 
 const POSTS_PER_PAGE = 3;
 
@@ -233,8 +234,8 @@ console.log('userId:', userId);
                     <img src={`${url}/iupload/${images[currentIdx]}`} alt={`피드 이미지 `} className="KYM-post-image" />
                     {images.length > 1 && (
                       <>
-                        <button className="KYM-image-nav left" onClick={() => handlePrevImage(feed.feedId, images.length)}>◀</button>
-                        <button className="KYM-image-nav right" onClick={() => handleNextImage(feed.feedId, images.length)}>▶</button>
+                        <button className="KYM-image-nav left" onClick={() => handlePrevImage(feed.feedId, images.length)}>&lt;</button>
+                        <button className="KYM-image-nav right" onClick={() => handleNextImage(feed.feedId, images.length)}>&gt;</button>
                         <div className="KYM-image-dots">
                           {images.map((_, i) => (
                             <span key={i} className={i === currentIdx ? 'dot active' : 'dot'}>●</span>
@@ -264,7 +265,7 @@ console.log('userId:', userId);
                         className="KYM-comment-button"
                         onClick={() => navigate(`/feed/${feed.feedId}`)}
                       >
-                        💬 {feed.commentsCount}
+                        <LuMessageCircleMore/> {feed.commentsCount}
                       </button>
                     </div>
                   </div>

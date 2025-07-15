@@ -13,6 +13,7 @@ import FollowButton from './FollowButton';
 import moreIcon from './icons/more.png';
 import plusIcon from './icons/plus.svg';
 import FeedCreate from '../socialRing/FeedCreate';
+import { LuMessageCircleMore } from 'react-icons/lu';
 
 export default function FeedPage2() {
     const navigate = useNavigate();
@@ -236,7 +237,7 @@ export default function FeedPage2() {
                                                     {scrapped ? '스크랩 해제' : '스크랩하기'}
                                                 </li>
                                                 <li onClick={() => { navigate(`/feed/${feed.feedId}`); setMenuOpenId(null); }}>게시물로 이동</li>
-                                                <li onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/feed/${feed.feedId}`); alert("링크 복사됨"); setMenuOpenId(null); }}>링크복사</li>
+                                                <li onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/feed/${feed.feedId}`); alert("링크가 복사되었습니다"); setMenuOpenId(null); }}>링크복사</li>
                                             </ul>
                                         )}
                                     </div>
@@ -271,7 +272,7 @@ export default function FeedPage2() {
                                             <button className={`KYM-like-button${likedByUser ? ' active' : ''}`} onClick={() => toggleLike(feed)}>
                                                 <img src={likedByUser ? heartFilled : heartOutline} alt="좋아요" /><span>{feed.likesCount}</span>
                                             </button>
-                                            <button className="KYM-comment-button" onClick={() => navigate(`/feed/${feed.feedId}`)}>💬 {feed.commentsCount}</button>
+                                            <button className="KYM-comment-button" onClick={() => navigate(`/feed/${feed.feedId}`)}><LuMessageCircleMore/> {feed.commentsCount}</button>
                                         </div>
                                     </div>
                                 </div>

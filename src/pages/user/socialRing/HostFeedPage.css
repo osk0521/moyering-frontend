@@ -257,3 +257,14 @@
  .KYM-host-content p {
   white-space: pre-line;
 }
+.KYM-HostFeedCreate-modal-content {
+  background: #fff;
+  border-radius: 8px;
+  width: 80vw;
+  max-width: 1000px;
+  height: auto;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}

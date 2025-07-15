@@ -242,7 +242,7 @@ export default function FeedDetail() {
       alert("좋아요 처리에 실패했습니다.");
     }
   };
-console.log('writerProfile =', writerProfile, typeof writerProfile);
+  console.log('writerProfile =', writerProfile, typeof writerProfile);
   const renderComment = (c, level = 0) => (
 
     <div key={c.commentId} className="KYM-comment-block" style={{ marginLeft: `${level * 20}px` }}>
@@ -255,14 +255,14 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
         <div className="KYM-comment-header">
           <span className="KYM-comment-author">{c.writerId}</span>
         </div>
-       <p className="KYM-comment-text">
-  {c.parentWriterId && (
-    <span style={{ color: '#888', fontWeight: 'bold' }}>
-      @{c.parentWriterId}
-    </span>
-  )}{" "}
-  {c.content}
-</p>
+        <p className="KYM-comment-text">
+          {c.parentWriterId && (
+            <span style={{ color: '#888', fontWeight: 'bold' }}>
+              @{c.parentWriterId}
+            </span>
+          )}{" "}
+          {c.content}
+        </p>
         <div className="KYM-comment-actions">
           <span className="KYM-comment-date">{formatDate(c.createAt)}</span>
           {c.replies && c.replies.length > 0 && (
@@ -415,8 +415,8 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
             {/* header */}
             <div className="KYM-detail-header">
               <div className="KYM-left-info">
-                <img className="KYM-detail-avatar"  src={writerProfile ? `${url}/iupload/${writerProfile}` : "/profile.png"} alt="" />
-                <span className="KYM-detail-nickname">{writerId}</span>
+                <img className="KYM-detail-avatar" src={writerProfile ? `${url}/iupload/${writerProfile}` : "/profile.png"} alt="" onClick={() => navigate(`/userFeed/${writerId}`)} style={{ cursor: "pointer" }} />
+                <span className="KYM-detail-nickname" onClick={() => navigate(`/userFeed/${writerId}`)} style={{ cursor: "pointer" }}>{writerId}</span>
                 {feed.writerBadge &&
                   <img src={`/badge_${feed.writerBadgeImg}.png`} alt="대표 배지" className="KYM-detail-badge-img" />
                 }
@@ -442,8 +442,9 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
                         <li onClick={handleDelete}>삭제하기</li>
                       </>
                     )}
-                    <li onClick={openReport}>신고하기</li>
-                    <li onClick={() => navigator.clipboard.writeText(window.location.href)}>링크복사</li>
+                    {/* <li onClick={openReport}>신고하기</li> */}
+                    {/* <li onClick={() => navigator.clipboard.writeText(window.location.href)}>링크복사</li> */}
+                    <li onClick={() => { navigator.clipboard.writeText(window.location.href); alert("링크가 복사되었습니다"); setShowMenu(false); }}>링크복사</li>
                     <li>공유하기</li>
                     <li>DM 보내기</li>
                     <li
@@ -480,10 +481,10 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
                 className={`KYM-action-icon ${liked ? 'liked' : ''}`}
                 onClick={toggleLike}
               >
-                 <img src={liked ? heartFilled : heartOutline} alt="좋아요" />
+                <img src={liked ? heartFilled : heartOutline} alt="좋아요" />
                 {/* {liked ? '❤️' : '🤍'} */}
               </button>
-              <button className="KYM-action-icon"><LuMessageCircleMore/> </button>
+              <button className="KYM-action-icon"><LuMessageCircleMore /> </button>
               <img src={share} alt="공유" className="KYM-action-icon2" onClick={() => {
                 handleShare(feed);
                 setMenuOpenId(null);
@@ -526,6 +527,12 @@ console.log('writerProfile =', writerProfile, typeof writerProfile);
                 disabled={!isLoggedIn}
                 value={commentText}
                 onChange={e => setCommentText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    postComment();
+                  }
+                }}
               />
               <button
                 className="KYM-input-post"

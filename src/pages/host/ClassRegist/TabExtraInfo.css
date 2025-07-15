@@ -129,6 +129,7 @@
   width: 600px; /* 기존보다 넓게 */
   max-width: 90%;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  height: 80%;
 }
 
 .KHJ-coupon-option {
@@ -181,6 +182,9 @@
 
 .KHJ-coupon-list {
   margin-bottom: 16px;
+  max-height: 90%; /* 또는 height: 100%; 등 비율도 가능 */
+  overflow-y: auto;
+  padding-right: 8px; /* 스크롤바 공간 확보 (선택사항) */
 }
 
 .KHJ-coupon-option {

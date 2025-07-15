@@ -600,7 +600,7 @@ useEffect(() => {
     const gatheringId = response.data;
     if (gatheringId) {
       console.log("새로 생성된 모임 ID:", gatheringId);
-      alert("모임이 성공적으로 등록되었습니다!");
+      // alert("모임이 성공적으로 등록되었습니다!");
       navigate(`/gatheringDetail/${gatheringId}`);
     } else {
       console.error("gatheringId를 받지 못했습니다:", response.data);

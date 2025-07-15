@@ -31,7 +31,7 @@ export default function UserFeed() {
         profile: res.data.profile,
         nickname: res.data.nickName || res.data.username,
         intro: res.data.intro || '',
-        badgeImg: res.data.writerBadgeImg
+        badgeImg: res.data.badgeImg
       };
     },
     enabled: !!nickname
@@ -109,7 +109,7 @@ export default function UserFeed() {
   };
 
   if (!user) return <div className="KYM-userfeed-loading">로딩 중…</div>;
-
+console.log("==========================",user)
   return (
     <>
       <Header />
@@ -123,9 +123,7 @@ export default function UserFeed() {
           <div className="KYM-userfeed-info">
             <div className="KYM-userfeed-name-line">
               <h2 className="KYM-userfeed-nickname">{user.nickname}</h2>
-              {feeds.length > 0 && feeds[0].badgeImg && (
-                <img className="KYM-userfeed-badge" src={`/${user.badgeImg}`} alt="배지" />
-              )}
+                <img className="KYM-userfeed-badge" src={`/badge_${user.badgeImg}.png`} alt="배지" />
             </div>
             <p className="KYM-userfeed-intro">
               {user.intro.split('\n').map((line, i) => (

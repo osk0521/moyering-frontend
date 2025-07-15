@@ -206,12 +206,11 @@
 
 .MyGatherInquiryList_inquiry-dates_osk {
   display: inline-flex;
-  gap: 5px;
+  gap: 16px;
   font-size: 14px;
   color: #666;
   flex-wrap: wrap;
   align-content: center;
-  flex-direction: column;
 }
 
 .MyGatherInquiryList_accordion-toggle_osk {
@@ -237,10 +236,15 @@
 }
 
 .MyGatherInquiryList_answer_osk {
+  display: flex;
   margin-top: 16px;
   background-color: #f9f9f9;
   padding: 11px;
   border-radius: 6px;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 16px;
 }
 
 .MyGatherInquiryList_answer-header_osk {

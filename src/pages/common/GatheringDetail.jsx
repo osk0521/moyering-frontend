@@ -18,7 +18,7 @@ import "./GatheringDetail.css";
 import GatheringDetailInquiry from "./GatheringDetailInquiry";
 import Header from "./Header";
 import aImage from "/detail2.png";
-import Footer from "../../components/Footer";
+import Footer from "./Footer";
 export default function GatheringDetail() {
   const user = useAtomValue(userAtom);
   const [token, setToken] = useAtom(tokenAtom);

@@ -47,7 +47,7 @@ const Login = () => {
   return (
     <div className="KHJ-login-container">
       <div className="KHJ-login-box">
-        <img src="/logo.png" alt="로고" className="KHJ-login-logo" onClick={()=>navigate('/')} />
+        <img src="/no-image_1.png" alt="로고" className="KHJ-login-logo" onClick={()=>navigate('/')} />
         <h2>로그인</h2>
         <form onSubmit={handleLogin} className="KHJ-login-form">
           <label>아이디</label>

@@ -123,7 +123,7 @@ export default function FollowList() {
                                 >
                                     <div className="KYM-following-user">
                                         <img
-                                            src={`${url}/iupload/${user.profile}`}
+                                            src={user.profile ? `${url}/iupload/${user.profile}` : "/profile.png"}
                                             alt=""
                                             className="KYM-following-avatar"
                                         />

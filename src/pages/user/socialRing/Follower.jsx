@@ -6,6 +6,7 @@ import { useAtom } from 'jotai';
 import { tokenAtom } from '../../../atoms';
 import Header from '../../common/Header';
 import Sidebar from '../0myPage/common/Sidebar';
+import Footer from '../../common/Footer';
 
 export default function Follower() {
     const [followers, setFollowers] = useState([]);
@@ -144,6 +145,7 @@ export default function Follower() {
                     {loading && <div className="loading">로딩 중...</div>}
                 </div>
             </div>
+            <Footer/>
         </>
 
     );

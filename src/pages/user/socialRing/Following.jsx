@@ -6,6 +6,7 @@ import { useAtom } from 'jotai';
 import { tokenAtom } from '../../../atoms';
 import Header from '../../common/Header';
 import Sidebar from '../0myPage/common/Sidebar';
+import Footer from '../../common/Footer';
 
 export default function FollowList() {
     const [followings, setFollowings] = useState([]);
@@ -138,10 +139,10 @@ export default function FollowList() {
                             );
                         })}
                     </ul>
-
                     {loading && <div className="loading">로딩 중...</div>}
                 </div>
             </div>
+            <Footer/>
         </>
 
     );

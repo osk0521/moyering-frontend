@@ -15,6 +15,7 @@ import { LuMessageCircleMore } from "react-icons/lu";
 import heartOutline from './icons/heart-outline.png';
 import heartFilled from './icons/heart-filled.png';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../../common/Footer';
 
 export default function FeedDetail() {
   // Jotai atom에서 토큰 읽어오기
@@ -574,6 +575,7 @@ export default function FeedDetail() {
           onSubmit={({ reason, detail }) => { console.log(reason, detail); closeReport(); }}
         />
       </div >
+      <Footer/>
     </>
   );
 }

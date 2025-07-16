@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className="footer-soy">
       <div className='logo'>
-        <img src="../../public/logo.png" alt="" />
+        <img src="../../public/no-image_1.png" alt="" />
       </div>
       <div className="footer-inner">
         <p>© 모여링 | 고객센터 </p>

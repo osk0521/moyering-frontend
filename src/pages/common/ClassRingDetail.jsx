@@ -23,7 +23,7 @@ import { FaStar } from "react-icons/fa";
 import ClassRingDetailInquiryList from "./ClassRingDetailInquiryList";
 import ClassRingReviewList from "./ClassRingReviewList";
 import useFetchUserClassLikes from "../../hooks/common/useFetchUserClassLikes";
-import Footer from "../../components/Footer";
+import Footer from "./Footer";
 import "./GatheringDetail.css";
 import {
   Table,

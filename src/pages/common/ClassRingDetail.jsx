@@ -351,7 +351,7 @@ export default function ClassRingDetail() {
                 <img className={styles.instructorImage} src={`${url}/image?filename=${host?.profile}`} alt="강사 이미지" />
               )}
               <div className={styles.instructorInfo}>
-                <h3>{host?.name} ⭐ 5(138)</h3>
+                <h3>{host?.name}</h3>
                 <p>{host?.intro}</p>
                 <div className={styles.instructorTags}>
                   {host?.tag1 && <span>{host.tag1}</span>}

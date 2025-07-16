@@ -38,7 +38,7 @@ const ClassReview = () => {
       endDate,
       replyStatus: statusParam,
       page,
-      size: 10,
+      size: 5,
     };
 
     token && myAxios(token, setToken).post('/host/review/search', reqParams)

@@ -56,6 +56,8 @@ const Inquiry = () => {
   useEffect(() => {
     const { classId, calendarId } = getQueryParams();
     fetchInquiries(classId, calendarId, currentPage);
+    console.log("🔍 보내는 replyStatus:", replyStatus === '답변완료' ? 1 : (replyStatus === '답변대기' ? 0 : ''));
+
   }, [searchQuery, startDate, endDate, replyStatus, location, token, currentPage]);
 
   const goToPage = (page) => {

@@ -41,7 +41,7 @@ export default function GatheringCard({ gatherInfo, onClick }) {
       <div
         className={styles.cardImage}
         style={{
-          backgroundImage: `url(${url}/image?filename=${gatherInfo.thumbnailFileName})`,
+          backgroundImage: `url("${url}/image?filename=${encodeURIComponent(gatherInfo.thumbnailFileName)}")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

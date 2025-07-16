@@ -87,7 +87,6 @@ export default function MainContent() {
               <tr key={row}>
                 {stats.slice(row * 4, row * 4 + 4).map((item, i) => (
                   <td key={i} className="KHJ-main__cell">
-
                     <div className="KHJ-main__label">{item.label}</div>
                     <div className="KHJ-main__value">{item.value}</div>
                   </td>
@@ -128,6 +127,6 @@ export default function MainContent() {
           ))}
         </div>
       </section>
-    </main >
+    </main>
   );
 }

@@ -42,7 +42,7 @@ export default function ClassCard({ classInfo, onClick  }) {
       <div
         className={styles.cardImage}
         style={{
-              backgroundImage: `url(${url}/image?filename=${classInfo.imgName1})`,
+              backgroundImage: `url(${url}/image?filename=${encodeURIComponent(classInfo.imgName1)})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}

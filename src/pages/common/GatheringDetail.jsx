@@ -133,7 +133,7 @@ export default function GatheringDetail() {
 
     // 입력값 검증
     if (!aspirationContent.trim()) {
-      alert("호스트에게 남길 말을 입력해주세요.");
+      alert("모임장에게 남길 말을 입력해주세요.");
       return;
     }
 
@@ -269,7 +269,7 @@ export default function GatheringDetail() {
           followers: organizer.followers || 0, // followers가 객체가 아닌 숫자값으로 설정
           intro: organizer.intro || "",
           tags: organizerCategories,
-          userBadgeImg: organizer.userBadgeImg || "badge_moyainssa.png",
+          userBadgeImg: organizer.userBadgeImg || "moyainssa",
         });
 
         setMembers(
@@ -282,7 +282,7 @@ export default function GatheringDetail() {
             aspiration: m.aspiration,
             isApprove: m.isApprove,
             userId: m.userId,
-            userBadgeImg: m.userBadgeImg || "badge_moyainssa.png",
+            userBadgeImg: m.userBadgeImg || "moyainssa",
           }))
         );
 
@@ -715,15 +715,16 @@ export default function GatheringDetail() {
                 </h3>
                 <div className="GatheringDetail_organizer-info_osk">
                   <div className="GatheringDetail_organizer-avatar_osk">
-                    <img
-                      src={`${url}/image?filename=${organizerData.profileImage}`}
-                      alt={organizerData.nickname}
+                    <img src={ `${url}/image?filename=${organizerData.profileImage}`}
+                      // alt={organizerData.nickname}
                       className="GatheringDetail_organizer-profile-image_osk"
                     />
                   </div>
                   <div className="GatheringDetail_organizer-details_osk">
-                    <h4>{organizerData.nickname} <img
-                      src={`/public/${organizerData.userBadgeImg}`} /></h4>
+                    <h4>{organizerData.nickname}
+                      <img src={`/badge_${organizerData.userBadgeImg}.png`} alt="배지" />
+                      {/* <img src={`/public/${organizerData.userBadgeImg}.png`} /> */}
+                      </h4>
                     <div className="GatheringDetail_organizer-stats_osk">
                       팔로워 {organizerData.followers}명
                     </div>
@@ -794,12 +795,13 @@ export default function GatheringDetail() {
                                 alt={`${member.nickName} 프로필`}
                                 className="GatheringDetail_member-profile-image_osk"
                               />
+                      
                             </div>
                             <div className="GatheringDetail_member-info_osk">
                               <h4 className="GatheringDetail_member-name_osk">
                                 <span className="GatheringDetail_verified_osk">  {member.nickName}
-                                  <img className="GatheringDetail_member-userBadgeImg_osk" src={`/public/${member.userBadgeImg}`} />
-
+                                  {/* <img className="GatheringDetail_member-userBadgeImg_osk" src={`/public/${member.userBadgeImg}`} /> */}
+                                <img className="GatheringDetail_member-userBadgeImg_osk"  src={`/badge_${member.userBadgeImg}.png`} alt="배지" />
                                 </span>
                               </h4>
                               <p className="GatheringDetail_member-description_osk">
@@ -1060,14 +1062,14 @@ export default function GatheringDetail() {
                   htmlFor="aspiration-textarea"
                   className="GatheringDetail_input-label_osk"
                 >
-                  호스트에게 남기고 싶은 말{" "}
+                  모임장에게 남기고 싶은 말{" "}
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <textarea
                   id="aspiration-textarea"
                   value={aspirationContent}
                   onChange={(e) => setAspirationContent(e.target.value)}
-                  placeholder="호스트에게 남기고 싶은 말을 적어주세요"
+                  placeholder="모임장에게 남기고 싶은 말을 적어주세요"
                   rows={6}
                   className="GatheringDetail_textarea-field_osk"
                   maxLength={500}

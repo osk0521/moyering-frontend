@@ -142,7 +142,7 @@ const ClassSettlement = () => {
 
       <div className="KHJ-settlement-result">
         <div className="KHJ-settlement-header">
-          <span>총 정산된 금액 : {totalAmount.toLocaleString()}</span>
+          {/* <span>총 정산된 금액 : {totalAmount.toLocaleString()}</span> */}
         </div>
 
         <table className="KHJ-settlement-table">

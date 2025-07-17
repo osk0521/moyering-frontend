@@ -48,7 +48,7 @@ export default function ClassRingReviewList() {
         {reviews.map((r) => (
           <div key={r.reviewId} className={styles.reviewCard}>
             <div className={styles.reviewHeader}>
-              <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+              <img src={`${url}/image?filename=${r?.profileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" , width:"30px"}} />
               <strong>{r.studentName}</strong>
               <span className={styles.rating}>
                 {[...Array(r.star)].map((_, i) => (
@@ -62,7 +62,7 @@ export default function ClassRingReviewList() {
               <div className={styles.reviewReply}>
                 <div className={styles.replyHeader}>
                   <div>
-                    <img src={`${url}/image?filename=${reviews[0]?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" }} />
+                    <img src={`${url}/image?filename=${reviews[0]?.hostProfileName}`} alt="작성자 프로필 사진 " width="30" height="30" style={{ borderRadius: "50%" , width:"30px"}} />
                     <strong>{r.hostName}</strong>
                   </div>
                   <span>{r.responseDate}</span>

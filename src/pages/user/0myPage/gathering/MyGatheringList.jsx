@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Button, } from "reactstrap";
+import React from "react";
+import {Accordion} from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { CiCalendar, CiClock1, CiSearch, CiLocationOn } from "react-icons/ci";
-import { GoPeople } from "react-icons/go";
 import "./MyGatheringList.css";
 import Header from "../../../common/Header";
 import Footer from "../../../../components/Footer";
 import Sidebar from "../common/Sidebar";
-import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue } from "jotai";
+import { useNavigate } from "react-router-dom";
 import { tokenAtom, userAtom } from "../../../../atoms";
-import { myAxios, url } from "../../../../config";
 import { useGatheringList } from "../../../../hooks/gathering/useGatheringList";
 import Pagination from "./Pagination";
+import AccordionItemCustom from "./AccordionItemCustom"; // 원본 
+
 export default function MyGatheringList() {
+  const navigate = useNavigate();
   const user = useAtomValue(userAtom);
   const [token, setToken] = useAtom(tokenAtom);
   const {
+    loading,
     activeTab,
     gatheringList,
     applyList,
@@ -30,6 +31,7 @@ export default function MyGatheringList() {
     handleCancelGathering,
     handleDetailGathering,
     getStatusCount,
+    handlePageChange,
     isGatheringDisabled,
     toggleAccordion,
     activeAccordion,
@@ -42,8 +44,12 @@ export default function MyGatheringList() {
     <div>
       <Header />
       <div className="MyGatherPage_container MyGatheringList_mypage-wrapper_osk">
-        <aside><Sidebar /></aside>
+        <aside>
+          <Sidebar />
+        </aside>
+
         <section className="MyGatheringList_gathering-main_osk">
+          {/* 헤더 */}
           <div className="MyGatheringList_gathering-header_osk">
             <h3>게더링 목록</h3>
             <div className="MyGatheringList_search-container_osk">
@@ -58,11 +64,14 @@ export default function MyGatheringList() {
             </div>
           </div>
 
+          {/* 탭 */}
           <div className="MyGatheringList_tabs_osk">
             {["전체", "진행예정", "진행완료", "취소된 모임"].map((tab) => (
               <button
                 key={tab}
-                className={`MyGatheringList_tab_osk ${activeTab === tab ? "MyGatheringList_active_osk" : ""}`}
+                className={`MyGatheringList_tab_osk ${
+                  activeTab === tab ? "MyGatheringList_active_osk" : ""
+                }`}
                 onClick={() => handleTabChange(tab)}
               >
                 {tab} ({getStatusCount(tab)})
@@ -73,25 +82,32 @@ export default function MyGatheringList() {
             </button>
           </div>
 
+          {/* 리스트 */}
           {gatheringList.length === 0 ? (
             <div className="MyGatheringList_empty-state_osk">
               <h4>조회된 목록이 없습니다</h4>
               <p>검색 조건을 변경하거나 새로운 모임을 생성해보세요.</p>
             </div>
           ) : (
-            <Accordion open={activeAccordion} toggle={toggleAccordion} className="MyGatheringList_gathering-list_osk">
+            <Accordion
+              open={activeAccordion}
+              toggle={toggleAccordion}
+              className="MyGatheringList_gathering-list_osk"
+            >
               {gatheringList.map((gathering) => {
-                const applicants = activeAccordion === String(gathering.gatheringId)
-                  ? categorizeApplicants(applyList)
-                  : { pending: [], accepted: [], rejected: [] };
+                const applicants =
+                  activeAccordion === String(gathering.gatheringId)
+                    ? categorizeApplicants(applyList)
+                    : { pending: [], accepted: [], rejected: [] };
+
                 const isDisabled = isGatheringDisabled(gathering);
+
                 return (
-                  <YourAccordionItem
+                  <AccordionItemCustom
                     key={gathering.gatheringId}
                     gathering={gathering}
                     applicants={applicants}
                     isDisabled={isDisabled}
-                    activeAccordion={activeAccordion}
                     handleCancelGathering={handleCancelGathering}
                     handleEditGathering={handleEditGathering}
                     handleDetailGathering={handleDetailGathering}
@@ -103,7 +119,8 @@ export default function MyGatheringList() {
             </Accordion>
           )}
 
-         <Pagination
+          {/* 페이지네이션 */}
+          <Pagination
             pageInfo={pageInfo}
             onPageChange={handlePageChange}
             loading={loading}

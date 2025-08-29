@@ -94,6 +94,10 @@ const handleCancelApply = async (gathering) => {
     }
   }
 };
+const {
+  loading,
+  handlePageChange
+} = useGatheringApplyList({ token, setToken, navigate, user });
   const handleDetailGathering = (gatheringId) => {
     navigate(`/gatheringDetail/${gatheringId}`);
   };

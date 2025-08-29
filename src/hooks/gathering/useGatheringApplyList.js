@@ -94,7 +94,8 @@ export function useGatheringApplyList({ token, setToken, navigate, user }) {
     handleSearch,
     handleTabChange,
     getStatusCount,
-    isGatheringDisabled
+    isGatheringDisabled,
+    handlePageChange
   };
 }
 

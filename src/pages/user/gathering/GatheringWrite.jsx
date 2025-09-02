@@ -3,10 +3,11 @@ import { useAtomValue } from "jotai";
 import { userAtom, tokenAtom } from "../../../atoms";
 import { useNavigate } from "react-router-dom";
 import { myAxios } from "../../../config";
-import GatheringForm from "../../../components/gathering/GatheringForm";
 import "./GatheringWrite.css";
 import Header from "../../common/Header";
 import Footer from "../../../components/Footer";
+import GatheringForm from "./GatheringForm";
+
 export default function GatheringWrite() {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
@@ -65,6 +66,5 @@ export default function GatheringWrite() {
       console.error(err);
     }
   };
-
-  return <GatheringForm mode="create" onSubmit={handleSubmit} />;
+return <GatheringForm mode="create" />;
 }

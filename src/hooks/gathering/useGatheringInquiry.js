@@ -35,7 +35,7 @@ export function useGatheringInquiry({ token, user, setToken }) {
     return body;
   }, [search.page, selectedStatus, startDate, endDate]);
   const loadInquiryData = useCallback(async () => {
-    if (!token || !user) {
+    if (!(user && token)) {
       setError("로그인이 필요합니다.");
       return;
     }

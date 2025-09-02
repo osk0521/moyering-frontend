@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { tokenAtom, userAtom } from "../../../../atoms";
 import { useGatheringList } from "../../../../hooks/gathering/useGatheringList";
 import Pagination from "./Pagination";
-import AccordionItemCustom from "./AccordionItemCustom"; // 원본 
+import AccordionItemCustom from "./AccordionItemCustom";
 
 export default function MyGatheringList() {
   const navigate = useNavigate();

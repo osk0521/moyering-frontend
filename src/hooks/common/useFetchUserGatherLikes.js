@@ -17,7 +17,7 @@ export default function  useFetchUserGatherLikes() {
     token && myAxios(token,setToken)
         .get(`/user/gather-like-list`)
         .then((res) => {
-        console.log(res);
+        // console.log(res);
         setGatherLikes(res.data)
         })
         .catch((err) => console.error("사용자 게더링 찜목록 로딩 실패", err));

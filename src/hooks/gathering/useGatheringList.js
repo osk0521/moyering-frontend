@@ -193,15 +193,15 @@ export function useGatheringList({ token, setToken, user }) {
 
   /** 리스트 불러오기 */
   useEffect(() => {
-    // 🔥 조건 수정: user와 token이 모두 없을 때만 로그인 페이지로 보냄
-    if (!user && !token) {
-      if (window.confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
-        navigate("/userlogin");
-      } else {
-        window.history.back();
-      }
-      return;
-    }
+    if (!(user && token)) return;
+    // if (!user || !token) {
+    //   if (window.confirm("로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?")) {
+    //     navigate("/userlogin");
+    //   } else {
+    //     window.history.back();
+    //   }
+    //   return;
+    // }
 
     const fetchList = async () => {
       setLoading(true);

@@ -632,4 +632,9 @@ select.GatheringWrite_custom-input_osk {
     font-size: 12px;
     padding: 12px;
   }
+  span.GatheringWrite_tag-item_osk{
+    font-size: 13px;
+    padding: 3px 8px;
+    color: #FFB22C;
+  }
 }

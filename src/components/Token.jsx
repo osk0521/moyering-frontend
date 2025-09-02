@@ -26,7 +26,7 @@ export default function Token() {
             headers:{Authorization:token}
         })
         .then(res=> {
-            console.log(res);
+            // console.log(res);
             setUser(res.data);
             navigate("/");
         })

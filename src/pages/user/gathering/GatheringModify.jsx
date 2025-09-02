@@ -7,7 +7,7 @@ import { myAxios, url } from "../../../config";
 import "./GatheringWrite.css";
 import Header from "../../common/Header";
 import Footer from "../../../components/Footer";
-import GatheringForm from "../../../components/gathering/GatheringForm";
+import GatheringForm from "./GatheringForm";
 
 export default function GatheringModify() {
   const navigate = useNavigate();
@@ -105,9 +105,7 @@ export default function GatheringModify() {
     }
   };
 
-  if (!initialData) return <div>로딩중...</div>;
+  // if (!initialData) return <div>로딩중...</div>;
 
-  return (
-    <GatheringForm mode="modify" initialData={initialData} onSubmit={handleSubmit} />
-  );
+  return <GatheringForm mode="modify" />;
 }

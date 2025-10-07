@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue } from "jotai";
 import { tokenAtom, userAtom } from "../../../../atoms";
 import { myAxios, url } from "../../../../config";
-
+import { useGatheringApplyList } from "../../../../hooks/gathering/useGatheringApplyList";
+import Pagination from "./Pagination";
 const isGatheringDisabled = (item) => {
   // 취소된 모임인 경우
   if (item.canceled === true) {
@@ -93,6 +94,10 @@ const handleCancelApply = async (gathering) => {
     }
   }
 };
+const {
+  loading,
+  handlePageChange
+} = useGatheringApplyList({ token, setToken, navigate, user });
   const handleDetailGathering = (gatheringId) => {
     navigate(`/gatheringDetail/${gatheringId}`);
   };
@@ -385,43 +390,11 @@ const handleCancelApply = async (gathering) => {
             )}
           </div>
 
-          {pageInfo.allPage > 1 && (
-            <div className="MyGatheringApplyList_pagination_osk">
-              {pageInfo.curPage > 1 && (
-                <button
-                  onClick={() =>
-                    setSearch((prev) => ({ ...prev, page: pageInfo.curPage - 1 }))
-                  }
-                >
-              〈
-                </button>
-              )}
-              {pageNums.map((pageNum) => (
-                <button
-                  key={pageNum}
-                  onClick={() =>
-                    setSearch((prev) => ({ ...prev, page: pageNum }))
-                  }
-                  className={
-                    pageInfo.curPage === pageNum
-                      ? "MyGatheringApplyList_active_osk"
-                      : ""
-                  }
-                >
-                  {pageNum}
-                </button>
-              ))}
-              {pageInfo.curPage < pageInfo.allPage && (
-                <button
-                  onClick={() =>
-                    setSearch((prev) => ({ ...prev, page: pageInfo.curPage + 1 }))
-                  }
-                >
-                  〉
-                </button>
-              )}
-            </div>
-          )}
+         <Pagination
+            pageInfo={pageInfo}
+            onPageChange={handlePageChange}
+            loading={loading}
+          />
         </section>
       </div>
       <Footer />

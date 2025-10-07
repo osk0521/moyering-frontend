@@ -7,9 +7,9 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
     couponType: '강사', // 관리자, 강사
     discountType: '비율', // 금액, 비율
     discountValue: '',
-    issueCount: '',
-    startDate: '',
-    endDate: ''
+    // issueCount: '',
+    // startDate: '',
+    // endDate: ''
   });
 
   // 자동 생성 쿠폰 코드 생성
@@ -23,6 +23,8 @@ const CouponCreateModal = ({ isOpen, onClose, onSubmit }) => {
   };
 
   // 입력값 변경 핸들러
+
+
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
